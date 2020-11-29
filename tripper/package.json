@@ -1,0 +1,57 @@
+{
+  "nativescript": {
+    "id": "com.bartovCoder.tripper",
+    "tns-ios": {
+      "version": "6.4.0"
+    },
+    "tns-android": {
+      "version": "6.4.1"
+    }
+  },
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "scripts": {
+    "lint": "tslint \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@angular/animations": "~8.2.0",
+    "@angular/common": "~8.2.0",
+    "@angular/compiler": "~8.2.0",
+    "@angular/core": "~8.2.0",
+    "@angular/forms": "~8.2.0",
+    "@angular/platform-browser": "~8.2.0",
+    "@angular/platform-browser-dynamic": "~8.2.0",
+    "@angular/router": "~8.2.0",
+    "@nativescript/theme": "~2.3.0",
+    "btoa": "^1.2.1",
+    "facebook-sdk": "^0.3.3",
+    "nativescript-angular": "~8.21.0",
+    "nativescript-carousel": "^7.0.1",
+    "nativescript-facebook": "^4.2.1",
+    "nativescript-geolocation": "^5.1.0",
+    "nativescript-gif": "^4.0.6",
+    "nativescript-google-login": "^1.4.0",
+    "nativescript-google-maps-sdk": "^2.9.1",
+    "nativescript-imagepicker": "^7.1.0",
+    "nativescript-localize": "^4.2.2",
+    "nativescript-oauth2": "^3.0.1",
+    "nativescript-social-share": "^1.6.0",
+    "nativescript-ui-sidedrawer": "~8.0.0",
+    "reflect-metadata": "~0.1.12",
+    "rxjs": "^6.4.0",
+    "tns-core-modules": "~6.4.0",
+    "zone.js": "~0.9.1"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "~8.2.0",
+    "@ngtools/webpack": "~8.2.0",
+    "codelyzer": "~4.5.0",
+    "nativescript-dev-webpack": "~1.5.0",
+    "node-sass": "^4.7.1",
+    "tslint": "~5.19.0",
+    "typescript": "~3.5.3"
+  },
+  "gitHead": "d8bdf0799a219051f28f8abd7c258d2bf2fce6e1",
+  "readme": "NativeScript Application"
+}

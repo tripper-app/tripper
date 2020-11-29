@@ -1,0 +1,16 @@
+<StackLayout verticalAlignment="center" horizontalAlignment="center" class="main">
+    <FlexboxLayout style="justify-content: space-around;">
+        <button text="{{ 'login.signUp' | L }}" (tap)="goToSignUp()"></button>
+    </FlexboxLayout>
+    <ns-carousel></ns-carousel>
+    <ScrollView orientation="horizontal">
+        <FlexboxLayout>
+            <button text="upload" (tap)="uploadImage()"></button>
+            <button class="navButton" text="{{'labels.map' | L}}" (tap)="goToMap()"></button>
+            <!-- <button class="navButton" text="{{'labels.setting' | L}}" (tap)="openSetting()"></button> -->
+            <!-- <button class="navButton" text="פרופיל"></button>
+            <button class="navButton" text="משחקים לדרך"></button>
+            <button class="navButton" text="צימרים"></button> -->
+        </FlexboxLayout>
+    </ScrollView>
+</StackLayout>

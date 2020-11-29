@@ -1,0 +1,77 @@
+{
+    "app.name": "tripper",
+    "switchLanguage": {
+        "switchLanguageTitle": {
+            "iw": "שינוי שפה",
+            "en": "Switch language"
+        },
+        "closeApp": {
+            "iw": "בסדר, אני אסגור את האפליקציה",
+            "en": "OK, i will close the app"
+        },
+        "switchLanguageMessage": {
+            "iw": "כדי להחל את השינויים האפליקציה צריכה להסגר",
+            "en": "The application needs to be restarted in order to apply changes"
+        }
+    },
+    "filters": {
+        "camping": "Suitable for camping",
+        "children": "Suitable for children",
+        "water": "Drinking water point",
+        "car": "Access with car",
+        "depth": "Deeper than 2 meters",
+        "radius": "Radius",
+        "submit": "Submit"
+    },
+    "messages": {
+        "info": {
+            "waitingForData": "Waiting for data... "
+        },
+        "error": {
+            "connectionError": "Request failed. please check your internet connection",
+            "serverError": "something has failed in our servers :-( the problem is being checked",
+            "noLocationPermissions": "In order for the application to work fully, location permissions must be enabled"
+        }
+    },
+    "springModal": {
+        "depth": "depth",
+        "walkingDistanceFromCar": "Walking distance from car",
+        "preferredSeason": "Preferred season",
+        "moreAboutTheSpring": "And more about the spring",
+        "navigateWith": "Navigate with",
+        "shareWith": "Share with",
+        "shareSpring": "Share spring",
+        "navigateWithWaze": "Navigate with waze"
+    },
+    "login": {
+        "requireCode": "Insert the code you recieved",
+        "requireEmail": "Fill your email",
+        "requireDetails": "Fill all the details",
+        "wrongDetails": "Inserted wrong details",
+        "passwordsNotMuch": "Your passwords do not match",
+        "accountCreated": "Your account was successfully created. An email with a verification link was sent to this address",
+        "emailAlreadyExist": "This email already exists",
+        "passwordChanged": "Your password changed successfuly",
+        "insertCode": "We sent you an email with confirmation code. insert here the code",
+        "proceed": "Proceed",
+        "submitNewPassword": "Update new password",
+        "backToLogin": "Back to login",
+        "dontHaveAcount": "Don't have an accout yet? ",
+        "forgotPassword": "Forgot your password?",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "code": "Code",
+        "nick": "Nick name",
+        "login": "Login",
+        "signUp": "Sign up",
+        "emailNotVerified": "this email address is not verified yet. Check your email inbox"
+    },
+    "labels": {
+        "map": "Map",
+        "setting": "Setting",
+        "language": "Language",
+        "OK": "OK",
+        "cancel": "Cancel",
+        "email": "Your email address"
+    }
+}

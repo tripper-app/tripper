@@ -1,0 +1,30 @@
+<GridLayout rows="*,*,*,*,*,*,*" cols="2*,*" class="main">
+    <FlexboxLayout [style.flex-direction]="!languageRightToLeft? 'row-reverse' : 'row' " row="0">
+        <Switch #campingSwitch></Switch>
+        <label textWrap="true" text="{{ 'filters.camping' | L }}" (tap)="campingSwitch.checked = !campingSwitch.checked"></label>
+    </FlexboxLayout>
+    <FlexboxLayout [style.flex-direction]="!languageRightToLeft? 'row-reverse' : 'row' " row="1">
+        <Switch #childrenSwitch></Switch>
+        <label text="{{ 'filters.children' | L }}" (tap)="childrenSwitch.checked = !childrenSwitch.checked"></label>
+    </FlexboxLayout>
+    <FlexboxLayout [style.flex-direction]="!languageRightToLeft? 'row-reverse' : 'row' " row="2">
+        <Switch #waterSwitch></Switch>
+        <label textWrap="true" text="{{ 'filters.water' | L }}" (tap)="waterSwitch.checked = !waterSwitch.checked"></label>
+    </FlexboxLayout>
+    <FlexboxLayout [style.flex-direction]="!languageRightToLeft? 'row-reverse' : 'row' " row="3">
+        <Switch #carSwitch></Switch>
+        <label text="{{ 'filters.car' | L }}" (tap)="carSwitch.checked = !carSwitch.checked"></label>
+    </FlexboxLayout>
+    <FlexboxLayout [style.flex-direction]="!languageRightToLeft? 'row-reverse' : 'row' " row="4">
+        <Switch #depth></Switch>
+        <label text="{{ 'filters.depth' | L }}" (tap)="depth.checked = !depth.checked"></label>
+    </FlexboxLayout>
+        <StackLayout row="5" orientation="horizontal" style="align-items: center;" >
+            <label *ngIf="!languageRightToLeft" verticalAlignment="center" textWrap="true" text="{{ 'filters.radius' | L }}"></label>
+            <label *ngIf="languageRightToLeft" verticalAlignment="center" text="{{sliderValue}} km"></label>
+            <Slider [(ngModel)]="sliderValue" minValue="0" maxValue="100"></Slider>
+            <label *ngIf="languageRightToLeft" verticalAlignment="center" textWrap="true" text="{{ 'filters.radius' | L }}"></label>
+            <label *ngIf="!languageRightToLeft" verticalAlignment="center" text="{{sliderValue}} km"></label>
+        </StackLayout>
+    <button row="6" text="{{ 'filters.submit' | L }}" (tap)="submit()"></button>
+</GridLayout>
