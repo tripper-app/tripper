@@ -1,0 +1,35 @@
+<!-- <StackLayout verticalAlignment="center" horizontalAlignment="center" class="main">
+    <FlexboxLayout style="justify-content: space-around;">
+        <button text="{{ 'login.signUp' | L }}" (tap)="goToSignUp()"></button>
+    </FlexboxLayout>
+    <ns-carousel></ns-carousel>
+    <ScrollView orientation="horizontal">
+        <FlexboxLayout>
+            <button text="upload" (tap)="uploadImage()"></button>
+            <button class="navButton" text="{{'labels.map' | L}}" (tap)="goToMap()"></button>
+            <button class="navButton" text="{{'labels.setting' | L}}" (tap)="openSetting()"></button>
+            <button class="navButton" text="פרופיל"></button>
+            <button class="navButton" text="משחקים לדרך"></button>
+            <button class="navButton" text="צימרים"></button>
+        </FlexboxLayout>
+    </ScrollView>
+</StackLayout>  -->
+
+<FlexboxLayout class="main">
+  <!-- <FlexboxLayout style="height: 30; background-color: aliceblue;">
+  </FlexboxLayout> -->
+  <FlexboxLayout class="upperLine">
+    <img src="res://icon" />
+    <label textWrap="true" text="ברוכים הבאים!"></label>
+    <img src="res://icon" />
+    <img src="res://icon" />
+    <img src="res://icon" />
+  </FlexboxLayout>
+  <StackLayout class="image">
+    <label textWrap="true" text="חתול קורונה"></label>
+    <img
+      src="https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop" />
+  </StackLayout>
+  <button class="login" text="התחבר/הרשם">
+  </button>
+</FlexboxLayout>
