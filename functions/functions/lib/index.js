@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFavorites = exports.removeFavorite = exports.addFavorite = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.signup = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getAllSprings = void 0;
+exports.GetHotel = exports.getAllHotels = exports.getFavorites = exports.removeFavorite = exports.addFavorite = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.signup = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -27,13 +27,14 @@ const firebaseConfig = {
 firebase.default.initializeApp(firebaseConfig);
 admin.initializeApp();
 const db = admin.firestore();
-//const SecretJWT = "springsSecret";
 const region = "europe-west1";
+const springsCollection = 'springs';
+const hotelsCollection = 'hotels';
+const defaultLanguage = 'iw';
 const runtimeOpts = {
     timeoutSeconds: 60,
     memory: '128MB'
 };
-const defaultLanguage = 'iw';
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -51,7 +52,7 @@ const mailOptions = {
 const functionBuilder = functions.region(region).runWith(runtimeOpts).https.onRequest;
 exports.getAllSprings = functionBuilder(async (req, res) => {
     try {
-        const springsDocs = await setQuery(req.body.filters);
+        const springsDocs = await setSpringsQuery(req.body.filters);
         const springs = [];
         springsDocs.forEach(doc => {
             const fields = doc.data();
@@ -61,14 +62,29 @@ exports.getAllSprings = functionBuilder(async (req, res) => {
         res.send(springs);
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
+    }
+});
+exports.getSpringByName = functionBuilder(async (req, res) => {
+    try {
+        const lang = req.query.lang;
+        const name = springNameToSearch(req.query.springName);
+        const spring = await (await db.collection(springsCollection).where(springNameToSearch(`name.${lang}`), "==", springNameToSearch(name)).limit(1).get()).docs[0];
+        const flatSpring = { ID: "", location: {} };
+        if (spring) {
+            flatSpring.ID = spring.id;
+            flatSpring.location = spring.get("location");
+        }
+        res.send(flatSpring);
+    }
+    catch (error) {
+        handleError(res, error);
     }
 });
 exports.getSpring = functionBuilder(async (req, res) => {
     try {
         const spring = await db
-            .collection("springs")
+            .collection(springsCollection)
             .doc(req.query.springId)
             .get();
         const data = spring.data();
@@ -84,8 +100,7 @@ exports.getSpring = functionBuilder(async (req, res) => {
         res.send(data);
     }
     catch (error) {
-        functions.logger.error(error, { structuredData: true });
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.login = functionBuilder(async (req, res) => {
@@ -114,8 +129,7 @@ exports.login = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.loginWithThirdParty = functionBuilder(async (req, res) => {
@@ -150,8 +164,7 @@ exports.loginWithThirdParty = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.signup = functionBuilder(async (req, res) => {
@@ -187,8 +200,7 @@ exports.signup = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.verifyEmail = functionBuilder(async (req, res) => {
@@ -203,8 +215,7 @@ exports.verifyEmail = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
@@ -225,8 +236,7 @@ exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.resetPasswordRecieveCode = functionBuilder(async (req, res) => {
@@ -254,8 +264,7 @@ exports.resetPasswordRecieveCode = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.changePassword = functionBuilder(async (req, res) => {
@@ -273,8 +282,7 @@ exports.changePassword = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.updateProfile = functionBuilder(async (req, res) => {
@@ -292,8 +300,7 @@ exports.updateProfile = functionBuilder(async (req, res) => {
         });
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.addComment = functionBuilder(async (req, res) => {
@@ -323,8 +330,7 @@ exports.addComment = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.addFavorite = functionBuilder(async (req, res) => {
@@ -341,8 +347,7 @@ exports.addFavorite = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.removeFavorite = functionBuilder(async (req, res) => {
@@ -359,8 +364,7 @@ exports.removeFavorite = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 });
 exports.getFavorites = functionBuilder(async (req, res) => {
@@ -371,8 +375,60 @@ exports.getFavorites = functionBuilder(async (req, res) => {
         res.send(favorites);
     }
     catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
+    }
+});
+exports.getAllHotels = functionBuilder(async (req, res) => {
+    const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+    try {
+        const hotelsDocs = await setHotelsQuery(req.body.filters, currentLanguage);
+        const hotels = [];
+        hotelsDocs.forEach(doc => {
+            const fields = doc.data();
+            const newHotel = {
+                ID: doc.id,
+                description: updateField(fields.description, currentLanguage),
+                name: updateField(fields.name, currentLanguage),
+                price: fields.price,
+                region: updateField(fields.region, currentLanguage)
+            };
+            hotels.push(newHotel);
+        });
+        res.send(hotels);
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.GetHotel = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const hotel = await db
+            .collection(hotelsCollection)
+            .doc(req.query.hotelId)
+            .get();
+        const data = hotel.data();
+        let newHotel;
+        if (data) {
+            newHotel = {
+                name: updateField(data.name, currentLanguage),
+                attractions: data.attractions.map((h) => updateField(h, currentLanguage)),
+                breakfast: data.breakfast,
+                city: updateField(data.city, currentLanguage),
+                description: updateField(data.description, currentLanguage),
+                images: data.images,
+                location: data.location,
+                phone: data.phone,
+                pool: data.pool,
+                price: data.price,
+                region: updateField(data.region, currentLanguage),
+                websiteLink: data.websiteLink
+            };
+        }
+        res.send(newHotel);
+    }
+    catch (error) {
+        handleError(res, error);
     }
 });
 // remove
@@ -384,7 +440,11 @@ exports.getFavorites = functionBuilder(async (req, res) => {
 //         res.status(500).send(error);
 //     }
 // })
-const setQuery = async (filters) => {
+const handleError = (res, err) => {
+    functions.logger.error(err);
+    res.status(500).send(err);
+};
+const setSpringsQuery = async (filters) => {
     const springsRef = await db.collection("springs");
     let springsQuery = undefined;
     if (filters) {
@@ -409,6 +469,25 @@ const setQuery = async (filters) => {
         }
     }
     return (springsQuery ? springsQuery : springsRef).get();
+};
+const setHotelsQuery = async (filters, language) => {
+    const hotelsRef = await db.collection("hotels");
+    let hotelsQuery = undefined;
+    if (filters) {
+        if (filters.price) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.price);
+        }
+        if (filters.pool) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('pool', '==', true);
+        }
+        if (filters.breakfast) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('breakfast', '==', true);
+        }
+        if (filters.regions) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('region.' + language, 'in', filters.regions);
+        }
+    }
+    return (hotelsQuery ? hotelsQuery : hotelsRef).get();
 };
 const getGeohashRange = (latitude, longitude, distance // miles
 ) => {
@@ -453,6 +532,19 @@ const creatJwtToken = (email) => {
 };
 const validateJwtToken = (token) => {
     return jwt.verify(token, jwtSecret.secret);
+};
+const springNameToSearch = (springName) => {
+    springName = springName.trim();
+    let tmp = "";
+    for (const letter of springName) {
+        if (letter === "/") {
+            tmp += "\\";
+        }
+        else if (letter !== `'` && letter !== `"`) {
+            tmp += letter;
+        }
+    }
+    return tmp;
 };
 const i18n = [
     {

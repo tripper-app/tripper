@@ -1,4 +1,4 @@
-export class Filters{
+export class SpringFilters{
     camping: boolean
     children: boolean
     water: boolean

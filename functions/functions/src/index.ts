@@ -1,4 +1,4 @@
-declare var global: any;
+declare let global: any;
 global.XMLHttpRequest = require("xhr2");
 import * as functions from 'firebase-functions';
 import * as admin from "firebase-admin";
@@ -26,15 +26,17 @@ const firebaseConfig = {
 firebase.default.initializeApp(firebaseConfig)
 admin.initializeApp();
 const db = admin.firestore();
-//const SecretJWT = "springsSecret";
 const region = "europe-west1";
+const usersCollection = "usesr";
+const springsCollection = 'springs';
+const hotelsCollection = 'hotels'
+const defaultLanguage = 'iw';
 
 const runtimeOpts: functions.RuntimeOptions = {
     timeoutSeconds: 60,
     memory: '128MB'
 }
 
-const defaultLanguage = 'iw';
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -42,6 +44,7 @@ const transporter = nodemailer.createTransport({
         pass: tripperEmail.password
     }
 });
+
 const mailOptions = {
     from: `tripper.app.il@gmail.com`,
     to: "",
@@ -56,27 +59,46 @@ const functionBuilder = functions.region(region).runWith(runtimeOpts).https.onRe
 
 export const getAllSprings = functionBuilder(async (req, res) => {
     try {
-        const springsDocs = await setQuery(req.body.filters);
+        const springsDocs = await setSpringsQuery(req.body.filters);
         const springs: any = [];
         springsDocs.forEach(doc => {
-            const fields = doc.data();
-            const newSpring = { location: fields.location, ID: doc.id };
+            const newSpring = { location: doc.get("location"), ID: doc.id };
             springs.push(newSpring);
         })
 
         res.send(springs)
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
+    }
+})
+
+export const getSpringByName = functionBuilder(async (req, res) => {
+    try {
+        const lang = req.query.lang;
+        const name = springNameToSearch(req.query.springName as string);
+        const spring = await (await db.collection(springsCollection)
+            .where(`name.${lang}`, ">=", name)
+            .where(`name.${lang}`, '<=', name + '\uf8ff')
+            .get()).docs[0]; // add limit?
+        const flatSpring = { ID: "", location: {} };
+        if (spring) {
+            flatSpring.ID = spring.id;
+            flatSpring.location = spring.get("location");
+        }
+        res.send(flatSpring);
+    } catch (error) {
+        handleError(res, error);
     }
 })
 
 export const getSpring = functionBuilder(async (req, res) => {
     try {
+        const email = validateJwtToken(req.headers.token as string);
         const spring = await db
-            .collection("springs")
+            .collection(springsCollection)
             .doc(req.query.springId as string)
             .get();
+
         const data = spring.data();
         if (data) {
             const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
@@ -86,11 +108,18 @@ export const getSpring = functionBuilder(async (req, res) => {
             data.name = updateField(data.name, currentLanguage);
             data.preferredSeason = updateField(data.preferredSeason, currentLanguage);
             data.depth = updateField(data.depth, currentLanguage);
+            data.isFavorite = false;
+            if (email) {
+                const isFavorite = (await db
+                    .collection(usersCollection)
+                    .doc(email)
+                    .get()).get("favoritesSprings");
+                if (isFavorite.includes(spring.id)) data.isFavorite = true;
+            }
         }
         res.send(data)
     } catch (error) {
-        functions.logger.error(error, { structuredData: true });
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -102,7 +131,7 @@ export const login = functionBuilder(async (req, res) => {
                 .where("password", "==", getHash(req.query.password as string))
                 .limit(1);
             const user = await usersRef.get();
-            if (user.size) {
+            if (!user.empty) {
                 const data = user.docs[0].data();
                 if (data.pendingVerification) {
                     res.status(407).send("email is not verified");
@@ -118,8 +147,7 @@ export const login = functionBuilder(async (req, res) => {
             res.status(400).send("email and password required");
         }
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 
 })
@@ -156,8 +184,7 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
         }
 
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -193,8 +220,7 @@ export const signup = functionBuilder(async (req, res) => {
             res.status(400).send("email and password required");
         }
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -208,8 +234,7 @@ export const verifyEmail = functionBuilder(async (req, res) => {
             res.status(400).send("can't find this email address");
         }
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -231,8 +256,7 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
             res.send(mailRes);
         }
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -259,17 +283,16 @@ export const resetPasswordRecieveCode = functionBuilder(async (req, res) => {
         }
 
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
-export const changePassword = functionBuilder(async (req, res) => {
+export const changePassword = functionBuilder(async (req, res) => { // should user provide old password?
     try {
         const email = validateJwtToken(req.headers.access_token as string);
         const newPassword = req.body.newPassword;
         if (newPassword) {
-            await await db.collection('users').doc(email).update({
+            await db.collection('users').doc(email).update({
                 "password": getHash(newPassword)
             });
             res.send();
@@ -277,8 +300,7 @@ export const changePassword = functionBuilder(async (req, res) => {
             res.status(400).send("please provide old and new passwords");
         }
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -296,8 +318,7 @@ export const updateProfile = functionBuilder(async (req, res) => {
             throw err;
         });
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
@@ -327,58 +348,174 @@ export const addComment = functionBuilder(async (req, res) => {
 
         }
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
-export const addFavorite = functionBuilder(async (req, res) => {
+export const addFavoriteSpring = functionBuilder(async (req, res) => {
     try {
         const email = validateJwtToken(req.headers.token as string);
-        const springId = req.body.springId;
-        const newFavorite = {
-            springId: springId
-        };
+        const springId = req.query.springId;
         const userRef = await db.collection('users').doc(email);
         await userRef.update({
-            favorites: admin.firestore.FieldValue.arrayUnion(newFavorite)
+            favoritesSprings: admin.firestore.FieldValue.arrayUnion(springId)
         });
 
         res.send();
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
-export const removeFavorite = functionBuilder(async (req, res) => {
+export const removeFavoriteSpring = functionBuilder(async (req, res) => {
     try {
         const email = validateJwtToken(req.headers.token as string);
         const springId = req.body.springId;
-        const newFavorite = {
-            springId: springId
-        };
         const userRef = await db.collection('users').doc(email);
         await userRef.update({
-            favorites: admin.firestore.FieldValue.arrayRemove(newFavorite)
+            favoritesSprings: admin.firestore.FieldValue.arrayRemove(springId)
         });
 
         res.send();
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
     }
 })
 
-export const getFavorites = functionBuilder(async (req, res) => {
+export const getFavoriteSprings = functionBuilder(async (req, res) => {
     try {
         const email = validateJwtToken(req.headers.token as string);
         const user = await db.collection('users').doc(email).get();
-        const favorites = user.get('favorites');
+        const favorites = user.get('favoriteSprings');
         res.send(favorites);
     } catch (error) {
-        functions.logger.error(error);
-        res.status(500).send(error);
+        handleError(res, error);
+    }
+})
+
+export const addHistorySpring = functionBuilder(async (req, res) => {
+    try {
+        const historyLimit = 50;
+        const email = validateJwtToken(req.headers.token as string);
+        const springId = req.query.springId;
+        const userRef = await db.collection('users').doc(email);
+        await userRef.update({
+            historySprings: admin.firestore.FieldValue.arrayUnion(springId)
+        });
+
+        if ((await userRef.get()).get("historySprings").length > historyLimit) {
+            const first = await (await userRef.get()).get("historySprings")
+            await userRef.update({
+                historySprings: admin.firestore.FieldValue.arrayRemove(first[0])
+            });
+        }
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getHistorySprings = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.token as string);
+        const user = await db.collection('users').doc(email).get();
+        const history = user.get('historySprings');
+        res.send(history);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getAllHotels = functionBuilder(async (req, res) => {
+    const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+    try {
+        const hotelsDocs = await setHotelsQuery(req.body.filters, currentLanguage);
+        const hotels: any = [];
+        hotelsDocs.forEach(doc => {
+            const fields = doc.data();
+            const newHotel = {
+                ID: doc.id,
+                description: updateField(fields.description, currentLanguage),
+                name: updateField(fields.name, currentLanguage),
+                price: fields.price,
+                region: updateField(fields.region, currentLanguage)
+            };
+            hotels.push(newHotel);
+        })
+        res.send(hotels)
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const GetHotel = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const hotel = await db
+            .collection(hotelsCollection)
+            .doc(req.query.hotelId as string)
+            .get();
+        const data = hotel.data()
+        let newHotel;
+        if (data) {
+            newHotel = {
+                name: updateField(data.name, currentLanguage),
+                attractions: data.attractions.map((h: string) => updateField(h, currentLanguage)),
+                breakfast: data.breakfast,
+                city: updateField(data.city, currentLanguage),
+                description: updateField(data.description, currentLanguage),
+                images: data.images,
+                location: data.location,
+                phone: data.phone,
+                pool: data.pool,
+                price: data.price,
+                region: updateField(data.region, currentLanguage),
+                websiteLink: data.websiteLink
+            }
+        }
+        res.send(newHotel);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const addFavoriteHotel = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.token as string);
+        const hotelId = req.query.hotelId;
+        const userRef = await db.collection('users').doc(email);
+        await userRef.update({
+            favoriteshotels: admin.firestore.FieldValue.arrayUnion(hotelId)
+        });
+
+        res.send();
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const removeFavoriteHotel = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.token as string);
+        const hotelId = req.body.springId;
+        const userRef = await db.collection('users').doc(email);
+        await userRef.update({
+            favoriteshotels: admin.firestore.FieldValue.arrayRemove(hotelId)
+        });
+
+        res.send();
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getFavoriteHotels = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.token as string);
+        const user = await db.collection('users').doc(email).get();
+        const favorites = user.get('favoriteHotels');
+        res.send(favorites);
+    } catch (error) {
+        handleError(res, error);
     }
 })
 
@@ -393,8 +530,12 @@ export const getFavorites = functionBuilder(async (req, res) => {
 // })
 
 
+const handleError = (res: functions.Response, err: Error) => {
+    functions.logger.error(err);
+    res.status(500).send(err);
+}
 
-const setQuery = async (filters: any) => {
+const setSpringsQuery = async (filters: any) => {
     const springsRef = await db.collection("springs");
     let springsQuery = undefined;
     if (filters) {
@@ -425,6 +566,30 @@ const setQuery = async (filters: any) => {
     }
 
     return (springsQuery ? springsQuery : springsRef).get();
+}
+
+const setHotelsQuery = async (filters: any, language: string) => {
+    const hotelsRef = await db.collection("hotels");
+    let hotelsQuery = undefined;
+    if (filters) {
+        if (filters.price) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.price);
+        }
+
+        if (filters.pool) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('pool', '==', true)
+        }
+
+        if (filters.breakfast) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('breakfast', '==', true)
+        }
+
+        if (filters.regions) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('region.' + language, 'in', filters.regions)
+        }
+    }
+
+    return (hotelsQuery ? hotelsQuery : hotelsRef).get();
 }
 
 const getGeohashRange = (
@@ -481,6 +646,21 @@ const creatJwtToken = (email: string) => {
 
 const validateJwtToken = (token: string) => {
     return jwt.verify(token, jwtSecret.secret) as string;
+}
+
+const springNameToSearch = (springName: string) => {
+    springName = springName.trim();
+    let tmp = "";
+    for (const letter of springName) {
+        if (letter === "/") {
+            tmp += "\\";
+        }
+        else if (letter !== `'` && letter !== `"`) {
+            tmp += letter;
+        }
+    }
+
+    return tmp;
 }
 
 const i18n = [

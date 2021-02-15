@@ -12,10 +12,11 @@ import { LanguageService } from '../common/services/language-service';
 import { DrawerService } from '../common/services/drawer-service';
 import * as application from "tns-core-modules/application";
 import { SearchBar } from 'tns-core-modules';
+import { AlertService } from '../common/services/alert-service';
 
 @Component({
   selector: 'ns-map',
-  providers: [ModalDialogService],
+  providers: [ModalDialogService], // delete
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
@@ -26,27 +27,28 @@ export class MapComponent implements OnInit, OnDestroy {
   defaultZoom = 10;
   bigZoom = 12;
   userMarker: Marker;
-  springsSubscription;
-  responseErrorSubscription;
-  waitForResponseSubscription;
+  springsSubscription; // delete
+  responseErrorSubscription; // delete
+  waitForResponseSubscription; // delete
 
   constructor(private page: Page,
-    private modalService: ModalDialogService,
+    private modalService: ModalDialogService, // delete
     private viewContainerRef: ViewContainerRef,
     private springsService: SpringsService,
     private languageService: LanguageService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService, // delete
+    private alertService: AlertService) {
   }
 
   ngOnInit(): void {
-    if (application.android) {
+    if (application.android) { // delete
       application.android.on(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
     }
 
     this.page.actionBarHidden = true;
-    this.drawerService.sideDrawer = true;
+    this.drawerService.sideDrawer = true; // delete
 
-    this.waitForResponseSubscription = this.springsService.waitingForResponse.subscribe((data) => {
+    this.waitForResponseSubscription = this.springsService.waitingForResponse.subscribe((data) => { // delete
       this.loading = true;
     })
   }
@@ -61,36 +63,27 @@ export class MapComponent implements OnInit, OnDestroy {
       this.centerMap();
     }
     else {
-      alert(localize('messages.error.noLocationPermissions'));
+      this.alertService.showError(localize('messages.error.noLocationPermissions'));
     }
 
     this.getSprings();
   }
 
   async getSprings() {
-    this.springsSubscription = this.springsService.getAllSprings().subscribe((springs: FlatSpring[]) => {
+    this.springsSubscription = this.springsService.getSpringsSubject().subscribe((springs: FlatSpring[]) => {
       this.loading = false;
       this.clearMarkers();
       springs.forEach(spring => {
-        const marker = new Marker();
-        marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
-        marker.color = "#9061ff";
-        marker.userData = { ID: spring.ID };
-        this.mainMap.addMarker(marker);
+        this.addMarker(spring);
+        // const marker = new Marker();
+        // marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
+        // marker.color = "#9061ff";
+        // marker.userData = { ID: spring.ID };
+        // this.mainMap.addMarker(marker);
       })
-    }, error => {
+    }, err => {
       this.loading = false;
-      switch (error.status) {
-        case 0:
-          alert(localize('messages.error.connectionError'));
-          break;
-        case 500:
-          console.log(error);
-          
-          alert(localize("messages.error.serverError"))
-        default:
-          break;
-      }
+      this.handleErrors(err);
     })
     this.springsService.updateSprings();
   }
@@ -125,7 +118,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.mainMap.longitude = location.longitude;
     }
     else {
-      alert(localize('messages.error.noLocationPermissions'));
+      this.alertService.showError(localize('messages.error.noLocationPermissions'));
       console.log("recieved location is NULL");
     }
   }
@@ -153,9 +146,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   onSearchBarLoaded(event) {
     if (event.object.android) {
-        event.object.android.clearFocus();
+      event.object.android.clearFocus();
     }
-}
+  }
 
   async clearMarkers() {
     if (this.mainMap) {
@@ -164,8 +157,52 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  searchByName(){
-    console.log(this.searchField.nativeElement.text);
+  searchByName() {
+    this.searchField.nativeElement.dismissSoftInput();
+    const oldText = this.searchField.nativeElement.text;
+    this.loading = true;
+    this.springsService.getSpringByName(this.searchField.nativeElement.text).subscribe((res: FlatSpring) => {
+      this.searchField.nativeElement.text += " ";
+      this.searchField.nativeElement.text = oldText;
+      if (res.ID) {
+        this.loading = false;
+        this.clearMarkers();
+        this.addMarker(res);
+        this.mainMap.latitude = res.location._latitude;
+        this.mainMap.longitude = res.location._longitude;
+      } else {
+        this.loading = false;
+        this.alertService.showError(localize("messages.error.springNotFound"));
+      }
+    }, err => {
+      this.loading = false;
+      this.searchField.nativeElement.text += " ";
+      this.searchField.nativeElement.text = oldText;
+      this.handleErrors(err);
+    })
+  }
+
+  handleErrors(error) {
+    this.loading = false;
+    console.log(error);
+    switch (error.status) {
+      case 0:
+        this.alertService.showError(localize('messages.error.connectionError'));
+        break;
+      case 500:
+        this.alertService.showError(localize("messages.error.serverError"));
+      default:
+        // alert default message
+        break;
+    }
+  }
+
+  private addMarker(spring: FlatSpring) {
+    const marker = new Marker();
+    marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
+    marker.color = "#9061ff";
+    marker.userData = { ID: spring.ID };
+    this.mainMap.addMarker(marker);
   }
 
   private onAndroidActivityResume(args) {

@@ -112,23 +112,23 @@ export class SignUpComponent implements OnInit {
     }
 
     loginWithGoogle() {
-        // GoogleLogin.login(res => {
-        //     console.log(res);
-
-        // })
-        this.oathService.tnsOauthLogin("google", data => {
-            console.log("in success callback!");
-            this.httpService.getEmailByFacebookToken(data.accessToken).subscribe(res => {
-                console.log("SUCCESS!!");
-
-                console.log(res);
-
-            }, err => this.handleError(err))
-        }, err => {
-            console.log("in error callback");
-            console.log(err);
-            
+        GoogleLogin.login(res => {
+            console.log(res);
         })
+        // this.oathService.tnsOauthLogin("google", data => {
+        //     alert(data)
+        //     console.log(data);
+        //     this.httpService.getEmailByFacebookToken(data.accessToken).subscribe(res => {
+        //         console.log("SUCCESS!!");
+
+        //         console.log(res);
+
+        //     }, err => this.handleError(err))
+        // }, err => {
+        //     console.log("in error callback");
+        //     console.log(err);
+            
+        // })
     }
 
     loginWithThirdParty(token, thirdParty) {
@@ -203,9 +203,7 @@ export class SignUpComponent implements OnInit {
                 serverClientId: "597122793226-4p5ki7crvpk9a9h0k9plh4n89fvnjmg4.apps.googleusercontent.com",
                 isRequestAuthCode: true
             },
-            activity: application.android.foregroundActivity,
-            viewController: undefined,
-            onActivityResult: undefined
+            viewController: application.android.foregroundActivity
         });
     }
 }

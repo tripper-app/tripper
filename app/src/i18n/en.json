@@ -28,9 +28,11 @@
             "waitingForData": "Waiting for data... "
         },
         "error": {
+            "springNotFound": "We can't find a spring with this name",
             "connectionError": "Request failed. please check your internet connection",
             "serverError": "something has failed in our servers :-( the problem is being checked",
-            "noLocationPermissions": "In order for the application to work fully, location permissions must be enabled"
+            "noLocationPermissions": "In order for the application to work fully, location permissions must be enabled",
+            "unRegisteredUser": "You have to be a registered user to do this"
         }
     },
     "springModal": {
@@ -41,7 +43,8 @@
         "navigateWith": "Navigate with",
         "shareWith": "Share with",
         "shareSpring": "Share spring",
-        "navigateWithWaze": "Navigate with waze"
+        "navigateWithWaze": "Navigate with waze",
+        "shareLink": "Shared withh Tripper app. Click on the link to download"
     },
     "login": {
         "requireCode": "Insert the code you recieved",

@@ -4,7 +4,7 @@ import { Accuracy } from "tns-core-modules/ui/enums";
 import { HttpService } from './http-service';
 import { Observable, Subject, Subscriber } from 'rxjs';
 import { FlatSpring } from '../models/flatSpring';
-import { Filters } from '../models/filters';
+import { SpringFilters } from '../models/springFilters';
 import { FullSpring } from '../models/fullSpring';
 import { map } from 'rxjs/operators';
 
@@ -18,20 +18,30 @@ export class SpringsService {
   geolocationWatching = false;
   geoWatchingEvent: Function;
   savedsprings: any[] = [];
+  filters: SpringFilters;
 
   constructor(private httpService: HttpService) {
   }
 
 
-  getAllSprings() {
+  getSprings(){
+    return this.httpService.getAllsprings(this.filters);
+  }
+
+
+  getSpringsSubject() {
     return this.springsSubject;
   }
 
-  updateSprings(filters: Filters = undefined) {
+  getSpringByName(springName: string){
+    return this.httpService.getSpringByName(springName);
+  }
+
+  updateSprings(filters: SpringFilters = undefined) {
     
     this.waitingForResponse.next();
     if (!filters) {
-      filters = new Filters();
+      filters = new SpringFilters();
       filters.distance = 25;
     }
 
@@ -67,6 +77,8 @@ export class SpringsService {
   addComment(text: string, springId: string){
     return this.httpService.addComment(text, springId);
   }
+
+
 
   async getLocationPermission() {
     try {

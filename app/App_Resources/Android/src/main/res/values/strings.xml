@@ -27,6 +27,7 @@
   <string name="_login_requireDetails_17tIQt">"מלאו את הפרטים"</string>
   <string name="_login_requireEmail_c5U2B">"הזינו את כתובת האמייל שלכם"</string>
   <string name="_login_requireCode_Z27Gx6p">"הזינו את הקוד שנשלח אליכם"</string>
+  <string name="_springModal_shareLink_3xbnl">"שותף מאפליקציית טריפר. לחצו על הקישור כדי להוריד"</string>
   <string name="_springModal_navigateWithWaze_Z244VUX">"נווטו באמצעות ווייז"</string>
   <string name="_springModal_shareSpring_8zE8n">"שתף מעיין"</string>
   <string name="_springModal_shareWith_3yCuu">"שתפו באמצעות"</string>
@@ -35,9 +36,11 @@
   <string name="_springModal_preferredSeason_19MPST">"עונה מועדפת"</string>
   <string name="_springModal_walkingDistanceFromCar_Z2tIIkz">"מרחק הליכה מהרכב"</string>
   <string name="_springModal_depth_Z14VPYC">"עומק"</string>
+  <string name="_messages_error_unRegisteredUser_Z2bThFI">"רק משתמש רשום יכול לעשות את הפעולה הזו"</string>
   <string name="_messages_error_noLocationPermissions_2sJauf">"כדי שהאפליקציה תעבוד בצורה מלאה צריך לאפשר הרשאות מיקום"</string>
   <string name="_messages_error_serverError_1f9C5t">"משהו השתבש אצלנו בשרתים :-( הבעיה בבדיקה"</string>
   <string name="_messages_error_connectionError_ZBYE1U">"בקשה נכשלה. אנא בדקו חיבור לאינטרנט"</string>
+  <string name="_messages_error_springNotFound_23yS3">"לא נמצא מעיין בשם הזה"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"ממתין לנתונים... "</string>
   <string name="_filters_submit_ZuRGQg">"שלח"</string>
   <string name="_filters_radius_ZygWxy">"רדיוס"</string>

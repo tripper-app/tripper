@@ -1,3 +1,3 @@
 "use strict";
-exports.secret = "springsSecret";
+exports.secret = "tripperSecret";
 //# sourceMappingURL=jwtSecret.js.map

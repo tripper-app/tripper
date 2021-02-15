@@ -28,9 +28,11 @@
             "waitingForData": "ממתין לנתונים... "
         },
         "error": {
+            "springNotFound": "לא נמצא מעיין בשם הזה",
             "connectionError": "בקשה נכשלה. אנא בדקו חיבור לאינטרנט",
             "serverError": "משהו השתבש אצלנו בשרתים :-( הבעיה בבדיקה",
-            "noLocationPermissions": "כדי שהאפליקציה תעבוד בצורה מלאה צריך לאפשר הרשאות מיקום"
+            "noLocationPermissions": "כדי שהאפליקציה תעבוד בצורה מלאה צריך לאפשר הרשאות מיקום",
+            "unRegisteredUser": "רק משתמש רשום יכול לעשות את הפעולה הזו"
         }
     },
     "springModal": {
@@ -41,7 +43,8 @@
         "navigateWith": "נווטו באמצעות",
         "shareWith": "שתפו באמצעות",
         "shareSpring": "שתף מעיין",
-        "navigateWithWaze": "נווטו באמצעות ווייז"
+        "navigateWithWaze": "נווטו באמצעות ווייז",
+        "shareLink": "שותף מאפליקציית טריפר. לחצו על הקישור כדי להוריד"
     },
     "login": {
         "requireCode": "הזינו את הקוד שנשלח אליכם",

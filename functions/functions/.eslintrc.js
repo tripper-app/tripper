@@ -45,7 +45,7 @@ module.exports = {
     ],
     "no-invalid-this": "error",
     "no-new-wrappers": "error",
-    "no-param-reassign": "error",
+    "no-param-reassign": 0,
     "no-redeclare": "error",
     "no-sequences": "error",
     "no-shadow": [

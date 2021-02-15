@@ -48,8 +48,12 @@ export class SpringModalComponent implements OnInit {
   async share() {
     const imgsrc = await ImageSource.fromUrl(this.currentSpring.images[0]);
     try {
-      var springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}\n${this.getTextFromFields()}\n\n${localize("springModal.navigateWithWaze")}: 
-      https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes`;
+      var springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}
+\n${this.getTextFromFields()}
+${localize("springModal.navigateWithWaze")}:
+https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n
+${localize("springModal.shareLink")}:
+123456 just some link here lorem ipsum`; // to do - put here real link!!!
       SocialShare.shareImage(imgsrc, springText)
     } catch (error) {
       console.log(error);
@@ -62,7 +66,7 @@ export class SpringModalComponent implements OnInit {
       txt += `${localize("springModal.depth")}: ${this.currentSpring.depth}\n`;
     }
 
-    if (this.currentSpring.walkingDistanceFromCar) {
+    if (this.currentSpring.distanceFromCar) {
       txt += `${localize("springModal.walkingDistanceFromCar")}: ${this.currentSpring.distanceFromCar}\n`;
     }
 

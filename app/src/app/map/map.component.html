@@ -1,16 +1,22 @@
-<GridLayout columns="3*,*" rows="*,3*">
+<GridLayout columns="3*,*" rows="*,*,5*">
     <StackLayout *ngIf="loading" rowSpan="2" colSpan="2" class="gif" horizontalAlignment="center" verticalAlignment="center">
-        <Gif:Gif src="~/assets/droplet_gif.gif" />
+        <Gif:Gif rowSpan="2" src="~/assets/droplet_gif.gif" />
         <label class="waitingLabel" text="{{ 'messages.info.waitingForData' | L }}" ></label>
     </StackLayout>
 
-    <maps:mapView row="0" rowSpan="2" col="0" colSpan="2" [zoom]="defaultZoom" (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
+    <maps:mapView row="0" rowSpan="3" col="0" colSpan="2" [zoom]="defaultZoom" (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
         (markerSelect)="clickOnMarker($event.marker)" [latitude]="31.7962994" [longitude]="35.2453993" #map>
     </maps:mapView>
-    <FlexboxLayout row="0" rowSpan="2" col="1" justifyContent="space-between" class="iconsFlex">
-        <button text="&#xf0c9;" class="fas burgerMenu" (tap)="toggleDrawer()"></button>
+    <!-- <FlexboxLayout row="0" rowSpan="2" col="1" justifyContent="space-between" class="iconsFlex">
+    </FlexboxLayout> -->
+    
+    <FlexboxLayout row="0" colSpan="2" class="iconsFlex">
+        <button text="חיפוש"></button>
         <button text="&#xf041;" class="fas locationBtn" (tap)="setMyPosition()"></button>
+        <!-- <SearchBar text="" hint="חיפוש מעיין לפי שם" colSpan="2" class="search" (loaded)="onSearchBarLoaded($event)" (submit)="searchByName()" #searchField></SearchBar> -->
     </FlexboxLayout>
-
-    <SearchBar hint="חיפוש מעיין לפי שם" row="0" col="0" colSpan="2" class="search" (loaded)="onSearchBarLoaded($event)" (submit)="searchByName()" #searchField></SearchBar>
+    <FlexboxLayout row="1" class="iconsFlex">
+        <button text="&#xf0c9;" class="fas burgerMenu" (tap)="toggleDrawer()"></button>
+        
+    </FlexboxLayout>
 </GridLayout>

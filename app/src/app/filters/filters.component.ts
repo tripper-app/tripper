@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Filters } from '../common/models/filters';
+import { SpringFilters } from '../common/models/springFilters';
 import { SpringsService } from '../common/services/springs-service';
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
 import { getRootView } from "tns-core-modules/application";
@@ -29,7 +29,7 @@ export class FiltersComponent implements OnInit {
 
     submit() {        
         (<RadSideDrawer>getRootView()).closeDrawer();
-        const filters: Filters = new Filters();
+        const filters: SpringFilters = new SpringFilters();
         filters.camping = this.campingSwitch.nativeElement.checked;
         filters.car = this.carSwitch.nativeElement.checked;
         filters.children = this.childrenSwitch.nativeElement.checked;
