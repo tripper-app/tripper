@@ -21,10 +21,17 @@ export class SpringsService {
   filters: SpringFilters;
 
   constructor(private httpService: HttpService) {
+    this.filters = new SpringFilters();
+    this.filters.distance = 25;
+  }
+
+  setFilters(filers: SpringFilters){
+    this.filters = filers;
   }
 
 
   getSprings(){
+    this.filters.location = this.currentLocation;
     return this.httpService.getAllsprings(this.filters);
   }
 
@@ -39,19 +46,19 @@ export class SpringsService {
 
   updateSprings(filters: SpringFilters = undefined) {
     
-    this.waitingForResponse.next();
-    if (!filters) {
-      filters = new SpringFilters();
-      filters.distance = 25;
-    }
+    // this.waitingForResponse.next();
+    // if (!filters) {
+    //   filters = new SpringFilters();
+    //   filters.distance = 25;
+    // }
 
     filters.location = this.currentLocation;
-
-    this.httpService.getAllsprings(filters).subscribe((res: FlatSpring[]) => {
-      this.springsSubject.next(res);
-    }, error => {      
-      this.springsSubject.error(error);
-    })
+    return this.httpService.getAllsprings(filters);
+    // this.httpService.getAllsprings(filters).subscribe((res: FlatSpring[]) => {
+    //   this.springsSubject.next(res);
+    // }, error => {      
+    //   this.springsSubject.error(error);
+    // })
   }
 
   getSpring(id: string) {

@@ -1,4 +1,4 @@
-<BottomNavigation selectedIndex="3" >
+<BottomNavigation [selectedIndex]="selectedPageIndex" >
     <TabStrip>
         <TabStripItem>
             <Label text="חשבון"></Label>
@@ -25,17 +25,17 @@
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <Label text="Account Page" class="h2 text-center"></Label>
+            <ns-profile></ns-profile>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <Label text="Search Page" class="h2 text-center"></Label>
+            <ns-profile></ns-profile>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <ns-map></ns-map>
+            <!-- <ns-map></ns-map> -->
         </GridLayout>
     </TabContentItem>
 </BottomNavigation>

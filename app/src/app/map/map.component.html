@@ -1,5 +1,5 @@
 <GridLayout columns="3*,*" rows="*,*,5*">
-    <StackLayout *ngIf="loading" rowSpan="2" colSpan="2" class="gif" horizontalAlignment="center" verticalAlignment="center">
+    <StackLayout *ngIf="loading" row="2" colSpan="2" class="gif" horizontalAlignment="center" verticalAlignment="center">
         <Gif:Gif rowSpan="2" src="~/assets/droplet_gif.gif" />
         <label class="waitingLabel" text="{{ 'messages.info.waitingForData' | L }}" ></label>
     </StackLayout>
@@ -16,7 +16,7 @@
         <!-- <SearchBar text="" hint="חיפוש מעיין לפי שם" colSpan="2" class="search" (loaded)="onSearchBarLoaded($event)" (submit)="searchByName()" #searchField></SearchBar> -->
     </FlexboxLayout>
     <FlexboxLayout row="1" class="iconsFlex">
-        <button text="&#xf0c9;" class="fas burgerMenu" (tap)="toggleDrawer()"></button>
+        <button text="&#xf0c9;" class="fas burgerMenu" (tap)="navigateToFilters()"></button>
         
     </FlexboxLayout>
 </GridLayout>

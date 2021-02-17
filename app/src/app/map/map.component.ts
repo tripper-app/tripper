@@ -13,6 +13,7 @@ import { DrawerService } from '../common/services/drawer-service';
 import * as application from "tns-core-modules/application";
 import { SearchBar } from 'tns-core-modules';
 import { AlertService } from '../common/services/alert-service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'ns-map',
@@ -32,6 +33,7 @@ export class MapComponent implements OnInit, OnDestroy {
   waitForResponseSubscription; // delete
 
   constructor(private page: Page,
+    private router: Router,
     private modalService: ModalDialogService, // delete
     private viewContainerRef: ViewContainerRef,
     private springsService: SpringsService,
@@ -41,6 +43,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     if (application.android) { // delete
       application.android.on(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
     }
@@ -70,9 +73,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   async getSprings() {
-    this.springsSubscription = this.springsService.getSpringsSubject().subscribe((springs: FlatSpring[]) => {
+    this.springsSubscription = this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
       this.loading = false;
-      this.clearMarkers();
+      this.clearMarkers(); // delete
       springs.forEach(spring => {
         this.addMarker(spring);
         // const marker = new Marker();
@@ -85,7 +88,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.handleErrors(err);
     })
-    this.springsService.updateSprings();
+    //this.springsService.updateSprings(); // delete
   }
 
   async setMyPosition() {
@@ -124,21 +127,22 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickOnMarker(marker) {
-    if (marker != this.userMarker) {
-      const options: ModalDialogOptions = {
-        viewContainerRef: this.viewContainerRef,
-        fullscreen: false,
-        context: marker.userData
-      };
-      this.modalService.showModal(SpringModalComponent, options);
-    }
+    this.router.navigate(["springView", marker.userData.ID])
+    // if (marker != this.userMarker) {
+    //   const options: ModalDialogOptions = {
+    //     viewContainerRef: this.viewContainerRef,
+    //     fullscreen: false,
+    //     context: marker.userData
+    //   };
+    //   this.modalService.showModal(SpringModalComponent, options);
+    // }
   }
 
-  toggleDrawer() {
-    this.searchField.nativeElement.dismissSoftInput();
-    this.drawerService.setdrawerLocation(this.languageService.getRightToLeft());
-    this.drawerService.openDrawer()
-  }
+  // toggleDrawer() {
+  //   this.searchField.nativeElement.dismissSoftInput();
+  //   this.drawerService.setdrawerLocation(this.languageService.getRightToLeft());
+  //   this.drawerService.openDrawer()
+  // }
 
   coordinateLongPress(cords) {
     // add marker (different collor?)    
@@ -182,6 +186,10 @@ export class MapComponent implements OnInit, OnDestroy {
     })
   }
 
+  navigateToFilters(){
+    this.router.navigate(["springsFilter"]);
+  }
+
   handleErrors(error) {
     this.loading = false;
     console.log(error);
@@ -205,7 +213,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mainMap.addMarker(marker);
   }
 
-  private onAndroidActivityResume(args) {
+  private onAndroidActivityResume(args) { // delete
     if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
       this.mainMap.nativeView.onResume();
       this.drawerService.sideDrawer = false;

@@ -15,13 +15,14 @@
         }
     },
     "filters": {
+        "header": "Which spring to look for?",
         "camping": "Suitable for camping",
         "children": "Suitable for children",
         "water": "Drinking water point",
         "car": "Access with car",
         "depth": "Deeper than 2 meters",
         "radius": "Radius",
-        "submit": "Submit"
+        "search": "Search"
     },
     "messages": {
         "info": {
@@ -35,7 +36,7 @@
             "unRegisteredUser": "You have to be a registered user to do this"
         }
     },
-    "springModal": {
+    "springView": {
         "depth": "depth",
         "walkingDistanceFromCar": "Walking distance from car",
         "preferredSeason": "Preferred season",
@@ -44,7 +45,15 @@
         "shareWith": "Share with",
         "shareSpring": "Share spring",
         "navigateWithWaze": "Navigate with waze",
-        "shareLink": "Shared withh Tripper app. Click on the link to download"
+        "navigateWithMaps": "Navigate with Maps",
+        "shareLink": "Shared withh Tripper app. Click on the link to download",
+        "suitableForCamping": "Suitable for camping",
+        "notSuitableForCamping": "Not suitable for camping",
+        "suitableableForChildren": "Suitable for kids",
+        "notSuitableForChildren": "Not suitable for kids",
+        "thereIsDrinkingWater": "There is drinking water",
+        "noDrinkingWater": "There is no drinking water",
+        "newComment": "new comment..."
     },
     "login": {
         "requireCode": "Insert the code you recieved",

@@ -15,13 +15,14 @@
         }
     },
     "filters": {
+        "header": "איזה מעיין לחפש?",
         "camping": "מתאים לקאמפינג",
         "children": "מתאים לילדים",
         "water": "נקודת מים לשתיה",
         "car": "גישה עם רכב",
         "depth": "עמוק יותר מ2 מטרים",
         "radius": "רדיוס",
-        "submit": "שלח"
+        "search": "חיפוש"
     },
     "messages": {
         "info": {
@@ -35,7 +36,7 @@
             "unRegisteredUser": "רק משתמש רשום יכול לעשות את הפעולה הזו"
         }
     },
-    "springModal": {
+    "springView": {
         "depth": "עומק",
         "walkingDistanceFromCar": "מרחק הליכה מהרכב",
         "preferredSeason": "עונה מועדפת",
@@ -43,8 +44,16 @@
         "navigateWith": "נווטו באמצעות",
         "shareWith": "שתפו באמצעות",
         "shareSpring": "שתף מעיין",
-        "navigateWithWaze": "נווטו באמצעות ווייז",
-        "shareLink": "שותף מאפליקציית טריפר. לחצו על הקישור כדי להוריד"
+        "navigateWithWaze": "ניווט ב-Waze",
+        "navigateWithMaps": "ניווט ב-Maps",
+        "shareLink": "שותף מאפליקציית טריפר. לחצו על הקישור כדי להוריד",
+        "suitableForCamping": "מתאים לקמפינג",
+        "notSuitableForCamping": "לא מתאים לקמפינג",
+        "suitableableForChildren": "מתאים לילדים",
+        "notSuitableForChildren": "לא מתאים לילדים",
+        "thereIsDrinkingWater": "יש מי שתיה",
+        "noDrinkingWater": "אין מי שתיה",
+        "newComment": "תגובה חדשה..."
     },
     "login": {
         "requireCode": "הזינו את הקוד שנשלח אליכם",

@@ -7,10 +7,14 @@ import { Gif } from 'nativescript-gif';
 import { AppRoutingModule } from "./app-routing.module";
 import { NativeScriptLocalizeModule } from "nativescript-localize/angular";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { TNSCheckBoxModule } from '@nstudio/nativescript-checkbox/angular';
+import { Carousel, CarouselItem } from 'nativescript-carousel';
 // import { NativeScriptFacebookModule } from "nativescript-facebook/angular";
 // import { init, initAnalytics } from "nativescript-facebook";
 // import * as application from 'tns-core-modules/application';
+import { LottieView } from 'nativescript-lottie';
 
+registerElement('LottieView', () => LottieView);
 import { AppComponent } from "./app.component";
 import { MainTabsComponent } from "./main-tabs/main-tabs.component";
 import { MapComponent } from "./map/map.component";
@@ -22,8 +26,12 @@ import { SettingModalComponent } from './setting/setting.component';
 import { CarouselComponent } from './home/carousel/carousel.component';
 import { SignUpComponent } from "./signUp/signUp.component";
 import { ResetPasswordComponent } from "./signUp/resetPassword/resetPassword.component";
-// registerElement('Carousel', () => Carousel);
-// registerElement('CarouselItem', () => CarouselItem);
+import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.component";
+import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
+import { WaitingGifComponent } from "./common/waiting-gif/waiting-gif.component";
+import { ProfileComponent } from "./profile/profile.component";
+registerElement('Carousel', () => Carousel);
+registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
 // registerElement("CarouselItem", () => require("nativescript-carousel").CarouselItem);
 
@@ -47,6 +55,7 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         NativeScriptFormsModule,
         NativeScriptLocalizeModule,
         NativeScriptRouterModule,
+        TNSCheckBoxModule
         // NativeScriptFacebookModule
     ],
     entryComponents: [
@@ -63,7 +72,11 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         CarouselComponent,
         SignUpComponent,
         ResetPasswordComponent,
-        MainTabsComponent
+        MainTabsComponent,
+        SpringsFiltersComponent,
+        SpringsViewComponent,
+        WaitingGifComponent,
+        ProfileComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -93,7 +93,11 @@ export const getSpringByName = functionBuilder(async (req, res) => {
 
 export const getSpring = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token as string);
+        let email;
+        try {
+            email = validateJwtToken(req.headers.token as string);
+        }
+        catch(error){}
         const spring = await db
             .collection(springsCollection)
             .doc(req.query.springId as string)
@@ -328,8 +332,8 @@ export const addComment = functionBuilder(async (req, res) => {
         const comment = {
             text: req.body.text,
             date: new Date,
-            nick: "",
-            profile: "",
+            user_name: "",
+            user_pic: "",
             email: email
         };
         const userRef = await db.collection('users').doc(email);
@@ -337,8 +341,9 @@ export const addComment = functionBuilder(async (req, res) => {
         const userData = await userRef.get();
         if (userData.exists) {
             const user = userData.data();
-            comment.nick = user ? user.nick : undefined;
-            comment.profile = user ? user.profile : undefined;
+            comment.user_name = user ? user.nick : undefined;
+            const guestPic = "https://images.macrumors.com/t/x_zUFqghBUNBxVUZN_dYoKF3D9g=/1600x0/article-new/2019/04/guest-user-250x250.jpg";
+            comment.user_pic = user ? user.profile? user.profile : guestPic : guestPic;
             const result = await springRef.update({
                 comments: admin.firestore.FieldValue.arrayUnion(comment)
             });

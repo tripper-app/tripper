@@ -140,7 +140,7 @@ export class HttpService {
 
   getToken() {
     // return getString("user-token");
-    return "eyJhbGciOiJIUzI1NiJ9.b2RlZG9kZWQ3NzdAZ21haWwuY29t.nK5HgSFmJeubse_ye4hGYjmk-5ykMpGnv7DnwkNxM6M";
+    return "eyJhbGciOiJIUzI1NiJ9.b2RlZG9kZWQ3NzdAZ21haWwuY29t.-dTvSdoQ8p7yMaRMB9EMEgdKrpJnkPIhTzHAuchsrbU";
   }
 
   throwNoConnection() {

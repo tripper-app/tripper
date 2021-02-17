@@ -5,6 +5,8 @@
 // This is where the vast majority of your CSS code goes.
 
 // Font icon class
+$trip: rgb(146, 226, 131);
+
 .fab {
     font-family: "Font Awesome 5 Brands", "fa-brands-400";
     font-weight: 400;
@@ -18,6 +20,10 @@
 .far {
     font-family: "Font Awesome 5 Free", "fa-regular-400";
     font-weight: 400;
+}
+
+.themeColor{
+    color: blue;
 }
 
 // Common page class

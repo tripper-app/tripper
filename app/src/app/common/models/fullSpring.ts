@@ -10,4 +10,7 @@ export class FullSpring extends FlatSpring{
     filterCar: boolean
     filterChildren: boolean
     filterDepth: boolean
+    isFavorite: boolean
+    preferredSeason: string
+    comments: []
 }

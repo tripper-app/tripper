@@ -5,6 +5,7 @@ import { Page } from 'tns-core-modules/ui/page';
 import { SettingModalComponent } from '../setting/setting.component';
 import { LanguageService } from '../common/services/language-service';
 import * as imagepicker from "nativescript-imagepicker";
+import { ActivatedRoute } from "@angular/router";
 
 import { ImageSource } from 'tns-core-modules/image-source';
 import { HttpService } from '../common/services/http-service';
@@ -20,8 +21,9 @@ declare let java: any;
     styleUrls: ['./main-tabs.component.css']
 })
 export class MainTabsComponent implements OnInit {
-
+    selectedPageIndex = 2;
     constructor(private router: Router,
+        private route: ActivatedRoute,
         private page: Page,
         private viewContainerRef: ViewContainerRef,
         private modalService: ModalDialogService,
@@ -33,6 +35,9 @@ export class MainTabsComponent implements OnInit {
     ngOnInit() {
         this.languageService.getCurrentLanguage();
         this.page.actionBarHidden = true;
+        if (this.route.snapshot.params.page) {
+            this.selectedPageIndex = this.route.snapshot.params.page;
+        }
     }
 
     goToMap() {
