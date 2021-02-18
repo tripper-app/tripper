@@ -11,7 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 import { openUrl } from "tns-core-modules/utils/utils";
 import { ImageSource } from "tns-core-modules/image-source";
 import * as SocialShare from "nativescript-social-share";
-import {  device } from "tns-core-modules/platform";
+import { device } from "tns-core-modules/platform";
 
 @Component({
     selector: 'ns-spring-view',
@@ -28,6 +28,7 @@ export class SpringsViewComponent implements OnInit {
     googleMapsURL = "https://maps.google.com/?daddr=";
     wazeURL = "waze://?ll=";
     springLocation;
+    fullComments = false;
     constructor(private page: Page,
         private router: Router,
         private route: ActivatedRoute,
@@ -45,7 +46,7 @@ export class SpringsViewComponent implements OnInit {
             this.loading = false;
             this.currentSpring = spring;
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
-            
+
         }, err => {
             console.log(err);
             this.handleErrors(err);
@@ -56,7 +57,7 @@ export class SpringsViewComponent implements OnInit {
 
     }
 
-    alignVertical(label){
+    alignVertical(label) {
         label.android.setGravity(17)
     }
 
@@ -87,22 +88,17 @@ export class SpringsViewComponent implements OnInit {
         }
     }
 
-    addComment(text){
+    addComment(text) {
         this.springsService.addComment(text, this.currentSpring.ID).subscribe(res => {
-          console.log("good");
-          console.log(res);
-          
+            console.log("good");
+            console.log(res);
+
         }, err => {
-          console.log("not good");
-          console.log(err);
-          
+            console.log("not good");
+            console.log(err);
+
         })
-      }
-
-      listviewLoaded(list){
-          
-      }
-
+    }
 
     getTextFromFields() {
         var txt = "";
