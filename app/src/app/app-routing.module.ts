@@ -11,7 +11,7 @@ import { ProfileComponent } from "./profile/profile.component";
 import { from } from "rxjs";
 
 const routes: Routes = [
-    { path: "", redirectTo: "/mainTabs", data: {}, pathMatch: "full" },
+    { path: "", redirectTo: "/springView", data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },

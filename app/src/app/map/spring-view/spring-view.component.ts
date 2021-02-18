@@ -40,8 +40,8 @@ export class SpringsViewComponent implements OnInit {
         this.page.actionBarHidden = true;
         this.shouldReverse = this.languageService.getCurrentLanguage() == device.language;
 
-        // this.springsService.getSpring("עינות דקלים").subscribe((spring: FullSpring) => {
-            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        this.springsService.getSpring("עין ספיר").subscribe((spring: FullSpring) => {
+            // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.loading = false;
             this.currentSpring = spring;
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
@@ -60,7 +60,7 @@ export class SpringsViewComponent implements OnInit {
         label.android.setGravity(17)
     }
 
-    navigateToMap() {        
+    navigateToMap() {
         this.router.navigate(["mainTabs/", 3]);
     }
 
@@ -97,6 +97,10 @@ export class SpringsViewComponent implements OnInit {
           console.log(err);
           
         })
+      }
+
+      listviewLoaded(list){
+          
       }
 
 
