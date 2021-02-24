@@ -11,8 +11,8 @@ import { TNSCheckBoxModule } from '@nstudio/nativescript-checkbox/angular';
 import { Carousel, CarouselItem } from 'nativescript-carousel';
 // import { NativeScriptFacebookModule } from "nativescript-facebook/angular";
 // import { init, initAnalytics } from "nativescript-facebook";
-// import * as application from 'tns-core-modules/application';
 import { LottieView } from 'nativescript-lottie';
+import { NativeScriptUIRangeSeekBarModule } from "nativescript-range-seek-bar/angular";
 
 registerElement('LottieView', () => LottieView);
 import { AppComponent } from "./app.component";
@@ -30,6 +30,7 @@ import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.com
 import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
 import { WaitingGifComponent } from "./common/waiting-gif/waiting-gif.component";
 import { ProfileComponent } from "./profile/profile.component";
+import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
@@ -55,7 +56,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         NativeScriptFormsModule,
         NativeScriptLocalizeModule,
         NativeScriptRouterModule,
-        TNSCheckBoxModule
+        TNSCheckBoxModule,
+        NativeScriptUIRangeSeekBarModule
         // NativeScriptFacebookModule
     ],
     entryComponents: [
@@ -76,7 +78,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         SpringsFiltersComponent,
         SpringsViewComponent,
         WaitingGifComponent,
-        ProfileComponent
+        ProfileComponent,
+        HotelsFiltersComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

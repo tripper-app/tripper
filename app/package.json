@@ -39,6 +39,7 @@
     "nativescript-localize": "^4.2.2",
     "nativescript-lottie": "^4.0.1",
     "nativescript-oauth2": "^3.0.1",
+    "nativescript-range-seek-bar": "^1.0.3",
     "nativescript-social-share": "^1.6.0",
     "nativescript-sweet-alert": "^1.0.4",
     "nativescript-ui-sidedrawer": "~8.0.0",

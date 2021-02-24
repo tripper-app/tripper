@@ -14,6 +14,7 @@ import * as application from "tns-core-modules/application";
 import { SearchBar } from 'tns-core-modules';
 import { AlertService } from '../common/services/alert-service';
 import { Router } from "@angular/router";
+import { android } from 'tns-core-modules/application';
 
 @Component({
   selector: 'ns-map',
@@ -22,15 +23,16 @@ import { Router } from "@angular/router";
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit, OnDestroy {
-  @ViewChild('searchField', { static: true }) searchField: ElementRef<SearchBar>;
   mainMap: MapView;
   loading = false;
   defaultZoom = 10;
   bigZoom = 12;
   userMarker: Marker;
-  springsSubscription; // delete
-  responseErrorSubscription; // delete
-  waitForResponseSubscription; // delete
+  searchMode = false;
+  searchBar;
+  //springsSubscription; // delete
+  //responseErrorSubscription; // delete
+  //waitForResponseSubscription; // delete
 
   constructor(private page: Page,
     private router: Router,
@@ -51,9 +53,9 @@ export class MapComponent implements OnInit, OnDestroy {
     this.page.actionBarHidden = true;
     this.drawerService.sideDrawer = true; // delete
 
-    this.waitForResponseSubscription = this.springsService.waitingForResponse.subscribe((data) => { // delete
-      this.loading = true;
-    })
+    // this.waitForResponseSubscription = this.springsService.waitingForResponse.subscribe((data) => { // delete
+    //   this.loading = true;
+    // })
   }
 
   async onMapReady(map: MapView) {
@@ -69,11 +71,11 @@ export class MapComponent implements OnInit, OnDestroy {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
     }
 
-    this.getSprings();
+    //this.getSprings();
   }
 
   async getSprings() {
-    this.springsSubscription = this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
+    this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
       this.loading = false;
       this.clearMarkers(); // delete
       springs.forEach(spring => {
@@ -138,11 +140,10 @@ export class MapComponent implements OnInit, OnDestroy {
     // }
   }
 
-  // toggleDrawer() {
-  //   this.searchField.nativeElement.dismissSoftInput();
-  //   this.drawerService.setdrawerLocation(this.languageService.getRightToLeft());
-  //   this.drawerService.openDrawer()
-  // }
+  clickOnMap(){    
+    this.searchBar.android.clearFocus();
+    this.searchMode = false;
+  }
 
   coordinateLongPress(cords) {
     // add marker (different collor?)    
@@ -150,6 +151,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   onSearchBarLoaded(event) {
     if (event.object.android) {
+      this.searchBar = event.object;
       event.object.android.clearFocus();
     }
   }
@@ -162,12 +164,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   searchByName() {
-    this.searchField.nativeElement.dismissSoftInput();
-    const oldText = this.searchField.nativeElement.text;
+    this.searchBar.dismissSoftInput();
+    const oldText = this.searchBar.text;
     this.loading = true;
-    this.springsService.getSpringByName(this.searchField.nativeElement.text).subscribe((res: FlatSpring) => {
-      this.searchField.nativeElement.text += " ";
-      this.searchField.nativeElement.text = oldText;
+    this.springsService.getSpringByName(this.searchBar.text).subscribe((res: FlatSpring) => {
+      this.searchBar.text += " ";
+      this.searchBar.text = oldText;
       if (res.ID) {
         this.loading = false;
         this.clearMarkers();
@@ -180,8 +182,8 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }, err => {
       this.loading = false;
-      this.searchField.nativeElement.text += " ";
-      this.searchField.nativeElement.text = oldText;
+      this.searchBar += " ";
+      this.searchBar = oldText;
       this.handleErrors(err);
     })
   }

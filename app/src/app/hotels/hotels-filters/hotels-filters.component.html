@@ -1,0 +1,38 @@
+<StackLayout>
+    <ScrollView height="87%">
+        <StackLayout>
+            <FlexboxLayout class="filterLine" marginTop="20"
+                [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
+                <label style="font-size: 30;" text="X" (tap)="navigateToFiltersView()"></label>
+                <label text="{{ 'hotelsFilters.title' | L }}"></label>
+            </FlexboxLayout>
+            <StackLayout height="3" margin="20 0" backgroundColor="rgb(233, 236, 220)"></StackLayout>
+            <GridLayout class="areasGrid" [columns]="leftToRight? '3*,4*,*,*' : '*,*,4*,3*' ">
+                <label textWrap="true" (onloaded)="alignVertical(area)" [col]="leftToRight? 0 : 3"
+                    text="{{ 'hotelsFilters.area' | L }}" #area></label>
+                <FlexboxLayout [ngStyle]="{'justify-content': leftToRight? 'flex-start' : 'flex-end'}"
+                    style="align-items: center;" *ngIf="!areasExpanded" [col]="leftToRight? 1 : 2">
+                    <label class="greyText" [text]="getAreasString()" #areasList></label>
+                </FlexboxLayout>
+                <img src="res://icon" [col]="leftToRight? 3 : 0" (tap)="expandAreas()" #expandImage />
+            </GridLayout>
+            <StackLayout height="0" #aresStack>
+                <FlexboxLayout *ngFor="let area of areas; let i = index" [height]="areaLineHeight"
+                    style="justify-content: space-between; margin: 0 40; font-size: 15;">
+                    <CheckBox:CheckBox (checkedChange)="checkChange(area, checkBox.checked)"
+                        [(ngModel)]="areasBoolean[i]" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                        #checkBox />
+                    <label [text]="area"></label>
+                </FlexboxLayout>
+            </StackLayout>
+            <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">    
+                <RangeSeekBar width="50%"  [maxValue]="maxPrice" [maxStartValue]="maxPrice" minRange="10"
+                    class="range-seek-bar" (rangeSeekBarChanged)="rangeSeekBarChanged($event)" #priceBar></RangeSeekBar>
+                    <label width="50%" text="מחיר ללילה"></label>
+            </FlexboxLayout>
+        </StackLayout>
+    </ScrollView>
+    <StackLayout verticalAlignment="center" class="search" (tap)="search()">
+        <label text="{{ 'springsFilters.search' | L }}"></label>
+    </StackLayout>
+</StackLayout>

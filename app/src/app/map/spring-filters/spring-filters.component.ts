@@ -23,7 +23,7 @@ export class SpringsFiltersComponent implements OnInit {
     sliderValue = 25;
     mainColor = "rgb(146, 226, 131)";
     scale = "1.3";
-    shouldReverse = true;
+    leftToRight = false;
 
     constructor(private page: Page,
         private router: Router,
@@ -33,7 +33,7 @@ export class SpringsFiltersComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.shouldReverse = this.languageService.getCurrentLanguage() == device.language;      
+        this.leftToRight = !this.languageService.getRightToLeft();    
         this.page.actionBarHidden = true;
         this.campingCheck = this.springsService.filters.camping;
         this.childrenCheck = this.springsService.filters.children;

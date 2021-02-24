@@ -42,6 +42,7 @@ ActivityIndicator{
 .filterIcon{
     margin: 5;
     width: 30%;
+    align-self: flex-start;
 }
 
 .filterLabel{
@@ -64,7 +65,6 @@ ActivityIndicator{
     background-color: $trip;
     justify-content: space-around;
     height: 13%;
-    background-color: $trip;
     font-size: 15;
     color: white;
 }

@@ -8,10 +8,10 @@ import { ResetPasswordComponent } from "./signUp/resetPassword/resetPassword.com
 import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.component";
 import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
 import { ProfileComponent } from "./profile/profile.component";
-import { from } from "rxjs";
+import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
 
 const routes: Routes = [
-    { path: "", redirectTo: "/springView", data: {}, pathMatch: "full" },
+    { path: "", redirectTo: "/hotelsFilters", data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },
@@ -20,7 +20,8 @@ const routes: Routes = [
     { path: "signUp", component: SignUpComponent},
     { path: "resetPassword", component: ResetPasswordComponent },
     { path: "springsFilter", component: SpringsFiltersComponent },
-    { path: "profile", component: ProfileComponent }
+    { path: "profile", component: ProfileComponent },
+    { path: "hotelsFilters", component: HotelsFiltersComponent }
 ];
 
 @NgModule({

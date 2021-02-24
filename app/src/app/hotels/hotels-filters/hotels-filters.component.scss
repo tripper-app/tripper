@@ -1,0 +1,41 @@
+@import '../../../app-common';
+
+.main{
+    margin-top: 20;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.filterLine{
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20;
+    font-size: 18;
+}
+
+.areasGrid{
+    font-size: 18;
+    height: 70;
+    margin: 0 20;
+}
+
+.greyText{
+    font-size: 14;
+    color: rgb(156, 201, 194);
+}
+
+.search{
+    text-align: center;
+    height: 13%;
+    background-color: $trip;
+    font-size: 25;
+    color: white;
+}
+
+.range-seek-bar {
+    bar-color: #332b28;
+    bar-highlight-color: #2434AD;
+    thumb-color: $trip;
+    bar-height: 10;
+    corner-radius: 30;
+}

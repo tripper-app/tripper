@@ -1,34 +1,34 @@
 <FlexboxLayout class="main">
-    <FlexboxLayout class="filterLine" style="margin-bottom: -20;" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" style="margin-bottom: -20;" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <label style="font-size: 30;" text="X" (tap)="navigateToMap()"></label>
-        <label text="{{ 'filters.header' | L }}"></label>
+        <label text="{{ 'springsFilters.title' | L }}"></label>
     </FlexboxLayout>
     <StackLayout height="3" backgroundColor="rgb(233, 236, 220)"></StackLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
-        <label text="{{ 'filters.camping' | L }}"></label>
+        <label text="{{ 'springsFilters.camping' | L }}"></label>
     </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <CheckBox:CheckBox [(ngModel)]="childrenCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
-        <label text="{{ 'filters.children' | L }}"></label>
+        <label text="{{ 'springsFilters.children' | L }}"></label>
     </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <CheckBox:CheckBox [(ngModel)]="waterCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
-        <label text="{{ 'filters.water' | L }}"></label>
+        <label text="{{ 'springsFilters.water' | L }}"></label>
     </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <CheckBox:CheckBox [(ngModel)]="carCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
-        <label text="{{ 'filters.car' | L }}"></label>
+        <label text="{{ 'springsFilters.car' | L }}"></label>
     </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <CheckBox:CheckBox [(ngModel)]="depthCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
-        <label text="{{ 'filters.depth' | L }}"></label>
+        <label text="{{ 'springsFilters.depth' | L }}"></label>
     </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <Slider class="slider" [(ngModel)]="sliderValue" minValue="0" maxValue="100"></Slider>
-        <label text="{{ 'filters.radius' | L }} {{sliderValue}} KM"></label>
+        <label text="{{ 'springsFilters.radius' | L }} {{sliderValue}} KM"></label>
     </FlexboxLayout>
     <StackLayout verticalAlignment="center" class="search" (tap)="search()">
-        <label text="{{ 'filters.search' | L }}"></label>
+        <label text="{{ 'springsFilters.search' | L }}"></label>
     </StackLayout>
 </FlexboxLayout>

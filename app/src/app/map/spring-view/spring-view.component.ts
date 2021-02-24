@@ -19,7 +19,7 @@ import { device } from "tns-core-modules/platform";
     styleUrls: ['./spring-view.component.scss']
 })
 export class SpringsViewComponent implements OnInit {
-    rightToLeft = true;
+    leftToRight = true;
     shouldReverse = true;
     mainColor = "rgb(146, 226, 131)";
     spring: FullSpring;
@@ -39,9 +39,10 @@ export class SpringsViewComponent implements OnInit {
 
     ngOnInit(): void {
         this.page.actionBarHidden = true;
-        this.shouldReverse = this.languageService.getCurrentLanguage() == device.language;
+        // this.shouldReverse = this.languageService.getCurrentLanguage() == device.language;
+        this.leftToRight = !this.languageService.getRightToLeft();
 
-        this.springsService.getSpring("עין ספיר").subscribe((spring: FullSpring) => {
+        this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
             // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.loading = false;
             this.currentSpring = spring;

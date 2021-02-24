@@ -14,8 +14,8 @@
             "en": "The application needs to be restarted in order to apply changes"
         }
     },
-    "filters": {
-        "header": "איזה מעיין לחפש?",
+    "springsFilters": {
+        "title": "איזה מעיין לחפש?",
         "camping": "מתאים לקאמפינג",
         "children": "מתאים לילדים",
         "water": "נקודת מים לשתיה",
@@ -23,6 +23,11 @@
         "depth": "עמוק יותר מ2 מטרים",
         "radius": "רדיוס",
         "search": "חיפוש"
+    },
+    "hotelsFilters":{
+        "title": "איזה צימר לחפש?",
+        "area": "אזור בארץ",
+        "areasList": "גולן, גליל, השרון, בנימין, שומרון, בקעת הירדן, גוש דן, ירושלים, הנגב, אילת"
     },
     "messages": {
         "info": {
@@ -53,7 +58,11 @@
         "notSuitableForChildren": "לא מתאים לילדים",
         "thereIsDrinkingWater": "יש מי שתיה",
         "noDrinkingWater": "אין מי שתיה",
-        "newComment": "תגובה חדשה..."
+        "newComment": "תגובה חדשה...",
+        "showMoreComments": "פתיחת תגובות נוספות",
+        "showLessComments": "צמצום תגובות",
+        "contactAboutSpring": "פניה בנוגע למעיין",
+        "share": "שיתוף"
     },
     "login": {
         "requireCode": "הזינו את הקוד שנשלח אליכם",

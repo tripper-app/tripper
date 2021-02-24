@@ -3,33 +3,20 @@
         <StackLayout>
             <GridLayout columns="*,3*,*" style="font-size: 27; padding: 0 10;">
                 <label #exit (onloaded)="alignVertical(exit)"
-                    [col]="shouldReverse? 3 : 0" text="X" [ngStyle]="{'text-align': shouldReverse? 'right' : 'left'}"
+                    [col]="leftToRight? 2 : 0" text="X" [ngStyle]="{'text-align': leftToRight? 'right' : 'left'}"
                     (tap)="navigateToMap()"></label>
                 <label textWrap="true" #title col="1" 
-                    [text]="currentSpring.name" [ngStyle]="{'text-align': shouldReverse? 'right' : 'left'}" style="margin-top: 13;"></label>
-                <img [col]="shouldReverse? 0 : 3"  class="headerIcon" src="res://icon" />
+                    [text]="currentSpring.name" [ngStyle]="{'text-align': leftToRight? 'right' : 'left'}" style="margin-top: 13;"></label>
+                <img [col]="leftToRight? 0 : 2"  class="headerIcon" src="res://icon" />
             </GridLayout>
-            <!-- <GridLayout columns="*,2*,*" class="header">                    
-                    <label #exit style="width: 20; height: 40;" (onloaded)="alignVertical(exit)" [col]="shouldReverse? 2 : 0" text="X" [ngStyle]="{'text-align': shouldReverse? 'right' : 'left'}"
-                    (tap)="navigateToMap()"></label>
-                <label textWrap="true" #lab col="1" (onloaded)="alignVertical(lab)" [text]="currentSpring.name" style="text-align: center;"></label>
-                <FlexboxLayout [col]="shouldReverse? 0 : 2"
-                    [ngStyle]="{'justify-content': shouldReverse? 'flex-start' : 'flex-end'}">
-                    <img class="headerIcon" src="res://icon" />
-                    <img class="headerIcon" src="res://icon" />
-                </FlexboxLayout>
-            </GridLayout> -->
-            <GridLayout height="200">
-                <Carousel #myCarousel [items]="currentSpring.images" android:indicatorAnimation="scale"
+            <GridLayout height="250">
+                <Carousel [items]="currentSpring.images" android:indicatorAnimation="scale"
                     indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 10"
                     showIndicator="true">
                     <CarouselItem *ngFor="let item of currentSpring.images">
                         <AbsoluteLayout>
-                            <!-- <ActivityIndicator top="50%" left="130%" class="imageActivityIndicator" [busy]="true"
-                                *ngIf="true">
-                            </ActivityIndicator> -->
                             <ns-waiting-gif top="-20%" left="-20%"></ns-waiting-gif>
-                            <Image [src]="item" stretch="aspectFill"></Image>
+                            <Image [src]="item" width="100%" height="100%" stretch="fill"></Image>
                         </AbsoluteLayout>
                     </CarouselItem>
                 </Carousel>
@@ -37,35 +24,35 @@
             <StackLayout style="width: 100%; padding: 10;">
                 <label [text]="currentSpring.description" class="descriptionLabel"></label>
                 <GridLayout rows="*,*,*" columns="*,*">
-                    <FlexboxLayout [ngStyle]="{'flex-direction': shouldReverse? 'row' : 'row-reverse'}"
+                    <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row' : 'row-reverse'}"
                         class="filterLine">
                         <img class="filterIcon" src="res://icon" />
                         <label class="filterLabel" [text]="currentSpring.distanceFromCar"></label>
                     </FlexboxLayout>
-                    <FlexboxLayout [ngStyle]="{'flex-direction': shouldReverse? 'row' : 'row-reverse'}"
+                    <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row' : 'row-reverse'}"
                         class="filterLine" col="1">
                         <img class="filterIcon" src="res://icon" />
                         <label class="filterLabel"
                             text="{{currentSpring.filterCamping? ('springView.suitableForCamping' | L) : ('springView.notSuitableForCamping' | L)}}"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="1" class="filterLine"
-                        [ngStyle]="{'flex-direction': shouldReverse? 'row' : 'row-reverse'}">
+                        [ngStyle]="{'flex-direction': leftToRight? 'row' : 'row-reverse'}">
                         <img class="filterIcon" src="res://icon" />
                         <label class="filterLabel" text="{{ 'springView.depth' | L }}: {{currentSpring.depth}}"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="1" col="1" class="filterLine"
-                        [ngStyle]="{'flex-direction': shouldReverse? 'row' : 'row-reverse'}">
+                        [ngStyle]="{'flex-direction': leftToRight? 'row' : 'row-reverse'}">
                         <img class="filterIcon" src="res://icon" />
                         <label class="filterLabel"
                             text="{{currentSpring.filterChildren? ('springView.suitableableForChildren' | L) : ('springView.notSuitableForChildren' | L)}}"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="2" class="filterLine"
-                        [ngStyle]="{'flex-direction': shouldReverse? 'row' : 'row-reverse'}">
+                        [ngStyle]="{'flex-direction': leftToRight? 'row' : 'row-reverse'}">
                         <img class="filterIcon" src="res://icon" />
                         <label class="filterLabel" textWrap="true" [text]="currentSpring.preferredSeason"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="2" col="1" class="filterLine"
-                        [ngStyle]="{'flex-direction': shouldReverse? 'row' : 'row-reverse'}">
+                        [ngStyle]="{'flex-direction': leftToRight? 'row' : 'row-reverse'}">
                         <img class="filterIcon" src="res://icon" />
                         <label class="filterLabel" v
                             text="{{currentSpring.filterWater? ('springView.thereIsDrinkingWater' | L) : ('springView.noDrinkingWater' | L)}}"></label>
@@ -73,51 +60,40 @@
                 </GridLayout>
             </StackLayout>
             <StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10"></StackLayout>
-                <StackLayout *ngFor="let comment of (expandComments? currentSpring.comments : currentSpring.comments.slice(0,3))" style="margin: 10;">
-                    <GridLayout rows="*,*" [columns]="shouldReverse? '*,5*' : '5*,*'">
-                        <FlexboxLayout [col]="shouldReverse? 1 : 0" class="comment"
-                        [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}">
+                <StackLayout *ngFor="let comment of (expandComments? currentSpring.comments : (currentSpring.comments?currentSpring.comments.slice(0,3) : undefined))" style="margin: 10;">
+                    <GridLayout rows="*,*" [columns]="leftToRight? '*,5*' : '5*,*'">
+                        <FlexboxLayout [col]="leftToRight? 1 : 0" class="comment"
+                        [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
                         <label text="{{ comment.date._seconds * 1000 | date: 'dd/MM/yyyy' }}"></label>
                         <label text="{{comment.user_name}}"></label>
                     </FlexboxLayout>
-                    <img src="{{comment.user_pic}}" rowSpan="2" [col]="shouldReverse? 0 : 1" class="userPic" />
-                    <StackLayout [col]="shouldReverse? 1 : 0" row="1"
+                    <img src="{{comment.user_pic}}" rowSpan="2" [col]="leftToRight? 0 : 1" class="userPic" />
+                    <StackLayout [col]="leftToRight? 1 : 0" row="1"
                         style="margin: 0 8; height: 3; background-color: rgb(178, 178, 189);"></StackLayout>
                 </GridLayout>
                 <label textWrap="true" text="{{ comment.text }}"></label>
             </StackLayout>
-            <label style="text-align: center;" text="{{ expandComments? 'צמצום תגובות' : 'פתיחת תגובות נוספות' }}" (tap)="expandComments = !expandComments"></label>
-            <GridLayout rows="*,*" [columns]="shouldReverse? '*,5*' : '5*,*'" style="margin: 10;">
-                <textField hint="{{ 'springView.newComment' | L }}" [col]="shouldReverse? 1 : 0"></textField>
-                <img rowSpan="2" [col]="shouldReverse? 0 : 1" class="userPic"
+            <label style="text-align: center;" text="{{ expandComments? ('springView.showLessComments' | L) : ('springView.showMoreComments' | L) }}" (tap)="expandComments = !expandComments" *ngIf="currentSpring.comments"></label>
+            <GridLayout rows="*,*" [columns]="leftToRight? '*,5*' : '5*,*'" style="margin: 10;">
+                <textField hint="{{ 'springView.newComment' | L }}" [col]="leftToRight? 1 : 0"></textField>
+                <img rowSpan="2" [col]="leftToRight? 0 : 1" class="userPic"
                     src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-cat-wearing-sunglasses-while-sitting-royalty-free-image-1571755145.jpg" />
                 <!-- <StackLayout [col]="rightToLeft? 0 : 1" row="1" style="height: 3; background-color: rgb(178, 178, 189);"></StackLayout> -->
             </GridLayout>
             <StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 20 10"></StackLayout>
             <label textWrap="true" [text]="currentSpring.info" style="margin: 10; font-size: 14;"></label>
-            <!-- <FlexboxLayout style="justify-content: space-between; height: 50; background-color: rgb(140, 204, 206); ">
-                <StackLayout orientation="horizontal" style="margin: 0 20;">
-                    <img src="res://icon" />
-                    <label (onloaded)="alignVertical(support)" #support text="פניה בנוגע למעיין"></label>
-                </StackLayout>
-                <StackLayout orientation="horizontal" style="margin: 0 20;">
-                    <img src="res://icon" />
-                    <label (onloaded)="alignVertical(share)" #share text="שיתוף"></label>
-                </StackLayout>
-            </FlexboxLayout> -->
             <GridLayout columns="*,*" style="background-color: rgb(168, 209, 211); height: 50;">
-                <FlexboxLayout [ngStyle]="{'flex-direction': shouldReverse? 'row-reverse' : 'row'}" [col]="shouldReverse? 1 : 0" style="justify-content: center;">
+                <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" [col]="leftToRight? 1 : 0" style="justify-content: center;">
                     <img src="res://icon" />
-                    <label (onloaded)="alignVertical(support)" #support text="פניה בנוגע למעיין"></label>
+                    <label (onloaded)="alignVertical(support)" #support text="{{ 'springView.contactAboutSpring' | L }}"></label>
                 </FlexboxLayout>
-                <FlexboxLayout [col]="shouldReverse? 0 : 1" style="justify-content: center;">
+                <FlexboxLayout [col]="leftToRight? 0 : 1" style="justify-content: center;">
                     <img src="res://icon" />
-                    <label (onloaded)="alignVertical(share)" #share text="שיתוף"></label>
+                    <label (onloaded)="alignVertical(share)" #share text="{{ 'springView.share' | L }}"></label>
                 </FlexboxLayout>
             </GridLayout>
         </StackLayout>
     </ScrollView>
-    <!-- <ActivityIndicator class="mainActivityIndicator" [busy]="loading" *ngIf="loading"></ActivityIndicator> -->
     <ns-waiting-gif *ngIf="loading"></ns-waiting-gif>
     <FlexboxLayout class="navigation" *ngIf="!loading">
         <FlexboxLayout style="align-items: center;" col="1" (tap)="navigateWithMaps()">

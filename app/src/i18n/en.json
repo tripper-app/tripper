@@ -14,8 +14,8 @@
             "en": "The application needs to be restarted in order to apply changes"
         }
     },
-    "filters": {
-        "header": "Which spring to look for?",
+    "springsFilters": {
+        "title": "What spring to look for?",
         "camping": "Suitable for camping",
         "children": "Suitable for children",
         "water": "Drinking water point",
@@ -23,6 +23,11 @@
         "depth": "Deeper than 2 meters",
         "radius": "Radius",
         "search": "Search"
+    },
+    "hotelsFilters":{
+        "title": "What B&B to look for",
+        "area": "Area in the country",
+        "areasList": "Golan, Galil, the Sharon, Binyamin, Shomron, Jordan valley, Gush Dan, Jerusalem, The negev, Eilat"
     },
     "messages": {
         "info": {
@@ -53,7 +58,11 @@
         "notSuitableForChildren": "Not suitable for kids",
         "thereIsDrinkingWater": "There is drinking water",
         "noDrinkingWater": "There is no drinking water",
-        "newComment": "new comment..."
+        "newComment": "new comment...",
+        "showMoreComments": "Show more comments",
+        "showLessComments": "show less comments",
+        "contactAboutSpring": "Contact us about the spring",
+        "share": "Share"
     },
     "login": {
         "requireCode": "Insert the code you recieved",
