@@ -97,7 +97,7 @@ export const getSpring = functionBuilder(async (req, res) => {
         try {
             email = validateJwtToken(req.headers.token as string);
         }
-        catch(error){}
+        catch (error) { }
         const spring = await db
             .collection(springsCollection)
             .doc(req.query.springId as string)
@@ -343,7 +343,7 @@ export const addComment = functionBuilder(async (req, res) => {
             const user = userData.data();
             comment.user_name = user ? user.nick : undefined;
             const guestPic = "https://images.macrumors.com/t/x_zUFqghBUNBxVUZN_dYoKF3D9g=/1600x0/article-new/2019/04/guest-user-250x250.jpg";
-            comment.user_pic = user ? user.profile? user.profile : guestPic : guestPic;
+            comment.user_pic = user ? user.profile ? user.profile : guestPic : guestPic;
             const result = await springRef.update({
                 comments: admin.firestore.FieldValue.arrayUnion(comment)
             });
@@ -452,7 +452,7 @@ export const getAllHotels = functionBuilder(async (req, res) => {
     }
 })
 
-export const GetHotel = functionBuilder(async (req, res) => {
+export const getHotel = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
         const hotel = await db
@@ -460,24 +460,36 @@ export const GetHotel = functionBuilder(async (req, res) => {
             .doc(req.query.hotelId as string)
             .get();
         const data = hotel.data()
-        let newHotel;
+        // let newHotel;
         if (data) {
-            newHotel = {
-                name: updateField(data.name, currentLanguage),
-                attractions: data.attractions.map((h: string) => updateField(h, currentLanguage)),
-                breakfast: data.breakfast,
-                city: updateField(data.city, currentLanguage),
-                description: updateField(data.description, currentLanguage),
-                images: data.images,
-                location: data.location,
-                phone: data.phone,
-                pool: data.pool,
-                price: data.price,
-                region: updateField(data.region, currentLanguage),
-                websiteLink: data.websiteLink
-            }
+            data.name = updateField(data.name, currentLanguage);
+            data.attractions = data.attractions.map((h: string) => updateField(h, currentLanguage));
+            data.breakfast = data.breakfast;
+            data.city = updateField(data.city, currentLanguage);
+            data.description = updateField(data.description, currentLanguage);
+            data.images = data.images;
+            data.location = data.location;
+            data.phone = data.phone;
+            data.pool = data.pool;
+            data.price = data.price;
+            data.region = updateField(data.region, currentLanguage);
+            data.websiteLink = data.websiteLink;
+            // newHotel = {
+            //     name: updateField(data.name, currentLanguage),
+            //     attractions: data.attractions.map((h: string) => updateField(h, currentLanguage)),
+            //     breakfast: data.breakfast,
+            //     city: updateField(data.city, currentLanguage),
+            //     description: updateField(data.description, currentLanguage),
+            //     images: data.images,
+            //     location: data.location,
+            //     phone: data.phone,
+            //     pool: data.pool,
+            //     price: data.price,
+            //     region: updateField(data.region, currentLanguage),
+            //     websiteLink: data.websiteLink
+            // }
         }
-        res.send(newHotel);
+        res.send(data);
     } catch (error) {
         handleError(res, error);
     }

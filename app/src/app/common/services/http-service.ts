@@ -53,7 +53,7 @@ export class HttpService {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
-    return this.httpClient.get(this.ApiURL + `gethotel?hotelId=${id}&lang=${this.getLanguage()}`);
+    return this.httpClient.get(this.ApiURL + `getHotel?hotelId=${id}&lang=${this.getLanguage()}`);
   }
 
   login(user: User) {

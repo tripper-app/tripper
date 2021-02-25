@@ -1,5 +1,6 @@
 export class HotelFilters{
-    price: number;
+    minPrice: number;
+    maxPrice: number;
     pool: boolean;
     breakfast: boolean;
     region: string[];

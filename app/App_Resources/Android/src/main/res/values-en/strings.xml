@@ -54,6 +54,11 @@
   <string name="_messages_error_connectionError_ZBYE1U">"Request failed. please check your internet connection"</string>
   <string name="_messages_error_springNotFound_23yS3">"We can\'t find a spring with this name"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"Waiting for data... "</string>
+  <string name="_hotelsList_startingFrom_Z1vX8br">"Starting from"</string>
+  <string name="_hotelsList_title_2qEv1T">"Choose the right B&amp;B for your vacation"</string>
+  <string name="_hotelsFilters_breakfast_1Eotq5">"Breakfast extra charge"</string>
+  <string name="_hotelsFilters_pool_Z1IKxLT">"Pool"</string>
+  <string name="_hotelsFilters_pricePerNight_Z2baz4o">"Price per night"</string>
   <string name="_hotelsFilters_areasList_Z1gLsF5">"Golan, Galil, the Sharon, Binyamin, Shomron, Jordan valley, Gush Dan, Jerusalem, The negev, Eilat"</string>
   <string name="_hotelsFilters_area_Z1IMvby">"Area in the country"</string>
   <string name="_hotelsFilters_title_2bLUHf">"What B&amp;B to look for"</string>

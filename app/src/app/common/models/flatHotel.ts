@@ -1,7 +1,7 @@
 export class FlatHotel{
-    ID: string;
-    description: string;
+    id: string;
     name: string;
     price: number;
-    region: string;
+    city: string;
+    images: string[];
 }

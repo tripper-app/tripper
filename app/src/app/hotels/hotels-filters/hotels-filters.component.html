@@ -1,15 +1,17 @@
 <StackLayout>
     <ScrollView height="87%">
         <StackLayout>
-            <FlexboxLayout class="filterLine" marginTop="20"
+            <FlexboxLayout class="filterLine"
                 [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
                 <label style="font-size: 30;" text="X" (tap)="navigateToFiltersView()"></label>
                 <label text="{{ 'hotelsFilters.title' | L }}"></label>
             </FlexboxLayout>
             <StackLayout height="3" margin="20 0" backgroundColor="rgb(233, 236, 220)"></StackLayout>
             <GridLayout class="areasGrid" [columns]="leftToRight? '3*,4*,*,*' : '*,*,4*,3*' ">
-                <label textWrap="true" (onloaded)="alignVertical(area)" [col]="leftToRight? 0 : 3"
+                <StackLayout height="100%" verticalAlignment="center" [col]="leftToRight? 0 : 3">          
+                    <label textWrap="true" 
                     text="{{ 'hotelsFilters.area' | L }}" #area></label>
+                </StackLayout>
                 <FlexboxLayout [ngStyle]="{'justify-content': leftToRight? 'flex-start' : 'flex-end'}"
                     style="align-items: center;" *ngIf="!areasExpanded" [col]="leftToRight? 1 : 2">
                     <label class="greyText" [text]="getAreasString()" #areasList></label>
@@ -25,10 +27,21 @@
                     <label [text]="area"></label>
                 </FlexboxLayout>
             </StackLayout>
-            <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">    
-                <RangeSeekBar width="50%"  [maxValue]="maxPrice" [maxStartValue]="maxPrice" minRange="10"
-                    class="range-seek-bar" (rangeSeekBarChanged)="rangeSeekBarChanged($event)" #priceBar></RangeSeekBar>
-                    <label width="50%" text="מחיר ללילה"></label>
+            <GridLayout rows="*, *" columns="*, *" style="margin: 0 20;">
+                <FlexboxLayout colSpan="2" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">    
+                    <RangeSeekBar width="50%" [maxValue]="maxPrice" [maxStartValue]="maxPrice" step="10" 
+                        class="range-seek-bar" (rangeSeekBarChanged)="rangeSeekBarChanged($event)" #priceBar minRange="100"></RangeSeekBar>
+                        <label width="50%" text="{{ 'springsFilters.PricePerNight' | L }}"></label>
+                </FlexboxLayout>
+                <Label style="text-align: right;" text="&#8362; {{finalMaxPrice}}-{{finalMinPrice}}" row="1" col="1"></Label>
+            </GridLayout>
+            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine">
+                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
+                <label text="{{ 'hotelsFilters.pool' | L }}"></label>
+            </FlexboxLayout>
+            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine">
+                <CheckBox:CheckBox [(ngModel)]="breakfastCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
+                <label text="{{ 'hotelsFilters.breakfast' | L }}"></label>
             </FlexboxLayout>
         </StackLayout>
     </ScrollView>

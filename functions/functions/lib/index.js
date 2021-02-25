@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.GetHotel = exports.getAllHotels = exports.getHistorySprings = exports.addHistorySpring = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.signup = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.addHistorySpring = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.signup = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -443,7 +443,7 @@ exports.getAllHotels = functionBuilder(async (req, res) => {
         handleError(res, error);
     }
 });
-exports.GetHotel = functionBuilder(async (req, res) => {
+exports.getHotel = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
         const hotel = await db
@@ -451,24 +451,36 @@ exports.GetHotel = functionBuilder(async (req, res) => {
             .doc(req.query.hotelId)
             .get();
         const data = hotel.data();
-        let newHotel;
+        // let newHotel;
         if (data) {
-            newHotel = {
-                name: updateField(data.name, currentLanguage),
-                attractions: data.attractions.map((h) => updateField(h, currentLanguage)),
-                breakfast: data.breakfast,
-                city: updateField(data.city, currentLanguage),
-                description: updateField(data.description, currentLanguage),
-                images: data.images,
-                location: data.location,
-                phone: data.phone,
-                pool: data.pool,
-                price: data.price,
-                region: updateField(data.region, currentLanguage),
-                websiteLink: data.websiteLink
-            };
+            data.name = updateField(data.name, currentLanguage);
+            data.attractions = data.attractions.map((h) => updateField(h, currentLanguage));
+            data.breakfast = data.breakfast;
+            data.city = updateField(data.city, currentLanguage);
+            data.description = updateField(data.description, currentLanguage);
+            data.images = data.images;
+            data.location = data.location;
+            data.phone = data.phone;
+            data.pool = data.pool;
+            data.price = data.price;
+            data.region = updateField(data.region, currentLanguage);
+            data.websiteLink = data.websiteLink;
+            // newHotel = {
+            //     name: updateField(data.name, currentLanguage),
+            //     attractions: data.attractions.map((h: string) => updateField(h, currentLanguage)),
+            //     breakfast: data.breakfast,
+            //     city: updateField(data.city, currentLanguage),
+            //     description: updateField(data.description, currentLanguage),
+            //     images: data.images,
+            //     location: data.location,
+            //     phone: data.phone,
+            //     pool: data.pool,
+            //     price: data.price,
+            //     region: updateField(data.region, currentLanguage),
+            //     websiteLink: data.websiteLink
+            // }
         }
-        res.send(newHotel);
+        res.send(data);
     }
     catch (error) {
         handleError(res, error);

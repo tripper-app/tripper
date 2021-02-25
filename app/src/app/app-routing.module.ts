@@ -9,9 +9,10 @@ import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.com
 import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
 import { ProfileComponent } from "./profile/profile.component";
 import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
+import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
 
 const routes: Routes = [
-    { path: "", redirectTo: "/hotelsFilters", data: {}, pathMatch: "full" },
+    { path: "", redirectTo: "/hotelView", data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },
@@ -21,7 +22,9 @@ const routes: Routes = [
     { path: "resetPassword", component: ResetPasswordComponent },
     { path: "springsFilter", component: SpringsFiltersComponent },
     { path: "profile", component: ProfileComponent },
-    { path: "hotelsFilters", component: HotelsFiltersComponent }
+    { path: "hotelsFilters", component: HotelsFiltersComponent },
+    { path: "hotelView", component: HotelViewComponent },
+    { path: "hotelView/:hotelId", component: HotelViewComponent }
 ];
 
 @NgModule({

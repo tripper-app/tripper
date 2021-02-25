@@ -25,7 +25,7 @@
 }
 
 ActivityIndicator{
-    color: $trip;
+    color: $themeColor;
 }
 
 .descriptionLabel{
@@ -62,7 +62,7 @@ ActivityIndicator{
 }
 
 .navigation{
-    background-color: $trip;
+    background-color: $themeColor;
     justify-content: space-around;
     height: 13%;
     font-size: 15;

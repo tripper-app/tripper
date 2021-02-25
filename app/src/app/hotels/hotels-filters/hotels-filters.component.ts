@@ -5,7 +5,8 @@ import { localize } from "nativescript-localize";
 import { LanguageService } from '../../common/services/language-service';
 import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
-import { SpringFilters } from '~/app/common/models/springFilters';
+import { HotelFilters } from '~/app/common/models/hotelFilters';
+import { HotelsService } from '~/app/common/services/hotels-service';
 
 @Component({
     selector: 'ns-hotels-filters',
@@ -15,12 +16,8 @@ import { SpringFilters } from '~/app/common/models/springFilters';
 export class HotelsFiltersComponent implements OnInit {
     @ViewChild('aresStack', { static: false }) aresStack: ElementRef;
     @ViewChild('expandImage', { static: false }) expandImage: ElementRef;
-    campingCheck = false;
-    childrenCheck = false;
-    waterCheck = false;
-    carCheck = false;
-    depthCheck = false;
-    sliderValue = 25;
+    poolCheck = false;
+    breakfastCheck = false;
     mainColor = "rgb(146, 226, 131)";
     scale = "1.3";
     leftToRight = false;
@@ -32,12 +29,12 @@ export class HotelsFiltersComponent implements OnInit {
     areasExpanded = false;
     minPrice = 0;
     maxPrice = 5001;
-    finalMinPrice;
-    finalMaxPrice;
+    finalMinPrice = 10;
+    finalMaxPrice = 2000;
 
     constructor(private page: Page,
         private router: Router,
-        private springsService: SpringsService,
+        private hotelsService: HotelsService,
         private languageService: LanguageService,
         private alertService: AlertService) {
     }
@@ -45,12 +42,6 @@ export class HotelsFiltersComponent implements OnInit {
     ngOnInit(): void {
         this.leftToRight = !this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
-        this.campingCheck = this.springsService.filters.camping;
-        this.childrenCheck = this.springsService.filters.children;
-        this.waterCheck = this.springsService.filters.water;
-        this.carCheck = this.springsService.filters.car;
-        this.depthCheck = this.springsService.filters.depth;
-        this.sliderValue = this.springsService.filters.distance;
     }
 
     getAreasString() {
@@ -58,15 +49,19 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     search() {
-        // const filters: SpringFilters = new SpringFilters();
-
-        // this.springsService.filters = filters;
-        //this.navigateToMap();
+        const filters: HotelFilters = new HotelFilters();
+        filters.breakfast = this.breakfastCheck;
+        filters.maxPrice = this.finalMaxPrice;
+        filters.minPrice = this.finalMinPrice;
+        filters.pool = this.poolCheck;
+        filters.region = this.selectedAreas;
+        this.hotelsService.setFilters(filters);
+        this.navigateToFiltersView();
     }
 
     rangeSeekBarChanged(event) {
-        this.finalMinPrice = event.value.minPrice;
-        this.finalMaxPrice = event.value.maxPrice;
+        this.finalMinPrice = event.value.minValue;
+        this.finalMaxPrice = event.value.maxValue;
     }
 
     expandAreas() {
@@ -93,10 +88,7 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     navigateToFiltersView() {
-        console.log(this.languageService.getCurrentLanguage());
-
-
-        // this.router.navigate(["mainTabs/", 3]);
+        this.router.navigate(["mainTabs/", 2]);
     }
 
     alignVertical(label) {

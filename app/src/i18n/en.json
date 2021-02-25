@@ -27,7 +27,14 @@
     "hotelsFilters":{
         "title": "What B&B to look for",
         "area": "Area in the country",
-        "areasList": "Golan, Galil, the Sharon, Binyamin, Shomron, Jordan valley, Gush Dan, Jerusalem, The negev, Eilat"
+        "areasList": "Golan, Galil, the Sharon, Binyamin, Shomron, Jordan valley, Gush Dan, Jerusalem, The negev, Eilat",
+        "pricePerNight": "Price per night",
+        "pool": "Pool",
+        "breakfast": "Breakfast extra charge"
+    },
+    "hotelsList":{
+        "title": "Choose the right B&B for your vacation",
+        "startingFrom": "Starting from"
     },
     "messages": {
         "info": {

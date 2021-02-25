@@ -54,6 +54,11 @@
   <string name="_messages_error_connectionError_ZBYE1U">"בקשה נכשלה. אנא בדקו חיבור לאינטרנט"</string>
   <string name="_messages_error_springNotFound_23yS3">"לא נמצא מעיין בשם הזה"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"ממתין לנתונים... "</string>
+  <string name="_hotelsList_startingFrom_Z1vX8br">"החל מ-"</string>
+  <string name="_hotelsList_title_2qEv1T">"בחרו בצימר מתאים לחופשה שלכם"</string>
+  <string name="_hotelsFilters_breakfast_1Eotq5">"ארוחת בוקר בתוספת תשלום"</string>
+  <string name="_hotelsFilters_pool_Z1IKxLT">"בריכה"</string>
+  <string name="_hotelsFilters_pricePerNight_Z2baz4o">"מחיר ללילה"</string>
   <string name="_hotelsFilters_areasList_Z1gLsF5">"גולן, גליל, השרון, בנימין, שומרון, בקעת הירדן, גוש דן, ירושלים, הנגב, אילת"</string>
   <string name="_hotelsFilters_area_Z1IMvby">"אזור בארץ"</string>
   <string name="_hotelsFilters_title_2bLUHf">"איזה צימר לחפש?"</string>

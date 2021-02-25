@@ -13,12 +13,22 @@ export class HotelsService {
   private hotelsSubject: Subject<FlatHotel[]> = new Subject<FlatHotel[]>();;
   waitingForResponse: Subject<boolean> = new Subject();
   savedHotels: any[] = [];
+  filters: HotelFilters;
 
   constructor(private httpService: HttpService) {
+    this.filters = new HotelFilters();
+  }
+
+  setFilters(filters: HotelFilters){
+    this.filters = filters;
   }
 
   getHotelsSubject() {
     return this.hotelsSubject;
+  }
+
+  getHotels(){
+    return this.httpService.getAllHotels(this.filters);
   }
 
   getHotel(id: string) {
@@ -41,19 +51,19 @@ export class HotelsService {
     }
   }
 
-  updateHotels(filters: HotelFilters = undefined) {
+  // updateHotels(filters: HotelFilters = undefined) {
     
-    this.waitingForResponse.next();
-    // if (!filters) {
-    //   filters = new Filters();
-    //   filters.distance = 25;
-    // }
+  //   this.waitingForResponse.next();
+  //   // if (!filters) {
+  //   //   filters = new Filters();
+  //   //   filters.distance = 25;
+  //   // }
 
 
-    this.httpService.getAllHotels(filters).subscribe((res: FlatHotel[]) => {
-      this.hotelsSubject.next(res);
-    }, error => {      
-      this.hotelsSubject.error(error);
-    })
-  }
+  //   this.httpService.getAllHotels(filters).subscribe((res: FlatHotel[]) => {
+  //     this.hotelsSubject.next(res);
+  //   }, error => {      
+  //     this.hotelsSubject.error(error);
+  //   })
+  // }
 }

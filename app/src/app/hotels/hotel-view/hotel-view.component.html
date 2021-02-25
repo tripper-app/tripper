@@ -1,0 +1,35 @@
+<StackLayout>
+  <scrollView width="100%" height="91%" *ngIf="!loading">
+    <StackLayout>
+      <FlexboxLayout class="header">
+        <label text="X"></label>
+        <label text="צימר החתולים"></label>
+      </FlexboxLayout>
+      <GridLayout height="250">
+        <Carousel [items]="currentHotel.images" android:indicatorAnimation="scale" indicatorColor="#fff"
+          indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 10" showIndicator="true">
+          <CarouselItem *ngFor="let item of currentHotel.images">
+            <AbsoluteLayout>
+              <ns-waiting-gif top="-20%" left="-20%"></ns-waiting-gif>
+              <Image [src]="item" width="100%" height="100%" stretch="fill"></Image>
+            </AbsoluteLayout>
+          </CarouselItem>
+        </Carousel>
+      </GridLayout>
+      <StackLayout style="width: 100%; padding: 10;">
+        <label class="descriptionLabel" [text]="currentHotel.description"></label>
+      </StackLayout>
+    </StackLayout>
+  </scrollView>
+  <ns-waiting-gif *ngIf="loading"></ns-waiting-gif>
+  <FlexboxLayout class="navigation" *ngIf="!loading">
+    <FlexboxLayout style="align-items: center;" col="1" (tap)="navigateWithMaps()">
+      <img src="res://google_maps_logo" class="navigationIcon" />
+      <label text="{{'springView.navigateWithMaps' | L }}"></label>
+    </FlexboxLayout>
+    <FlexboxLayout style="align-items: center;" (tap)="navigateWithWaze()">
+      <img src="res://waze_logo" class="navigationIcon" />
+      <label text="{{'springView.navigateWithWaze' | L }}"></label>
+    </FlexboxLayout>
+  </FlexboxLayout>
+</StackLayout>

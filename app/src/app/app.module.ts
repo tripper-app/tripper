@@ -31,6 +31,8 @@ import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
 import { WaitingGifComponent } from "./common/waiting-gif/waiting-gif.component";
 import { ProfileComponent } from "./profile/profile.component";
 import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
+import { HotelsListComponent } from "./hotels/hotels-list/hotels-list.component";
+import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
@@ -79,7 +81,9 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         SpringsViewComponent,
         WaitingGifComponent,
         ProfileComponent,
-        HotelsFiltersComponent
+        HotelsFiltersComponent,
+        HotelsListComponent,
+        HotelViewComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
