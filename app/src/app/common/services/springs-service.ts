@@ -15,6 +15,8 @@ export class SpringsService {
   private springsSubject: Subject<FlatSpring[]> = new Subject<FlatSpring[]>();;
   waitingForResponse: Subject<boolean> = new Subject();
   currentLocation = { latitude: 0, longitude: 0 }
+  hotelLocation = { latitude: 0, longitude: 0 };
+  filterByHotel = false;
   geolocationWatching = false;
   geoWatchingEvent: Function;
   savedsprings: any[] = [];
@@ -29,12 +31,10 @@ export class SpringsService {
     this.filters = filers;
   }
 
-
   getSprings(){
-    this.filters.location = this.currentLocation;
+    this.filters.location = this.filterByHotel? this.hotelLocation : this.currentLocation;
     return this.httpService.getAllsprings(this.filters);
   }
-
 
   getSpringsSubject() {
     return this.springsSubject;

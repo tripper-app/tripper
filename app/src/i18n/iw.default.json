@@ -36,6 +36,16 @@
         "title": "בחרו בצימר מתאים לחופשה שלכם",
         "startingFrom": "החל מ-"
     },
+    "hotelView": {
+        "breakfast": "ארוחת בוקר - %s%s",
+        "noBreakfast": "אין ארוחת בוקר",
+        "pool": "יש בריכה",
+        "noPool": "אין בריכה",
+        "price": "החל מ-%s%s ללילה",
+        "attractionsInArea": "אטרקציות באזור",
+        "openMap": "פתיחה במפה",
+        "reserve": "הזמנה"
+    },
     "messages": {
         "info": {
             "waitingForData": "ממתין לנתונים... "

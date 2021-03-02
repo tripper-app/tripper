@@ -9,7 +9,7 @@ import { SpringsService } from '../common/services/springs-service';
 import { FlatSpring } from '../common/models/flatSpring';
 import { localize } from "nativescript-localize";
 import { LanguageService } from '../common/services/language-service';
-import { DrawerService } from '../common/services/drawer-service';
+// import { DrawerService } from '../common/services/drawer-service';
 import * as application from "tns-core-modules/application";
 import { SearchBar } from 'tns-core-modules';
 import { AlertService } from '../common/services/alert-service';
@@ -30,17 +30,15 @@ export class MapComponent implements OnInit, OnDestroy {
   userMarker: Marker;
   searchMode = false;
   searchBar;
-  //springsSubscription; // delete
-  //responseErrorSubscription; // delete
-  //waitForResponseSubscription; // delete
+  hotelMarker: Marker;
 
   constructor(private page: Page,
     private router: Router,
-    private modalService: ModalDialogService, // delete
+    // private modalService: ModalDialogService, // delete
     private viewContainerRef: ViewContainerRef,
     private springsService: SpringsService,
     private languageService: LanguageService,
-    private drawerService: DrawerService, // delete
+    // private drawerService: DrawerService, // delete
     private alertService: AlertService) {
   }
 
@@ -51,7 +49,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     this.page.actionBarHidden = true;
-    this.drawerService.sideDrawer = true; // delete
+    // this.drawerService.sideDrawer = true; // delete
 
     // this.waitForResponseSubscription = this.springsService.waitingForResponse.subscribe((data) => { // delete
     //   this.loading = true;
@@ -65,26 +63,31 @@ export class MapComponent implements OnInit, OnDestroy {
     if (await this.springsService.getCurrentLocation()) {
       // map.settings.compassEnabled = false;
       map.myLocationEnabled = true;
-      this.centerMap();
+      if (!this.springsService.filterByHotel) {
+        this.centerMap();
+      }
     }
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
     }
-
-    //this.getSprings();
+    this.getSprings();
   }
 
   async getSprings() {
+    if (this.springsService.filterByHotel) {
+      this.hotelMarker = new Marker();
+      this.hotelMarker.position = Position.positionFromLatLng(this.springsService.hotelLocation.latitude, this.springsService.hotelLocation.longitude);
+      this.hotelMarker.color = "#61ffa3";
+      this.mainMap.addMarker(this.hotelMarker);
+      this.mainMap.latitude = this.hotelMarker.position.latitude;
+      this.mainMap.longitude = this.hotelMarker.position.longitude;
+    }
+
     this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
       this.loading = false;
-      this.clearMarkers(); // delete
+      // this.clearMarkers(); // delete
       springs.forEach(spring => {
         this.addMarker(spring);
-        // const marker = new Marker();
-        // marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
-        // marker.color = "#9061ff";
-        // marker.userData = { ID: spring.ID };
-        // this.mainMap.addMarker(marker);
       })
     }, err => {
       this.loading = false;
@@ -117,6 +120,10 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   async centerMap() {
+    if (this.springsService.filterByHotel) {
+      this.springsService.filterByHotel = false;
+      this.removeHotelMarker();
+    }
     const location = await this.springsService.getCurrentLocation()
     if (location) {
       this.mainMap.latitude = location.latitude;
@@ -129,7 +136,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickOnMarker(marker) {
-    this.router.navigate(["springView", marker.userData.ID])
+    if (marker.userData) {
+      this.router.navigate(["springView", marker.userData.ID])
+    }
     // if (marker != this.userMarker) {
     //   const options: ModalDialogOptions = {
     //     viewContainerRef: this.viewContainerRef,
@@ -140,8 +149,10 @@ export class MapComponent implements OnInit, OnDestroy {
     // }
   }
 
-  clickOnMap(){    
-    this.searchBar.android.clearFocus();
+  clickOnMap() {
+    if (this.searchBar) {
+      this.searchBar.android.clearFocus();
+    }
     this.searchMode = false;
   }
 
@@ -161,6 +172,10 @@ export class MapComponent implements OnInit, OnDestroy {
       this.mainMap.removeAllMarkers();
       //await this.addUserMarker()
     }
+  }
+
+  removeHotelMarker(){
+    this.mainMap.removeMarker(this.hotelMarker);    
   }
 
   searchByName() {
@@ -188,7 +203,7 @@ export class MapComponent implements OnInit, OnDestroy {
     })
   }
 
-  navigateToFilters(){
+  navigateToFilters() {
     this.router.navigate(["springsFilter"]);
   }
 
@@ -218,7 +233,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private onAndroidActivityResume(args) { // delete
     if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
       this.mainMap.nativeView.onResume();
-      this.drawerService.sideDrawer = false;
+      // this.drawerService.sideDrawer = false;
       // this.drawerService.closeDrawer();
       // this.springsSubscription.unsubscribe();
       // this.waitForResponseSubscription.unsubscribe();

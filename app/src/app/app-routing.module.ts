@@ -12,7 +12,7 @@ import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.c
 import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
 
 const routes: Routes = [
-    { path: "", redirectTo: "/hotelView", data: {}, pathMatch: "full" },
+    { path: "", redirectTo: "/mainTabs", data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },

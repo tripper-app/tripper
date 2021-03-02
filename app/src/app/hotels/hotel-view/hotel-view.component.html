@@ -2,7 +2,7 @@
   <scrollView width="100%" height="91%" *ngIf="!loading">
     <StackLayout>
       <FlexboxLayout class="header">
-        <label text="X"></label>
+        <label text="X" (tap)="backToList()"></label>
         <label text="צימר החתולים"></label>
       </FlexboxLayout>
       <GridLayout height="250">
@@ -18,18 +18,41 @@
       </GridLayout>
       <StackLayout style="width: 100%; padding: 10;">
         <label class="descriptionLabel" [text]="currentHotel.description"></label>
+        <GridLayout rows="*, *" columns="*, *">
+          <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            [col]="rightToLeft? 0 : 1">
+            <img src="res://icon" class="filterIcon" />
+            <label class="filterLabel"
+              text="{{currentHotel.breakfast? ('hotelView.breakfast' | L: currentHotel.breakfastPrice : ' &#8362;') : ('hotelView.noBreakfast' | L)}}"></label>
+          </FlexboxLayout>
+          <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            [col]="rightToLeft? 1 : 0">
+            <img src="res://icon" class="filterIcon" />
+            <label class="filterLabel" [text]="currentHotel.region"></label>
+          </FlexboxLayout>
+          <FlexboxLayout row="1" class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            [col]="rightToLeft? 0 : 1">
+            <img src="res://icon" class="filterIcon" />
+            <label class="filterLabel"
+              text="{{ currentHotel.pool? ('hotelView.pool' | L) : ('hotelView.noPool' | L) }}"></label>
+          </FlexboxLayout>
+          <FlexboxLayout row="1" class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            [col]="rightToLeft? 1 : 0">
+            <img src="res://icon" class="filterIcon" />
+            <label class="filterLabel" text="{{ 'hotelView.price' | L: currentHotel.price : ' &#8362;' }}"></label>
+          </FlexboxLayout>
+        </GridLayout>
       </StackLayout>
+      <StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
+      <label text="{{ 'hotelView.attractionsInArea' | L }}"></label>
+      <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+          <label *ngFor="let attraction of currentHotel.attractions; let i = index" text="{{attraction}}{{i<currentHotel.attractions.length-1? (', ') : ('')}}"></label>
+      </FlexboxLayout>
     </StackLayout>
   </scrollView>
   <ns-waiting-gif *ngIf="loading"></ns-waiting-gif>
   <FlexboxLayout class="navigation" *ngIf="!loading">
-    <FlexboxLayout style="align-items: center;" col="1" (tap)="navigateWithMaps()">
-      <img src="res://google_maps_logo" class="navigationIcon" />
-      <label text="{{'springView.navigateWithMaps' | L }}"></label>
-    </FlexboxLayout>
-    <FlexboxLayout style="align-items: center;" (tap)="navigateWithWaze()">
-      <img src="res://waze_logo" class="navigationIcon" />
-      <label text="{{'springView.navigateWithWaze' | L }}"></label>
-    </FlexboxLayout>
+    <label text="{{ 'hotelView.openMap' | L }}" (tap)="openMap()"></label>
+    <label text="{{ 'hotelView.reserve' | L }}" (tap)="openWebsite()"></label>
   </FlexboxLayout>
 </StackLayout>

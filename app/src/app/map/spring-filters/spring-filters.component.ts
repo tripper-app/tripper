@@ -53,8 +53,7 @@ export class SpringsFiltersComponent implements OnInit {
         filters.distance = this.sliderValue > 0 ? this.sliderValue : undefined;
 
         this.springsService.filters = filters;
-        this.languageService.switchLanguage("iw");
-        //this.navigateToMap();
+        this.navigateToMap();
     }
 
     navigateToMap() {

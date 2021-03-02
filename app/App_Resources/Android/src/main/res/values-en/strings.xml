@@ -54,6 +54,14 @@
   <string name="_messages_error_connectionError_ZBYE1U">"Request failed. please check your internet connection"</string>
   <string name="_messages_error_springNotFound_23yS3">"We can\'t find a spring with this name"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"Waiting for data... "</string>
+  <string name="_hotelView_reserve_ZuNjQn">"reserve"</string>
+  <string name="_hotelView_openMap_1LUcvG">"Open on the map"</string>
+  <string name="_hotelView_attractionsInArea_Z1IA9f6">"Attractions in the area"</string>
+  <string name="_hotelView_price_JGy4v">"Start from %1$s%2$s per night"</string>
+  <string name="_hotelView_noPool_Z2gK6cc">"there is no pool"</string>
+  <string name="_hotelView_pool_Z2gBz5w">"There is a pool"</string>
+  <string name="_hotelView_noBreakfast_1fXg28">"No breakfast"</string>
+  <string name="_hotelView_breakfast_Z1O6N4M">"Breakfast - %1$s%2$s"</string>
   <string name="_hotelsList_startingFrom_Z1vX8br">"Starting from"</string>
   <string name="_hotelsList_title_2qEv1T">"Choose the right B&amp;B for your vacation"</string>
   <string name="_hotelsFilters_breakfast_1Eotq5">"Breakfast extra charge"</string>

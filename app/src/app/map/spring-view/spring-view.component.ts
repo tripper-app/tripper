@@ -19,7 +19,7 @@ import { device } from "tns-core-modules/platform";
     styleUrls: ['./spring-view.component.scss']
 })
 export class SpringsViewComponent implements OnInit {
-    leftToRight = true;
+    rightToLeft = true;
     shouldReverse = true;
     mainColor = "rgb(146, 226, 131)";
     spring: FullSpring;
@@ -39,11 +39,10 @@ export class SpringsViewComponent implements OnInit {
 
     ngOnInit(): void {
         this.page.actionBarHidden = true;
-        // this.shouldReverse = this.languageService.getCurrentLanguage() == device.language;
-        this.leftToRight = !this.languageService.getRightToLeft();
+        this.rightToLeft = this.languageService.getRightToLeft();
 
-        this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-            // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
+        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.loading = false;
             this.currentSpring = spring;
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
@@ -74,15 +73,12 @@ export class SpringsViewComponent implements OnInit {
         openUrl(this.wazeURL + this.springLocation);
     }
 
-    async share() {
+    async shareSpring() {
         const imgsrc = await ImageSource.fromUrl(this.currentSpring.images[0]);
         try {
             var springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}
-    \n${this.getTextFromFields()}
-    ${localize("springModal.navigateWithWaze")}:
-    https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n
-    ${localize("springModal.shareLink")}:
-    123456 just some link here lorem ipsum`; // to do - put here real link!!!
+        \n${this.getTextFromFields()}\n${localize("springView.navigateWithWaze")}:
+        https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n\n${localize("springView.shareLink")}:\n123456 just some link here lorem ipsum`; // to do - put here real link!!!
             SocialShare.shareImage(imgsrc, springText)
         } catch (error) {
             console.log(error);
@@ -104,15 +100,15 @@ export class SpringsViewComponent implements OnInit {
     getTextFromFields() {
         var txt = "";
         if (this.currentSpring.depth) {
-            txt += `${localize("springModal.depth")}: ${this.currentSpring.depth}\n`;
+            txt += `${localize("springView.depth")}: ${this.currentSpring.depth}\n`;
         }
 
         if (this.currentSpring.distanceFromCar) {
-            txt += `${localize("springModal.walkingDistanceFromCar")}: ${this.currentSpring.distanceFromCar}\n`;
+            txt += `${localize("springView.walkingDistanceFromCar")}: ${this.currentSpring.distanceFromCar}\n`;
         }
 
         if (this.currentSpring.preferredSeason) {
-            txt += `${localize("springModal.preferredSeason")}: ${this.currentSpring.preferredSeason}\n`;
+            txt += `${localize("springView.preferredSeason")}: ${this.currentSpring.preferredSeason}\n`;
         }
 
         return txt;

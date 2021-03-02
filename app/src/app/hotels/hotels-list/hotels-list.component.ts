@@ -27,7 +27,7 @@ export class HotelsListComponent implements OnInit {
 
     ngOnInit(): void {
         this.hotelsList = [];        
-        this.rightToLeft = !this.languageService.getRightToLeft();
+        this.rightToLeft = this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
         this.getHotels();
     }
@@ -56,8 +56,8 @@ export class HotelsListComponent implements OnInit {
         this.hotelsList.push(h1, h2, h3);
     }
 
-    navigateToHotel(hotel){
-        this.router.navigate(["hotelView", hotel.id]);
+    navigateToHotel(hotel){        
+        this.router.navigate(["hotelView", hotel]);
     }
 
     navigateToFilters(){

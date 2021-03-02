@@ -9,13 +9,30 @@
 
 .descriptionLabel{
     font-size: 15;
-    text-wrap: true;
     margin-bottom: 10;
+}
+
+.filterLine{
+    align-items: center;
+    font-size: 15;
+    text-wrap: true;
+}
+
+.filterIcon{
+    margin: 5;
+    width: 30%;
+    // align-self: flex-start;
+}
+
+.filterLabel{
+    text-wrap: true;
+    width: 70%;
 }
 
 .navigation{
     background-color: $themeColor;
     justify-content: space-around;
+    align-items: center;
     height: 13%;
     font-size: 15;
     color: white;

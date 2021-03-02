@@ -464,14 +464,14 @@ export const getHotel = functionBuilder(async (req, res) => {
         if (data) {
             data.name = updateField(data.name, currentLanguage);
             data.attractions = data.attractions.map((h: string) => updateField(h, currentLanguage));
-            data.breakfast = data.breakfast;
+            // data.breakfast = data.breakfast;
             data.city = updateField(data.city, currentLanguage);
             data.description = updateField(data.description, currentLanguage);
-            data.images = data.images;
-            data.location = data.location;
-            data.phone = data.phone;
-            data.pool = data.pool;
-            data.price = data.price;
+            // data.images = data.images;
+            // data.location = data.location;
+            // data.phone = data.phone;
+            // data.pool = data.pool;
+            // data.price = data.price;
             data.region = updateField(data.region, currentLanguage);
             data.websiteLink = data.websiteLink;
             // newHotel = {

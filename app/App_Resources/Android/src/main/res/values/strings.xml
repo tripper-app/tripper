@@ -54,6 +54,14 @@
   <string name="_messages_error_connectionError_ZBYE1U">"בקשה נכשלה. אנא בדקו חיבור לאינטרנט"</string>
   <string name="_messages_error_springNotFound_23yS3">"לא נמצא מעיין בשם הזה"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"ממתין לנתונים... "</string>
+  <string name="_hotelView_reserve_ZuNjQn">"הזמנה"</string>
+  <string name="_hotelView_openMap_1LUcvG">"פתיחה במפה"</string>
+  <string name="_hotelView_attractionsInArea_Z1IA9f6">"אטרקציות באזור"</string>
+  <string name="_hotelView_price_JGy4v">"החל מ-%1$s%2$s ללילה"</string>
+  <string name="_hotelView_noPool_Z2gK6cc">"אין בריכה"</string>
+  <string name="_hotelView_pool_Z2gBz5w">"יש בריכה"</string>
+  <string name="_hotelView_noBreakfast_1fXg28">"אין ארוחת בוקר"</string>
+  <string name="_hotelView_breakfast_Z1O6N4M">"ארוחת בוקר - %1$s%2$s"</string>
   <string name="_hotelsList_startingFrom_Z1vX8br">"החל מ-"</string>
   <string name="_hotelsList_title_2qEv1T">"בחרו בצימר מתאים לחופשה שלכם"</string>
   <string name="_hotelsFilters_breakfast_1Eotq5">"ארוחת בוקר בתוספת תשלום"</string>

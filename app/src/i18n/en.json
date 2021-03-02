@@ -36,6 +36,16 @@
         "title": "Choose the right B&B for your vacation",
         "startingFrom": "Starting from"
     },
+    "hotelView": {
+        "breakfast": "Breakfast - %s%s",
+        "noBreakfast": "No breakfast",
+        "pool": "There is a pool",
+        "noPool": "there is no pool",
+        "price": "Start from %s%s per night",
+        "attractionsInArea": "Attractions in the area",
+        "openMap": "Open on the map",
+        "reserve": "reserve"
+    },
     "messages": {
         "info": {
             "waitingForData": "Waiting for data... "
