@@ -20,12 +20,12 @@ import { MainTabsComponent } from "./main-tabs/main-tabs.component";
 import { MapComponent } from "./map/map.component";
 import { FiltersComponent } from "./filters/filters.component"
 import { registerElement } from "nativescript-angular/element-registry";
-import { HomeComponent } from './home/home.component';
+// import { HomeComponent } from './home/home.component';
 import { SpringModalComponent } from './map/spring-modal/spring-modal.component';
 import { SettingModalComponent } from './setting/setting.component';
-import { CarouselComponent } from './home/carousel/carousel.component';
-import { SignUpComponent } from "./signUp/signUp.component";
-import { ResetPasswordComponent } from "./signUp/resetPassword/resetPassword.component";
+// import { CarouselComponent } from './home/carousel/carousel.component';
+import { SignUpComponent } from "./account/signUp/signUp.component";
+import { ResetPasswordComponent } from "./account/resetPassword/resetPassword.component";
 import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.component";
 import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
 import { WaitingGifComponent } from "./common/waiting-gif/waiting-gif.component";
@@ -33,6 +33,8 @@ import { ProfileComponent } from "./profile/profile.component";
 import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
 import { HotelsListComponent } from "./hotels/hotels-list/hotels-list.component";
 import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
+import { LoginComponent } from "./account/login/login.component";
+import { ResetPasswordModalComponent } from "./account/resetPassword/resetPasswordModal/resetPasswordModal.component";
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
@@ -64,16 +66,17 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
     ],
     entryComponents: [
         SpringModalComponent,
-        SettingModalComponent
+        SettingModalComponent,
+        ResetPasswordModalComponent
     ],
     declarations: [
         AppComponent,
         MapComponent,
         SpringModalComponent,
         FiltersComponent,
-        HomeComponent,
+        // HomeComponent,
         SettingModalComponent,
-        CarouselComponent,
+        // CarouselComponent,
         SignUpComponent,
         ResetPasswordComponent,
         MainTabsComponent,
@@ -83,7 +86,9 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         ProfileComponent,
         HotelsFiltersComponent,
         HotelsListComponent,
-        HotelViewComponent
+        HotelViewComponent,
+        LoginComponent,
+        ResetPasswordModalComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

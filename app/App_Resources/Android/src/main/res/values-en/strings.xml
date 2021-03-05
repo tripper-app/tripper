@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="_labels_email_Z24Kl9J">"Your email address"</string>
+  <string name="_labels_email_Z24Kl9J">"Email address"</string>
   <string name="_labels_cancel_1B7I0U">"Cancel"</string>
   <string name="_labels_OK_ZHOEvR">"OK"</string>
   <string name="_labels_language_Z1LvLi1">"Language"</string>
   <string name="_labels_setting_HCebH">"Setting"</string>
   <string name="_labels_map_Z1UVRWy">"Map"</string>
+  <string name="_login_loginFacebook_kjut0">"Login with facebook"</string>
+  <string name="_login_haveAccount_Z4bqKB">"I already have an account"</string>
+  <string name="_login_dontHaveAccount_10esYQ">"I don\'t have an account yet"</string>
   <string name="_login_emailNotVerified_Z1KEhks">"this email address is not verified yet. Check your email inbox"</string>
   <string name="_login_signUp_ZOOaTy">"Sign up"</string>
   <string name="_login_login_hU56g">"Login"</string>
-  <string name="_login_nick_Z27uAk9">"Nick name"</string>
+  <string name="_login_userName_27blVx">"User name"</string>
   <string name="_login_code_Z27w0Pm">"Code"</string>
   <string name="_login_confirmPassword_ZQN1r9">"Confirm password"</string>
+  <string name="_login_createPassword_Z1Pv07e">"Create password"</string>
   <string name="_login_password_Z1cQjIY">"Password"</string>
   <string name="_login_forgotPassword_1rEjq6">"Forgot your password?"</string>
   <string name="_login_dontHaveAcount_Z1L4cQ4">"Don\'t have an accout yet? "</string>
@@ -27,6 +31,7 @@
   <string name="_login_requireDetails_17tIQt">"Fill all the details"</string>
   <string name="_login_requireEmail_c5U2B">"Fill your email"</string>
   <string name="_login_requireCode_Z27Gx6p">"Insert the code you recieved"</string>
+  <string name="_login_emailAndPasswordRequired_zDDBk">"Email and password required"</string>
   <string name="_springView_share_ewhd3">"Share"</string>
   <string name="_springView_contactAboutSpring_Z1IfXwj">"Contact us about the spring"</string>
   <string name="_springView_showLessComments_ZoRY7i">"show less comments"</string>

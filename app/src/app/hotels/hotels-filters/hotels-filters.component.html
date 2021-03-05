@@ -31,7 +31,7 @@
                 <FlexboxLayout colSpan="2" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">    
                     <RangeSeekBar width="50%" [maxValue]="maxPrice" [maxStartValue]="maxPrice" step="10" 
                         class="range-seek-bar" (rangeSeekBarChanged)="rangeSeekBarChanged($event)" #priceBar minRange="100"></RangeSeekBar>
-                        <label width="50%" text="{{ 'springsFilters.PricePerNight' | L }}"></label>
+                        <label width="50%" text="{{ 'hotelsFilters.pricePerNight' | L }}"></label>
                 </FlexboxLayout>
                 <Label style="text-align: right;" text="&#8362; {{finalMaxPrice}}-{{finalMinPrice}}" row="1" col="1"></Label>
             </GridLayout>

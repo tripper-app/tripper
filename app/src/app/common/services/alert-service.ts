@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TNSFancyAlert, TNSFancyAlertButton } from "nativescript-fancyalert";
 import { SweetAlert } from 'nativescript-sweet-alert';
-import { ShowSuccess , ShowError, ShowText } from 'nativescript-sweet-alert/classes';
+import { ShowSuccess, ShowError, ShowText, ShowNormal } from 'nativescript-sweet-alert/classes';
 import localize from 'nativescript-localize';
 
 @Injectable({
@@ -12,14 +12,14 @@ export class AlertService {
     constructor() {
     }
 
-    showError(txt: string){
+    showError(txt: string) {
         const options: ShowError = {
             contentText: txt,
             text: "",
             cancelButtonText: localize("labels.OK")
         }
         SweetAlert.showError(options).then(value => {
-         // result: true, false, CLOSED    
+            // result: true, false, CLOSED    
         });
 
         // TNSFancyAlert.showError(" ", txt, localize("label.OK") );
@@ -27,13 +27,26 @@ export class AlertService {
         // alert(txt);
     }
 
-    showInfo(txt: string){
-        const options: ShowText = {
+    showInfo(txt: string) {
+        const options: ShowNormal = {
             text: txt,
+            contentText: '',
             cancelButtonText: localize("labels.OK")
         }
-        SweetAlert.showText(options).then(value => {
-         // result: true, false, CLOSED    
+        SweetAlert.showNormal(options).then(value => {
+            // result: true, false, CLOSED    
+        });
+    }
+
+    showSuccess(txt: string) {
+        const options: ShowSuccess = {
+            text: txt,
+            contentText: '',
+            cancelButtonText: localize("labels.OK")
+        }
+
+        SweetAlert.showSuccess(options).then(value => {
+            // result: true, false, CLOSED    
         });
     }
 }

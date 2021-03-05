@@ -11,6 +11,7 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { HttpService } from '../common/services/http-service';
 import * as btoa from 'btoa';
 import { DrawerService } from '../common/services/drawer-service';
+import { HotelsService } from '../common/services/hotels-service';
 
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
@@ -21,7 +22,9 @@ declare let java: any;
     styleUrls: ['./main-tabs.component.css']
 })
 export class MainTabsComponent implements OnInit {
-    selectedPageIndex = 2;
+    selectedPageIndex = 0;
+    tabsVisibility = true;
+    showList = false;
     constructor(private router: Router,
         private route: ActivatedRoute,
         private page: Page,
@@ -29,7 +32,8 @@ export class MainTabsComponent implements OnInit {
         private modalService: ModalDialogService,
         private languageService: LanguageService,
         private httpService: HttpService,
-        private drawerService: DrawerService) {
+        private drawerService: DrawerService,
+        private hotelService: HotelsService) {
     }
 
     ngOnInit() {
@@ -59,6 +63,14 @@ export class MainTabsComponent implements OnInit {
         };
         this.modalService.showModal(SettingModalComponent, options);
 
+    }
+
+    pageChange(index){
+        if (index != 2) {
+            this.hotelService.showList = false;
+        } else{            
+            this.tabsVisibility = false;
+        }
     }
 
     async uploadImage() {

@@ -3,16 +3,17 @@ import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { MapComponent } from "./map/map.component";
 import { MainTabsComponent } from "./main-tabs/main-tabs.component";
-import { SignUpComponent } from "./signUp/signUp.component";
-import { ResetPasswordComponent } from "./signUp/resetPassword/resetPassword.component";
+import { SignUpComponent } from "./account/signUp/signUp.component";
+import { ResetPasswordComponent } from "./account/resetPassword/resetPassword.component";
 import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.component";
 import { SpringsViewComponent } from "./map/spring-view/spring-view.component";
 import { ProfileComponent } from "./profile/profile.component";
 import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
 import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
+import { LoginComponent } from "./account/login/login.component";
 
 const routes: Routes = [
-    { path: "", redirectTo: "/mainTabs", data: {}, pathMatch: "full" },
+    { path: "", redirectTo: "/login", data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
     { path: "profile", component: ProfileComponent },
     { path: "hotelsFilters", component: HotelsFiltersComponent },
     { path: "hotelView", component: HotelViewComponent },
-    { path: "hotelView/:hotelId", component: HotelViewComponent }
+    { path: "hotelView/:hotelId", component: HotelViewComponent },
+    { path: "login", component: LoginComponent }
 ];
 
 @NgModule({

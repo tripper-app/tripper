@@ -5,6 +5,7 @@ import { HttpService } from './http-service';
     providedIn: 'root'
 })
 export class UserService {
+    showProfile = false;
 
     constructor(private httpService: HttpService) {
     }

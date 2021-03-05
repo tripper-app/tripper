@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
@@ -15,6 +15,8 @@ import { FlatHotel } from '~/app/common/models/flatHotel';
     styleUrls: ['./hotels-list.component.scss']
 })
 export class HotelsListComponent implements OnInit {
+    @Output() showTabs: EventEmitter<any> = new EventEmitter();
+    @Output() hideTabs: EventEmitter<any> = new EventEmitter();
     private rightToLeft = true;
     hotelsList: FlatHotel[];
 
@@ -23,16 +25,23 @@ export class HotelsListComponent implements OnInit {
         private hotelsService: HotelsService,
         private languageService: LanguageService,
         private alertService: AlertService) {
+        // this.checkFilters();
     }
 
     ngOnInit(): void {
-        this.hotelsList = [];        
+        this.hotelsList = [];
         this.rightToLeft = this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
         this.getHotels();
     }
 
-    getHotels(){
+    hideTheFilters(){        
+        this.hotelsService.showList = true;
+        this.showTabs.emit();
+    }
+
+
+    getHotels() {
         // this.hotelsService.getHotels().subscribe(hotels => {
         //     console.log(hotels)
         // })
@@ -56,14 +65,15 @@ export class HotelsListComponent implements OnInit {
         this.hotelsList.push(h1, h2, h3);
     }
 
-    navigateToHotel(hotel){        
+    navigateToHotel(hotel) {
         this.router.navigate(["hotelView", hotel]);
     }
 
-    navigateToFilters(){
-        this.router.navigate(["hotelsFilters"]);
+    navigateToFilters() {
+        this.hideTabs.emit();
+        this.hotelsService.showList = false;
+        // this.router.navigate(["hotelsFilters"]);
     }
-
 
     navigateToFiltersView() {
         console.log(this.languageService.getCurrentLanguage());
@@ -75,6 +85,14 @@ export class HotelsListComponent implements OnInit {
     alignVertical(label) {
         label.android.setGravity(17)
     }
+
+    // checkFilters() {
+    //     if (this.hotelsService.cameFromFilters) {
+    //         this.hotelsService.cameFromFilters = false;
+    //     } else {
+    //         this.navigateToFilters();
+    //     }
+    // }
 
     handleErrors(error) {
         console.log(error);

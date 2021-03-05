@@ -1,5 +1,5 @@
-<BottomNavigation [selectedIndex]="selectedPageIndex" >
-    <TabStrip>
+<BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
+    <TabStrip  [visibility]="tabsVisibility ? 'visible' : 'collapsed'">
         <TabStripItem>
             <Label text="חשבון"></Label>
             <Image src="res://icon" class="fas t-36"></Image>
@@ -8,7 +8,7 @@
             <Label text="משחקים"></Label>
             <Image src="font://&#xf007;" class="fas"></Image>
         </TabStripItem>
-        <TabStripItem class="special">
+        <TabStripItem class="special" >
             <Label text="צימרים"></Label>
             <Image src="font://&#xf00e;" class="fas t-36"></Image>
         </TabStripItem>
@@ -20,22 +20,22 @@
 
     <TabContentItem>
         <GridLayout>
-            <ns-signUp></ns-signUp>
-        </GridLayout>
-    </TabContentItem>
-    <TabContentItem>
-        <GridLayout>
             <ns-profile></ns-profile>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <ns-hotels-list></ns-hotels-list>
+            <!-- <ns-profile></ns-profile> -->
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <ns-map></ns-map>
+            <ns-hotels-list (hideTabs)="tabsVisibility = false" (showTabs)="tabsVisibility = true"></ns-hotels-list>
+        </GridLayout>
+    </TabContentItem>
+    <TabContentItem>
+        <GridLayout>
+            <!-- <ns-map></ns-map> -->
         </GridLayout>
     </TabContentItem>
 </BottomNavigation>

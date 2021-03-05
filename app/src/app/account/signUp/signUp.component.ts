@@ -5,28 +5,32 @@ import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { localize } from "nativescript-localize";
 import { Router } from '@angular/router';
-import { OauthService } from '../common/services/oauthService';
+import { OauthService } from '../../common/services/oauthService';
 import { HttpService } from '~/app/common/services/http-service';
 import { LanguageService } from '~/app/common/services/language-service';
 import { setString, getString } from '@nativescript/core/application-settings';
 import { GoogleLogin } from 'nativescript-google-login';
 import * as application from "tns-core-modules/application";
+import { AlertService } from '../../common/services/alert-service';
 
 @Component({
     selector: 'ns-signUp',
     templateUrl: './signUp.component.html',
-    styleUrls: ['./signUp.component.css']
+    styleUrls: ['./signUp.component.scss']
 })
 export class SignUpComponent implements OnInit {
     waitingForResponse = false;
-    isLoggingIn = true;
-    localizeSignUp = localize('login.signUp');
-    localizeLogin = localize('login.login');
-    localizeBackToLogin = localize('login.backToLogin');
-    localizedontHaveAcount = localize('login.dontHaveAcount');
+    mainColor = "rgb(146, 226, 131)";
+    // isLoggingIn = true;
+    rightToLeft = true;
+    // localizeSignUp = localize('login.signUp');
+    // localizeLogin = localize('login.login');
+    // localizeBackToLogin = localize('login.backToLogin');
+    // localizedontHaveAcount = localize('login.dontHaveAcount');
     user: User;
+    confirmPassword = '';
     @ViewChild("password", { static: false }) password: ElementRef;
-    @ViewChild("confirmPassword", { static: false }) confirmPassword: ElementRef;
+    // @ViewChild("confirmPassword", { static: false }) confirmPassword: ElementRef;
     @ViewChild("nick", { static: false }) nick: ElementRef;
 
     constructor(private page: Page,
@@ -34,71 +38,55 @@ export class SignUpComponent implements OnInit {
         private router: Router,
         private oathService: OauthService,
         private httpService: HttpService,
-        private languageService: LanguageService) {
+        private languageService: LanguageService,
+        private alertService: AlertService) {
     }
 
-
-    toggleForm() {
-        this.isLoggingIn = !this.isLoggingIn;
+    ngOnInit() {
+        this.page.actionBarHidden = true;
+        this.rightToLeft = this.languageService.getRightToLeft();
+        this.user = new User();
+        this.oathService.configureOAuthProviders();
+        // GoogleLogin.init({
+        //     google: {
+        //         initialize: true,
+        //         clientId: undefined,
+        //         serverClientId: "597122793226-4p5ki7crvpk9a9h0k9plh4n89fvnjmg4.apps.googleusercontent.com",
+        //         isRequestAuthCode: true
+        //     },
+        //     viewController: application.android.foregroundActivity
+        // });
     }
+
+    navigateToLogin() {
+        this.router.navigate(['login']);
+    }
+
+    // toggleForm() {
+    //     this.isLoggingIn = !this.isLoggingIn;
+    // }
 
     submit() {
-        if (!this.user.email || !this.user.password) {
-            this.alert(localize('login.requireEmailAndPassword'));
+        if (!this.user.email || !this.user.password || !this.confirmPassword) {
+            this.alertService.showError(localize('login.emailAndPasswordRequired'));
             return;
         }
 
-        if (this.isLoggingIn) {
-            this.login();
-        } else {
-            this.register();
+        if (this.user.password != this.confirmPassword) {
+            this.alertService.showError(localize('login.passwordsNotMuch'));
+            return;
         }
+
+        this.signUp();
     }
 
-    login() {
+    signUp() {
         this.waitingForResponse = true;
-        this.userService.login(this.user).subscribe(data => {
+        this.userService.signUp(this.user).subscribe(res => {
             this.waitingForResponse = false;
-            this.alert("YEAH!")
-            console.log(data.token);
-            this.saveTokenToCache(data.token);
-            //this.router.navigate(["/home"]);
+            this.alertService.showSuccess(localize('login.accountCreated'));
+            // navigate
         }, err => this.handleError(err))
-    }
-
-    register() {
-        if (this.user.password != this.confirmPassword.nativeElement.text) {
-            this.alert(localize('login.passwordsNotMuch'));
-        } else {
-            this.waitingForResponse = true;
-            this.userService.signUp(this.user).subscribe(res => {
-                this.waitingForResponse = false;
-                this.alert(localize('login.accountCreated'));
-                this.isLoggingIn = true;
-            }, err => this.handleError(err))
-        }
-    }
-
-    forgotPassword() {
-        this.router.navigate(['resetPassword']);
-    }
-
-    focusPassword() {
-        this.password.nativeElement.focus();
-    }
-
-    focusConfirmPassword() {
-        if (!this.isLoggingIn) {
-            this.confirmPassword.nativeElement.focus();
-        }
-    }
-
-    focusNick() {
-        this.nick.nativeElement.focus();
-    }
-
-    getLocalizeBackToLogin() {
-        return localize('login.backToLogin')
     }
 
     loginWithFacebook() {
@@ -127,14 +115,14 @@ export class SignUpComponent implements OnInit {
         // }, err => {
         //     console.log("in error callback");
         //     console.log(err);
-            
+
         // })
     }
 
     loginWithThirdParty(token, thirdParty) {
         // waiting gif
         //setString("facebook_token", token);
-        this.httpService.loginWithThirdPartyToken(token, thirdParty).subscribe((res: {token: string}) => {                
+        this.httpService.loginWithThirdPartyToken(token, thirdParty).subscribe((res: { token: string }) => {
             this.saveTokenToCache(res.token);
         }, err => this.handleError(err))
     }
@@ -189,22 +177,8 @@ export class SignUpComponent implements OnInit {
         //this.oathService.disConnect();
     }
 
-    ngOnInit() {
-        this.page.actionBarHidden = true;
-        this.user = new User();
-        this.user.email = "odedoded777@gmail.com";
-        this.user.password = "1234";
-
-        this.oathService.configureOAuthProviders();
-        GoogleLogin.init({
-            google: {
-                initialize: true,
-                clientId: undefined,
-                serverClientId: "597122793226-4p5ki7crvpk9a9h0k9plh4n89fvnjmg4.apps.googleusercontent.com",
-                isRequestAuthCode: true
-            },
-            viewController: application.android.foregroundActivity
-        });
+    exit() {
+        this.router.navigate(['mainTabs', 3])
     }
 }
     // activity: application.android.foregroundActivity

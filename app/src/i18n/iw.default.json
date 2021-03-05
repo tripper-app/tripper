@@ -82,6 +82,7 @@
         "share": "שיתוף"
     },
     "login": {
+        "emailAndPasswordRequired": "נא להזין אימייל וסיסמא",
         "requireCode": "הזינו את הקוד שנשלח אליכם",
         "requireEmail": "הזינו את כתובת האמייל שלכם",
         "requireDetails": "מלאו את הפרטים",
@@ -96,13 +97,17 @@
         "backToLogin": "חזרה להתחברות",
         "dontHaveAcount": "עדיין אין לכם משתמש? ",
         "code": "קוד",
-        "nick": "כינוי",
+        "userName": "שם משתמש",
         "forgotPassword": "שכחת את הסיסמא?",
         "password": "סיסמא",
+        "createPassword": "יצירת סיסמא",
         "confirmPassword": "אימות סיסמא",
         "login": "התחברות",
         "signUp": "הרשמה",
-        "emailNotVerified": "כתובת זו אינה אמותה עדיין. אנא בדקו את תיבת הדואר הנכנס שלכם"
+        "emailNotVerified": "כתובת זו אינה אמותה עדיין. אנא בדקו את תיבת הדואר הנכנס שלכם",
+        "dontHaveAccount": "עדיין אין לי חשבון",
+        "haveAccount": "כבר יש לי חשבון",
+        "loginFacebook": "התחברות באמצעות פייסבוק"
     },
     "labels": {
         "map": "מפה",
@@ -110,6 +115,6 @@
         "language": "שפה",
         "OK": "אישור",
         "cancel": "ביטול",
-        "email": "כתובת האימייל שלכם"
+        "email": "כתובת אימייל"
     }
 }

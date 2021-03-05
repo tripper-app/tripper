@@ -1,3 +1,6 @@
-<FlexboxLayout flexDirection="column">
-    <label *ngFor="let item of items" [text]="item"></label>
-</FlexboxLayout>
+<StackLayout>
+    <ns-login></ns-login>
+    <FlexboxLayout flexDirection="column">
+        <label *ngFor="let item of items" [text]="item"></label>
+    </FlexboxLayout>
+</StackLayout>

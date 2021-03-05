@@ -82,6 +82,7 @@
         "share": "Share"
     },
     "login": {
+        "emailAndPasswordRequired": "Email and password required",
         "requireCode": "Insert the code you recieved",
         "requireEmail": "Fill your email",
         "requireDetails": "Fill all the details",
@@ -97,12 +98,16 @@
         "dontHaveAcount": "Don't have an accout yet? ",
         "forgotPassword": "Forgot your password?",
         "password": "Password",
+        "createPassword": "Create password",
         "confirmPassword": "Confirm password",
         "code": "Code",
-        "nick": "Nick name",
+        "userName": "User name",
         "login": "Login",
         "signUp": "Sign up",
-        "emailNotVerified": "this email address is not verified yet. Check your email inbox"
+        "emailNotVerified": "this email address is not verified yet. Check your email inbox",
+        "dontHaveAccount": "I don't have an account yet",
+        "haveAccount": "I already have an account",
+        "loginFacebook": "Login with facebook"
     },
     "labels": {
         "map": "Map",
@@ -110,6 +115,6 @@
         "language": "Language",
         "OK": "OK",
         "cancel": "Cancel",
-        "email": "Your email address"
+        "email": "Email address"
     }
 }

@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="_labels_email_Z24Kl9J">"כתובת האימייל שלכם"</string>
+  <string name="_labels_email_Z24Kl9J">"כתובת אימייל"</string>
   <string name="_labels_cancel_1B7I0U">"ביטול"</string>
   <string name="_labels_OK_ZHOEvR">"אישור"</string>
   <string name="_labels_language_Z1LvLi1">"שפה"</string>
   <string name="_labels_setting_HCebH">"הגדרות"</string>
   <string name="_labels_map_Z1UVRWy">"מפה"</string>
+  <string name="_login_loginFacebook_kjut0">"התחברות באמצעות פייסבוק"</string>
+  <string name="_login_haveAccount_Z4bqKB">"כבר יש לי חשבון"</string>
+  <string name="_login_dontHaveAccount_10esYQ">"עדיין אין לי חשבון"</string>
   <string name="_login_emailNotVerified_Z1KEhks">"כתובת זו אינה אמותה עדיין. אנא בדקו את תיבת הדואר הנכנס שלכם"</string>
   <string name="_login_signUp_ZOOaTy">"הרשמה"</string>
   <string name="_login_login_hU56g">"התחברות"</string>
   <string name="_login_confirmPassword_ZQN1r9">"אימות סיסמא"</string>
+  <string name="_login_createPassword_Z1Pv07e">"יצירת סיסמא"</string>
   <string name="_login_password_Z1cQjIY">"סיסמא"</string>
   <string name="_login_forgotPassword_1rEjq6">"שכחת את הסיסמא?"</string>
-  <string name="_login_nick_Z27uAk9">"כינוי"</string>
+  <string name="_login_userName_27blVx">"שם משתמש"</string>
   <string name="_login_code_Z27w0Pm">"קוד"</string>
   <string name="_login_dontHaveAcount_Z1L4cQ4">"עדיין אין לכם משתמש? "</string>
   <string name="_login_backToLogin_Zmc5JC">"חזרה להתחברות"</string>
@@ -27,6 +31,7 @@
   <string name="_login_requireDetails_17tIQt">"מלאו את הפרטים"</string>
   <string name="_login_requireEmail_c5U2B">"הזינו את כתובת האמייל שלכם"</string>
   <string name="_login_requireCode_Z27Gx6p">"הזינו את הקוד שנשלח אליכם"</string>
+  <string name="_login_emailAndPasswordRequired_zDDBk">"נא להזין אימייל וסיסמא"</string>
   <string name="_springView_share_ewhd3">"שיתוף"</string>
   <string name="_springView_contactAboutSpring_Z1IfXwj">"פניה בנוגע למעיין"</string>
   <string name="_springView_showLessComments_ZoRY7i">"צמצום תגובות"</string>

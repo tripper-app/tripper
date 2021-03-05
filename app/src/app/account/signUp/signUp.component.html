@@ -1,0 +1,96 @@
+<StackLayout>
+	<StackLayout height="90%">
+		<GridLayout columns="*,*,*" margin="10 20" style="font-size: 25;" height="40">
+			<Label width="100%" [ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" text="X"
+				[col]="rightToLeft? 0 : 2" (tap)="exit()"></Label>
+			<Label text="{{ 'login.signUp' | L }}" col="1"></Label>
+		</GridLayout>
+		<StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
+		<label class="haveAccount" text="{{ 'login.haveAccount' | L }}" (tap)="navigateToLogin()"></label>
+		<StackLayout margin="20">
+			<label class="title" width="100%" text=""></label>
+			<FlexboxLayout justifyContent="space-between" width="100%" height="100%" flexDirection="column">
+				<FlexboxLayout margin="0 -6 20" justifyContent="space-between">
+					<FlexboxLayout style="align-items: center;">
+						<CheckBox:CheckBox (checkedChange)="$event.value? cbIw.checked = false : ''" checked="false"
+							[fillColor]="mainColor" boxType="circle" #cbEn />
+						<label (tap)="cbEn.checked = true" text="English"></label>
+					</FlexboxLayout>
+					<FlexboxLayout style="align-items: center;">
+						<label text="עברית" (tap)="cbIw.checked = true"></label>
+						<CheckBox:CheckBox (checkedChange)="$event.value? cbEn.checked = false : ''" checked="true"
+							[fillColor]="mainColor" boxType="circle" #cbIw />
+					</FlexboxLayout>
+				</FlexboxLayout>
+				<label class="title" text="{{ 'login.userName' | L }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="user.userName" class="input"
+					autocorrect="false" autocapitalizationType="none" returnKeyType="next"
+					[disabled]="waitingForResponse"></TextField>
+				<label class="title" text="{{ 'labels.email' | L }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="user.email" class="input" keyboardType="email"
+					autocorrect="false" autocapitalizationType="none" returnKeyType="next"
+					[disabled]="waitingForResponse"></TextField>
+				<label class="title" text="{{ 'login.createPassword' | L }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="user.password" class="input" autocorrect="false" secure="true"
+					autocapitalizationType="none" returnKeyType="next"
+					[disabled]="waitingForResponse"></TextField>
+					<label class="title" text="{{ 'login.confirmPassword' | L }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="confirmPassword" class="input" autocorrect="false" secure="true"
+					autocapitalizationType="none" returnKeyType="go" (returnPress)="submit()"
+					[disabled]="waitingForResponse"></TextField>
+			</FlexboxLayout>
+		</StackLayout>
+	</StackLayout>
+	<FlexboxLayout class="signUp" (tap)="submit()">
+		<label text="הרשמה"></label>
+	</FlexboxLayout>
+</StackLayout>
+
+
+<!-- <FlexboxLayout class="page">
+	<StackLayout class="form">
+		<Label class="header" text="{{ 'app.name' | L }}"></Label>
+		<ActivityIndicator *ngIf="waitingForResponse" [busy]="waitingForResponse"></ActivityIndicator>
+		<button text="login with facebook" (tap)="loginWithFacebook()"></button>
+		<button text="logout" (tap)="logout()"></button>
+		<button text="login with google" (tap)="loginWithGoogle()"></button>
+
+		<StackLayout class="input-field">
+			<TextField class="input" hint="{{ 'labels.email' | L }}" keyboardType="email" autocorrect="false"
+				autocapitalizationType="none" [(ngModel)]="user.email" returnKeyType="next"
+				(returnPress)="focusPassword()" [disabled]="waitingForResponse"></TextField>
+			<StackLayout class="hr-light"></StackLayout>
+		</StackLayout>
+
+		<StackLayout class="input-field">
+			<TextField #password class="input" hint="{{ 'login.password' | L }}" secure="true"
+				[(ngModel)]="user.password" [returnKeyType]="isLoggingIn ? 'done' : 'next'"
+				(returnPress)="focusConfirmPassword()" [disabled]="waitingForResponse"></TextField>
+			<StackLayout class="hr-light"></StackLayout>
+		</StackLayout>
+
+		<StackLayout *ngIf="!isLoggingIn" class="input-field">
+			<TextField #confirmPassword class="input" hint="{{ 'login.confirmPassword' | L }}" secure="true"
+				returnKeyType="next" (returnPress)="focusConfirmPassword()" [disabled]="waitingForResponse"></TextField>
+			<StackLayout class="hr-light"></StackLayout>
+		</StackLayout>
+
+		<StackLayout *ngIf="!isLoggingIn" class="input-field">
+			<TextField #nick class="input" hint="{{ 'login.nick' | L }}" [(ngModel)]="user.nick" returnKeyType="done"
+				[disabled]="waitingForResponse"></TextField>
+			<StackLayout class="hr-light"></StackLayout>
+		</StackLayout>
+
+		<Button [text]="isLoggingIn ? localizeLogin : localizeSignUp" (tap)="submit()"
+			class="btn btn-primary m-t-20" [disabled]="waitingForResponse"></Button>
+		<Label *ngIf="isLoggingIn" text="{{ 'login.forgotPassword' | L }}" class="login-label" (tap)="forgotPassword()"
+			[disabled]="waitingForResponse"></Label>
+	</StackLayout>
+
+	<Label class="login-label sign-up-label" (tap)="toggleForm()" [disabled]="waitingForResponse">
+		<FormattedString>
+			<Span [text]="isLoggingIn ? localizedontHaveAcount : localizeBackToLogin"></Span>
+			<Span [text]="isLoggingIn ? localizeSignUp : ''" class="bold"></Span>
+		</FormattedString>
+	</Label>
+</FlexboxLayout> -->

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
@@ -16,12 +16,14 @@ import { HotelsService } from '~/app/common/services/hotels-service';
 export class HotelsFiltersComponent implements OnInit {
     @ViewChild('aresStack', { static: false }) aresStack: ElementRef;
     @ViewChild('expandImage', { static: false }) expandImage: ElementRef;
+    @Output() hideFilters: EventEmitter<any> = new EventEmitter();
     poolCheck = false;
     breakfastCheck = false;
     mainColor = "rgb(146, 226, 131)";
     scale = "1.3";
     leftToRight = false;
-    areas = ["שרון", "מרכז", "שומרון", "גולן", "אילת", "גליל", "נגב", "שומרון", "בנימין", "טלמון", "ירושלים"]
+    areas = localize('hotelsFilters.areasList').split(', ');
+    // areas = ["שרון", "מרכז", "שומרון", "גולן", "אילת", "גליל", "נגב", "שומרון", "בנימין", "טלמון", "ירושלים"]
     areasBoolean: boolean[] = [];
     selectedAreas = [];
     areaLineHeight = 30;
@@ -88,7 +90,9 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     navigateToFiltersView() {
-        this.router.navigate(["mainTabs/", 2]);
+        // this.router.navigate(["mainTabs/", 2]);
+        
+        this.hideFilters.emit();
     }
 
     alignVertical(label) {

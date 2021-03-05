@@ -10,10 +10,9 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HotelsService {
-  private hotelsSubject: Subject<FlatHotel[]> = new Subject<FlatHotel[]>();;
-  waitingForResponse: Subject<boolean> = new Subject();
   savedHotels: any[] = [];
   filters: HotelFilters;
+  showList = false;
 
   constructor(private httpService: HttpService) {
     this.filters = new HotelFilters();
@@ -21,10 +20,6 @@ export class HotelsService {
 
   setFilters(filters: HotelFilters){
     this.filters = filters;
-  }
-
-  getHotelsSubject() {
-    return this.hotelsSubject;
   }
 
   getHotels(){
@@ -50,20 +45,4 @@ export class HotelsService {
       return hotelMap(this.httpService.getHotel(id))
     }
   }
-
-  // updateHotels(filters: HotelFilters = undefined) {
-    
-  //   this.waitingForResponse.next();
-  //   // if (!filters) {
-  //   //   filters = new Filters();
-  //   //   filters.distance = 25;
-  //   // }
-
-
-  //   this.httpService.getAllHotels(filters).subscribe((res: FlatHotel[]) => {
-  //     this.hotelsSubject.next(res);
-  //   }, error => {      
-  //     this.hotelsSubject.error(error);
-  //   })
-  // }
 }
