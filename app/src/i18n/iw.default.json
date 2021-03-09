@@ -78,20 +78,21 @@
         "newComment": "תגובה חדשה...",
         "showMoreComments": "פתיחת תגובות נוספות",
         "showLessComments": "צמצום תגובות",
-        "contactAboutSpring": "פניה בנוגע למעיין",
+        "foundError": "מצאתם טעות?",
         "share": "שיתוף"
     },
     "login": {
         "emailAndPasswordRequired": "נא להזין אימייל וסיסמא",
+        "wrongEmail": "כתובת אימייל לא נכונה",
         "requireCode": "הזינו את הקוד שנשלח אליכם",
         "requireEmail": "הזינו את כתובת האמייל שלכם",
-        "requireDetails": "מלאו את הפרטים",
+        "requireDetails": "מלאו את כל הפרטים",
         "wrongDetails": "הפרטים שהוזנו אינם נכונים",
         "passwordsNotMuch": "סיסמאות לא תואמות",
         "accountCreated": "משתמש חדש נוצר בהצלחה. אימייל עם קישור לאימות הכתובת נשלח אליכם",
         "emailAlreadyExist": "כתובת מייל זו כבר רשומה במערכת",
         "passwordChanged": "סיסמתכם שונתה בהצלחה",
-        "insertCode": "קוד אימות נשלח אליכם לכתובת האמייל. הזינו את כאן את הקוד",
+        "codeSent": "קוד אימות נשלח אליכם לכתובת האימייל",
         "proceed": "המשך",
         "submitNewPassword": "עדכון סיסמא חדשה",
         "backToLogin": "חזרה להתחברות",
@@ -101,7 +102,8 @@
         "forgotPassword": "שכחת את הסיסמא?",
         "password": "סיסמא",
         "createPassword": "יצירת סיסמא",
-        "confirmPassword": "אימות סיסמא",
+        "confirmPassword": "אישור סיסמא",
+        "resetPassword": "שחזור סיסמא",
         "login": "התחברות",
         "signUp": "הרשמה",
         "emailNotVerified": "כתובת זו אינה אמותה עדיין. אנא בדקו את תיבת הדואר הנכנס שלכם",
@@ -109,10 +111,13 @@
         "haveAccount": "כבר יש לי חשבון",
         "loginFacebook": "התחברות באמצעות פייסבוק"
     },
+    "profile": {
+        "title": "פרופיל אישי"
+    },
     "labels": {
         "map": "מפה",
         "setting": "הגדרות",
-        "language": "שפה",
+        "language": "שפה מועדפת",
         "OK": "אישור",
         "cancel": "ביטול",
         "email": "כתובת אימייל"

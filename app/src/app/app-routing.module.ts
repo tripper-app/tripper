@@ -11,16 +11,20 @@ import { ProfileComponent } from "./profile/profile.component";
 import { HotelsFiltersComponent } from "./hotels/hotels-filters/hotels-filters.component";
 import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
 import { LoginComponent } from "./account/login/login.component";
+import { getString } from '@nativescript/core/application-settings';
+
+const loggedUser = getString('user_token');
+const firstPage = 'mainTabs/' +  (loggedUser? '0' : '0');
 
 const routes: Routes = [
-    { path: "", redirectTo: "/login", data: {}, pathMatch: "full" },
+    { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },
     { path: "mainTabs", component: MainTabsComponent},
     { path: "mainTabs/:page", component: MainTabsComponent},
     { path: "signUp", component: SignUpComponent},
-    { path: "resetPassword", component: ResetPasswordComponent },
+    { path: "resetPassword/:email", component: ResetPasswordComponent },
     { path: "springsFilter", component: SpringsFiltersComponent },
     { path: "profile", component: ProfileComponent },
     { path: "hotelsFilters", component: HotelsFiltersComponent },

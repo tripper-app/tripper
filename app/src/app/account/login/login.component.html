@@ -1,28 +1,57 @@
 <StackLayout>
-	<StackLayout height="90%">
-		<GridLayout columns="*,*,*" margin="10 20" style="font-size: 25;" height="40">
-			<Label class="greyText" width="100%" [ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" text="X"
-				[col]="rightToLeft? 0 : 2" (tap)="exit()"></Label>
-			<Label text="{{ 'login.login' | L }}" col="1"></Label>
-		</GridLayout>
-		<StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
-		<label class="signUp greyText" text="{{ 'login.dontHaveAccount' | L }}" (tap)="goToSignUp()"></label>
-		<StackLayout height="100%" margin="20">
-			<label class="title greyText" text="{{ 'labels.email' | L }}"></label>
-			<TextField marginBottom="50" [(ngModel)]="user.email" class="input" keyboardType="email" autocorrect="false"
-				autocapitalizationType="none" returnKeyType="next" [disabled]="waitingForResponse"></TextField>
-			<label class="title greyText" text="{{ 'login.password' | L }}"></label>
-			<TextField [(ngModel)]="user.password" class="input" autocorrect="false" secure="true"
-				autocapitalizationType="none" returnKeyType="go" (returnPress)="submit()"
-				[disabled]="waitingForResponse"></TextField>
-				<FlexboxLayout margin="-15 0 30" width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}">
-					<label class="greyText" text="שכחת את הסיסמא?" (tap)="forgotPassword()"></label>
+	<ns-profile *ngIf="!userService.showProfile"></ns-profile>
+	<GridLayout *ngIf="userService.showProfile" rows="7*,*">
+		<ns-waiting-gif *ngIf="waitingForResponse" rowSpan="2"></ns-waiting-gif>
+		<StackLayout>
+			<GridLayout columns="*,4*,*" class="header">
+				<Label [isUserInteractionEnabled]="!waitingForResponse" class="greyText" width="100%"
+					[ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" text="X" [col]="rightToLeft? 0 : 2"
+					(tap)="navigateToMap()" (onloaded)="alignVertical(exit)" #exit></Label>
+				<Label text="{{ 'login.login' | L }}" col="1" (onloaded)="alignVertical(title)" #title></Label>
+			</GridLayout>
+			<StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
+			<label [isUserInteractionEnabled]="!waitingForResponse" class="signUp greyText"
+				text="{{ 'login.dontHaveAccount' | L }}" enabled="false" (tap)="goToSignUp()"></label>
+			<StackLayout height="100%" margin="20">
+				<label width="100%" text="{{ 'labels.language' | L }}"></label>
+				<FlexboxLayout margin="0 -6 20" justifyContent="space-between" style="font-size: 15;">
+					<FlexboxLayout style="align-items: center;">
+						<CheckBox:CheckBox [isUserInteractionEnabled]="!waitingForResponse"
+							(checkedChange)="$event.value? cbIw.checked = false : changeLanguage(iw)"
+							[checked]="!rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
+						<label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true"
+							text="English"></label>
+					</FlexboxLayout>
+					<FlexboxLayout style="align-items: center;">
+						<label [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
+							(tap)="cbIw.checked = true"></label>
+						<CheckBox:CheckBox [isUserInteractionEnabled]="!waitingForResponse"
+							(checkedChange)="$event.value? cbEn.checked = false : changeLanguage(en)"
+							[checked]="rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
+					</FlexboxLayout>
 				</FlexboxLayout>
-			<button class="loginBtn" text="{{ 'login.login' | L }}" [isEnabled]="!waitingForResponse" (tap)="submit()"></button>
+				<label class="title greyText" text="{{ 'labels.email' | L }}"></label>
+				<TextField marginBottom="30" [(ngModel)]="user.email" class="input" keyboardType="email"
+					autocorrect="false" autocapitalizationType="none" returnKeyType="next"
+					[disabled]="waitingForResponse"></TextField>
+				<label class="title greyText" text="{{ 'login.password' | L }}"></label>
+				<TextField [(ngModel)]="user.password" class="input" autocorrect="false" secure="true"
+					autocapitalizationType="none" returnKeyType="go" (returnPress)="submit()"
+					[disabled]="waitingForResponse"></TextField>
+				<FlexboxLayout margin="-15 0 15" width="100%"
+					[ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}">
+					<label [isUserInteractionEnabled]="!waitingForResponse" class="greyText" text="{{ 'login.forgotPassword' | L }}"
+						(tap)="forgotPassword()"></label>
+				</FlexboxLayout>
+				<button class="loginBtn" text="{{ 'login.login' | L }}" [isEnabled]="!waitingForResponse"
+					(tap)="submit()"></button>
+			</StackLayout>
 		</StackLayout>
-	</StackLayout>
-	<FlexboxLayout class="facebook">
-		<label text="{{ 'login.loginFacebook' | L }}"></label>
-		<img src="res://icon" height="60%" />
-	</FlexboxLayout>
+		<FlexboxLayout row="1" height="100%" flexDirection="column" style="justify-content: flex-end;">
+			<FlexboxLayout class="facebook" [isUserInteractionEnabled]="!waitingForResponse">
+				<label text="{{ 'login.loginFacebook' | L }}"></label>
+				<img src="res://icon" height="60%" />
+			</FlexboxLayout>
+		</FlexboxLayout>
+	</GridLayout>
 </StackLayout>

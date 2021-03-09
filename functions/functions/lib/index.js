@@ -198,7 +198,6 @@ exports.signup = functionBuilder(async (req, res) => {
                     nick: req.body.nick ? req.body.nick : email.slice(0, email.indexOf('@')),
                     pendingVerification: true
                 };
-                await db.collection('users').doc(email).set(data);
                 const i18nBody = geti18n((req.query.lang ? req.query.lang : defaultLanguage).toString());
                 mailOptions.to = req.body.email;
                 mailOptions.subject = i18nBody ? i18nBody.emailVerificationSubject : "";
@@ -209,6 +208,7 @@ exports.signup = functionBuilder(async (req, res) => {
                                     </a>`;
                 mailOptions.text = "https://europe-west1-tripper-d0e21.cloudfunctions.net/verifyEmail?email=" + req.body.email;
                 await transporter.sendMail(mailOptions);
+                await db.collection('users').doc(email).set(data);
                 res.send(data);
             }
         }
@@ -217,7 +217,12 @@ exports.signup = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        if (error.code == "EENVELOPE") {
+            res.status(422).send("Wrong email address");
+        }
+        else {
+            handleError(res, error);
+        }
     }
 });
 exports.verifyEmail = functionBuilder(async (req, res) => {
@@ -240,7 +245,7 @@ exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
         const generatedCode = generateRandomString();
         const email = req.query.email;
         if (!(await db.collection('users').doc(email).get()).exists) {
-            res.status(401).send("can't find this email");
+            res.status(404).send("can't find this email");
         }
         else {
             await db.collection('users').doc(email).update({ resetPasswordCode: generatedCode });
@@ -253,7 +258,12 @@ exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        if (error.code == "EENVELOPE") {
+            res.status(422).send("Wrong email address");
+        }
+        else {
+            handleError(res, error);
+        }
     }
 });
 exports.resetPasswordRecieveCode = functionBuilder(async (req, res) => {
@@ -455,14 +465,14 @@ exports.getHotel = functionBuilder(async (req, res) => {
         if (data) {
             data.name = updateField(data.name, currentLanguage);
             data.attractions = data.attractions.map((h) => updateField(h, currentLanguage));
-            data.breakfast = data.breakfast;
+            // data.breakfast = data.breakfast;
             data.city = updateField(data.city, currentLanguage);
             data.description = updateField(data.description, currentLanguage);
-            data.images = data.images;
-            data.location = data.location;
-            data.phone = data.phone;
-            data.pool = data.pool;
-            data.price = data.price;
+            // data.images = data.images;
+            // data.location = data.location;
+            // data.phone = data.phone;
+            // data.pool = data.pool;
+            // data.price = data.price;
             data.region = updateField(data.region, currentLanguage);
             data.websiteLink = data.websiteLink;
             // newHotel = {

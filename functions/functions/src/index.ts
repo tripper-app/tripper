@@ -192,7 +192,7 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
     }
 })
 
-export const signup = functionBuilder(async (req, res) => {
+export const signUp = functionBuilder(async (req, res) => {
     try {
         if (req.body.email && req.body.password) {
             if ((await db.collection('users').doc(req.body.email).get()).exists) {
@@ -205,7 +205,6 @@ export const signup = functionBuilder(async (req, res) => {
                     nick: req.body.nick ? req.body.nick : email.slice(0, email.indexOf('@')),
                     pendingVerification: true
                 }
-                await db.collection('users').doc(email).set(data);
 
                 const i18nBody = geti18n((req.query.lang ? req.query.lang : defaultLanguage).toString());
                 mailOptions.to = req.body.email as string;
@@ -217,6 +216,7 @@ export const signup = functionBuilder(async (req, res) => {
                                     </a>`
                 mailOptions.text = "https://europe-west1-tripper-d0e21.cloudfunctions.net/verifyEmail?email=" + req.body.email;
                 await transporter.sendMail(mailOptions);
+                await db.collection('users').doc(email).set(data);
 
                 res.send(data);
             }
@@ -224,7 +224,11 @@ export const signup = functionBuilder(async (req, res) => {
             res.status(400).send("email and password required");
         }
     } catch (error) {
-        handleError(res, error);
+        if (error.code == "EENVELOPE") {
+            res.status(422).send("Wrong email address");
+        } else {
+            handleError(res, error);
+        }
     }
 })
 
@@ -247,7 +251,7 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
         const generatedCode = generateRandomString();
         const email = req.query.email as string;
         if (!(await db.collection('users').doc(email).get()).exists) {
-            res.status(401).send("can't find this email");
+            res.status(404).send("can't find this email");
         } else {
             await db.collection('users').doc(email).update({ resetPasswordCode: generatedCode });
             const i18nBody = geti18n((req.query.lang ? req.query.lang : defaultLanguage).toString());
@@ -260,7 +264,11 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
             res.send(mailRes);
         }
     } catch (error) {
-        handleError(res, error);
+        if (error.code == "EENVELOPE") {
+            res.status(422).send("Wrong email address");
+        } else {
+            handleError(res, error);
+        }
     }
 })
 

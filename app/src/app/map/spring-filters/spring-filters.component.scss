@@ -1,9 +1,17 @@
 @import '../../../app-common';
 
 .main{
-    margin-top: 20;
+    // margin-top: 20;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.header{
+    height: $headerHeight;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20;
+    font-size: 20;
 }
 
 .filterLine{
@@ -22,17 +30,17 @@
 
 .search{
     text-align: center;
-    height: 70;
-    margin-top: 40;
+    height: $bottomHeight;
+    margin-top: 30;
     background-color: $themeColor;
     font-size: 25;
     color: white;
 }
 
 .slider{
-    background-color: green;
+    background-color: $greyText;
     color: $themeColor;
-    border: rgb(190, 2, 2);
+    // border: rgb(30, 2, 190);
     margin-left: -20;
     width: 150;
 }

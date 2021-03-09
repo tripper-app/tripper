@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { Router } from "@angular/router";
 import { Page } from 'tns-core-modules/ui/page';
@@ -12,6 +12,7 @@ import { HttpService } from '../common/services/http-service';
 import * as btoa from 'btoa';
 import { DrawerService } from '../common/services/drawer-service';
 import { HotelsService } from '../common/services/hotels-service';
+import { UserService } from '../common/services/userService';
 
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
@@ -22,6 +23,7 @@ declare let java: any;
     styleUrls: ['./main-tabs.component.css']
 })
 export class MainTabsComponent implements OnInit {
+    // @ViewChild('tabs', {static: false}) tabs;
     selectedPageIndex = 0;
     tabsVisibility = true;
     showList = false;
@@ -33,7 +35,8 @@ export class MainTabsComponent implements OnInit {
         private languageService: LanguageService,
         private httpService: HttpService,
         private drawerService: DrawerService,
-        private hotelService: HotelsService) {
+        private hotelService: HotelsService,
+        private userService: UserService) {
     }
 
     ngOnInit() {
@@ -44,31 +47,44 @@ export class MainTabsComponent implements OnInit {
         }
     }
 
-    goToMap() {
-        this.router.navigate(['map']);
-    }
+    // goToMap() {
+    //     this.router.navigate(['map']);
+    // }
 
-    goToLogin() {
-        this.router.navigate(['login']);
-    }
+    // goToLogin() {
+    //     this.router.navigate(['login']);
+    // }
 
-    goToSignUp() {
-        this.router.navigate(['signUp']);
-    }
+    // goToSignUp() {
+    //     this.router.navigate(['signUp']);
+    // }
 
-    openSetting() {
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.viewContainerRef,
-            fullscreen: false
-        };
-        this.modalService.showModal(SettingModalComponent, options);
+    // navigatetoMap(){
+    //     this.tabsVisibility = true;
+    //     console.log(this.tabs.selecteIndex);
+        
+    //     this.tabs.selecteIndex = 3;
+    //     console.log(this.tabs.selecteIndex);
+    // }
 
-    }
+    // openSetting() {
+    //     const options: ModalDialogOptions = {
+    //         viewContainerRef: this.viewContainerRef,
+    //         fullscreen: false
+    //     };
+    //     this.modalService.showModal(SettingModalComponent, options);
 
-    pageChange(index){
+    // }
+
+    pageChange(index) {
         if (index != 2) {
-            this.hotelService.showList = false;
-        } else{            
+            this.hotelService.showList = false;            
+            if (index == 0 && !this.userService.showProfile) {
+                this.tabsVisibility = false;
+            }else{
+                this.tabsVisibility = true;
+            }
+        } else {
             this.tabsVisibility = false;
         }
     }

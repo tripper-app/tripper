@@ -1,6 +1,62 @@
 <StackLayout>
-    <ns-login></ns-login>
-    <FlexboxLayout flexDirection="column">
-        <label *ngFor="let item of items" [text]="item"></label>
-    </FlexboxLayout>
+    <ScrollView>
+        <StackLayout>
+            <GridLayout class="header" columns="*,3*,*">
+                <label col="1" text="{{ 'profile.title' }}" class="title" (onloaded)="alignVertical(title)"
+                    #title></label>
+                <img src="res://icon" height="60%" [col]="rightToLeft? 2 : 0" />
+            </GridLayout>
+            <StackLayout class="line"></StackLayout>
+            <StackLayout margin="10">
+                <GridLayout [height]="widthHalf-10" columns="*,2*,*">
+                    <FlexboxLayout flexDirection="column"
+                        [ngStyle]="{'align-items': rightToLeft? 'flex-start' : 'flex-end'}"
+                        style="justify-content: flex-end;">
+                        <img src="res://icon" [col]="rightToLeft? 0 : 2" height="30" />
+                    </FlexboxLayout>
+                    <img col="1" class="pic" stretch="fill" [src]="currentUser.profile" />
+                </GridLayout>
+                <GridLayout columns="*,3*,*" row="*" marginTop="20">
+                    <label col="1" [text]="currentUser.userName" style="font-size: 20;" (onloaded)="alignVertical(name)"
+                        #name></label>
+                    <FlexboxLayout height="100%" style="align-items: center;" [col]="rightToLeft? 0 : 2"
+                        [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}">
+                        <img src="res://icon" height="30" />
+                    </FlexboxLayout>
+                </GridLayout>
+                <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                    <label class="greyText" text="{{ 'labels.email' | L }}"></label>
+                </FlexboxLayout>
+                <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                    <label style="font-size: 15;" [text]="currentUser.email"></label>
+                </FlexboxLayout>
+
+                <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                    <label class="greyText" text="{{ 'login.password' | L }}"></label>
+                </FlexboxLayout>
+                <FlexboxLayout width="100%" style="justify-content: space-between;" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                    <img src="res://icon" height="30" />
+                    <label (onloaded)="alignVertical(password)" style="font-size: 15;" [text]="'*'.repeat(currentUser.password.length)" #password></label>
+                </FlexboxLayout>
+
+                <label width="100%" marginTop="30" text="{{ 'labels.language' | L }}"></label>
+				<FlexboxLayout margin="0 -6 20" justifyContent="space-between" style="font-size: 15;">
+					<FlexboxLayout style="align-items: center;">
+						<CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" height="40" [isUserInteractionEnabled]="!waitingForResponse"
+							(checkedChange)="$event.value? cbIw.checked = false : changeLanguage(iw)"
+							[checked]="!rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
+						<label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true"
+							text="English"></label>
+					</FlexboxLayout>
+					<FlexboxLayout style="align-items: center;">
+						<label [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
+							(tap)="cbIw.checked = true"></label>
+						<CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" [isUserInteractionEnabled]="!waitingForResponse"
+							(checkedChange)="$event.value? cbEn.checked = false : changeLanguage(en)"
+							[checked]="rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
+					</FlexboxLayout>
+				</FlexboxLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </StackLayout>

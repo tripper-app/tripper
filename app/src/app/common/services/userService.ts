@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpService } from './http-service';
+import { getString } from '@nativescript/core/application-settings';
 
 @Injectable({
     providedIn: 'root'
@@ -7,7 +8,10 @@ import { HttpService } from './http-service';
 export class UserService {
     showProfile = false;
 
-    constructor(private httpService: HttpService) {
+    constructor(private httpService: HttpService) {        
+        if (getString('user_token')) {
+            this.showProfile = true;
+        }
     }
 
     login(user){

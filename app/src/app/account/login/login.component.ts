@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, OnInit } from '@angular/core';
+import { Component, ViewContainerRef, OnInit, Output, EventEmitter } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
@@ -20,9 +20,13 @@ import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+    @Output() cancelLogin: EventEmitter<any> = new EventEmitter();
     waitingForResponse = false;
     // isLoggingIn = true;
     rightToLeft = true;
+    mainColor = "rgb(35, 204, 153)";
+    en = 'en';
+    iw = 'iw';
     // localizeSignUp = localize('login.signUp');
     // localizeLogin = localize('login.login');
     // localizeBackToLogin = localize('login.backToLogin');
@@ -41,6 +45,8 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.languageService.getCurrentLanguage());
+        
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.user = new User();
@@ -59,7 +65,7 @@ export class LoginComponent implements OnInit {
         // });
     }
 
-    goToSignUp(){
+    goToSignUp() {
         this.router.navigate(['signUp']);
     }
 
@@ -76,24 +82,25 @@ export class LoginComponent implements OnInit {
         this.waitingForResponse = true;
         this.userService.login(this.user).subscribe(data => {
             this.waitingForResponse = false;
-            console.log(data.token);
             this.saveTokenToCache(data.token);
+            this.userService.showProfile = true;
             // this.router.navigate(['mainTabs', 3]);
+            this.navigateToMap();
         }, err => this.handleError(err))
     }
 
     forgotPassword() {
         const options: ModalDialogOptions = {
-                viewContainerRef: this.viewContainerRef,
-                fullscreen: false
-              };
-              this.modalService.showModal(ResetPasswordModalComponent, options);
-        // this.router.navigate(['resetPassword']);
+            viewContainerRef: this.viewContainerRef,
+            fullscreen: false
+        };
+        this.modalService.showModal(ResetPasswordModalComponent, options).then(email => {
+            this.waitingForResponse = true;
+            this.userService.resetPasswordCreateCode(email).subscribe(() => {
+                this.router.navigate(['resetPassword', email]);
+            }, err => this.handleError(err));
+        });
     }
-
-    // getLocalizeBackToLogin() {
-    //     return localize('login.backToLogin')
-    // }
 
     loginWithFacebook() {
         this.oathService.tnsOauthLogin("facebook", data => {
@@ -138,6 +145,11 @@ export class LoginComponent implements OnInit {
         setString("user_token", token);
     }
 
+    changeLanguage(lan) {
+        this.languageService.switchLanguage(lan);
+
+    }
+
     handleError(err) {
         this.waitingForResponse = false;
         console.log(err);
@@ -151,6 +163,9 @@ export class LoginComponent implements OnInit {
                 break;
             case 401:
                 this.alertService.showError(localize('login.wrongDetails'));
+                break;
+            case 404:
+                this.alertService.showError(localize('login.wrongEmail'));
                 break;
             case 407:
                 this.alertService.showError(localize('login.emailNotVerified'))
@@ -184,9 +199,14 @@ export class LoginComponent implements OnInit {
         //this.oathService.disConnect();
     }
 
-    exit(){
-        this.router.navigate(['mainTabs', 3])
-    } 
+    alignVertical(label) {
+        label.android.setGravity(17)
+    }
+
+    navigateToMap() {
+        this.cancelLogin.emit();
+        // this.router.navigate(['mainTabs', 3])
+    }
 }
     // activity: application.android.foregroundActivity
     // serverClientId: "761150329649-cd3pjk9elh5ncrhq4seah28c4as7qfl5.apps.googleusercontent.com",

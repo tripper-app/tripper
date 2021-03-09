@@ -4,72 +4,64 @@ import { alert } from "tns-core-modules/ui/dialogs";
 import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { localize } from "nativescript-localize";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LanguageService } from '~/app/common/services/language-service';
+import { AlertService } from '~/app/common/services/alert-service';
 
 @Component({
     selector: 'ns-resetPassword',
     templateUrl: './resetPassword.component.html',
-    styleUrls: ['./resetPassword.component.css']
+    styleUrls: ['./resetPassword.component.scss']
 })
 export class ResetPasswordComponent implements OnInit {
-    localizeProceed = localize('login.proceed');
-    localizeSubmitNewPassword = localize('login.submitNewPassword');
+    rightToLeft = true;
     waitingForResponse = false;
-    beforeCode = true;
-    user: User;
+    email = 'odedoded777@gmail.com';
     code = '';
-    @ViewChild("password", { static: false }) password: ElementRef;
-    @ViewChild("confirmPassword", { static: false }) confirmPassword: ElementRef;
+    password = '';
+    confirmPassword = '';
 
-    constructor(private page: Page, private userService: UserService, private router: Router) {
+    constructor(private page: Page, 
+                private userService: UserService, 
+                private router: Router,
+                private languageService: LanguageService,
+                private route: ActivatedRoute,
+                private alertService: AlertService) {
     }
 
+    ngOnInit() {
+        this.page.actionBarHidden = true;
+        this.rightToLeft = this.languageService.getRightToLeft();
+        // this.email = this.route.snapshot.params.email        
+    }
 
     submit() {
-        if (this.beforeCode) {
-            if (!this.user.email) {
-                this.alert(localize('login.requireEmail'));
-            } else {
-                this.waitingForResponse = true;
-                this.userService.resetPasswordCreateCode(this.user.email).subscribe(data => {
-                    this.alert(localize('login.insertCode'))
-                    this.waitingForResponse = false;
-                    this.beforeCode = false;
-                }, err => this.handleError(err))
-            }
-        } else {
-            if (!this.user.email || !this.user.password) {
-                this.alert(localize('login.requireDetails'));
-            } else {
-                if (!this.code) {
-                    this.alert(localize('login.requireCode'));
-                } else {
-                    if (this.user.password != this.confirmPassword.nativeElement.text) {
-                        this.alert(localize('login.passwordsNotMuch'));
-                    } else {
-                        this.waitingForResponse = true;
-                        this.userService.resetPasswordRecieveCode(this.code, this.user.email, this.user.password).subscribe(data => {
-                            this.waitingForResponse = false;
-                            this.alert(localize('login.passwordChanged'));
-                            this.backToLogin();
-                        }, err => this.handleError(err))
-                    }
-                }
-            }
+        if (!this.code || !this.password || !this.confirmPassword) {
+            this.alertService.showError(localize('login.requireDetails'));
+            return;
         }
 
+        if (this.password !== this.confirmPassword) {
+            this.alertService.showError(localize('login.passwordsNotMuch'));
+            return
+        }
+
+        this.waitingForResponse = true;
+        this.userService.resetPasswordRecieveCode(this.code, this.email, this.password).subscribe(() => {
+            this.waitingForResponse = false;
+            this.alertService.showSuccess(localize('login.passwordChanged'));
+            this.router.navigate(['login']);
+        }, err => {
+            this.handleError(err);
+        })
     }
 
-    focusPassword() {
-        this.password.nativeElement.focus();
+    navigateToLogin() {
+        this.router.navigate(['login']);
     }
 
-    focusConfirmPassword() {
-        this.confirmPassword.nativeElement.focus();
-    }
-
-    backToLogin() {
-        this.router.navigate(['signUp']);
+    alignVertical(label) {
+        label.android.setGravity(17)
     }
 
     handleError(err) {
@@ -78,19 +70,16 @@ export class ResetPasswordComponent implements OnInit {
 
         switch (err.status) {
             case 0:
-                this.alert(localize('messages.error.connectionError'))
+                this.alertService.showError(localize('messages.error.connectionError'))
                 break;
             case 400:
-                this.alert(localize('login.requireDetails'));
+                this.alertService.showError(localize('login.requireDetails'));
                 break;
             case 401:
-                this.alert(localize('login.wrongDetails'));
-                break;
-            case 409:
-                this.alert(localize('login.emailAlreadyExist'))
+                this.alertService.showError(localize('login.wrongDetails'));
                 break;
             default:
-                this.alert(localize('messages.error.serverError'));
+                this.alertService.showError(localize('messages.error.serverError'));
                 break;
         }
     }
@@ -101,11 +90,5 @@ export class ResetPasswordComponent implements OnInit {
             okButtonText: localize('labels.OK'),
             message: message
         });
-    }
-
-    ngOnInit() {
-        this.page.actionBarHidden = true;
-        this.user = new User();
-        this.user.email = "odedoded777@gmail.com";
     }
 }

@@ -61,7 +61,7 @@ export class HotelsListComponent implements OnInit {
         h1.price = 100;
         h2.price = 800;
         h3.price = 750;
-        h1.id = "מלךון החתולים";
+        h1.id = "מלון החתולים";
         this.hotelsList.push(h1, h2, h3);
     }
 

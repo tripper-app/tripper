@@ -1,9 +1,11 @@
 <FlexboxLayout class="main">
-    <FlexboxLayout class="filterLine" style="margin-bottom: -20;" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
-        <label style="font-size: 30;" text="X" (tap)="navigateToMap()"></label>
-        <label text="{{ 'springsFilters.title' | L }}"></label>
+    <FlexboxLayout flexDirection="column">
+        <FlexboxLayout class="header" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
+            <label style="font-size: 30;" text="X" (tap)="navigateToMap()"></label>
+            <label text="{{ 'springsFilters.title' | L }}"></label>
+        </FlexboxLayout>
+        <StackLayout class="line"></StackLayout>
     </FlexboxLayout>
-    <StackLayout height="3" backgroundColor="rgb(233, 236, 220)"></StackLayout>
     <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
         <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"/>
         <label text="{{ 'springsFilters.camping' | L }}"></label>

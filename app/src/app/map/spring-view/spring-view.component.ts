@@ -21,7 +21,7 @@ import { device } from "tns-core-modules/platform";
 export class SpringsViewComponent implements OnInit {
     rightToLeft = true;
     shouldReverse = true;
-    mainColor = "rgb(146, 226, 131)";
+    mainColor = "rgb(35, 204, 153)";
     spring: FullSpring;
     loading = true;
     currentSpring: any = {}

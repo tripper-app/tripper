@@ -20,7 +20,7 @@ import { AlertService } from '../../common/services/alert-service';
 })
 export class SignUpComponent implements OnInit {
     waitingForResponse = false;
-    mainColor = "rgb(146, 226, 131)";
+    mainColor = "rgb(35, 204, 153)";
     // isLoggingIn = true;
     rightToLeft = true;
     // localizeSignUp = localize('login.signUp');
@@ -29,9 +29,9 @@ export class SignUpComponent implements OnInit {
     // localizedontHaveAcount = localize('login.dontHaveAcount');
     user: User;
     confirmPassword = '';
-    @ViewChild("password", { static: false }) password: ElementRef;
+    // @ViewChild("password", { static: false }) password: ElementRef;
     // @ViewChild("confirmPassword", { static: false }) confirmPassword: ElementRef;
-    @ViewChild("nick", { static: false }) nick: ElementRef;
+    // @ViewChild("nick", { static: false }) nick: ElementRef;
 
     constructor(private page: Page,
         private userService: UserService,
@@ -62,13 +62,14 @@ export class SignUpComponent implements OnInit {
         this.router.navigate(['login']);
     }
 
-    // toggleForm() {
-    //     this.isLoggingIn = !this.isLoggingIn;
-    // }
-
     submit() {
         if (!this.user.email || !this.user.password || !this.confirmPassword) {
             this.alertService.showError(localize('login.emailAndPasswordRequired'));
+            return;
+        }
+
+        if (!this.user.userName) {
+            this.alertService.showError(localize('login.requireDetails'));
             return;
         }
 
@@ -85,7 +86,7 @@ export class SignUpComponent implements OnInit {
         this.userService.signUp(this.user).subscribe(res => {
             this.waitingForResponse = false;
             this.alertService.showSuccess(localize('login.accountCreated'));
-            // navigate
+            this.router.navigate(['login']);
         }, err => this.handleError(err))
     }
 
@@ -151,6 +152,9 @@ export class SignUpComponent implements OnInit {
             case 409:
                 this.alert(localize('login.emailAlreadyExist'))
                 break;
+            case 422:
+                this.alertService.showError(localize('login.wrongEmail'));
+                break
             default:
                 this.alert(localize('messages.error.serverError'));
                 break;

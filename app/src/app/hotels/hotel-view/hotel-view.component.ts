@@ -40,7 +40,7 @@ export class HotelViewComponent implements OnInit {
     }
 
     getHotel(){
-        this.hotelsService.getHotel("מלון החתולים").subscribe((hotel: FullHotel) => {
+        this.hotelsService.getHotel(this.route.snapshot.params.hotelId).subscribe((hotel: FullHotel) => {
             this.loading = false;
             this.currentHotel = hotel;
             
@@ -61,10 +61,6 @@ export class HotelViewComponent implements OnInit {
 
     }    
 
-
-    alignVertical(label) {
-        label.android.setGravity(17)
-    }
 
     handleErrors(error) {
         console.log(error);

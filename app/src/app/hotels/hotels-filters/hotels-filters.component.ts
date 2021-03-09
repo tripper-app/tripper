@@ -19,7 +19,7 @@ export class HotelsFiltersComponent implements OnInit {
     @Output() hideFilters: EventEmitter<any> = new EventEmitter();
     poolCheck = false;
     breakfastCheck = false;
-    mainColor = "rgb(146, 226, 131)";
+    mainColor = "rgb(35, 204, 153)";
     scale = "1.3";
     leftToRight = false;
     areas = localize('hotelsFilters.areasList').split(', ');
@@ -93,10 +93,6 @@ export class HotelsFiltersComponent implements OnInit {
         // this.router.navigate(["mainTabs/", 2]);
         
         this.hideFilters.emit();
-    }
-
-    alignVertical(label) {
-        label.android.setGravity(17)
     }
 
     handleErrors(error) {

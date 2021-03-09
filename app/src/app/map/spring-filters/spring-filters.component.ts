@@ -21,7 +21,7 @@ export class SpringsFiltersComponent implements OnInit {
     carCheck = false;
     depthCheck = false;
     sliderValue = 25;
-    mainColor = "rgb(146, 226, 131)";
+    mainColor = "rgb(35, 204, 153)";
     scale = "1.3";
     leftToRight = false;
 

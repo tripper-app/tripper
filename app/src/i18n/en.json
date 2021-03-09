@@ -78,11 +78,12 @@
         "newComment": "new comment...",
         "showMoreComments": "Show more comments",
         "showLessComments": "show less comments",
-        "contactAboutSpring": "Contact us about the spring",
+        "foundError": "Found an error?",
         "share": "Share"
     },
     "login": {
         "emailAndPasswordRequired": "Email and password required",
+        "wrongEmail": "Wrong email address",
         "requireCode": "Insert the code you recieved",
         "requireEmail": "Fill your email",
         "requireDetails": "Fill all the details",
@@ -91,7 +92,7 @@
         "accountCreated": "Your account was successfully created. An email with a verification link was sent to this address",
         "emailAlreadyExist": "This email already exists",
         "passwordChanged": "Your password changed successfuly",
-        "insertCode": "We sent you an email with confirmation code. insert here the code",
+        "codeSent": "We sent you an email with verification code",
         "proceed": "Proceed",
         "submitNewPassword": "Update new password",
         "backToLogin": "Back to login",
@@ -100,6 +101,7 @@
         "password": "Password",
         "createPassword": "Create password",
         "confirmPassword": "Confirm password",
+        "resetPassword": "Reset password",
         "code": "Code",
         "userName": "User name",
         "login": "Login",
@@ -109,10 +111,13 @@
         "haveAccount": "I already have an account",
         "loginFacebook": "Login with facebook"
     },
+    "profile": {
+        "title": "Profile"
+    },
     "labels": {
         "map": "Map",
         "setting": "Setting",
-        "language": "Language",
+        "language": "Preferred language",
         "OK": "OK",
         "cancel": "Cancel",
         "email": "Email address"

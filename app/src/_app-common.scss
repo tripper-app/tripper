@@ -5,7 +5,16 @@
 // This is where the vast majority of your CSS code goes.
 
 // Font icon class
-$themeColor: rgb(146, 226, 131);
+$themeColor: rgb(35, 204, 153);
+$greyText: rgb(168, 151, 151);
+$headerHeight: 60;
+$bottomHeight: 60;
+$headerFontSize: 20;
+
+.line{
+    height: 3;
+    background-color: $greyText;
+}
 
 .fab {
     font-family: "Font Awesome 5 Brands", "fa-brands-400";

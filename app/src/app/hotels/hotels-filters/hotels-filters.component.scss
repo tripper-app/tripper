@@ -9,8 +9,9 @@
 .filterLine{
     justify-content: space-between;
     align-items: center;
-    margin: 30 20 0;
+    margin: 00 20;
     font-size: 18;
+    height: $headerHeight;
 }
 
 .areasGrid{
@@ -21,12 +22,12 @@
 
 .greyText{
     font-size: 14;
-    color: rgb(156, 201, 194);
+    color: $greyText;
 }
 
 .search{
     text-align: center;
-    height: 13%;
+    height: $bottomHeight;
     background-color: $themeColor;
     font-size: 25;
     color: white;

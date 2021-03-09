@@ -17,10 +17,9 @@
             <Image src="res://icon" class="fas t-36"></Image>
         </TabStripItem>
     </TabStrip>
-
     <TabContentItem>
         <GridLayout>
-            <ns-profile></ns-profile>
+            <ns-login (cancelLogin)="tabs.selectedIndex = 3"></ns-login>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>

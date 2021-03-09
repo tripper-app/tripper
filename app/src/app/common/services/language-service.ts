@@ -4,6 +4,7 @@ import { overrideLocale } from "nativescript-localize/localize";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 import { localize } from "nativescript-localize";
 import { getString } from '@nativescript/core/application-settings';
+import {exit} from 'nativescript-exit';
 
 
 @Injectable({
@@ -29,11 +30,15 @@ export class LanguageService {
 
     switchLanguage(lan) {
         overrideLocale(lan);
-        dialogs.alert({
-            title: localize(`switchLanguage.switchLanguageTitle.${lan}`),
-            message: localize(`switchLanguage.switchLanguageMessage.${lan}`),
-            okButtonText: localize(`switchLanguage.closeApp.${lan}`)
-        })
+        setTimeout(() => {
+            
+            exit();
+        }, 2000);
+        // dialogs.alert({
+        //     title: localize(`switchLanguage.switchLanguageTitle.${lan}`),
+        //     message: localize(`switchLanguage.switchLanguageMessage.${lan}`),
+        //     okButtonText: localize(`switchLanguage.closeApp.${lan}`)
+        // })
     }
 
     getLanguages(){
