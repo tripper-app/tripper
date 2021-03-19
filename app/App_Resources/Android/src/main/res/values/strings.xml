@@ -6,6 +6,12 @@
   <string name="_labels_language_Z1LvLi1">"שפה מועדפת"</string>
   <string name="_labels_setting_HCebH">"הגדרות"</string>
   <string name="_labels_map_Z1UVRWy">"מפה"</string>
+  <string name="_profile_confirmNewPassword_JQNS8">"אישור סיסמה חדשה"</string>
+  <string name="_profile_newPassword_Z2cBXjh">"סיסמה חדשה"</string>
+  <string name="_profile_currentPassword_Z2d1tTl">"סיסמה נוכחית"</string>
+  <string name="_profile_changePassword_ZJeg7O">"החלפת סיסמה"</string>
+  <string name="_profile_history_ZAwKGd">"היסטוריה"</string>
+  <string name="_profile_favorites_Z33dsH">"מועדפים"</string>
   <string name="_profile_title_Z2uRWsS">"פרופיל אישי"</string>
   <string name="_login_loginFacebook_kjut0">"התחברות באמצעות פייסבוק"</string>
   <string name="_login_haveAccount_Z4bqKB">"כבר יש לי חשבון"</string>
@@ -35,6 +41,7 @@
   <string name="_login_requireCode_Z27Gx6p">"הזינו את הקוד שנשלח אליכם"</string>
   <string name="_login_wrongEmail_Zi9Oyh">"כתובת אימייל לא נכונה"</string>
   <string name="_login_emailAndPasswordRequired_zDDBk">"נא להזין אימייל וסיסמא"</string>
+  <string name="_springView_update_2mRJ0n">"אז בנוגע ל%1$s..."</string>
   <string name="_springView_share_ewhd3">"שיתוף"</string>
   <string name="_springView_foundError_1YBLQl">"מצאתם טעות?"</string>
   <string name="_springView_showLessComments_ZoRY7i">"צמצום תגובות"</string>

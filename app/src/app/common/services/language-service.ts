@@ -1,10 +1,12 @@
 import { device, isAndroid } from '@nativescript/core/platform';
-import { Injectable } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import { overrideLocale } from "nativescript-localize/localize";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 import { localize } from "nativescript-localize";
 import { getString } from '@nativescript/core/application-settings';
-import {exit} from 'nativescript-exit';
+import { exit } from 'nativescript-exit';
+import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
+import { ChangeLanguageModalComponent } from '../alerts/changeLanguage/change-language.component';
 
 
 @Injectable({
@@ -12,7 +14,7 @@ import {exit} from 'nativescript-exit';
 })
 export class LanguageService {
     rightToLefts = ['iw'];
-    languages = [{id: 'iw', lan: 'hebrew'}, {id: 'en', lan: 'english'}]
+    languages = [{ id: 'iw', lan: 'hebrew' }, { id: 'en', lan: 'english' }]
 
     constructor() {
         if (!getString("__app__language__")) {
@@ -20,20 +22,21 @@ export class LanguageService {
         }
     }
 
-    getCurrentLanguage() {  
+    getCurrentLanguage() {
         return getString("__app__language__");
     }
 
-    getRightToLeft(){
+    getRightToLeft() {
         return this.rightToLefts.some(l => l == this.getCurrentLanguage());
     }
 
     switchLanguage(lan) {
         overrideLocale(lan);
+
         setTimeout(() => {
-            
+
             exit();
-        }, 2000);
+        }, 3000);
         // dialogs.alert({
         //     title: localize(`switchLanguage.switchLanguageTitle.${lan}`),
         //     message: localize(`switchLanguage.switchLanguageMessage.${lan}`),
@@ -41,7 +44,7 @@ export class LanguageService {
         // })
     }
 
-    getLanguages(){
+    getLanguages() {
         return this.languages;
     }
 }

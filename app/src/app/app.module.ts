@@ -22,7 +22,6 @@ import { FiltersComponent } from "./filters/filters.component"
 import { registerElement } from "nativescript-angular/element-registry";
 // import { HomeComponent } from './home/home.component';
 import { SpringModalComponent } from './map/spring-modal/spring-modal.component';
-import { SettingModalComponent } from './setting/setting.component';
 // import { CarouselComponent } from './home/carousel/carousel.component';
 import { SignUpComponent } from "./account/signUp/signUp.component";
 import { ResetPasswordComponent } from "./account/resetPassword/resetPassword.component";
@@ -35,6 +34,8 @@ import { HotelsListComponent } from "./hotels/hotels-list/hotels-list.component"
 import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
 import { LoginComponent } from "./account/login/login.component";
 import { ResetPasswordModalComponent } from "./account/resetPassword/resetPasswordModal/resetPasswordModal.component";
+import { ChangeLanguageModalComponent } from "./common/alerts/changeLanguage/change-language.component";
+import { ChangePasswordModalComponent } from "./common/alerts/changePassword/change-password.component";
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
@@ -66,8 +67,9 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
     ],
     entryComponents: [
         SpringModalComponent,
-        SettingModalComponent,
-        ResetPasswordModalComponent
+        ResetPasswordModalComponent,
+        ChangeLanguageModalComponent,
+        ChangePasswordModalComponent
     ],
     declarations: [
         AppComponent,
@@ -75,7 +77,6 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         SpringModalComponent,
         FiltersComponent,
         // HomeComponent,
-        SettingModalComponent,
         // CarouselComponent,
         SignUpComponent,
         ResetPasswordComponent,
@@ -88,7 +89,9 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         HotelsListComponent,
         HotelViewComponent,
         LoginComponent,
-        ResetPasswordModalComponent
+        ResetPasswordModalComponent,
+        ChangeLanguageModalComponent,
+        ChangePasswordModalComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

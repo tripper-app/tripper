@@ -35,6 +35,28 @@ export class HttpService {
     return this.httpClient.get(`${this.ApiURL}getSpringByName?springName=${springName}&lang=${this.getLanguage()}`);
   }
 
+  getFavoritesprings(){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+    return this.httpClient.get(this.ApiURL + "getFavoriteSprings", {headers: {token: token}});
+  }
+
+  getHistorySprings(){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+    return this.httpClient.get(this.ApiURL + "getHistorySprings", {headers: {token: token}});
+  }
+
   getspring(id: string) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
@@ -68,6 +90,18 @@ export class HttpService {
       return this.throwNoConnection();
     }
     return this.httpClient.post(this.ApiURL + `signup`, user)
+  }
+
+  changePassword(oldPassword, newPassword){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+    
+    return this.httpClient.post(`${this.ApiURL}changePassword`, { newPassword: newPassword, oldPassword: oldPassword }, {headers: {access_token: token}});
   }
 
   resetPasswordCreateCode(email) {
@@ -113,7 +147,7 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    return this.httpClient.post(`${this.ApiURL}updateProfile`, { imageString: base64 }, {headers: {token: token}});
+    return this.httpClient.post(`${this.ApiURL}updateProfile`, { imageString: base64 }, {headers: {access_token: token}}); // change to access token
   }
 
   addComment(text: string, springId: string) {

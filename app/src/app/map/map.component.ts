@@ -34,26 +34,18 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(private page: Page,
     private router: Router,
-    // private modalService: ModalDialogService, // delete
     private viewContainerRef: ViewContainerRef,
     private springsService: SpringsService,
     private languageService: LanguageService,
-    // private drawerService: DrawerService, // delete
     private alertService: AlertService) {
   }
 
   ngOnInit(): void {
-    this.loading = true;
     if (application.android) { // delete
       application.android.on(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
     }
 
     this.page.actionBarHidden = true;
-    // this.drawerService.sideDrawer = true; // delete
-
-    // this.waitForResponseSubscription = this.springsService.waitingForResponse.subscribe((data) => { // delete
-    //   this.loading = true;
-    // })
   }
 
   async onMapReady(map: MapView) {
@@ -69,15 +61,22 @@ export class MapComponent implements OnInit, OnDestroy {
     }
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
+    } if (this.springsService.showSingleSpring) {
+      this.clearMarkers();
+      this.addMarker(this.springsService.singleSpring);
+      this.springsService.showSingleSpring = false;
+    } else {
+      this.getSprings();
     }
-    this.getSprings();
   }
 
   async getSprings() {
+    this.loading = true;
     if (this.springsService.filterByHotel) {
       this.hotelMarker = new Marker();
-      this.hotelMarker.position = Position.positionFromLatLng(this.springsService.hotelLocation.latitude, this.springsService.hotelLocation.longitude);
+      this.hotelMarker.position = Position.positionFromLatLng(this.springsService.singleHotel.location.latitude, this.springsService.singleHotel.location.longitude);
       this.hotelMarker.color = "#61ffa3";
+      this.hotelMarker.userData = { hotelId: this.springsService.singleHotel.id };
       this.mainMap.addMarker(this.hotelMarker);
       this.mainMap.latitude = this.hotelMarker.position.latitude;
       this.mainMap.longitude = this.hotelMarker.position.longitude;
@@ -93,7 +92,6 @@ export class MapComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.handleErrors(err);
     })
-    //this.springsService.updateSprings(); // delete
   }
 
   async setMyPosition() {
@@ -136,115 +134,117 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickOnMarker(marker) {
-    if (marker.userData) {
-      this.router.navigate(["springView", marker.userData.ID])
+    if (marker.userData.springId) {      
+      this.router.navigate(["springView", marker.userData.springId])
+    } else if (marker.userData.hotelId) {      
+      this.router.navigate(["hotelView", marker.userData.hotelId])
     }
-    // if (marker != this.userMarker) {
-    //   const options: ModalDialogOptions = {
-    //     viewContainerRef: this.viewContainerRef,
-    //     fullscreen: false,
-    //     context: marker.userData
-    //   };
-    //   this.modalService.showModal(SpringModalComponent, options);
-    // }
-  }
+  //   if (marker != this.userMarker) {
+  //     const options: ModalDialogOptions = {
+  //       viewContainerRef: this.viewContainerRef,
+  //       fullscreen: false,
+  //       context: marker.userData
+  //     };
+  //   this.modalService.showModal(SpringModalComponent, options);
+  // }
+}
 
-  clickOnMap() {
-    if (this.searchBar) {
-      this.searchBar.android.clearFocus();
-    }
-    this.searchMode = false;
+clickOnMap() {
+  if (this.searchBar && this.searchBar.android) {
+    this.searchBar.android.clearFocus();
   }
+  this.searchMode = false;
+}
 
-  coordinateLongPress(cords) {
-    // add marker (different collor?)    
+coordinateLongPress(cords) {
+  // add marker (different collor?)    
+}
+
+onSearchBarLoaded(event) {
+  if (event.object.android) {
+    this.searchBar = event.object;
+    event.object.android.clearFocus();
   }
+}
 
-  onSearchBarLoaded(event) {
-    if (event.object.android) {
-      this.searchBar = event.object;
-      event.object.android.clearFocus();
-    }
+async clearMarkers() {
+  if (this.mainMap) {
+    this.mainMap.removeAllMarkers();
+    //await this.addUserMarker()
   }
+}
 
-  async clearMarkers() {
-    if (this.mainMap) {
-      this.mainMap.removeAllMarkers();
-      //await this.addUserMarker()
-    }
-  }
+removeHotelMarker(){
+  this.mainMap.removeMarker(this.hotelMarker);
+}
 
-  removeHotelMarker(){
-    this.mainMap.removeMarker(this.hotelMarker);    
-  }
-
-  searchByName() {
-    this.searchBar.dismissSoftInput();
-    const oldText = this.searchBar.text;
-    this.loading = true;
-    this.springsService.getSpringByName(this.searchBar.text).subscribe((res: FlatSpring) => {
-      this.searchBar.text += " ";
-      this.searchBar.text = oldText;
-      if (res.ID) {
-        this.loading = false;
-        this.clearMarkers();
-        this.addMarker(res);
-        this.mainMap.latitude = res.location._latitude;
-        this.mainMap.longitude = res.location._longitude;
-      } else {
-        this.loading = false;
-        this.alertService.showError(localize("messages.error.springNotFound"));
-      }
-    }, err => {
+searchByName() {
+  this.searchBar.dismissSoftInput();
+  const oldText = this.searchBar.text;
+  this.loading = true;
+  this.springsService.getSpringByName(this.searchBar.text).subscribe((res: FlatSpring) => {
+    this.searchBar.text += " ";
+    this.searchBar.text = oldText;
+    if (res.id) {
       this.loading = false;
-      this.searchBar += " ";
-      this.searchBar = oldText;
-      this.handleErrors(err);
-    })
-  }
-
-  navigateToFilters() {
-    this.router.navigate(["springsFilter"]);
-  }
-
-  handleErrors(error) {
-    this.loading = false;
-    console.log(error);
-    switch (error.status) {
-      case 0:
-        this.alertService.showError(localize('messages.error.connectionError'));
-        break;
-      case 500:
-        this.alertService.showError(localize("messages.error.serverError"));
-      default:
-        // alert default message
-        break;
+      this.clearMarkers();
+      this.addMarker(res);
+      this.mainMap.latitude = res.location._latitude;
+      this.mainMap.longitude = res.location._longitude;
+    } else {
+      this.loading = false;
+      this.alertService.showError(localize("messages.error.springNotFound"));
     }
+  }, err => {
+    this.loading = false;
+    this.searchBar += " ";
+    this.searchBar = oldText;
+    this.handleErrors(err);
+  })
+}
+
+navigateToFilters() {
+  this.router.navigate(["springsFilter"]);
+}
+
+handleErrors(error) {
+  this.loading = false;
+  console.log(error);
+  switch (error.status) {
+    case 0:
+      this.alertService.showError(localize('messages.error.connectionError'));
+      break;
+    case 500:
+      this.alertService.showError(localize("messages.error.serverError"));
+    default:
+      // alert default message
+      break;
   }
+}
 
   private addMarker(spring: FlatSpring) {
-    const marker = new Marker();
-    marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
-    marker.color = "#9061ff";
-    marker.userData = { ID: spring.ID };
-    this.mainMap.addMarker(marker);
-  }
+  const marker = new Marker();
+  marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
+  marker.color = "#9061ff";
+  marker.userData = { springId: spring.id };
+  this.mainMap.addMarker(marker);
+}
 
   private onAndroidActivityResume(args) { // delete
-    if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
-      this.mainMap.nativeView.onResume();
-      // this.drawerService.sideDrawer = false;
-      // this.drawerService.closeDrawer();
-      // this.springsSubscription.unsubscribe();
-      // this.waitForResponseSubscription.unsubscribe();
-    }
+  if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
+    this.mainMap.nativeView.onResume();
+    // this.drawerService.sideDrawer = false;
+    // this.drawerService.closeDrawer();
+    // this.springsSubscription.unsubscribe();
+    // this.waitForResponseSubscription.unsubscribe();
   }
+}
 
-  ngOnDestroy() {
-    if (application.android) {
-      application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
-    }
+ngOnDestroy() {
+  if (application.android) {
+    application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
   }
+}
 
   // async addUserMarker() {
   //   if (this.userMarker) {

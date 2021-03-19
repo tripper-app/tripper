@@ -52,8 +52,11 @@ export class HotelViewComponent implements OnInit {
 
     openMap(){
         this.springService.filterByHotel = true;
-        this.springService.hotelLocation.latitude = this.currentHotel.location._latitude;
-        this.springService.hotelLocation.longitude = this.currentHotel.location._longitude;
+        // this.springService.hotelLocation.latitude = this.currentHotel.location._latitude;
+        // this.springService.hotelLocation.longitude = this.currentHotel.location._longitude;
+        
+        this.springService.singleHotel = {id: this.currentHotel.ID, location: {latitude: this.currentHotel.location._latitude, longitude: this.currentHotel.location._longitude}};
+        this.springService.loadMap = true;
         this.router.navigate(['mainTabs', 3]);
     }
 

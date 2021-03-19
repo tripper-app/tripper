@@ -1,6 +1,6 @@
 <StackLayout>
-	<ns-profile *ngIf="!userService.showProfile"></ns-profile>
-	<GridLayout *ngIf="userService.showProfile" rows="7*,*">
+	<ns-profile (goToMap)="navigateToMap()" *ngIf="userService.userLoggedIn"></ns-profile>
+	<GridLayout *ngIf="!userService.userLoggedIn" rows="7*,*">
 		<ns-waiting-gif *ngIf="waitingForResponse" rowSpan="2"></ns-waiting-gif>
 		<StackLayout>
 			<GridLayout columns="*,4*,*" class="header">
@@ -17,7 +17,7 @@
 				<FlexboxLayout margin="0 -6 20" justifyContent="space-between" style="font-size: 15;">
 					<FlexboxLayout style="align-items: center;">
 						<CheckBox:CheckBox [isUserInteractionEnabled]="!waitingForResponse"
-							(checkedChange)="$event.value? cbIw.checked = false : changeLanguage(iw)"
+							(checkedChange)="$event.value? cbIw.checked = false : changeLanguage('iw')"
 							[checked]="!rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
 						<label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true"
 							text="English"></label>
@@ -26,7 +26,7 @@
 						<label [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
 							(tap)="cbIw.checked = true"></label>
 						<CheckBox:CheckBox [isUserInteractionEnabled]="!waitingForResponse"
-							(checkedChange)="$event.value? cbEn.checked = false : changeLanguage(en)"
+							(checkedChange)="$event.value? cbEn.checked = false : changeLanguage('en')"
 							[checked]="rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
 					</FlexboxLayout>
 				</FlexboxLayout>

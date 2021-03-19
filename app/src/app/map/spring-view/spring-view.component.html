@@ -12,10 +12,10 @@
                 <Carousel [items]="currentSpring.images" android:indicatorAnimation="scale" indicatorColor="#fff"
                     indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 10" showIndicator="true">
                     <CarouselItem *ngFor="let item of currentSpring.images">
-                        <AbsoluteLayout>
-                            <ns-waiting-gif top="-20%" left="-20%"></ns-waiting-gif>
-                            <Image [src]="item" width="100%" height="100%" stretch="fill"></Image>
-                        </AbsoluteLayout>
+                        <GridLayout>
+                            <ns-waiting-gif></ns-waiting-gif>
+                            <Image style="z-index: 3;" [src]="item" width="100%" height="100%" stretch="fill"></Image>
+                        </GridLayout>
                     </CarouselItem>
                 </Carousel>
             </GridLayout>
@@ -75,13 +75,13 @@
             <label style="text-align: center;"
                 text="{{ expandComments? ('springView.showLessComments' | L) : ('springView.showMoreComments' | L) }}"
                 (tap)="expandComments = !expandComments" *ngIf="currentSpring.comments"></label>
-            <GridLayout rows="*,*" [columns]="rightToLeft? '5*,*' : '*,5*'" style="margin: 10;">
+            <GridLayout *ngIf="userService.userLoggedIn" rows="*,*" [columns]="rightToLeft? '5*,*' : '*,5*'" style="margin: 10;">
                 <textField hint="{{ 'springView.newComment' | L }}" [col]="rightToLeft? 0 : 1"></textField>
                 <img rowSpan="2" [col]="rightToLeft? 1 : 0" class="userPic"
-                    src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-cat-wearing-sunglasses-while-sitting-royalty-free-image-1571755145.jpg" />
+                    [src]="userService.getUserPicture()" />
                 <!-- <StackLayout [col]="rightToLeft? 0 : 1" row="1" style="height: 3; background-color: rgb(178, 178, 189);"></StackLayout> -->
             </GridLayout>
-            <StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 20 10"></StackLayout>
+            <StackLayout class="line"></StackLayout>
             <label textWrap="true" [text]="currentSpring.info" style="margin: 10; font-size: 14;"></label>
             <GridLayout columns="*,*" style="background-color: rgb(168, 209, 211); height: 50;">
                 <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}"

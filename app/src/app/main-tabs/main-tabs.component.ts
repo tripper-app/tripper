@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { Router } from "@angular/router";
 import { Page } from 'tns-core-modules/ui/page';
-import { SettingModalComponent } from '../setting/setting.component';
 import { LanguageService } from '../common/services/language-service';
 import * as imagepicker from "nativescript-imagepicker";
 import { ActivatedRoute } from "@angular/router";
@@ -13,6 +12,7 @@ import * as btoa from 'btoa';
 import { DrawerService } from '../common/services/drawer-service';
 import { HotelsService } from '../common/services/hotels-service';
 import { UserService } from '../common/services/userService';
+import { SpringsService } from '../common/services/springs-service';
 
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
@@ -23,7 +23,7 @@ declare let java: any;
     styleUrls: ['./main-tabs.component.css']
 })
 export class MainTabsComponent implements OnInit {
-    // @ViewChild('tabs', {static: false}) tabs;
+    @ViewChild('tabs', { static: true }) tabs;
     selectedPageIndex = 0;
     tabsVisibility = true;
     showList = false;
@@ -34,7 +34,7 @@ export class MainTabsComponent implements OnInit {
         private modalService: ModalDialogService,
         private languageService: LanguageService,
         private httpService: HttpService,
-        private drawerService: DrawerService,
+        private springService: SpringsService,
         private hotelService: HotelsService,
         private userService: UserService) {
     }
@@ -45,6 +45,11 @@ export class MainTabsComponent implements OnInit {
         if (this.route.snapshot.params.page) {
             this.selectedPageIndex = this.route.snapshot.params.page;
         }
+    }
+
+    navigateToMap() {
+        this.springService.loadMap = true;
+        this.tabs.nativeElement.selectedIndex = 3
     }
 
     // goToMap() {
@@ -62,7 +67,7 @@ export class MainTabsComponent implements OnInit {
     // navigatetoMap(){
     //     this.tabsVisibility = true;
     //     console.log(this.tabs.selecteIndex);
-        
+
     //     this.tabs.selecteIndex = 3;
     //     console.log(this.tabs.selecteIndex);
     // }
@@ -78,14 +83,18 @@ export class MainTabsComponent implements OnInit {
 
     pageChange(index) {
         if (index != 2) {
-            this.hotelService.showList = false;            
-            if (index == 0 && !this.userService.showProfile) {
+            this.hotelService.showList = false;
+            if (index == 0 && !this.userService.userLoggedIn) {
                 this.tabsVisibility = false;
-            }else{
+            } else {
                 this.tabsVisibility = true;
             }
         } else {
-            this.tabsVisibility = false;
+            if (this.hotelService.showList) {
+                this.tabsVisibility = true;
+            } else {
+                this.tabsVisibility = false;
+            }
         }
     }
 

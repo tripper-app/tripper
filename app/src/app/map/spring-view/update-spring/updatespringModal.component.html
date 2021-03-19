@@ -2,12 +2,10 @@
     <StackLayout margin="30" height="60%">
         <FlexboxLayout class="header">
             <label text="X" (tap)="exit()"></label>
-            <label text="{{ 'login.resetPassword' | L }}"></label>
         </FlexboxLayout>
         <label class="email" text="{{ 'labels.email' | L }}"></label>
-        <TextField [(ngModel)]="email" keyboardType="email" autocapitalizationType="none" class="input"
+        <TextField [(ngModel)]="content" keyboardType="email" autocapitalizationType="none" class="input"
             autocorrect="false" returnKeyType="done" (returnPress)="navigateToResetPassword()"></TextField>
-        <label text="{{ 'login.codeSent' | L }}"></label>
     </StackLayout>
     <FlexboxLayout class="confirm" (tap)="navigateToResetPassword()">
         <label text="{{ 'labels.OK' | L }}"></label>

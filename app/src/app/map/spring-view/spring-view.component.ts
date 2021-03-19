@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
 import { LanguageService } from '../../common/services/language-service';
-import * as application from "tns-core-modules/application";
 import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
 import { FullSpring } from '~/app/common/models/fullSpring';
@@ -11,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 import { openUrl } from "tns-core-modules/utils/utils";
 import { ImageSource } from "tns-core-modules/image-source";
 import * as SocialShare from "nativescript-social-share";
-import { device } from "tns-core-modules/platform";
+import { UserService } from '~/app/common/services/userService';
 
 @Component({
     selector: 'ns-spring-view',
@@ -34,7 +33,8 @@ export class SpringsViewComponent implements OnInit {
         private route: ActivatedRoute,
         private springsService: SpringsService,
         private languageService: LanguageService,
-        private alertService: AlertService) {
+        private alertService: AlertService,
+        private userService: UserService) {
     }
 
     ngOnInit(): void {
@@ -56,6 +56,7 @@ export class SpringsViewComponent implements OnInit {
     favorites() {
 
     }
+    
 
     alignVertical(label) {
         label.android.setGravity(17)

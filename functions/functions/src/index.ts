@@ -11,26 +11,27 @@ import * as firebase from "firebase/app";
 import 'firebase/storage';
 const tripperEmail = require("./credentials/email");
 const jwtSecret = require("./credentials/jwtSecret");
-const firebaseConfigFile = require("./credentials/firebaseConfig");
+// const firebaseConfigFile = require("./credentials/firebaseConfig");
 
+admin.initializeApp();
 const firebaseConfig = {
-    apiKey: firebaseConfigFile.apiKey,
-    authDomain: firebaseConfigFile.authDomain,
-    databaseURL: firebaseConfigFile.databaseURL,
-    projectId: firebaseConfigFile.projectId,
-    storageBucket: firebaseConfigFile.storageBucket,
-    messagingSenderId: firebaseConfigFile.messagingSenderId,
-    appId: firebaseConfigFile.appId,
-    measurementId: firebaseConfigFile.measurementId
+    apiKey: "AIzaSyAnnNBKwmXrXQ6lmexwt-oQs5aRTxkwV8A",
+    authDomain: "tripper-d0e21.firebaseapp.com",
+    databaseURL: "https://tripper-d0e21.firebaseio.com",
+    projectId: "tripper-d0e21",
+    storageBucket: "tripper-d0e21.appspot.com",
+    messagingSenderId: "658415875612",
+    appId: "1:658415875612:web:b1535639c70c6fdc2591d9",
+    measurementId: "G-HFCHK193HY"
 };
 firebase.default.initializeApp(firebaseConfig)
-admin.initializeApp();
 const db = admin.firestore();
 const region = "europe-west1";
 const usersCollection = "usesr";
 const springsCollection = 'springs';
 const hotelsCollection = 'hotels'
 const defaultLanguage = 'iw';
+const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
 
 const runtimeOpts: functions.RuntimeOptions = {
     timeoutSeconds: 60,
@@ -62,7 +63,7 @@ export const getAllSprings = functionBuilder(async (req, res) => {
         const springsDocs = await setSpringsQuery(req.body.filters);
         const springs: any = [];
         springsDocs.forEach(doc => {
-            const newSpring = { location: doc.get("location"), ID: doc.id };
+            const newSpring = { location: doc.get("location"), id: doc.id };
             springs.push(newSpring);
         })
 
@@ -97,7 +98,9 @@ export const getSpring = functionBuilder(async (req, res) => {
         try {
             email = validateJwtToken(req.headers.token as string);
         }
-        catch (error) { }
+        catch (error) {
+            // to check if spring is favorite
+        }
         const spring = await db
             .collection(springsCollection)
             .doc(req.query.springId as string)
@@ -140,7 +143,7 @@ export const login = functionBuilder(async (req, res) => {
                 if (data.pendingVerification) {
                     res.status(407).send("email is not verified");
                 } else {
-                    res.send({ token: creatJwtToken(data.email) });
+                    res.send({ token: creatJwtToken(data.email), profile_picture: data.profile });
                 }
             }
             else {
@@ -202,8 +205,9 @@ export const signUp = functionBuilder(async (req, res) => {
                 const data = {
                     email: email,
                     password: getHash(req.body.password),
-                    nick: req.body.nick ? req.body.nick : email.slice(0, email.indexOf('@')),
-                    pendingVerification: true
+                    userName: req.body.nick ? req.body.nick : email.slice(0, email.indexOf('@')),
+                    pendingVerification: true,
+                    profile: defaultUserPicture
                 }
 
                 const i18nBody = geti18n((req.query.lang ? req.query.lang : defaultLanguage).toString());
@@ -224,7 +228,7 @@ export const signUp = functionBuilder(async (req, res) => {
             res.status(400).send("email and password required");
         }
     } catch (error) {
-        if (error.code == "EENVELOPE") {
+        if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         } else {
             handleError(res, error);
@@ -237,7 +241,8 @@ export const verifyEmail = functionBuilder(async (req, res) => {
         const userRef = await db.collection('users').doc(req.query.email as string);
         if ((await userRef.get()).exists) {
             await userRef.update({ "pendingVerification": false });
-            res.send("Email verified");
+            res.send(`<h1 style="text-align: center" >כתובת אימייל אומתה. אתם יכולים לחזור לאפליקציה ולהתחבר למשתמש שלכם</h1>
+            <h1 style="text-align: center">Email address verified. You can return to the application and login to your account</h1>`);
         } else {
             res.status(400).send("can't find this email address");
         }
@@ -264,7 +269,7 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
             res.send(mailRes);
         }
     } catch (error) {
-        if (error.code == "EENVELOPE") {
+        if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         } else {
             handleError(res, error);
@@ -303,11 +308,20 @@ export const changePassword = functionBuilder(async (req, res) => { // should us
     try {
         const email = validateJwtToken(req.headers.access_token as string);
         const newPassword = req.body.newPassword;
+        const usersRef = await db.collection("users")
+            .where("email", "==", email)
+            .where("password", "==", getHash(req.body.oldPassword as string))
+            .limit(1);
+        const user = await usersRef.get();
         if (newPassword) {
-            await db.collection('users').doc(email).update({
-                "password": getHash(newPassword)
-            });
-            res.send();
+            if (user.empty) {
+                res.status(401).send("wrong email or password");
+            } else {
+                await db.collection('users').doc(email).update({
+                    "password": getHash(newPassword)
+                });
+                res.send();
+            }
         } else {
             res.status(400).send("please provide old and new passwords");
         }
@@ -318,14 +332,17 @@ export const changePassword = functionBuilder(async (req, res) => { // should us
 
 export const updateProfile = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token as string);
+        const email = validateJwtToken(req.headers.access_token as string);
         const storageRef = firebase.default.storage().ref();
         const imageRef = storageRef.child(`users/${email}/profile`);
         const blob = Buffer.from(req.body.imageString, "base64");
         imageRef.put(blob, {
             contentType: "image/jpeg"
         }).then(async snap => {
-            res.send({ imageUrl: await snap.ref.getDownloadURL() });
+            const user = await db.collection("users").doc(email).get();
+            const imageUrl = await snap.ref.getDownloadURL();
+            await user.ref.update({ "profile": imageUrl });
+            res.send({ imageUrl: imageUrl });
         }).catch(err => {
             throw err;
         });
@@ -397,10 +414,27 @@ export const removeFavoriteSpring = functionBuilder(async (req, res) => {
 
 export const getFavoriteSprings = functionBuilder(async (req, res) => {
     try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
         const email = validateJwtToken(req.headers.token as string);
         const user = await db.collection('users').doc(email).get();
         const favorites = user.get('favoriteSprings');
-        res.send(favorites);
+        const springPromises: any = [];
+        let springsData: any = [];
+        const actualSprings: any = [];
+        favorites.forEach(async (element: any) => {
+            springPromises.push(db.collection('springs').doc(element).get());
+        });
+        springsData = await Promise.all(springPromises)
+        springsData.forEach((spring: any) => {
+            const final = {
+                id: spring.id,
+                images: spring.get('images'),
+                name: updateField(spring.get('name'), currentLanguage),
+                location: spring.get('location')
+            };
+            actualSprings.push(final)
+        })
+        res.send(actualSprings);
     } catch (error) {
         handleError(res, error);
     }
@@ -429,10 +463,27 @@ export const addHistorySpring = functionBuilder(async (req, res) => {
 
 export const getHistorySprings = functionBuilder(async (req, res) => {
     try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
         const email = validateJwtToken(req.headers.token as string);
         const user = await db.collection('users').doc(email).get();
         const history = user.get('historySprings');
-        res.send(history);
+        const springPromises: any = [];
+        let springsData: any = [];
+        const actualSprings: any = [];
+        history.forEach(async (element: any) => {
+            springPromises.push(db.collection('springs').doc(element).get());
+        });
+        springsData = await Promise.all(springPromises)
+        springsData.forEach((spring: any) => {
+            const final = {
+                id: spring.id,
+                images: spring.get('images'),
+                name: updateField(spring.get('name'), currentLanguage),
+                location: spring.get('location')
+            };
+            actualSprings.push(final)
+        })
+        res.send(actualSprings);
     } catch (error) {
         handleError(res, error);
     }
@@ -542,6 +593,37 @@ export const getFavoriteHotels = functionBuilder(async (req, res) => {
     } catch (error) {
         handleError(res, error);
     }
+})
+
+export const getUserProfile = functionBuilder(async (req, res) => {
+    const email = validateJwtToken(req.headers.token as string);
+    const user = await (await db.collection('users').doc(email).get()).data();
+    const userData = {
+        email: email,
+        profileImage: "",
+        userName: "",
+        favoriteSprings: [],
+        historySprings: []
+    }
+    if (user) {
+        userData.profileImage = user.profile;
+        userData.userName = user.userName;
+        // const springPromises: any = [];
+        // let springsData: any = []
+        // let actualSprings: any = [];
+        // let springs = user.favoriteSprings;
+        // springs.forEach(async (element: any) => {
+        //     springPromises.push(db.collection('springs').doc(element).get())
+        // });
+        // springsData = await Promise.all(springPromises)
+        // springsData.forEach((spring: any) => {
+        //     actualSprings.push(spring.data())
+        // })
+        // userData.favoriteSprings = user.actualSprings;
+        // userData.historySprings = user.historySprings;
+    }
+
+    res.send(userData);
 })
 
 // remove

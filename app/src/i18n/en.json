@@ -79,7 +79,8 @@
         "showMoreComments": "Show more comments",
         "showLessComments": "show less comments",
         "foundError": "Found an error?",
-        "share": "Share"
+        "share": "Share",
+        "update": "So about %s..."
     },
     "login": {
         "emailAndPasswordRequired": "Email and password required",
@@ -88,7 +89,7 @@
         "requireEmail": "Fill your email",
         "requireDetails": "Fill all the details",
         "wrongDetails": "Inserted wrong details",
-        "passwordsNotMuch": "Your passwords do not match",
+        "passwordsNotMuch": "passwords do not match",
         "accountCreated": "Your account was successfully created. An email with a verification link was sent to this address",
         "emailAlreadyExist": "This email already exists",
         "passwordChanged": "Your password changed successfuly",
@@ -112,7 +113,13 @@
         "loginFacebook": "Login with facebook"
     },
     "profile": {
-        "title": "Profile"
+        "title": "Profile",
+        "favorites": "Favorites",
+        "history": "History",
+        "changePassword": "Change password",
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "confirmNewPassword": "Confirm new password"
     },
     "labels": {
         "map": "Map",

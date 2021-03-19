@@ -19,7 +19,7 @@
     </TabStrip>
     <TabContentItem>
         <GridLayout>
-            <ns-login (cancelLogin)="tabs.selectedIndex = 3"></ns-login>
+            <ns-login (goToMap)="navigateToMap()"></ns-login>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
@@ -34,7 +34,7 @@
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <!-- <ns-map></ns-map> -->
+            <ns-map></ns-map>
         </GridLayout>
     </TabContentItem>
 </BottomNavigation>

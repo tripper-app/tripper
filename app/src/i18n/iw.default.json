@@ -79,7 +79,8 @@
         "showMoreComments": "פתיחת תגובות נוספות",
         "showLessComments": "צמצום תגובות",
         "foundError": "מצאתם טעות?",
-        "share": "שיתוף"
+        "share": "שיתוף",
+        "update": "אז בנוגע ל%s..."
     },
     "login": {
         "emailAndPasswordRequired": "נא להזין אימייל וסיסמא",
@@ -112,7 +113,13 @@
         "loginFacebook": "התחברות באמצעות פייסבוק"
     },
     "profile": {
-        "title": "פרופיל אישי"
+        "title": "פרופיל אישי",
+        "favorites": "מועדפים",
+        "history": "היסטוריה",
+        "changePassword": "החלפת סיסמה",
+        "currentPassword": "סיסמה נוכחית",
+        "newPassword": "סיסמה חדשה",
+        "confirmNewPassword": "אישור סיסמה חדשה"
     },
     "labels": {
         "map": "מפה",

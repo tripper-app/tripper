@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.addHistorySpring = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.signup = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.addHistorySpring = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -13,25 +13,26 @@ const firebase = require("firebase/app");
 require("firebase/storage");
 const tripperEmail = require("./credentials/email");
 const jwtSecret = require("./credentials/jwtSecret");
-const firebaseConfigFile = require("./credentials/firebaseConfig");
+// const firebaseConfigFile = require("./credentials/firebaseConfig");
+admin.initializeApp();
 const firebaseConfig = {
-    apiKey: firebaseConfigFile.apiKey,
-    authDomain: firebaseConfigFile.authDomain,
-    databaseURL: firebaseConfigFile.databaseURL,
-    projectId: firebaseConfigFile.projectId,
-    storageBucket: firebaseConfigFile.storageBucket,
-    messagingSenderId: firebaseConfigFile.messagingSenderId,
-    appId: firebaseConfigFile.appId,
-    measurementId: firebaseConfigFile.measurementId
+    apiKey: "AIzaSyAnnNBKwmXrXQ6lmexwt-oQs5aRTxkwV8A",
+    authDomain: "tripper-d0e21.firebaseapp.com",
+    databaseURL: "https://tripper-d0e21.firebaseio.com",
+    projectId: "tripper-d0e21",
+    storageBucket: "tripper-d0e21.appspot.com",
+    messagingSenderId: "658415875612",
+    appId: "1:658415875612:web:b1535639c70c6fdc2591d9",
+    measurementId: "G-HFCHK193HY"
 };
 firebase.default.initializeApp(firebaseConfig);
-admin.initializeApp();
 const db = admin.firestore();
 const region = "europe-west1";
 const usersCollection = "usesr";
 const springsCollection = 'springs';
 const hotelsCollection = 'hotels';
 const defaultLanguage = 'iw';
+const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
 const runtimeOpts = {
     timeoutSeconds: 60,
     memory: '128MB'
@@ -56,7 +57,7 @@ exports.getAllSprings = functionBuilder(async (req, res) => {
         const springsDocs = await setSpringsQuery(req.body.filters);
         const springs = [];
         springsDocs.forEach(doc => {
-            const newSpring = { location: doc.get("location"), ID: doc.id };
+            const newSpring = { location: doc.get("location"), id: doc.id };
             springs.push(newSpring);
         });
         res.send(springs);
@@ -90,7 +91,9 @@ exports.getSpring = functionBuilder(async (req, res) => {
         try {
             email = validateJwtToken(req.headers.token);
         }
-        catch (error) { }
+        catch (error) {
+            // to check if spring is favorite
+        }
         const spring = await db
             .collection(springsCollection)
             .doc(req.query.springId)
@@ -134,7 +137,7 @@ exports.login = functionBuilder(async (req, res) => {
                     res.status(407).send("email is not verified");
                 }
                 else {
-                    res.send({ token: creatJwtToken(data.email) });
+                    res.send({ token: creatJwtToken(data.email), profile_picture: data.profile });
                 }
             }
             else {
@@ -184,7 +187,7 @@ exports.loginWithThirdParty = functionBuilder(async (req, res) => {
         handleError(res, error);
     }
 });
-exports.signup = functionBuilder(async (req, res) => {
+exports.signUp = functionBuilder(async (req, res) => {
     try {
         if (req.body.email && req.body.password) {
             if ((await db.collection('users').doc(req.body.email).get()).exists) {
@@ -195,8 +198,9 @@ exports.signup = functionBuilder(async (req, res) => {
                 const data = {
                     email: email,
                     password: getHash(req.body.password),
-                    nick: req.body.nick ? req.body.nick : email.slice(0, email.indexOf('@')),
-                    pendingVerification: true
+                    userName: req.body.nick ? req.body.nick : email.slice(0, email.indexOf('@')),
+                    pendingVerification: true,
+                    profile: defaultUserPicture
                 };
                 const i18nBody = geti18n((req.query.lang ? req.query.lang : defaultLanguage).toString());
                 mailOptions.to = req.body.email;
@@ -217,7 +221,7 @@ exports.signup = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        if (error.code == "EENVELOPE") {
+        if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         }
         else {
@@ -230,7 +234,8 @@ exports.verifyEmail = functionBuilder(async (req, res) => {
         const userRef = await db.collection('users').doc(req.query.email);
         if ((await userRef.get()).exists) {
             await userRef.update({ "pendingVerification": false });
-            res.send("Email verified");
+            res.send(`<h1 style="text-align: center" >כתובת אימייל אומתה. אתם יכולים לחזור לאפליקציה ולהתחבר למשתמש שלכם</h1>
+            <h1 style="text-align: center">Email address verified. You can return to the application and login to your account</h1>`);
         }
         else {
             res.status(400).send("can't find this email address");
@@ -258,7 +263,7 @@ exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        if (error.code == "EENVELOPE") {
+        if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         }
         else {
@@ -298,11 +303,21 @@ exports.changePassword = functionBuilder(async (req, res) => {
     try {
         const email = validateJwtToken(req.headers.access_token);
         const newPassword = req.body.newPassword;
+        const usersRef = await db.collection("users")
+            .where("email", "==", email)
+            .where("password", "==", getHash(req.body.oldPassword))
+            .limit(1);
+        const user = await usersRef.get();
         if (newPassword) {
-            await db.collection('users').doc(email).update({
-                "password": getHash(newPassword)
-            });
-            res.send();
+            if (user.empty) {
+                res.status(401).send("wrong email or password");
+            }
+            else {
+                await db.collection('users').doc(email).update({
+                    "password": getHash(newPassword)
+                });
+                res.send();
+            }
         }
         else {
             res.status(400).send("please provide old and new passwords");
@@ -314,14 +329,17 @@ exports.changePassword = functionBuilder(async (req, res) => {
 });
 exports.updateProfile = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token);
+        const email = validateJwtToken(req.headers.access_token);
         const storageRef = firebase.default.storage().ref();
         const imageRef = storageRef.child(`users/${email}/profile`);
         const blob = Buffer.from(req.body.imageString, "base64");
         imageRef.put(blob, {
             contentType: "image/jpeg"
         }).then(async (snap) => {
-            res.send({ imageUrl: await snap.ref.getDownloadURL() });
+            const user = await db.collection("users").doc(email).get();
+            const imageUrl = await snap.ref.getDownloadURL();
+            await user.ref.update({ "profile": imageUrl });
+            res.send({ imageUrl: imageUrl });
         }).catch(err => {
             throw err;
         });
@@ -391,10 +409,27 @@ exports.removeFavoriteSpring = functionBuilder(async (req, res) => {
 });
 exports.getFavoriteSprings = functionBuilder(async (req, res) => {
     try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
         const email = validateJwtToken(req.headers.token);
         const user = await db.collection('users').doc(email).get();
         const favorites = user.get('favoriteSprings');
-        res.send(favorites);
+        const springPromises = [];
+        let springsData = [];
+        const actualSprings = [];
+        favorites.forEach(async (element) => {
+            springPromises.push(db.collection('springs').doc(element).get());
+        });
+        springsData = await Promise.all(springPromises);
+        springsData.forEach((spring) => {
+            const final = {
+                id: spring.id,
+                images: spring.get('images'),
+                name: updateField(spring.get('name'), currentLanguage),
+                location: spring.get('location')
+            };
+            actualSprings.push(final);
+        });
+        res.send(actualSprings);
     }
     catch (error) {
         handleError(res, error);
@@ -422,10 +457,27 @@ exports.addHistorySpring = functionBuilder(async (req, res) => {
 });
 exports.getHistorySprings = functionBuilder(async (req, res) => {
     try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
         const email = validateJwtToken(req.headers.token);
         const user = await db.collection('users').doc(email).get();
         const history = user.get('historySprings');
-        res.send(history);
+        const springPromises = [];
+        let springsData = [];
+        const actualSprings = [];
+        history.forEach(async (element) => {
+            springPromises.push(db.collection('springs').doc(element).get());
+        });
+        springsData = await Promise.all(springPromises);
+        springsData.forEach((spring) => {
+            const final = {
+                id: spring.id,
+                images: spring.get('images'),
+                name: updateField(spring.get('name'), currentLanguage),
+                location: spring.get('location')
+            };
+            actualSprings.push(final);
+        });
+        res.send(actualSprings);
     }
     catch (error) {
         handleError(res, error);
@@ -534,6 +586,35 @@ exports.getFavoriteHotels = functionBuilder(async (req, res) => {
     catch (error) {
         handleError(res, error);
     }
+});
+exports.getUserProfile = functionBuilder(async (req, res) => {
+    const email = validateJwtToken(req.headers.token);
+    const user = await (await db.collection('users').doc(email).get()).data();
+    const userData = {
+        email: email,
+        profileImage: "",
+        userName: "",
+        favoriteSprings: [],
+        historySprings: []
+    };
+    if (user) {
+        userData.profileImage = user.profile;
+        userData.userName = user.userName;
+        // const springPromises: any = [];
+        // let springsData: any = []
+        // let actualSprings: any = [];
+        // let springs = user.favoriteSprings;
+        // springs.forEach(async (element: any) => {
+        //     springPromises.push(db.collection('springs').doc(element).get())
+        // });
+        // springsData = await Promise.all(springPromises)
+        // springsData.forEach((spring: any) => {
+        //     actualSprings.push(spring.data())
+        // })
+        // userData.favoriteSprings = user.actualSprings;
+        // userData.historySprings = user.historySprings;
+    }
+    res.send(userData);
 });
 // remove
 // export const checkJWT = functions.runWith(runtimeOpts).https.onRequest(async (req, res) => {

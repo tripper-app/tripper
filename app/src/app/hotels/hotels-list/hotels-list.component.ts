@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
@@ -18,6 +18,7 @@ export class HotelsListComponent implements OnInit {
     @Output() showTabs: EventEmitter<any> = new EventEmitter();
     @Output() hideTabs: EventEmitter<any> = new EventEmitter();
     private rightToLeft = true;
+    loadingImage = true;
     hotelsList: FlatHotel[];
 
     constructor(private page: Page,
@@ -35,7 +36,7 @@ export class HotelsListComponent implements OnInit {
         this.getHotels();
     }
 
-    hideTheFilters(){        
+    hideTheFilters() {
         this.hotelsService.showList = true;
         this.showTabs.emit();
     }
@@ -61,11 +62,11 @@ export class HotelsListComponent implements OnInit {
         h1.price = 100;
         h2.price = 800;
         h3.price = 750;
-        h1.id = "מלון החתולים";
+        h1.ID = "מלון החתולים";
         this.hotelsList.push(h1, h2, h3);
     }
 
-    navigateToHotel(hotel) {
+    navigateToHotel(hotel) {        
         this.router.navigate(["hotelView", hotel]);
     }
 

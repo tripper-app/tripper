@@ -1,27 +1,31 @@
 <StackLayout>
-    <ScrollView>
-        <StackLayout>
+    <ScrollView height="100%">
+        <StackLayout (tap)="tappedAnywhere()">
             <GridLayout class="header" columns="*,3*,*">
-                <label col="1" text="{{ 'profile.title' }}" class="title" (onloaded)="alignVertical(title)"
+                <label col="1" text="{{ 'profile.title' | L }}" class="title" (onloaded)="alignVertical(title)"
                     #title></label>
-                <img src="res://icon" height="60%" [col]="rightToLeft? 2 : 0" />
+                <img src="res://icon" (tap)="navigatetoAbout()" height="60%" [col]="rightToLeft? 2 : 0" />
             </GridLayout>
             <StackLayout class="line"></StackLayout>
             <StackLayout margin="10">
                 <GridLayout [height]="widthHalf-10" columns="*,2*,*">
-                    <FlexboxLayout flexDirection="column"
+                    <FlexboxLayout flexDirection="column" [col]="rightToLeft? 0 : 2"
                         [ngStyle]="{'align-items': rightToLeft? 'flex-start' : 'flex-end'}"
                         style="justify-content: flex-end;">
-                        <img src="res://icon" [col]="rightToLeft? 0 : 2" height="30" />
+                        <img src="res://icon" height="30" (tap)="uploadImage()" />
                     </FlexboxLayout>
                     <img col="1" class="pic" stretch="fill" [src]="currentUser.profile" />
                 </GridLayout>
                 <GridLayout columns="*,3*,*" row="*" marginTop="20">
-                    <label col="1" [text]="currentUser.userName" style="font-size: 20;" (onloaded)="alignVertical(name)"
-                        #name></label>
+                    <label col="1" [text]="currentUser.userName" style="font-size: 20; font-weight: bold;" (onloaded)="alignVertical(name)"
+                        [ngStyle]="{'visibility': editingUsername? 'collapse' : 'visible'}" #name></label>
+                    <TextField col="1" style="font-size: 20; margin-top: -6;" autocorrect="false" autocapitalizationType="none"
+                        returnKeyType="done" [ngStyle]="{'visibility': editingUsername? 'visible' : 'collapse'}"
+                        (returnPress)="submitUsername()" (onloaded)="alignVertical(usernameInput)" (loaded)="ontTextFieldLoaded($event)" #usernameInput>
+                    </TextField>
                     <FlexboxLayout height="100%" style="align-items: center;" [col]="rightToLeft? 0 : 2"
                         [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}">
-                        <img src="res://icon" height="30" />
+                        <img src="res://icon" height="30" (tap)="editUsername()" />
                     </FlexboxLayout>
                 </GridLayout>
                 <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
@@ -30,32 +34,97 @@
                 <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
                     <label style="font-size: 15;" [text]="currentUser.email"></label>
                 </FlexboxLayout>
-
                 <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
                     <label class="greyText" text="{{ 'login.password' | L }}"></label>
                 </FlexboxLayout>
-                <FlexboxLayout width="100%" style="justify-content: space-between;" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                    <img src="res://icon" height="30" />
-                    <label (onloaded)="alignVertical(password)" style="font-size: 15;" [text]="'*'.repeat(currentUser.password.length)" #password></label>
+                <FlexboxLayout width="100%" style="justify-content: space-between;"
+                    [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                    <img src="res://icon" height="30" (tap)="changePassword()"/>
+                    <label (onloaded)="alignVertical(password)" style="font-size: 15;" text="******" #password></label>
                 </FlexboxLayout>
 
                 <label width="100%" marginTop="30" text="{{ 'labels.language' | L }}"></label>
-				<FlexboxLayout margin="0 -6 20" justifyContent="space-between" style="font-size: 15;">
-					<FlexboxLayout style="align-items: center;">
-						<CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" height="40" [isUserInteractionEnabled]="!waitingForResponse"
-							(checkedChange)="$event.value? cbIw.checked = false : changeLanguage(iw)"
-							[checked]="!rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
-						<label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true"
-							text="English"></label>
-					</FlexboxLayout>
-					<FlexboxLayout style="align-items: center;">
-						<label [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
-							(tap)="cbIw.checked = true"></label>
-						<CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" [isUserInteractionEnabled]="!waitingForResponse"
-							(checkedChange)="$event.value? cbEn.checked = false : changeLanguage(en)"
-							[checked]="rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
-					</FlexboxLayout>
-				</FlexboxLayout>
+                <FlexboxLayout margin="0 -6 20" justifyContent="space-between" style="font-size: 15;">
+                    <FlexboxLayout style="align-items: center;">
+                        <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" height="40"
+                            [isUserInteractionEnabled]="!waitingForResponse"
+                            (checkedChange)="$event.value? cbIw.checked = false : changeLanguage('iw')"
+                            [checked]="!rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
+                        <label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true"
+                            text="English"></label>
+                    </FlexboxLayout>
+                    <FlexboxLayout style="align-items: center;">
+                        <label [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
+                            (tap)="cbIw.checked = true"></label>
+                        <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale"
+                            [isUserInteractionEnabled]="!waitingForResponse"
+                            (checkedChange)="$event.value? cbEn.checked = false : changeLanguage('en')"
+                            [checked]="rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
+                    </FlexboxLayout>
+                </FlexboxLayout>
+                <StackLayout class="line" marginBottom="20"></StackLayout>
+                <GridLayout columns="*,5*,*">
+                    <img src="res://icon" (tap)="showFavorites()" [col]="rightToLeft? 0 : 2" #showFavoritesImage />
+                    <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
+                        <label text="{{ 'profile.favorites' | L }}"></label>
+                    </FlexboxLayout>
+                    <img src="res://icon" [col]="rightToLeft? 2 : 0" />
+                </GridLayout>
+                <StackLayout width="100%" height="0"  #favoritesStack>
+                    <ns-waiting-gif *ngIf="waitingForFavorites"></ns-waiting-gif>
+                    <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+                        <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring)" width="50%"
+                            [padding]="((i%2==0 || rightToLeft) && !(i%2==0 && rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
+                            *ngFor="let spring of favoriteSprings; let i = index">
+                            <GridLayout [height]="springHeight-40">
+                                <Carousel [items]="spring.images" android:indicatorAnimation="scale"
+                                    indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
+                                    indicatorOffset="0, 20" showIndicator="true">
+                                    <CarouselItem *ngFor="let item of spring.images">
+                                        <GridLayout>
+                                            <ns-waiting-gif></ns-waiting-gif>
+                                            <Image (tap)="navigateToSpring(spring)" style="z-index: 3;" [src]="item"
+                                                width="100%" height="100%" stretch="fill"></Image>
+                                        </GridLayout>
+                                    </CarouselItem>
+                                </Carousel>
+                            </GridLayout>
+                            <label text="{{spring.name}}"></label>
+                            <!-- <label text="{{hotel.city}}, {{'hotelsList.startingFrom' | L}}{{hotel.price}} &#8362;"></label> -->
+                        </StackLayout>
+                    </FlexboxLayout>
+                </StackLayout>
+                <GridLayout columns="*,5*,*">
+                    <img src="res://icon" (tap)="showHistory()" [col]="rightToLeft? 0 : 2" #showHistoryImage />
+                    <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
+                        <label text="{{ 'profile.history' | L }}"></label>
+                    </FlexboxLayout>
+                    <img src="res://icon" [col]="rightToLeft? 2 : 0" />
+                </GridLayout>
+                <StackLayout class="line"> </StackLayout>
+                <StackLayout width="100%" height="0"  #historyStack>
+                    <ns-waiting-gif *ngIf="waitingForHistory"></ns-waiting-gif>
+                    <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+                        <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring.id)" width="50%"
+                            [padding]="((i%2==0 || rightToLeft) && !(i%2==0 && rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
+                            *ngFor="let spring of historySprings; let i = index">
+                            <GridLayout [height]="springHeight-40">
+                                <Carousel [items]="spring.images" android:indicatorAnimation="scale"
+                                    indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
+                                    indicatorOffset="0, 20" showIndicator="true">
+                                    <CarouselItem *ngFor="let item of spring.images">
+                                        <GridLayout>
+                                            <ns-waiting-gif></ns-waiting-gif>
+                                            <Image (tap)="navigateToSpring(spring.id)" style="z-index: 3;" [src]="item"
+                                                width="100%" height="100%" stretch="fill"></Image>
+                                        </GridLayout>
+                                    </CarouselItem>
+                                </Carousel>
+                            </GridLayout>
+                            <label text="{{spring.name}}"></label>
+                        </StackLayout>
+                    </FlexboxLayout>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ScrollView>

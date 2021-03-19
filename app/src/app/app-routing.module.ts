@@ -13,8 +13,9 @@ import { HotelViewComponent } from "./hotels/hotel-view/hotel-view.component";
 import { LoginComponent } from "./account/login/login.component";
 import { getString } from '@nativescript/core/application-settings';
 
+import { SpringsService } from './common/services/springs-service';
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '0' : '0');
+const firstPage = 'mainTabs/' +  (loggedUser? '3' : '0');
 
 const routes: Routes = [
     { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
@@ -34,7 +35,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
+    providers: [SpringsService],
     imports: [NativeScriptRouterModule.forRoot(routes)],
     exports: [NativeScriptRouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { 
+    constructor(private springService: SpringsService){
+        if (loggedUser) {
+            this.springService.loadMap = true;
+        }
+    }
+}

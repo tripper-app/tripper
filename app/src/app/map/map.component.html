@@ -1,4 +1,4 @@
-<GridLayout columns="*,*" rows="*,*,5*">
+<GridLayout columns="*,*" rows="*,*,5*" *ngIf="springsService.loadMap">
     <StackLayout *ngIf="loading" rowSpan="3" colSpan="2" class="gif" horizontalAlignment="center" verticalAlignment="center">
         <!-- <Gif:Gif rowSpan="2" src="~/assets/droplet_gif.gif" /> -->
         <ns-waiting-gif></ns-waiting-gif>

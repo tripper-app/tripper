@@ -1,5 +1,5 @@
 export class FlatHotel{
-    id: string;
+    ID: string;
     name: string;
     price: number;
     city: string;

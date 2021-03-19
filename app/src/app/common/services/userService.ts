@@ -6,12 +6,20 @@ import { getString } from '@nativescript/core/application-settings';
     providedIn: 'root'
 })
 export class UserService {
-    showProfile = false;
+    userLoggedIn = false;
 
-    constructor(private httpService: HttpService) {        
+    constructor(private httpService: HttpService) {
         if (getString('user_token')) {
-            this.showProfile = true;
+            this.userLoggedIn = true;
         }
+    }
+
+    getFavoriteSprings(){
+        return this.httpService.getFavoritesprings();
+    }
+
+    getHistorySpriings(){
+        return this.httpService.getHistorySprings();
     }
 
     login(user){
@@ -22,11 +30,23 @@ export class UserService {
         return this.httpService.signUp(user);
     }
 
+    changePassword(oldPassword, newPassword){
+        return this.httpService.changePassword(oldPassword, newPassword);
+    }
+
     resetPasswordCreateCode(email){
         return this.httpService.resetPasswordCreateCode(email);
     }
 
     resetPasswordRecieveCode(code, email, password){
         return this.httpService.resetPasswordRecieveCode(code, email, password);
+    }
+
+    updateProfilePicture(base64){
+        return this.httpService.updateProfile(base64);
+    }
+
+    getUserPicture(){
+        return getString('user_picture')? getString('user_picture') : "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
     }
 }

@@ -13,6 +13,7 @@ import * as application from "tns-core-modules/application";
 import { AlertService } from '../../common/services/alert-service';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
+import { ChangeLanguageModalComponent } from '~/app/common/alerts/changeLanguage/change-language.component';
 
 @Component({
     selector: 'ns-login',
@@ -20,18 +21,17 @@ import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    @Output() cancelLogin: EventEmitter<any> = new EventEmitter();
+    @Output() goToMap: EventEmitter<any> = new EventEmitter();
     waitingForResponse = false;
     // isLoggingIn = true;
     rightToLeft = true;
     mainColor = "rgb(35, 204, 153)";
-    en = 'en';
-    iw = 'iw';
     // localizeSignUp = localize('login.signUp');
     // localizeLogin = localize('login.login');
     // localizeBackToLogin = localize('login.backToLogin');
     // localizedontHaveAcount = localize('login.dontHaveAcount');
     user: User;
+    first = false;
 
     constructor(private page: Page,
         private userService: UserService,
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.languageService.getCurrentLanguage());
-        
+
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.user = new User();
@@ -83,7 +83,8 @@ export class LoginComponent implements OnInit {
         this.userService.login(this.user).subscribe(data => {
             this.waitingForResponse = false;
             this.saveTokenToCache(data.token);
-            this.userService.showProfile = true;
+            this.saveUserPictureToCache(data.profile_picture);
+            this.userService.userLoggedIn = true;
             // this.router.navigate(['mainTabs', 3]);
             this.navigateToMap();
         }, err => this.handleError(err))
@@ -94,11 +95,13 @@ export class LoginComponent implements OnInit {
             viewContainerRef: this.viewContainerRef,
             fullscreen: false
         };
-        this.modalService.showModal(ResetPasswordModalComponent, options).then(email => {
-            this.waitingForResponse = true;
-            this.userService.resetPasswordCreateCode(email).subscribe(() => {
-                this.router.navigate(['resetPassword', email]);
-            }, err => this.handleError(err));
+        this.modalService.showModal(ResetPasswordModalComponent, options).then(email => {            
+            if (email) {
+                this.waitingForResponse = true;
+                this.userService.resetPasswordCreateCode(email).subscribe(() => {
+                    this.router.navigate(['resetPassword', email]);
+                }, err => this.handleError(err));
+            }
         });
     }
 
@@ -145,9 +148,17 @@ export class LoginComponent implements OnInit {
         setString("user_token", token);
     }
 
+    saveUserPictureToCache(pic){
+        setString("user_picture", pic);
+    }
+
     changeLanguage(lan) {
         this.languageService.switchLanguage(lan);
-
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.viewContainerRef,
+            fullscreen: false
+        };
+        this.modalService.showModal(ChangeLanguageModalComponent, options);
     }
 
     handleError(err) {
@@ -204,8 +215,7 @@ export class LoginComponent implements OnInit {
     }
 
     navigateToMap() {
-        this.cancelLogin.emit();
-        // this.router.navigate(['mainTabs', 3])
+        this.goToMap.emit();
     }
 }
     // activity: application.android.foregroundActivity

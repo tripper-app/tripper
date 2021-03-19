@@ -6,7 +6,6 @@
                 <label text="{{ 'hotelsFilters.title' | L }}"></label>
             </FlexboxLayout>
             <StackLayout class="line" marginBottom="20"></StackLayout>
-            <!-- <StackLayout height="3" marginBottom="20" backgroundColor="rgb(233, 236, 220)"></StackLayout> -->
             <GridLayout class="areasGrid" [columns]="leftToRight? '3*,4*,*,*' : '*,*,4*,3*' ">
                 <StackLayout height="100%" verticalAlignment="center" [col]="leftToRight? 0 : 3">
                     <label textWrap="true" text="{{ 'hotelsFilters.area' | L }}" #area></label>

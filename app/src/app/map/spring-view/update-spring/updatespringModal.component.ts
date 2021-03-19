@@ -7,12 +7,12 @@ import { UserService } from '~/app/common/services/userService';
 
 
 @Component({
-  selector: 'ns-reset-password-modal',
-  templateUrl: './resetPasswordModal.component.html',
-  styleUrls: ['./resetPasswordModal.component.scss']
+  selector: 'ns-update-spring-modal',
+  templateUrl: './updatespringdModal.component.html',
+  styleUrls: ['./updatespringModal.component.scss']
 })
-export class ResetPasswordModalComponent implements OnInit {
-  email = 'odedoded777@gmail.com';
+export class UpdatespringModalComponent implements OnInit {
+  content = 'aaa';
   constructor(private params: ModalDialogParams,
     private router: Router,
     private alertService: AlertService,
@@ -24,9 +24,9 @@ export class ResetPasswordModalComponent implements OnInit {
 
   }
 
-  navigateToResetPassword() {
-    if (this.email) {
-      this.exit(this.email);
+  confirm() {
+    if (this.content) {
+      this.exit(true);
       // this.userService.resetPasswordCreateCode(this.email).subscribe(() => {});
       // setTimeout(() => {
       //   this.router.navigate(['resetPassword', this.email]);
@@ -38,7 +38,7 @@ export class ResetPasswordModalComponent implements OnInit {
 
   }
 
-  exit(email = undefined) {
-    this.params.closeCallback(email);
+  exit(ok = false) {
+    this.params.closeCallback(ok);
   }
 }
