@@ -7,9 +7,18 @@
 // Font icon class
 $themeColor: rgb(35, 204, 153);
 $greyText: rgb(168, 151, 151);
-$headerHeight: 60;
-$bottomHeight: 60;
-$headerFontSize: 20;
+$headerHeight: 65;
+$bottomHeight: 65;
+$headerFontSize: 25;
+$titleFontSize: 20;
+$subtitleFontSize: 15;
+
+
+.header{
+    height: $headerHeight;
+    font-size: $headerFontSize;
+    margin: 10 5 0;
+  }
 
 .line{
     height: 3;

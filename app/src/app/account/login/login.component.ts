@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         this.user.email = "odedoded777@gmail.com";
         this.user.password = "1234";
 
-        // this.oathService.configureOAuthProviders();
+        this.oathService.configureOAuthProviders();
         // GoogleLogin.init({
         //     google: {
         //         initialize: true,
@@ -107,10 +107,9 @@ export class LoginComponent implements OnInit {
 
     loginWithFacebook() {
         this.oathService.tnsOauthLogin("facebook", data => {
-            console.log("logged in to facebook");
             this.loginWithThirdParty(data.accessToken, 'facebook')
         }, err => {
-            this.handleError(err);
+            //this.handleError(err);
             console.log("error while logging to facebook");
             console.log(err);
         })
@@ -137,10 +136,16 @@ export class LoginComponent implements OnInit {
     }
 
     loginWithThirdParty(token, thirdParty) {
-        // waiting gif
-        //setString("facebook_token", token);
-        this.httpService.loginWithThirdPartyToken(token, thirdParty).subscribe((res: { token: string }) => {
+        this.waitingForResponse = true;
+        console.log("logged in with: " + thirdParty);
+        
+        this.httpService.loginWithThirdPartyToken(token, thirdParty).subscribe((res: any) => {
+            this.waitingForResponse = false;
+            console.log("token is: " + res.token);
             this.saveTokenToCache(res.token);
+            this.saveUserPictureToCache(res.profile_picture);
+            this.userService.userLoggedIn = true;
+            this.navigateToMap();
         }, err => this.handleError(err))
     }
 
@@ -189,14 +194,6 @@ export class LoginComponent implements OnInit {
                 break;
         }
     }
-
-    // alert(message: string) {
-    //     return alert({
-    //         title: localize('app.name'),
-    //         okButtonText: localize('labels.OK'),
-    //         message: message
-    //     });
-    // }
 
     logout() {
         // this.httpService.logoutFacebook(getString("facebook_token")).subscribe(data => {

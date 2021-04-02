@@ -52,13 +52,15 @@ ActivityIndicator{
 
 .userPic{
     border-radius: 100%;
-    height: 35;
+    height: 37;
+    width: 37;
+    // height: 35;
+    stretch: fill;
 }
 
 .comment{
     justify-content: space-between;
     align-items: flex-end;
-    margin: 0 8;
 }
 
 .navigation{
@@ -67,6 +69,17 @@ ActivityIndicator{
     height: 13%;
     font-size: 15;
     color: white;
+}
+
+.commentLine{
+    background-color: $themeColor;
+    height: 2;
+}
+
+.input{
+    border-bottom-width: 2;
+    margin: 0;
+    border-color:$themeColor;
 }
 
 .navigationIcon{

@@ -14,14 +14,20 @@
                         style="justify-content: flex-end;">
                         <img src="res://icon" height="30" (tap)="uploadImage()" />
                     </FlexboxLayout>
-                    <img col="1" class="pic" stretch="fill" [src]="currentUser.profile" />
+                    <img col="1" class="pic" stretch="fill" [src]="currentUser.profile" *ngIf="!waitingForUserPic"/>
+                    <StackLayout col="1" class="gif" borderRadius="100" >
+                        <Lottie:LottieView src="waitingGif.json" speed="1" loop="true" autoPlay="true" />
+                    </StackLayout>
                 </GridLayout>
                 <GridLayout columns="*,3*,*" row="*" marginTop="20">
-                    <label col="1" [text]="currentUser.userName" style="font-size: 20; font-weight: bold;" (onloaded)="alignVertical(name)"
+                    <label col="1" [text]="currentUser.userName" style="font-size: 20; font-weight: bold;"
+                        (onloaded)="alignVertical(name)"
                         [ngStyle]="{'visibility': editingUsername? 'collapse' : 'visible'}" #name></label>
-                    <TextField col="1" style="font-size: 20; margin-top: -6;" autocorrect="false" autocapitalizationType="none"
-                        returnKeyType="done" [ngStyle]="{'visibility': editingUsername? 'visible' : 'collapse'}"
-                        (returnPress)="submitUsername()" (onloaded)="alignVertical(usernameInput)" (loaded)="ontTextFieldLoaded($event)" #usernameInput>
+                    <TextField col="1" style="font-size: 20; margin-top: -6;" autocorrect="false"
+                        autocapitalizationType="none" returnKeyType="done"
+                        [ngStyle]="{'visibility': editingUsername? 'visible' : 'collapse'}"
+                        (returnPress)="submitUsername()" (onloaded)="alignVertical(usernameInput)"
+                        (loaded)="ontTextFieldLoaded($event)" #usernameInput>
                     </TextField>
                     <FlexboxLayout height="100%" style="align-items: center;" [col]="rightToLeft? 0 : 2"
                         [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}">
@@ -39,7 +45,7 @@
                 </FlexboxLayout>
                 <FlexboxLayout width="100%" style="justify-content: space-between;"
                     [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                    <img src="res://icon" height="30" (tap)="changePassword()"/>
+                    <img src="res://icon" height="30" (tap)="changePassword()" />
                     <label (onloaded)="alignVertical(password)" style="font-size: 15;" text="******" #password></label>
                 </FlexboxLayout>
 
@@ -70,12 +76,12 @@
                     </FlexboxLayout>
                     <img src="res://icon" [col]="rightToLeft? 2 : 0" />
                 </GridLayout>
-                <StackLayout width="100%" height="0"  #favoritesStack>
+                <StackLayout width="100%" height="0" #favoritesStack>
                     <ns-waiting-gif *ngIf="waitingForFavorites"></ns-waiting-gif>
                     <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
                         <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring)" width="50%"
                             [padding]="((i%2==0 || rightToLeft) && !(i%2==0 && rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
-                            *ngFor="let spring of favoriteSprings; let i = index">
+                            *ngFor="let spring of currentUser.favorites; let i = index">
                             <GridLayout [height]="springHeight-40">
                                 <Carousel [items]="spring.images" android:indicatorAnimation="scale"
                                     indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
@@ -94,6 +100,7 @@
                         </StackLayout>
                     </FlexboxLayout>
                 </StackLayout>
+                <StackLayout class="line"></StackLayout>
                 <GridLayout columns="*,5*,*">
                     <img src="res://icon" (tap)="showHistory()" [col]="rightToLeft? 0 : 2" #showHistoryImage />
                     <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
@@ -102,12 +109,12 @@
                     <img src="res://icon" [col]="rightToLeft? 2 : 0" />
                 </GridLayout>
                 <StackLayout class="line"> </StackLayout>
-                <StackLayout width="100%" height="0"  #historyStack>
+                <StackLayout width="100%" height="0" #historyStack>
                     <ns-waiting-gif *ngIf="waitingForHistory"></ns-waiting-gif>
                     <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
                         <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring.id)" width="50%"
                             [padding]="((i%2==0 || rightToLeft) && !(i%2==0 && rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
-                            *ngFor="let spring of historySprings; let i = index">
+                            *ngFor="let spring of currentUser.history; let i = index">
                             <GridLayout [height]="springHeight-40">
                                 <Carousel [items]="spring.images" android:indicatorAnimation="scale"
                                     indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
@@ -115,7 +122,7 @@
                                     <CarouselItem *ngFor="let item of spring.images">
                                         <GridLayout>
                                             <ns-waiting-gif></ns-waiting-gif>
-                                            <Image (tap)="navigateToSpring(spring.id)" style="z-index: 3;" [src]="item"
+                                            <Image (tap)="navigateToSpring(spring)" style="z-index: 3;" [src]="item"
                                                 width="100%" height="100%" stretch="fill"></Image>
                                         </GridLayout>
                                     </CarouselItem>

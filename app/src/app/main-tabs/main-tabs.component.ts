@@ -1,15 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import { Router } from "@angular/router";
 import { Page } from 'tns-core-modules/ui/page';
 import { LanguageService } from '../common/services/language-service';
 import * as imagepicker from "nativescript-imagepicker";
 import { ActivatedRoute } from "@angular/router";
 
-import { ImageSource } from 'tns-core-modules/image-source';
 import { HttpService } from '../common/services/http-service';
 import * as btoa from 'btoa';
-import { DrawerService } from '../common/services/drawer-service';
 import { HotelsService } from '../common/services/hotels-service';
 import { UserService } from '../common/services/userService';
 import { SpringsService } from '../common/services/springs-service';
@@ -27,8 +24,7 @@ export class MainTabsComponent implements OnInit {
     selectedPageIndex = 0;
     tabsVisibility = true;
     showList = false;
-    constructor(private router: Router,
-        private route: ActivatedRoute,
+    constructor(private route: ActivatedRoute,
         private page: Page,
         private viewContainerRef: ViewContainerRef,
         private modalService: ModalDialogService,
@@ -48,38 +44,9 @@ export class MainTabsComponent implements OnInit {
     }
 
     navigateToMap() {
-        this.springService.loadMap = true;
+        // this.springService.loadMap = true;
         this.tabs.nativeElement.selectedIndex = 3
     }
-
-    // goToMap() {
-    //     this.router.navigate(['map']);
-    // }
-
-    // goToLogin() {
-    //     this.router.navigate(['login']);
-    // }
-
-    // goToSignUp() {
-    //     this.router.navigate(['signUp']);
-    // }
-
-    // navigatetoMap(){
-    //     this.tabsVisibility = true;
-    //     console.log(this.tabs.selecteIndex);
-
-    //     this.tabs.selecteIndex = 3;
-    //     console.log(this.tabs.selecteIndex);
-    // }
-
-    // openSetting() {
-    //     const options: ModalDialogOptions = {
-    //         viewContainerRef: this.viewContainerRef,
-    //         fullscreen: false
-    //     };
-    //     this.modalService.showModal(SettingModalComponent, options);
-
-    // }
 
     pageChange(index) {
         if (index != 2) {

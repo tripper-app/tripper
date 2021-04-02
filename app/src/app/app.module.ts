@@ -18,7 +18,6 @@ registerElement('LottieView', () => LottieView);
 import { AppComponent } from "./app.component";
 import { MainTabsComponent } from "./main-tabs/main-tabs.component";
 import { MapComponent } from "./map/map.component";
-import { FiltersComponent } from "./filters/filters.component"
 import { registerElement } from "nativescript-angular/element-registry";
 // import { HomeComponent } from './home/home.component';
 import { SpringModalComponent } from './map/spring-modal/spring-modal.component';
@@ -36,7 +35,15 @@ import { LoginComponent } from "./account/login/login.component";
 import { ResetPasswordModalComponent } from "./account/resetPassword/resetPasswordModal/resetPasswordModal.component";
 import { ChangeLanguageModalComponent } from "./common/alerts/changeLanguage/change-language.component";
 import { ChangePasswordModalComponent } from "./common/alerts/changePassword/change-password.component";
+import { UpdateSpringModalComponent } from "./map/spring-view/update-spring/updateSpringModal.component";
+import { GamesComponent } from "./games/games.component";
+import { BingoComponent } from "./games/bingo/bingo.component";
+import { KahootComponent } from "./games/kahoot/kahoot.component";
+import { LandKingComponent } from "./games/landKing/landKing.component";
+import { TriviaComponent } from "./games/trivia/trivia.component";
+
 registerElement('Carousel', () => Carousel);
+import { from } from "rxjs";
 registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
 // registerElement("CarouselItem", () => require("nativescript-carousel").CarouselItem);
@@ -69,13 +76,13 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         SpringModalComponent,
         ResetPasswordModalComponent,
         ChangeLanguageModalComponent,
-        ChangePasswordModalComponent
+        ChangePasswordModalComponent,
+        UpdateSpringModalComponent
     ],
     declarations: [
         AppComponent,
         MapComponent,
         SpringModalComponent,
-        FiltersComponent,
         // HomeComponent,
         // CarouselComponent,
         SignUpComponent,
@@ -91,7 +98,13 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         LoginComponent,
         ResetPasswordModalComponent,
         ChangeLanguageModalComponent,
-        ChangePasswordModalComponent
+        ChangePasswordModalComponent,
+        UpdateSpringModalComponent,
+        GamesComponent,
+        BingoComponent,
+        KahootComponent,
+        LandKingComponent,
+        TriviaComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

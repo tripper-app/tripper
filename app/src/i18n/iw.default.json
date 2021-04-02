@@ -80,7 +80,8 @@
         "showLessComments": "צמצום תגובות",
         "foundError": "מצאתם טעות?",
         "share": "שיתוף",
-        "update": "אז בנוגע ל%s..."
+        "update": "אז בנוגע ל%s...",
+        "thankYou": "תודה רבה!"
     },
     "login": {
         "emailAndPasswordRequired": "נא להזין אימייל וסיסמא",
@@ -119,7 +120,15 @@
         "changePassword": "החלפת סיסמה",
         "currentPassword": "סיסמה נוכחית",
         "newPassword": "סיסמה חדשה",
-        "confirmNewPassword": "אישור סיסמה חדשה"
+        "confirmNewPassword": "אישור סיסמה חדשה",
+        "cantPickImage": "לא ניתן לבחור בתמונה זו. אנא בחרו בתמונה אחרת"
+    },
+    "games": {
+        "title": "בחרו משחק לדרך",
+        "trivia": "טריוויה",
+        "kahoot": "קהוט",
+        "bingo": "בינגו",
+        "landKing": "מלך הארץ"
     },
     "labels": {
         "map": "מפה",

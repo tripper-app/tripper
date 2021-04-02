@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
@@ -11,6 +11,8 @@ import { openUrl } from "tns-core-modules/utils/utils";
 import { ImageSource } from "tns-core-modules/image-source";
 import * as SocialShare from "nativescript-social-share";
 import { UserService } from '~/app/common/services/userService';
+import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { UpdateSpringModalComponent } from './update-spring/updateSpringModal.component';
 
 @Component({
     selector: 'ns-spring-view',
@@ -18,6 +20,7 @@ import { UserService } from '~/app/common/services/userService';
     styleUrls: ['./spring-view.component.scss']
 })
 export class SpringsViewComponent implements OnInit {
+    commentHeight = 60;
     rightToLeft = true;
     shouldReverse = true;
     mainColor = "rgb(35, 204, 153)";
@@ -34,7 +37,9 @@ export class SpringsViewComponent implements OnInit {
         private springsService: SpringsService,
         private languageService: LanguageService,
         private alertService: AlertService,
-        private userService: UserService) {
+        private userService: UserService,
+        private modalService: ModalDialogService,
+        private viewContainerRef: ViewContainerRef) {
     }
 
     ngOnInit(): void {
@@ -42,9 +47,10 @@ export class SpringsViewComponent implements OnInit {
         this.rightToLeft = this.languageService.getRightToLeft();
 
         // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.loading = false;
             this.currentSpring = spring;
+
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
 
         }, err => {
@@ -53,10 +59,50 @@ export class SpringsViewComponent implements OnInit {
         })
     }
 
-    favorites() {
-
+    clickOnFavorites() {
+        if (this.currentSpring.isFavorite !== undefined) {
+            if (this.currentSpring.isFavorite) {
+                this.removeFromFavorites();
+            } else {
+                this.addToFavorites();
+            }
+        }
     }
-    
+
+    addToFavorites() {
+        this.currentSpring.isFavorite = true;
+        this.userService.addFavoriteSpring(this.currentSpring.ID).subscribe(res => {
+            console.log("spring added to favorites");
+
+        }, err => {
+            this.handleErrors(err);
+        })
+    }
+
+    removeFromFavorites() {
+        this.currentSpring.isFavorite = false;
+        this.userService.removeFavoriteSpring(this.currentSpring.ID).subscribe(res => {
+            console.log("spring removed from favorites");
+
+        }, err => {
+            this.handleErrors(err)
+        })
+    }
+
+    updateSpring() {
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.viewContainerRef,
+            fullscreen: false,
+            context: this.currentSpring.name
+        };
+        this.modalService.showModal(UpdateSpringModalComponent, options).then(text => {
+            if (text) {
+                this.springsService.updateSpring(text + ".\n", this.currentSpring.ID).subscribe(() => {
+                    this.alertService.showSuccess(localize('springView.thankYou'));
+                }, err => this.handleErrors(err));
+            }
+        });
+    }
 
     alignVertical(label) {
         label.android.setGravity(17)
@@ -86,16 +132,17 @@ export class SpringsViewComponent implements OnInit {
         }
     }
 
-    addComment(text) {
-        this.springsService.addComment(text, this.currentSpring.ID).subscribe(res => {
-            console.log("good");
-            console.log(res);
-
-        }, err => {
-            console.log("not good");
-            console.log(err);
-
-        })
+    addComment(input) {
+        if (input.text) {
+            this.springsService.addComment(input.text, this.currentSpring.ID).subscribe(res => {
+                input.text = "";
+                console.log(res);
+                res.date = { _seconds: new Date().getTime() / 1000 };
+                this.currentSpring.comments.push(res);
+            }, err => {
+                this.handleErrors(err);
+            })
+        }
     }
 
     getTextFromFields() {

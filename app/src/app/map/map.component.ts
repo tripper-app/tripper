@@ -31,6 +31,7 @@ export class MapComponent implements OnInit, OnDestroy {
   searchMode = false;
   searchBar;
   hotelMarker: Marker;
+  singleSpringSubject;
 
   constructor(private page: Page,
     private router: Router,
@@ -45,6 +46,9 @@ export class MapComponent implements OnInit, OnDestroy {
       application.android.on(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
     }
 
+    this.springsService.singleSpringSubject.subscribe(spring => {
+      this.addSingleSpring(spring);
+    });
     this.page.actionBarHidden = true;
   }
 
@@ -53,21 +57,20 @@ export class MapComponent implements OnInit, OnDestroy {
     map.settings.mapToolbarEnabled = false;
     map.settings.myLocationButtonEnabled = false;
     if (await this.springsService.getCurrentLocation()) {
-      // map.settings.compassEnabled = false;
+      map.settings.compassEnabled = false;
       map.myLocationEnabled = true;
       if (!this.springsService.filterByHotel) {
-        this.centerMap();
+        this.centerMapToUser();
       }
     }
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
-    } if (this.springsService.showSingleSpring) {
-      this.clearMarkers();
-      this.addMarker(this.springsService.singleSpring);
-      this.springsService.showSingleSpring = false;
-    } else {
-      this.getSprings();
     }
+    // if (this.springsService.showSingleSpring) {
+    //   this.addSingleSpring();
+    // } else {  // add with subject
+    this.getSprings();
+    //}
   }
 
   async getSprings() {
@@ -78,13 +81,13 @@ export class MapComponent implements OnInit, OnDestroy {
       this.hotelMarker.color = "#61ffa3";
       this.hotelMarker.userData = { hotelId: this.springsService.singleHotel.id };
       this.mainMap.addMarker(this.hotelMarker);
+      this.centerMap(this.hotelMarker.position.latitude, this.hotelMarker.position.longitude);
       this.mainMap.latitude = this.hotelMarker.position.latitude;
       this.mainMap.longitude = this.hotelMarker.position.longitude;
     }
 
     this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
       this.loading = false;
-      // this.clearMarkers(); // delete
       springs.forEach(spring => {
         this.addMarker(spring);
       })
@@ -95,7 +98,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   async setMyPosition() {
-    this.centerMap();
+    this.centerMapToUser();
 
     if (this.mainMap.zoom < this.bigZoom) {
       this.mainMap.zoom = this.bigZoom;
@@ -117,15 +120,14 @@ export class MapComponent implements OnInit, OnDestroy {
     // this.mainMap.addMarker(marker);
   }
 
-  async centerMap() {
+  async centerMapToUser() {
     if (this.springsService.filterByHotel) {
       this.springsService.filterByHotel = false;
       this.removeHotelMarker();
     }
     const location = await this.springsService.getCurrentLocation()
     if (location) {
-      this.mainMap.latitude = location.latitude;
-      this.mainMap.longitude = location.longitude;
+      this.centerMap(location.latitude, location.longitude);
     }
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
@@ -133,118 +135,132 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
+  centerMap(lat: number, lon: number){
+    this.mainMap.latitude = lat;
+    this.mainMap.longitude = lon;
+  }
+
   clickOnMarker(marker) {
-    if (marker.userData.springId) {      
+    if (marker.userData.springId) {
       this.router.navigate(["springView", marker.userData.springId])
-    } else if (marker.userData.hotelId) {      
+    } else if (marker.userData.hotelId) {
       this.router.navigate(["hotelView", marker.userData.hotelId])
     }
-  //   if (marker != this.userMarker) {
-  //     const options: ModalDialogOptions = {
-  //       viewContainerRef: this.viewContainerRef,
-  //       fullscreen: false,
-  //       context: marker.userData
-  //     };
-  //   this.modalService.showModal(SpringModalComponent, options);
-  // }
-}
-
-clickOnMap() {
-  if (this.searchBar && this.searchBar.android) {
-    this.searchBar.android.clearFocus();
+    //   if (marker != this.userMarker) {
+    //     const options: ModalDialogOptions = {
+    //       viewContainerRef: this.viewContainerRef,
+    //       fullscreen: false,
+    //       context: marker.userData
+    //     };
+    //   this.modalService.showModal(SpringModalComponent, options);
+    // }
   }
-  this.searchMode = false;
-}
 
-coordinateLongPress(cords) {
-  // add marker (different collor?)    
-}
-
-onSearchBarLoaded(event) {
-  if (event.object.android) {
-    this.searchBar = event.object;
-    event.object.android.clearFocus();
-  }
-}
-
-async clearMarkers() {
-  if (this.mainMap) {
-    this.mainMap.removeAllMarkers();
-    //await this.addUserMarker()
-  }
-}
-
-removeHotelMarker(){
-  this.mainMap.removeMarker(this.hotelMarker);
-}
-
-searchByName() {
-  this.searchBar.dismissSoftInput();
-  const oldText = this.searchBar.text;
-  this.loading = true;
-  this.springsService.getSpringByName(this.searchBar.text).subscribe((res: FlatSpring) => {
-    this.searchBar.text += " ";
-    this.searchBar.text = oldText;
-    if (res.id) {
-      this.loading = false;
-      this.clearMarkers();
-      this.addMarker(res);
-      this.mainMap.latitude = res.location._latitude;
-      this.mainMap.longitude = res.location._longitude;
-    } else {
-      this.loading = false;
-      this.alertService.showError(localize("messages.error.springNotFound"));
+  clickOnMap() {
+    if (this.searchBar && this.searchBar.android) {
+      this.searchBar.android.clearFocus();
     }
-  }, err => {
-    this.loading = false;
-    this.searchBar += " ";
-    this.searchBar = oldText;
-    this.handleErrors(err);
-  })
-}
-
-navigateToFilters() {
-  this.router.navigate(["springsFilter"]);
-}
-
-handleErrors(error) {
-  this.loading = false;
-  console.log(error);
-  switch (error.status) {
-    case 0:
-      this.alertService.showError(localize('messages.error.connectionError'));
-      break;
-    case 500:
-      this.alertService.showError(localize("messages.error.serverError"));
-    default:
-      // alert default message
-      break;
+    this.searchMode = false;
   }
-}
+
+  coordinateLongPress(cords) {
+    // add marker (different collor?)    
+  }
+
+  onSearchBarLoaded(event) {
+    if (event.object.android) {
+      this.searchBar = event.object;
+      event.object.android.clearFocus();
+    }
+  }
+
+  addSingleSpring(spring) {
+    this.clearMarkers();
+    this.addMarker(spring);
+    
+    this.centerMap(spring.location._latitude, spring.location._longitude);
+    // this.addMarker(this.springsService.singleSpring);
+    //this.springsService.showSingleSpring = false;
+  }
+
+  async clearMarkers() {
+    if (this.mainMap) {
+      this.mainMap.removeAllMarkers();
+      //await this.addUserMarker()
+    }
+  }
+
+  removeHotelMarker() {
+    this.mainMap.removeMarker(this.hotelMarker);
+  }
+
+  searchByName() {
+    this.searchBar.dismissSoftInput();
+    const oldText = this.searchBar.text;
+    this.loading = true;
+    this.springsService.getSpringByName(this.searchBar.text).subscribe(res => {      
+      this.searchBar.text += " ";
+      this.searchBar.text = oldText;
+      if (res.id) {
+        this.loading = false;
+        this.clearMarkers();
+        this.addMarker(res);
+        this.mainMap.latitude = res.location._latitude;
+        this.mainMap.longitude = res.location._longitude;
+      } else {        
+        this.loading = false;
+        this.alertService.showError(localize("messages.error.springNotFound"));
+      }
+    }, err => {
+      this.loading = false;
+      this.searchBar += " ";
+      this.searchBar = oldText;
+      this.handleErrors(err);
+    })
+  }
+
+  navigateToFilters() {
+    this.router.navigate(["springsFilter"]);
+  }
+
+  handleErrors(error) {
+    this.loading = false;
+    console.log(error);
+    switch (error.status) {
+      case 0:
+        this.alertService.showError(localize('messages.error.connectionError'));
+        break;
+      case 500:
+        this.alertService.showError(localize("messages.error.serverError"));
+      default:
+        // alert default message
+        break;
+    }
+  }
 
   private addMarker(spring: FlatSpring) {
-  const marker = new Marker();
-  marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
-  marker.color = "#9061ff";
-  marker.userData = { springId: spring.id };
-  this.mainMap.addMarker(marker);
-}
+    const marker = new Marker();
+    marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
+    marker.color = "#9061ff";
+    marker.userData = { springId: spring.id };
+    this.mainMap.addMarker(marker);
+  }
 
   private onAndroidActivityResume(args) { // delete
-  if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
-    this.mainMap.nativeView.onResume();
-    // this.drawerService.sideDrawer = false;
-    // this.drawerService.closeDrawer();
-    // this.springsSubscription.unsubscribe();
-    // this.waitForResponseSubscription.unsubscribe();
+    if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
+      this.mainMap.nativeView.onResume();
+      // this.drawerService.sideDrawer = false;
+      // this.drawerService.closeDrawer();
+      // this.springsSubscription.unsubscribe();
+      // this.waitForResponseSubscription.unsubscribe();
+    }
   }
-}
 
-ngOnDestroy() {
-  if (application.android) {
-    application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
+  ngOnDestroy() {
+    if (application.android) {
+      application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
+    }
   }
-}
 
   // async addUserMarker() {
   //   if (this.userMarker) {

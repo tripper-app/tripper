@@ -18,7 +18,15 @@ export class UserService {
         return this.httpService.getFavoritesprings();
     }
 
-    getHistorySpriings(){
+    addFavoriteSpring(springId){
+        return this.httpService.addFavoriteSpring(springId);
+    }
+
+    removeFavoriteSpring(springId: string){
+        return this.httpService.removeFavoriteSpring(springId);
+    }
+
+    getHistorySprings(){
         return this.httpService.getHistorySprings();
     }
 
@@ -30,8 +38,16 @@ export class UserService {
         return this.httpService.signUp(user);
     }
 
+    getUserProfile(){
+        return this.httpService.getUserProfile();
+    }
+
     changePassword(oldPassword, newPassword){
         return this.httpService.changePassword(oldPassword, newPassword);
+    }
+
+    updateUserName(newUserName){
+        return this.httpService.updateUserName(newUserName);
     }
 
     resetPasswordCreateCode(email){

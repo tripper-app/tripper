@@ -9,8 +9,11 @@ import * as jwt from 'jsonwebtoken'
 import * as https from 'https';
 import * as firebase from "firebase/app";
 import 'firebase/storage';
-const tripperEmail = require("./credentials/email");
-const jwtSecret = require("./credentials/jwtSecret");
+const tripperEmail = {
+    user: "tripper.app.il@gmail.com",
+    password: "tripperapp"
+};
+const jwtSecret = "tripperSecret";
 // const firebaseConfigFile = require("./credentials/firebaseConfig");
 
 admin.initializeApp();
@@ -27,12 +30,12 @@ const firebaseConfig = {
 firebase.default.initializeApp(firebaseConfig)
 const db = admin.firestore();
 const region = "europe-west1";
-const usersCollection = "usesr";
+const usersCollection = "users";
 const springsCollection = 'springs';
 const hotelsCollection = 'hotels'
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
-
+const historyLimit = 30;
 const runtimeOpts: functions.RuntimeOptions = {
     timeoutSeconds: 60,
     memory: '128MB'
@@ -81,9 +84,9 @@ export const getSpringByName = functionBuilder(async (req, res) => {
             .where(`name.${lang}`, ">=", name)
             .where(`name.${lang}`, '<=', name + '\uf8ff')
             .get()).docs[0]; // add limit?
-        const flatSpring = { ID: "", location: {} };
+        const flatSpring = { id: "", location: {} };
         if (spring) {
-            flatSpring.ID = spring.id;
+            flatSpring.id = spring.id;
             flatSpring.location = spring.get("location");
         }
         res.send(flatSpring);
@@ -96,14 +99,16 @@ export const getSpring = functionBuilder(async (req, res) => {
     try {
         let email;
         try {
-            email = validateJwtToken(req.headers.token as string);
+            email = validateJwtToken(req.headers.access_token as string);
         }
         catch (error) {
+            functions.logger.debug("cant find email: \n" + error);
             // to check if spring is favorite
         }
+        const springId = req.query.springId as string;
         const spring = await db
             .collection(springsCollection)
-            .doc(req.query.springId as string)
+            .doc(springId)
             .get();
 
         const data = spring.data();
@@ -117,11 +122,22 @@ export const getSpring = functionBuilder(async (req, res) => {
             data.depth = updateField(data.depth, currentLanguage);
             data.isFavorite = false;
             if (email) {
-                const isFavorite = (await db
-                    .collection(usersCollection)
-                    .doc(email)
-                    .get()).get("favoritesSprings");
-                if (isFavorite.includes(spring.id)) data.isFavorite = true;
+                const userRef = await db.collection(usersCollection).doc(email);
+                const favorites = (await userRef.get()).get("favoriteSprings");
+
+
+                await userRef.update({
+                    historySprings: admin.firestore.FieldValue.arrayUnion(springId)
+                });
+
+                if ((await userRef.get()).get("historySprings").length > historyLimit) {
+                    const history = await (await userRef.get()).get("historySprings")
+                    await userRef.update({
+                        historySprings: admin.firestore.FieldValue.arrayRemove(history[0])
+                    });
+                }
+                functions.logger.debug("favorites: \n" + favorites)
+                if (favorites.includes(springId)) data.isFavorite = true;
             }
         }
         res.send(data)
@@ -183,7 +199,7 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
                             profile: data.picture.data.url
                         })
                     }
-                    res.send({ token: creatJwtToken(data.email) });
+                    res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url});
                 });
             }).end();
         } else {
@@ -233,6 +249,24 @@ export const signUp = functionBuilder(async (req, res) => {
         } else {
             handleError(res, error);
         }
+    }
+})
+
+export const updateSpring = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.access_token as string);
+        const text = req.query.text as string;
+        const spring = req.query.spring;
+        mailOptions.to = tripperEmail.user;
+        mailOptions.subject = `עדכון בנוגע ל ${spring}`;
+        mailOptions.html = `${text}
+        
+        מאת: ${email}`;
+
+        const mailRes = await transporter.sendMail(mailOptions);
+        res.send(mailRes);
+    } catch (error) {
+        handleError(res, error);
     }
 })
 
@@ -366,13 +400,13 @@ export const addComment = functionBuilder(async (req, res) => {
         const userData = await userRef.get();
         if (userData.exists) {
             const user = userData.data();
-            comment.user_name = user ? user.nick : undefined;
+            comment.user_name = user ? user.userName : undefined;
             const guestPic = "https://images.macrumors.com/t/x_zUFqghBUNBxVUZN_dYoKF3D9g=/1600x0/article-new/2019/04/guest-user-250x250.jpg";
             comment.user_pic = user ? user.profile ? user.profile : guestPic : guestPic;
-            const result = await springRef.update({
+            await springRef.update({
                 comments: admin.firestore.FieldValue.arrayUnion(comment)
             });
-            res.send(result);
+            res.send(comment);
         } else {
             throw new Error("user does not exist");
 
@@ -384,11 +418,11 @@ export const addComment = functionBuilder(async (req, res) => {
 
 export const addFavoriteSpring = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token as string);
-        const springId = req.query.springId;
+        const email = validateJwtToken(req.headers.access_token as string);
+        const springId = req.body.springId;
         const userRef = await db.collection('users').doc(email);
         await userRef.update({
-            favoritesSprings: admin.firestore.FieldValue.arrayUnion(springId)
+            favoriteSprings: admin.firestore.FieldValue.arrayUnion(springId)
         });
 
         res.send();
@@ -399,11 +433,11 @@ export const addFavoriteSpring = functionBuilder(async (req, res) => {
 
 export const removeFavoriteSpring = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token as string);
+        const email = validateJwtToken(req.headers.access_token as string);
         const springId = req.body.springId;
         const userRef = await db.collection('users').doc(email);
         await userRef.update({
-            favoritesSprings: admin.firestore.FieldValue.arrayRemove(springId)
+            favoriteSprings: admin.firestore.FieldValue.arrayRemove(springId)
         });
 
         res.send();
@@ -440,26 +474,25 @@ export const getFavoriteSprings = functionBuilder(async (req, res) => {
     }
 })
 
-export const addHistorySpring = functionBuilder(async (req, res) => {
-    try {
-        const historyLimit = 50;
-        const email = validateJwtToken(req.headers.token as string);
-        const springId = req.query.springId;
-        const userRef = await db.collection('users').doc(email);
-        await userRef.update({
-            historySprings: admin.firestore.FieldValue.arrayUnion(springId)
-        });
+// export const addHistorySpring = functionBuilder(async (req, res) => {
+//     try {
+//         const email = validateJwtToken(req.headers.token as string);
+//         const springId = req.query.springId;
+//         const userRef = await db.collection('users').doc(email);
+//         await userRef.update({
+//             historySprings: admin.firestore.FieldValue.arrayUnion(springId)
+//         });
 
-        if ((await userRef.get()).get("historySprings").length > historyLimit) {
-            const first = await (await userRef.get()).get("historySprings")
-            await userRef.update({
-                historySprings: admin.firestore.FieldValue.arrayRemove(first[0])
-            });
-        }
-    } catch (error) {
-        handleError(res, error);
-    }
-})
+//         if ((await userRef.get()).get("historySprings").length > historyLimit) {
+//             const first = await (await userRef.get()).get("historySprings")
+//             await userRef.update({
+//                 historySprings: admin.firestore.FieldValue.arrayRemove(first[0])
+//             });
+//         }
+//     } catch (error) {
+//         handleError(res, error);
+//     }
+// })
 
 export const getHistorySprings = functionBuilder(async (req, res) => {
     try {
@@ -596,8 +629,8 @@ export const getFavoriteHotels = functionBuilder(async (req, res) => {
 })
 
 export const getUserProfile = functionBuilder(async (req, res) => {
-    const email = validateJwtToken(req.headers.token as string);
-    const user = await (await db.collection('users').doc(email).get()).data();
+    const email = validateJwtToken(req.headers.access_token as string);
+    const user = await (await db.collection(usersCollection).doc(email).get()).data();
     const userData = {
         email: email,
         profileImage: "",
@@ -605,6 +638,7 @@ export const getUserProfile = functionBuilder(async (req, res) => {
         favoriteSprings: [],
         historySprings: []
     }
+    functions.logger.debug("user: " + user)
     if (user) {
         userData.profileImage = user.profile;
         userData.userName = user.userName;
@@ -622,8 +656,20 @@ export const getUserProfile = functionBuilder(async (req, res) => {
         // userData.favoriteSprings = user.actualSprings;
         // userData.historySprings = user.historySprings;
     }
-
+    functions.logger.debug("result: " + userData)
     res.send(userData);
+})
+
+export const updateUserName = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.access_token as string);
+        const user = await db.collection(usersCollection).doc(email).get();
+        await user.ref.update({ "userName": req.body.newUserName })
+
+        res.send();
+    } catch (error) {
+        handleError(res, error);
+    }
 })
 
 // remove
@@ -748,11 +794,11 @@ const geti18n = (lang: string) => {
 }
 
 const creatJwtToken = (email: string) => {
-    return jwt.sign(email, jwtSecret.secret)
+    return jwt.sign(email, jwtSecret)
 }
 
 const validateJwtToken = (token: string) => {
-    return jwt.verify(token, jwtSecret.secret) as string;
+    return jwt.verify(token, jwtSecret) as string;
 }
 
 const springNameToSearch = (springName: string) => {

@@ -80,7 +80,8 @@
         "showLessComments": "show less comments",
         "foundError": "Found an error?",
         "share": "Share",
-        "update": "So about %s..."
+        "update": "So about %s...",
+        "thankYou": "Thank you!"
     },
     "login": {
         "emailAndPasswordRequired": "Email and password required",
@@ -119,7 +120,15 @@
         "changePassword": "Change password",
         "currentPassword": "Current password",
         "newPassword": "New password",
-        "confirmNewPassword": "Confirm new password"
+        "confirmNewPassword": "Confirm new password",
+        "cantPickImage": "Can't use this image. Please select another one"
+    },
+    "games": {
+        "title": "Pick a game for the road",
+        "trivia": "Trivia",
+        "kahoot": "Kahoot",
+        "bingo": "Bingo",
+        "landKing": "Land king"
     },
     "labels": {
         "map": "Map",

@@ -14,8 +14,9 @@ import { LoginComponent } from "./account/login/login.component";
 import { getString } from '@nativescript/core/application-settings';
 
 import { SpringsService } from './common/services/springs-service';
+import { BingoComponent } from "./games/bingo/bingo.component";
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '3' : '0');
+const firstPage = 'mainTabs/' +  (loggedUser? '0' : '0');
 
 const routes: Routes = [
     { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
@@ -31,7 +32,9 @@ const routes: Routes = [
     { path: "hotelsFilters", component: HotelsFiltersComponent },
     { path: "hotelView", component: HotelViewComponent },
     { path: "hotelView/:hotelId", component: HotelViewComponent },
-    { path: "login", component: LoginComponent }
+    { path: "login", component: LoginComponent },
+    { path: "bingo", component: BingoComponent }
+
 ];
 
 @NgModule({

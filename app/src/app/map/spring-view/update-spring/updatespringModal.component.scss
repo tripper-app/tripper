@@ -1,15 +1,15 @@
 @import '../../../../_app-common.scss';
 
-.header{
+.upper{
     justify-content: space-between;
     font-size: 20;
     margin-bottom: 40;
 }
 
-.email{
-    color: $greyText;
+.title{
     font-size: 15;
     width: 100%;
+    text-align: center;
 }
 
 .confirm{
@@ -27,5 +27,5 @@
     font-size: 15;
     border-bottom-color: $themeColor; 
     // border-bottom-width: 5;
-    margin: 0 -10 0;
+    margin: 0 0;
   }

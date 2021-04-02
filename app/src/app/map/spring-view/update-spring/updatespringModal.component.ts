@@ -8,10 +8,10 @@ import { UserService } from '~/app/common/services/userService';
 
 @Component({
   selector: 'ns-update-spring-modal',
-  templateUrl: './updatespringdModal.component.html',
+  templateUrl: './updatespringModal.component.html',
   styleUrls: ['./updatespringModal.component.scss']
 })
-export class UpdatespringModalComponent implements OnInit {
+export class UpdateSpringModalComponent implements OnInit {
   content = 'aaa';
   constructor(private params: ModalDialogParams,
     private router: Router,
@@ -21,24 +21,13 @@ export class UpdatespringModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
 
   confirm() {
-    if (this.content) {
-      this.exit(true);
-      // this.userService.resetPasswordCreateCode(this.email).subscribe(() => {});
-      // setTimeout(() => {
-      //   this.router.navigate(['resetPassword', this.email]);
-      // }, 0);
-
-    } else {
-      this.alertService.showError(localize('login.requireEmail'));
-    }
-
+      this.exit(this.content);
   }
 
-  exit(ok = false) {
-    this.params.closeCallback(ok);
+  exit(text: string) {
+    this.params.closeCallback(text);
   }
 }

@@ -6,6 +6,12 @@
   <string name="_labels_language_Z1LvLi1">"Preferred language"</string>
   <string name="_labels_setting_HCebH">"Setting"</string>
   <string name="_labels_map_Z1UVRWy">"Map"</string>
+  <string name="_games_landKing_1nlTda">"Land king"</string>
+  <string name="_games_bingo_Z1EnEGc">"Bingo"</string>
+  <string name="_games_kahoot_ZmXmgu">"Kahoot"</string>
+  <string name="_games_trivia_Z3dQMo">"Trivia"</string>
+  <string name="_games_title_Z1DboDT">"Pick a game for the road"</string>
+  <string name="_profile_cantPickImage_1XPrb8">"Can\'t use this image. Please select another one"</string>
   <string name="_profile_confirmNewPassword_JQNS8">"Confirm new password"</string>
   <string name="_profile_newPassword_Z2cBXjh">"New password"</string>
   <string name="_profile_currentPassword_Z2d1tTl">"Current password"</string>
@@ -41,6 +47,7 @@
   <string name="_login_requireCode_Z27Gx6p">"Insert the code you recieved"</string>
   <string name="_login_wrongEmail_Zi9Oyh">"Wrong email address"</string>
   <string name="_login_emailAndPasswordRequired_zDDBk">"Email and password required"</string>
+  <string name="_springView_thankYou_Z1bpN89">"Thank you!"</string>
   <string name="_springView_update_2mRJ0n">"So about %1$s..."</string>
   <string name="_springView_share_ewhd3">"Share"</string>
   <string name="_springView_foundError_1YBLQl">"Found an error?"</string>

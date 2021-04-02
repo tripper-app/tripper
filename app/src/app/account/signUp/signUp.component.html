@@ -2,10 +2,10 @@
 	<GridLayout rows="7*,*">
 		<ns-waiting-gif rowSpan="2" *ngIf="waitingForResponse"></ns-waiting-gif>
 		<StackLayout height="90%">
-			<GridLayout columns="*,*,*" margin="10 20" style="font-size: 25;" height="40">
-				<Label width="100%" [ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" text="X"
-					[col]="rightToLeft? 0 : 2" (tap)="exit()"></Label>
-				<Label text="{{ 'login.signUp' | L }}" col="1"></Label>
+			<GridLayout columns="*,4*,*" class="header">
+				<Label width="100%" [isUserInteractionEnabled]="!waitingForResponse" [ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" text="X"
+					[col]="rightToLeft? 0 : 2" (tap)="exit()" (onloaded)="alignVertical(cancell)" #cancell></Label>
+				<Label text="{{ 'login.signUp' | L }}" col="1" (onloaded)="alignVertical(title)" #title></Label>
 			</GridLayout>
 			<StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
 			<label [isUserInteractionEnabled]="!waitingForResponse" class="haveAccount"

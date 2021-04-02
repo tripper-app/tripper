@@ -1,13 +1,13 @@
 <FlexboxLayout flexDirection="column" height="300">
     <StackLayout margin="30" height="60%">
-        <FlexboxLayout class="header">
+        <FlexboxLayout class="upper">
             <label text="X" (tap)="exit()"></label>
         </FlexboxLayout>
-        <label class="email" text="{{ 'labels.email' | L }}"></label>
+        <label class="email" text="{{ 'springView.update' | L: params.context }}"></label>
         <TextField [(ngModel)]="content" keyboardType="email" autocapitalizationType="none" class="input"
-            autocorrect="false" returnKeyType="done" (returnPress)="navigateToResetPassword()"></TextField>
+            autocorrect="false" returnKeyType="done" (returnPress)="confirm()"></TextField>
     </StackLayout>
-    <FlexboxLayout class="confirm" (tap)="navigateToResetPassword()">
+    <FlexboxLayout class="confirm" (tap)="confirm()">
         <label text="{{ 'labels.OK' | L }}"></label>
     </FlexboxLayout>
 </FlexboxLayout>

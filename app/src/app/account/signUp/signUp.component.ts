@@ -169,6 +169,10 @@ export class SignUpComponent implements OnInit {
         });
     }
 
+    alignVertical(label) {
+        label.android.setGravity(17)
+    }
+
     logout() {
         // this.httpService.logoutFacebook(getString("facebook_token")).subscribe(data => {
         //     console.log("good");

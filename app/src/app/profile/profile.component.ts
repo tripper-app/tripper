@@ -32,15 +32,16 @@ export class ProfileComponent implements OnInit {
     animationTime = 150;
     favoritesGifHeight = 320;
     usernameInput;
-    currentUser: User;
-    favoriteSprings: [];
-    historySprings: [];
+    currentUser = new User();
+    // favoriteSprings: [];
+    // historySprings: [];
     rightToLeft = true;
     widthHalf = screen.mainScreen.widthDIPs / 2;
     editingUsername = false;
     waitingForResponse = false;
     waitingForFavorites = false;
     waitingForHistory = false;
+    waitingForUserPic = false;
     springHeight = 160;
     mainColor = "rgb(35, 204, 153)";
     checkBoxScale = 0.7;
@@ -63,17 +64,19 @@ export class ProfileComponent implements OnInit {
     }
 
     getUser() {
-        this.currentUser = new User();
-        this.currentUser.profile = "https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg";
-        this.currentUser.email = "blablabla@gmail.com";
-        this.currentUser.password = "1234";
-        this.currentUser.userName = "ישראל ישראלי";
-        this.currentUser.favorites = ["מעיין אביאל", "בור דותן", "מעיין הגבורה"];
+        this.waitingForResponse = true;
+        this.userService.getUserProfile().subscribe(res => {
+            this.waitingForResponse = false;
+            this.currentUser.userName = res.userName;
+            this.currentUser.email = res.email;
+            this.currentUser.profile = res.profileImage;
+        })
     }
 
     async uploadImage() {
         let context = imagepicker.create({
-            mode: "single" // use "multiple" for multiple selection
+            mode: "single", // use "multiple" for multiple selection
+            mediaType: imagepicker.ImagePickerMediaType.Image
         });
         context.authorize().then(() => {
             return context.present();
@@ -82,16 +85,20 @@ export class ProfileComponent implements OnInit {
             image.getImageAsync((img, err) => {
                 if (err) {
                     console.log(err);
+                    this.alertService.showError(localize('profile.cantPickImage'));
                 } else {
+                    this.waitingForUserPic = true;
                     let byteArrayOutputStream = new java.io.ByteArrayOutputStream();
-                    img.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    img.compress(android.graphics.Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
                     let byteArray = byteArrayOutputStream.toByteArray();
                     var base64 = btoa(new Uint8Array(byteArray).reduce((data, byte) => data + String.fromCharCode(byte), ''));
 
                     this.userService.updateProfilePicture(base64).subscribe(res => {
                         console.log("MIRACLE");
+                        this.waitingForUserPic = false;
                         this.currentUser.profile = res.imageUrl;
                     }, err => {
+                        this.waitingForUserPic = false;
                         console.log("ERROR");
                         this.handleError(err);
                     })
@@ -107,8 +114,8 @@ export class ProfileComponent implements OnInit {
     getFavorites() {
         this.waitingForFavorites = true;
         return this.userService.getFavoriteSprings().subscribe(springs => {
-            this.waitingForFavorites = false;            
-            this.favoriteSprings = springs;
+            this.waitingForFavorites = false;
+            this.currentUser.favorites = springs;
             this.expandToFavorites();
         })
     }
@@ -124,7 +131,7 @@ export class ProfileComponent implements OnInit {
             this.favoritesStack.nativeElement.animate({ height: 0, duration: this.animationTime, curve: 'easeOut' })
         } else {
 
-            if (!this.favoriteSprings) {
+            if (!this.currentUser.favorites) {
                 this.favoritesStack.nativeElement.animate({ height: this.favoritesGifHeight, duration: this.animationTime, curve: 'easeOut' })
                 this.getFavorites();
             } else {
@@ -136,19 +143,20 @@ export class ProfileComponent implements OnInit {
     }
 
     expandToFavorites() {
-        this.favoritesStack.nativeElement.animate({ height: this.springHeight*((this.favoriteSprings.length+1)/2), duration: this.animationTime, curve: 'easeOut' })
+        this.favoritesStack.nativeElement.animate({ height: this.springHeight * Math.floor(((this.currentUser.favorites.length + 1) / 2)), duration: this.animationTime, curve: 'easeOut' })
     }
 
-    getHistory(){
+    getHistory() {
         this.waitingForHistory = true;
-        return this.userService.getHistorySpriings().subscribe(springs => { // change to history!
-            this.waitingForHistory = false;            
-            this.historySprings = springs;
+        return this.userService.getHistorySprings().subscribe(springs => { // change to history!
+            this.waitingForHistory = false;
+            this.currentUser.history = springs;
+
             this.expandToHistory();
         })
     }
 
-    showHistory(){
+    showHistory() {
         this.showHistoryImage.nativeElement.animate({ scale: { x: 1, y: 0 }, duration: this.animationTime / 2 }).then(() => {
             this.showHistoryImage.nativeElement.rotate = this.showHistory ? 180 : 0;
         }).then(() => {
@@ -158,8 +166,7 @@ export class ProfileComponent implements OnInit {
         if (this.showingHistory) {
             this.historyStack.nativeElement.animate({ height: 0, duration: this.animationTime, curve: 'easeOut' })
         } else {
-
-            if (!this.historySprings) {
+            if (!this.currentUser.history) {
                 this.historyStack.nativeElement.animate({ height: this.favoritesGifHeight, duration: this.animationTime, curve: 'easeOut' })
                 this.getHistory();
             } else {
@@ -170,8 +177,8 @@ export class ProfileComponent implements OnInit {
         this.showingHistory = !this.showingHistory;
     }
 
-    expandToHistory(){
-        this.historyStack.nativeElement.animate({ height: this.springHeight*((this.historySprings.length+1)/2), duration: this.animationTime, curve: 'easeOut' })
+    expandToHistory() {
+        this.historyStack.nativeElement.animate({ height: this.springHeight * Math.floor(((this.currentUser.history.length + 1) / 2)), duration: this.animationTime, curve: 'easeOut' })
     }
 
     ontTextFieldLoaded(event) {
@@ -195,6 +202,11 @@ export class ProfileComponent implements OnInit {
     submitUsername() {
         this.currentUser.userName = this.usernameInput.text;
         this.editingUsername = false;
+        this.userService.updateUserName(this.usernameInput.text).subscribe(res => {
+            console.log("user name changed successfuly");
+        }, err => {
+            this.handleError(err);
+        })
     }
 
     tappedAnywhere() {
@@ -210,9 +222,8 @@ export class ProfileComponent implements OnInit {
 
     }
 
-    navigateToSpring(spring) {        
-        this.springService.showSingleSpring = true;
-        this.springService.singleSpring = spring;
+    navigateToSpring(spring) {
+        this.springService.showSingleSpring(spring);
         this.goToMap.emit();
     }
 
@@ -226,7 +237,7 @@ export class ProfileComponent implements OnInit {
         this.modalService.showModal(ChangeLanguageModalComponent, options);
     }
 
-    changePassword(){
+    changePassword() {
         const options: ModalDialogOptions = {
             viewContainerRef: this.viewContainerRef,
             fullscreen: false

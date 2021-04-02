@@ -13,13 +13,14 @@ import { map } from 'rxjs/operators';
 })
 export class SpringsService {
   private springsSubject: Subject<FlatSpring[]> = new Subject<FlatSpring[]>();;
-  waitingForResponse: Subject<boolean> = new Subject();
+  // waitingForResponse: Subject<boolean> = new Subject();
+  singleSpringSubject: Subject<string> = new Subject();
   currentLocation = { latitude: 0, longitude: 0 }
   // hotelLocation = { latitude: 0, longitude: 0 };
   filterByHotel = false;
-  singleSpring;
+  // singleSpring;
   singleHotel;
-  showSingleSpring = false;
+  // showSingleSpring = false;
   geolocationWatching = false;
   geoWatchingEvent: Function;
   savedsprings: any[] = [];
@@ -87,6 +88,14 @@ export class SpringsService {
 
   addComment(text: string, springId: string){
     return this.httpService.addComment(text, springId);
+  }
+
+  updateSpring(text: string, springId: string){
+    return this.httpService.updateSpring(text, springId);
+  }
+
+  showSingleSpring(spring){
+    this.singleSpringSubject.next(spring);
   }
 
 
