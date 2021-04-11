@@ -60,17 +60,17 @@ export class SpringsFiltersComponent implements OnInit {
         this.router.navigate(["mainTabs/", 3]);
     }
 
-    handleErrors(error) {
-        console.log(error);
-        switch (error.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'));
-                break;
-            case 500:
-                this.alertService.showError(localize("messages.error.serverError"));
-            default:
-                // alert default message
-                break;
-        }
-    }
+    // handleErrors(error) {
+    //     console.log(error);
+    //     switch (error.status) {
+    //         case 0:
+    //             this.alertService.showError(localize('messages.error.connectionError'));
+    //             break;
+    //         case 500:
+    //             this.alertService.showError(localize("messages.error.serverError"));
+    //         default:
+    //             // alert default message
+    //             break;
+    //     }
+    // }
 }

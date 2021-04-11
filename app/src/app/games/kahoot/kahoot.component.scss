@@ -3,9 +3,14 @@
 .title{
     text-align: center;
     font-size: $headerFontSize;
-    text-wrap: true;
+    justify-content: space-between;
+    margin-right: 10;
+    margin-left: 10;
 }
 
-image{
-    height: 120;
+.quizLine{
+    height: 40;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5 10;
 }

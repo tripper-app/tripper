@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_labels_all_Z1UVUX5">"הכול"</string>
   <string name="_labels_email_Z24Kl9J">"כתובת אימייל"</string>
   <string name="_labels_cancel_1B7I0U">"ביטול"</string>
   <string name="_labels_OK_ZHOEvR">"אישור"</string>
   <string name="_labels_language_Z1LvLi1">"שפה מועדפת"</string>
   <string name="_labels_setting_HCebH">"הגדרות"</string>
   <string name="_labels_map_Z1UVRWy">"מפה"</string>
+  <string name="_games_timeToFinishBingo_58baB">"לקח לך %1$s להשלים את הסדרה"</string>
+  <string name="_games_wellDone_Z2hrYvy">"כל הכבוד!"</string>
+  <string name="_games_bingoFirstWinner_XdqSp">"הראשון שיסמן את כל הפריטים - מנצח"</string>
+  <string name="_games_bingoMarkItems_Z14Ccue">"סמנו את הפריטים שראיתם בדרך"</string>
+  <string name="_games_triviaRightAnswerIs_Z1TPAot">"התשובה הנכונה היא %1$s"</string>
+  <string name="_games_triviaRight_Ec3EB">"תשובה נכונה!"</string>
+  <string name="_games_triviaWrong_ExBMj">"הפעם טעית :-)"</string>
+  <string name="_games_score_Z1Dgh7z">"עד עכשיו צברת %1$s נקודות"</string>
+  <string name="_games_chooseQuiz_Z1eLoF4">"בחרו חידון"</string>
+  <string name="_games_chooseSubject_ZtKRKO">"בחרו נושא"</string>
   <string name="_games_landKing_1nlTda">"מלך הארץ"</string>
   <string name="_games_bingo_Z1EnEGc">"בינגו"</string>
   <string name="_games_kahoot_ZmXmgu">"קהוט"</string>
@@ -70,6 +81,7 @@
   <string name="_springView_preferredSeason_Z19NlFr">"עונה מועדפת"</string>
   <string name="_springView_walkingDistanceFromCar_wKeL1">"מרחק הליכה מהרכב"</string>
   <string name="_springView_depth_dvUcX">"עומק"</string>
+  <string name="_messages_error_unknownError_ZgpE6n">"טריפר נתקלה בבעיה לא ידועה :-( אנו מתנצלים"</string>
   <string name="_messages_error_unRegisteredUser_Z2bThFI">"רק משתמש רשום יכול לעשות את הפעולה הזו"</string>
   <string name="_messages_error_noLocationPermissions_2sJauf">"כדי שהאפליקציה תעבוד בצורה מלאה צריך לאפשר הרשאות מיקום"</string>
   <string name="_messages_error_serverError_1f9C5t">"משהו השתבש אצלנו בשרתים :-( הבעיה בבדיקה"</string>

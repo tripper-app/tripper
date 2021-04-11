@@ -1,5 +1,5 @@
 <StackLayout>
-  <scrollView width="100%" height="91%" *ngIf="!loading">
+  <scrollView width="100%" height="91%" *ngIf="!waitingForResponse">
     <StackLayout>
       <FlexboxLayout class="header">
         <label text="X" (tap)="backToList()"></label>
@@ -50,8 +50,8 @@
       </FlexboxLayout>
     </StackLayout>
   </scrollView>
-  <ns-waiting-gif *ngIf="loading"></ns-waiting-gif>
-  <FlexboxLayout class="navigation" *ngIf="!loading">
+  <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
+  <FlexboxLayout class="navigation" *ngIf="!waitingForResponse">
     <label text="{{ 'hotelView.openMap' | L }}" (tap)="openMap()"></label>
     <label text="{{ 'hotelView.reserve' | L }}" (tap)="openWebsite()"></label>
   </FlexboxLayout>

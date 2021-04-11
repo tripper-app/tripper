@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, ViewContainerRef } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
@@ -13,6 +13,8 @@ import * as SocialShare from "nativescript-social-share";
 import { UserService } from '~/app/common/services/userService';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { UpdateSpringModalComponent } from './update-spring/updateSpringModal.component';
+import { ErrorsService } from '~/app/common/services/errors-service';
+import { registerSoftKeyboardCallback } from 'nativescript-soft-keyboard';
 
 @Component({
     selector: 'ns-spring-view',
@@ -22,15 +24,16 @@ import { UpdateSpringModalComponent } from './update-spring/updateSpringModal.co
 export class SpringsViewComponent implements OnInit {
     commentHeight = 60;
     rightToLeft = true;
-    shouldReverse = true;
     mainColor = "rgb(35, 204, 153)";
     spring: FullSpring;
-    loading = true;
+    waitingForResponse = false;
     currentSpring: any = {}
     googleMapsURL = "https://maps.google.com/?daddr=";
     wazeURL = "waze://?ll=";
     springLocation;
     fullComments = false;
+    thereIsComment = false;
+    isKeyboardOpen = false;
     constructor(private page: Page,
         private router: Router,
         private route: ActivatedRoute,
@@ -39,22 +42,31 @@ export class SpringsViewComponent implements OnInit {
         private alertService: AlertService,
         private userService: UserService,
         private modalService: ModalDialogService,
-        private viewContainerRef: ViewContainerRef) {
+        private viewContainerRef: ViewContainerRef,
+        private errorService: ErrorsService,
+        private cd: ChangeDetectorRef,
+        private zone: NgZone) {
     }
 
     ngOnInit(): void {
+        registerSoftKeyboardCallback(h => {
+            this.zone.run(() => {
+                this.isKeyboardOpen = h>0;
+                this.cd.detectChanges();
+            })
+        })
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
-
-        // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
-            this.loading = false;
+        this.waitingForResponse = true;
+        this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
+            // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+            this.waitingForResponse = false;
             this.currentSpring = spring;
 
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
 
         }, err => {
-            console.log(err);
+            this.waitingForResponse = false;
             this.handleErrors(err);
         })
     }
@@ -133,16 +145,20 @@ export class SpringsViewComponent implements OnInit {
     }
 
     addComment(input) {
+        input.android.clearFocus();
         if (input.text) {
             this.springsService.addComment(input.text, this.currentSpring.ID).subscribe(res => {
                 input.text = "";
-                console.log(res);
                 res.date = { _seconds: new Date().getTime() / 1000 };
                 this.currentSpring.comments.push(res);
             }, err => {
                 this.handleErrors(err);
             })
         }
+    }
+
+    commentTextChanged(text) {
+        this.thereIsComment = text !== '';
     }
 
     getTextFromFields() {
@@ -162,17 +178,11 @@ export class SpringsViewComponent implements OnInit {
         return txt;
     }
 
+    tapComment(){
+        this.isKeyboardOpen = true;
+    }
+
     handleErrors(error) {
-        console.log(error);
-        switch (error.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'));
-                break;
-            case 500:
-                this.alertService.showError(localize("messages.error.serverError"));
-            default:
-                // alert default message
-                break;
-        }
+        this.errorService.handleErorr(error);
     }
 }

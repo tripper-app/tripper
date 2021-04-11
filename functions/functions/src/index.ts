@@ -121,10 +121,13 @@ export const getSpring = functionBuilder(async (req, res) => {
             data.preferredSeason = updateField(data.preferredSeason, currentLanguage);
             data.depth = updateField(data.depth, currentLanguage);
             data.isFavorite = false;
+            data.comments.forEach(async (comment: any) => {
+                comment.user_name = await (await db.collection(usersCollection).doc(comment.email).get()).get('userName')
+                comment.user_pic = await (await db.collection(usersCollection).doc(comment.email).get()).get('profile')
+            });
             if (email) {
                 const userRef = await db.collection(usersCollection).doc(email);
                 const favorites = (await userRef.get()).get("favoriteSprings");
-
 
                 await userRef.update({
                     historySprings: admin.firestore.FieldValue.arrayUnion(springId)
@@ -136,7 +139,6 @@ export const getSpring = functionBuilder(async (req, res) => {
                         historySprings: admin.firestore.FieldValue.arrayRemove(history[0])
                     });
                 }
-                functions.logger.debug("favorites: \n" + favorites)
                 if (favorites.includes(springId)) data.isFavorite = true;
             }
         }
@@ -199,7 +201,7 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
                             profile: data.picture.data.url
                         })
                     }
-                    res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url});
+                    res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url });
                 });
             }).end();
         } else {
@@ -667,6 +669,63 @@ export const updateUserName = functionBuilder(async (req, res) => {
         await user.ref.update({ "userName": req.body.newUserName })
 
         res.send();
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getKahoot = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const result: any = [];
+        const quizes = (await db.collection('kahoot').get()).docs;
+        quizes.forEach(quiz => {
+            result.push({ url: quiz.get('url'), name: quiz.get('name')[currentLanguage] })
+        })
+
+        res.send(result);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getTriviaSubjects = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const quizes = (await db.collection('trivia').get()).docs;
+        const result: any = [];
+        quizes.forEach(quiz => {
+            result.push({ name: quiz.get('name')[currentLanguage], id: quiz.id, size: Object.keys(quiz.data()).length - 1 });
+            // result.push({ image: data.image, name: data.name[currentLanguage], text: data.text[currentLanguage], answers: data.answers.map((a: any) => a[currentLanguage]), rightAnswer: data.rightAnswer })
+        })
+        res.send(result);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getTriviaQuestion = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const quiz = (await db.collection('trivia').doc(req.query.triviaId as string).get());
+        const data = quiz.get(req.query.questionNumber as string);
+
+        res.send({ image: data.image, text: data.text[currentLanguage], answers: data.answers.map((a: any) => a[currentLanguage]), rightAnswer: data.rightAnswer });
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getBingoItems = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const ref = await db.collection('bingo').get();
+        const items = [];
+        for (let index = 0; index < 4; index++) {
+            items.push(ref.docs.splice(Math.random() * ref.docs.length, 1)[0].get('name')[currentLanguage]);
+        }
+
+        res.send(items);
     } catch (error) {
         handleError(res, error);
     }

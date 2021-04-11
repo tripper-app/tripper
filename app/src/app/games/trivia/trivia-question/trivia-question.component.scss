@@ -1,0 +1,21 @@
+@import '../../../../app-common';
+
+.title{
+    text-align: center;
+    font-size: $headerFontSize;
+    justify-content: space-between;
+    margin-right: 10;
+    margin-left: 10;
+}
+
+.answer{
+    margin: 10;
+    font-size: $titleFontSize;
+}
+
+.questionImage{
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    stretch: fill;
+}

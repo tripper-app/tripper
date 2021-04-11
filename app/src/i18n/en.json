@@ -55,7 +55,8 @@
             "connectionError": "Request failed. please check your internet connection",
             "serverError": "something has failed in our servers :-( the problem is being checked",
             "noLocationPermissions": "In order for the application to work fully, location permissions must be enabled",
-            "unRegisteredUser": "You have to be a registered user to do this"
+            "unRegisteredUser": "You have to be a registered user to do this",
+            "unknownError": "Tripper had encounter an unknown error :-( We are sorry"
         }
     },
     "springView": {
@@ -128,7 +129,18 @@
         "trivia": "Trivia",
         "kahoot": "Kahoot",
         "bingo": "Bingo",
-        "landKing": "Land king"
+        "landKing": "Land king",
+        "chooseSubject": "Choose a subject",
+        "chooseQuiz": "Choose a quiz",
+        "score": "So far you have achieved %s points",
+        "triviaWrong": "This time you were wrong :-)",
+        "triviaRight": "Correct answer!",
+        "triviaRightAnswerIs": "The right answer is %s",
+        "bingoMarkItems": "Mark the items you saw along the way",
+        "bingoFirstWinner": "The first to mark all items - wins!",
+        "wellDone": "Well done!",
+        "timeToFinishBingo": "Took you %s to complete the series"
+
     },
     "labels": {
         "map": "Map",
@@ -136,6 +148,7 @@
         "language": "Preferred language",
         "OK": "OK",
         "cancel": "Cancel",
-        "email": "Email address"
+        "email": "Email address",
+        "all": "all"
     }
 }

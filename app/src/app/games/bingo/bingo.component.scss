@@ -1,5 +1,17 @@
 @import '../../../app-common';
 
+.title{
+    justify-content: space-between;
+}
+
+.text{
+    font-size: $titleFontSize;
+    margin: 10 10 -5;
+}
+
+.circle{
+    border-radius: 100%; 
+}
 
 .gif{
     height: 100%;

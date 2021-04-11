@@ -4,7 +4,6 @@ import { Page } from 'tns-core-modules/ui/page';
 import { Image } from 'tns-core-modules/ui/image';
 import { ImageSource } from "tns-core-modules/image-source";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import { SpringModalComponent } from './spring-modal/spring-modal.component';
 import { SpringsService } from '../common/services/springs-service';
 import { FlatSpring } from '../common/models/flatSpring';
 import { localize } from "nativescript-localize";

@@ -1,22 +1,17 @@
-<StackLayout>
-    <label class="header" style="text-align: center;" text="{{ 'games.title' | L }}"></label>
-    <StackLayout class="line"></StackLayout>
-    <GridLayout rows="*, *" columns="*, *" height="100%" margin="30">
-        <FlexboxLayout flexDirection="column" row="0" col="0">
-            <img src="res://icon" />
-            <Label class="title" text="{{ 'games.trivia' | L }}"></Label>
+<ScrollView height="100%">
+    <StackLayout>
+        <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+            <label text="X" (tap)="navigateToGames()"></label>
+            <label text="{{ 'games.chooseSubject' | L }}"></label>
         </FlexboxLayout>
-        <FlexboxLayout flexDirection="column" row="0" col="1">
-            <img src="res://icon" />
-            <Label class="title" text="{{ 'games.kahoot' | L }}"></Label>
-        </FlexboxLayout>
-        <FlexboxLayout flexDirection="column" row="1" col="0">
-            <img src="res://icon" />
-            <Label class="title" text="{{ 'games.landKing' | L }}"></Label>
-        </FlexboxLayout>
-        <FlexboxLayout flexDirection="column" row="1" col="1">
-            <img src="res://icon" />
-            <Label class="title" text="{{ 'games.bingo' | L }}"></Label>
-        </FlexboxLayout>
-    </GridLayout>
-</StackLayout>
+        <StackLayout class="line"></StackLayout>
+        <ns-waiting-gif class="gif" *ngIf="waitingForResponse"></ns-waiting-gif>
+        <StackLayout *ngFor="let subject of subjects">
+            <FlexboxLayout (tap)="goToQuestion(subject)" class="questionLine" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                <img src="res://icon"/>
+                <label [text]="subject.name"></label>
+            </FlexboxLayout>
+            <StackLayout class="line"></StackLayout>
+        </StackLayout>
+    </StackLayout>
+</ScrollView>

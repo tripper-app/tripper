@@ -1,0 +1,20 @@
+@import '../../../../app-common';
+
+.main{
+    background-color: $themeColor;
+}
+
+.title{
+    font-size: $headerFontSize;
+    margin: 10;
+    margin-top: 20;
+}
+
+.wellDone{
+    font-weight: bold;
+    font-size: $titleFontSize;
+}
+
+.result{
+    font-size: $subtitleFontSize;
+}

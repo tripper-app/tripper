@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_labels_all_Z1UVUX5">"all"</string>
   <string name="_labels_email_Z24Kl9J">"Email address"</string>
   <string name="_labels_cancel_1B7I0U">"Cancel"</string>
   <string name="_labels_OK_ZHOEvR">"OK"</string>
   <string name="_labels_language_Z1LvLi1">"Preferred language"</string>
   <string name="_labels_setting_HCebH">"Setting"</string>
   <string name="_labels_map_Z1UVRWy">"Map"</string>
+  <string name="_games_timeToFinishBingo_58baB">"Took you %1$s to complete the series"</string>
+  <string name="_games_wellDone_Z2hrYvy">"Well done!"</string>
+  <string name="_games_bingoFirstWinner_XdqSp">"The first to mark all items - wins!"</string>
+  <string name="_games_bingoMarkItems_Z14Ccue">"Mark the items you saw along the way"</string>
+  <string name="_games_triviaRightAnswerIs_Z1TPAot">"The right answer is %1$s"</string>
+  <string name="_games_triviaRight_Ec3EB">"Correct answer!"</string>
+  <string name="_games_triviaWrong_ExBMj">"This time you were wrong :-)"</string>
+  <string name="_games_score_Z1Dgh7z">"So far you have achieved %1$s points"</string>
+  <string name="_games_chooseQuiz_Z1eLoF4">"Choose a quiz"</string>
+  <string name="_games_chooseSubject_ZtKRKO">"Choose a subject"</string>
   <string name="_games_landKing_1nlTda">"Land king"</string>
   <string name="_games_bingo_Z1EnEGc">"Bingo"</string>
   <string name="_games_kahoot_ZmXmgu">"Kahoot"</string>
@@ -70,6 +81,7 @@
   <string name="_springView_preferredSeason_Z19NlFr">"Preferred season"</string>
   <string name="_springView_walkingDistanceFromCar_wKeL1">"Walking distance from car"</string>
   <string name="_springView_depth_dvUcX">"depth"</string>
+  <string name="_messages_error_unknownError_ZgpE6n">"Tripper had encounter an unknown error :-( We are sorry"</string>
   <string name="_messages_error_unRegisteredUser_Z2bThFI">"You have to be a registered user to do this"</string>
   <string name="_messages_error_noLocationPermissions_2sJauf">"In order for the application to work fully, location permissions must be enabled"</string>
   <string name="_messages_error_serverError_1f9C5t">"something has failed in our servers :-( the problem is being checked"</string>

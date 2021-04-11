@@ -12,6 +12,7 @@ import { AlertService } from '../common/services/alert-service';
 import { ChangePasswordModalComponent } from '../common/alerts/changePassword/change-password.component';
 import { Router } from '@angular/router';
 import { SpringsService } from '../common/services/springs-service';
+import { ErrorsService } from '../common/services/errors-service';
 
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
@@ -53,7 +54,7 @@ export class ProfileComponent implements OnInit {
         private viewContainerRef: ViewContainerRef,
         private alertService: AlertService,
         private springService: SpringsService,
-        private router: Router,) {
+        private errorService: ErrorsService) {
     }
 
     ngOnInit(): void {
@@ -97,6 +98,7 @@ export class ProfileComponent implements OnInit {
                         console.log("MIRACLE");
                         this.waitingForUserPic = false;
                         this.currentUser.profile = res.imageUrl;
+                        this.userService.setUserPicture(res.imageUrl);
                     }, err => {
                         this.waitingForUserPic = false;
                         console.log("ERROR");
@@ -251,12 +253,8 @@ export class ProfileComponent implements OnInit {
 
     handleError(err) {
         this.waitingForResponse = false;
-        console.log(err);
 
         switch (err.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'))
-                break;
             case 400:
                 this.alertService.showError(localize('login.requireDetails'));
                 break;
@@ -273,7 +271,7 @@ export class ProfileComponent implements OnInit {
                 this.alertService.showError(localize('login.emailAlreadyExist'))
                 break;
             default:
-                this.alertService.showError(localize('messages.error.serverError'));
+                this.errorService.handleErorr(err);
                 break;
         }
     }

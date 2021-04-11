@@ -9,7 +9,7 @@
 .filterLine{
     justify-content: space-between;
     align-items: center;
-    margin: 00 20;
+    margin: 0 20;
     font-size: 18;
     height: $headerHeight;
 }
@@ -20,8 +20,9 @@
     margin: 0 20;
 }
 
-.greyText{
-    font-size: 14;
+.grayText{
+    font-size: $subtitleFontSize;
+    text-wrap: false;
     color: $greyText;
 }
 

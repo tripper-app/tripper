@@ -55,7 +55,8 @@
             "connectionError": "בקשה נכשלה. אנא בדקו חיבור לאינטרנט",
             "serverError": "משהו השתבש אצלנו בשרתים :-( הבעיה בבדיקה",
             "noLocationPermissions": "כדי שהאפליקציה תעבוד בצורה מלאה צריך לאפשר הרשאות מיקום",
-            "unRegisteredUser": "רק משתמש רשום יכול לעשות את הפעולה הזו"
+            "unRegisteredUser": "רק משתמש רשום יכול לעשות את הפעולה הזו",
+            "unknownError": "טריפר נתקלה בבעיה לא ידועה :-( אנו מתנצלים"
         }
     },
     "springView": {
@@ -128,7 +129,17 @@
         "trivia": "טריוויה",
         "kahoot": "קהוט",
         "bingo": "בינגו",
-        "landKing": "מלך הארץ"
+        "landKing": "מלך הארץ",
+        "chooseSubject": "בחרו נושא",
+        "chooseQuiz": "בחרו חידון",
+        "score": "עד עכשיו צברת %s נקודות",
+        "triviaWrong": "הפעם טעית :-)",
+        "triviaRight": "תשובה נכונה!",
+        "triviaRightAnswerIs": "התשובה הנכונה היא %s",
+        "bingoMarkItems": "סמנו את הפריטים שראיתם בדרך",
+        "bingoFirstWinner": "הראשון שיסמן את כל הפריטים - מנצח",
+        "wellDone": "כל הכבוד!",
+        "timeToFinishBingo": "לקח לך %s להשלים את הסדרה"
     },
     "labels": {
         "map": "מפה",
@@ -136,6 +147,7 @@
         "language": "שפה מועדפת",
         "OK": "אישור",
         "cancel": "ביטול",
-        "email": "כתובת אימייל"
+        "email": "כתובת אימייל",
+        "all": "הכול"
     }
 }

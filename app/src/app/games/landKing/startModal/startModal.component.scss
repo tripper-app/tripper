@@ -1,0 +1,11 @@
+@import '../../../../app-common';
+
+.confirm{
+    background-color: $themeColor;
+    color: whitesmoke;
+    width: 100%;
+    height: $bottomHeight;
+    justify-content: center;
+    align-items: center;
+    font-size: 20;
+}

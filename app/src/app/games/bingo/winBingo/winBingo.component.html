@@ -1,0 +1,8 @@
+<GridLayout [height]="screenHeight" [width]="screenWidth" class="main" rows="*,2*,2*">
+    <label class="title" text="X" [ngStyle]="{'text-align': rigthToLeft? 'left' : 'right'}" (tap)="exit()"></label>
+    <img src="res://icon" row="1"/>
+    <StackLayout row="2" style="text-align: center;" color="white" horizontalAlignment="center">
+        <label class="wellDone" text="{{ 'games.wellDone' | L }}"></label>
+        <label class="result" text="{{ 'games.timeToFinishBingo' | L: (timeToWin | date:'HH:mm:ss':'UTC') }}"></label>
+    </StackLayout>
+</GridLayout>

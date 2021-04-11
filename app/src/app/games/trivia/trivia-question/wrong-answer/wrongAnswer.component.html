@@ -1,0 +1,7 @@
+<GridLayout [height]="screenHeight" [width]="screenWidth" backgroundColor="red" rows="*,2*,2*">
+    <img src="res://icon" row="1"/>
+    <StackLayout row="2" style="text-align: center;" color="white" horizontalAlignment="center">
+        <label text="{{ 'games.triviaWrong' | L }}"></label>
+        <label text="{{ 'games.triviaRightAnswerIs' | L: rightAnswer }}"></label>
+    </StackLayout>
+</GridLayout>

@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { HotelFilters } from '~/app/common/models/hotelFilters';
 import { HotelsService } from '~/app/common/services/hotels-service';
 import { FlatHotel } from '~/app/common/models/flatHotel';
+import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-hotels-list',
@@ -25,7 +26,8 @@ export class HotelsListComponent implements OnInit {
         private router: Router,
         private hotelsService: HotelsService,
         private languageService: LanguageService,
-        private alertService: AlertService) {
+        private alertService: AlertService,
+        private errorService: ErrorsService) {
         // this.checkFilters();
     }
 
@@ -43,9 +45,6 @@ export class HotelsListComponent implements OnInit {
 
 
     getHotels() {
-        // this.hotelsService.getHotels().subscribe(hotels => {
-        //     console.log(hotels)
-        // })
         const h1: FlatHotel = new FlatHotel();
         const h2: FlatHotel = new FlatHotel();
         const h3: FlatHotel = new FlatHotel();
@@ -66,7 +65,7 @@ export class HotelsListComponent implements OnInit {
         this.hotelsList.push(h1, h2, h3);
     }
 
-    navigateToHotel(hotel) {        
+    navigateToHotel(hotel) {
         this.router.navigate(["hotelView", hotel]);
     }
 
@@ -87,25 +86,7 @@ export class HotelsListComponent implements OnInit {
         label.android.setGravity(17)
     }
 
-    // checkFilters() {
-    //     if (this.hotelsService.cameFromFilters) {
-    //         this.hotelsService.cameFromFilters = false;
-    //     } else {
-    //         this.navigateToFilters();
-    //     }
+    // handleErrors(error) {
+    //    this.errorService.handleErorr(error);
     // }
-
-    handleErrors(error) {
-        console.log(error);
-        switch (error.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'));
-                break;
-            case 500:
-                this.alertService.showError(localize("messages.error.serverError"));
-            default:
-                // alert default message
-                break;
-        }
-    }
 }

@@ -2,15 +2,15 @@
     <label class="header" style="text-align: center;" text="{{ 'games.title' | L }}"></label>
     <StackLayout class="line"></StackLayout>
     <GridLayout rows="*, *" columns="*, *" height="100%" margin="30">
-        <FlexboxLayout flexDirection="column" row="0" col="0">
+        <FlexboxLayout flexDirection="column" row="0" col="0" (tap)="navigateToGame('trivia')">
             <img src="res://icon" />
             <Label class="title" text="{{ 'games.trivia' | L }}"></Label>
         </FlexboxLayout>
-        <FlexboxLayout flexDirection="column" row="0" col="1">
+        <FlexboxLayout flexDirection="column" row="0" col="1" (tap)="navigateToGame('kahoot')">
             <img src="res://icon" />
             <Label class="title" text="{{ 'games.kahoot' | L }}"></Label>
         </FlexboxLayout>
-        <FlexboxLayout flexDirection="column" row="1" col="0">
+        <FlexboxLayout flexDirection="column" row="1" col="0" (tap)="navigateToGame('landKing')">
             <img src="res://icon" />
             <Label class="title" text="{{ 'games.landKing' | L }}"></Label>
         </FlexboxLayout>

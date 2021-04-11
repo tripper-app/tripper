@@ -6,22 +6,22 @@
                 <label text="{{ 'hotelsFilters.title' | L }}"></label>
             </FlexboxLayout>
             <StackLayout class="line" marginBottom="20"></StackLayout>
-            <GridLayout class="areasGrid" [columns]="leftToRight? '3*,4*,*,*' : '*,*,4*,3*' ">
+            <GridLayout class="areasGrid" [columns]="leftToRight? '3*,4*,*,*' : '*,*,4*,3*' " (tap)="expandAreas()">
                 <StackLayout height="100%" verticalAlignment="center" [col]="leftToRight? 0 : 3">
                     <label textWrap="true" text="{{ 'hotelsFilters.area' | L }}" #area></label>
                 </StackLayout>
                 <FlexboxLayout [ngStyle]="{'justify-content': leftToRight? 'flex-start' : 'flex-end'}"
                     style="align-items: center;" *ngIf="!areasExpanded" [col]="leftToRight? 1 : 2">
-                    <label class="greyText" [text]="getAreasString()" #areasList></label>
+                    <label textWrap="false" class="grayText" [text]="getAreasString()" #areasList></label>
                 </FlexboxLayout>
-                <img src="res://icon" [col]="leftToRight? 3 : 0" (tap)="expandAreas()" #expandImage />
+                <img src="res://icon" [col]="leftToRight? 3 : 0" #expandImage />
             </GridLayout>
             <StackLayout height="0" #aresStack>
                 <FlexboxLayout *ngFor="let area of areas; let i = index" [height]="areaLineHeight"
-                    style="justify-content: space-between; margin: 0 40; font-size: 15;">
-                    <CheckBox:CheckBox (checkedChange)="checkChange(area, checkBox.checked)"
+                    style="justify-content: space-between; margin: 0 40; font-size: 15;" (tap)="cbArea.toggle()">
+                    <CheckBox:CheckBox (checkedChange)="checkChange(area, cbArea.checked)"
                         [(ngModel)]="areasBoolean[i]" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
-                        #checkBox />
+                        #cbArea />
                     <label [text]="area"></label>
                 </FlexboxLayout>
             </StackLayout>
@@ -35,13 +35,13 @@
                 <Label style="text-align: right;" text="&#8362; {{finalMaxPrice}}-{{finalMinPrice}}" row="1"
                     col="1"></Label>
             </GridLayout>
-            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine">
-                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" />
+            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine" (tap)="cbPool.toggle()">
+                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbPool/>
                 <label text="{{ 'hotelsFilters.pool' | L }}"></label>
             </FlexboxLayout>
-            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine">
+            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine" (tap)="cbBreakfast.toggle()">
                 <CheckBox:CheckBox [(ngModel)]="breakfastCheck" [fillColor]="mainColor" [scaleX]="scale"
-                    [scaleY]="scale" />
+                    [scaleY]="scale" #cbBreakfast/>
                 <label text="{{ 'hotelsFilters.breakfast' | L }}"></label>
             </FlexboxLayout>
         </StackLayout>

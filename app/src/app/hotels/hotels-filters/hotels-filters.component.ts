@@ -7,6 +7,7 @@ import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
 import { HotelFilters } from '~/app/common/models/hotelFilters';
 import { HotelsService } from '~/app/common/services/hotels-service';
+import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-hotels-filters',
@@ -38,7 +39,8 @@ export class HotelsFiltersComponent implements OnInit {
         private router: Router,
         private hotelsService: HotelsService,
         private languageService: LanguageService,
-        private alertService: AlertService) {
+        private alertService: AlertService,
+        private errorService: ErrorsService) {
     }
 
     ngOnInit(): void {
@@ -90,22 +92,10 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     navigateToFiltersView() {
-        // this.router.navigate(["mainTabs/", 2]);
-        
         this.hideFilters.emit();
     }
 
-    handleErrors(error) {
-        console.log(error);
-        switch (error.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'));
-                break;
-            case 500:
-                this.alertService.showError(localize("messages.error.serverError"));
-            default:
-                // alert default message
-                break;
-        }
-    }
+    // handleErrors(error) {
+    //     this.errorService.handleErorr(error);
+    // }
 }

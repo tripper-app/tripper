@@ -1,17 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { alert } from "tns-core-modules/ui/dialogs";
 import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { localize } from "nativescript-localize";
 import { Router } from '@angular/router';
-import { OauthService } from '../../common/services/oauthService';
+import { OauthService } from '../../common/services/oauth-service';
 import { HttpService } from '~/app/common/services/http-service';
 import { LanguageService } from '~/app/common/services/language-service';
 import { setString, getString } from '@nativescript/core/application-settings';
 import { GoogleLogin } from 'nativescript-google-login';
-import * as application from "tns-core-modules/application";
 import { AlertService } from '../../common/services/alert-service';
+import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-signUp',
@@ -21,7 +21,6 @@ import { AlertService } from '../../common/services/alert-service';
 export class SignUpComponent implements OnInit {
     waitingForResponse = false;
     mainColor = "rgb(35, 204, 153)";
-    // isLoggingIn = true;
     rightToLeft = true;
     // localizeSignUp = localize('login.signUp');
     // localizeLogin = localize('login.login');
@@ -39,7 +38,8 @@ export class SignUpComponent implements OnInit {
         private oathService: OauthService,
         private httpService: HttpService,
         private languageService: LanguageService,
-        private alertService: AlertService) {
+        private alertService: AlertService,
+        private errorService: ErrorsService) {
     }
 
     ngOnInit() {
@@ -137,9 +137,6 @@ export class SignUpComponent implements OnInit {
         console.log(err);
 
         switch (err.status) {
-            case 0:
-                this.alert(localize('messages.error.connectionError'))
-                break;
             case 400:
                 this.alert(localize('login.requireDetails'));
                 break;
@@ -156,7 +153,7 @@ export class SignUpComponent implements OnInit {
                 this.alertService.showError(localize('login.wrongEmail'));
                 break
             default:
-                this.alert(localize('messages.error.serverError'));
+                this.errorService.handleErorr(err);
                 break;
         }
     }

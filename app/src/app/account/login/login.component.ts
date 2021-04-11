@@ -4,7 +4,7 @@ import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { localize } from "nativescript-localize";
 import { Router } from '@angular/router';
-import { OauthService } from '../../common/services/oauthService';
+import { OauthService } from '../../common/services/oauth-service';
 import { HttpService } from '~/app/common/services/http-service';
 import { LanguageService } from '~/app/common/services/language-service';
 import { setString, getString } from '@nativescript/core/application-settings';
@@ -14,6 +14,7 @@ import { AlertService } from '../../common/services/alert-service';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
 import { ChangeLanguageModalComponent } from '~/app/common/alerts/changeLanguage/change-language.component';
+import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-login',
@@ -41,7 +42,8 @@ export class LoginComponent implements OnInit {
         private languageService: LanguageService,
         private alertService: AlertService,
         private modalService: ModalDialogService,
-        private viewContainerRef: ViewContainerRef,) {
+        private viewContainerRef: ViewContainerRef,
+        private errorService: ErrorsService) {
     }
 
     ngOnInit() {
@@ -51,7 +53,7 @@ export class LoginComponent implements OnInit {
         this.rightToLeft = this.languageService.getRightToLeft();
         this.user = new User();
         this.user.email = "odedoded777@gmail.com";
-        this.user.password = "1234";
+        this.user.password = "12";
 
         this.oathService.configureOAuthProviders();
         // GoogleLogin.init({
@@ -83,7 +85,7 @@ export class LoginComponent implements OnInit {
         this.userService.login(this.user).subscribe(data => {
             this.waitingForResponse = false;
             this.saveTokenToCache(data.token);
-            this.saveUserPictureToCache(data.profile_picture);
+            this.userService.setUserPicture(data.profile_picture);
             this.userService.userLoggedIn = true;
             // this.router.navigate(['mainTabs', 3]);
             this.navigateToMap();
@@ -143,7 +145,7 @@ export class LoginComponent implements OnInit {
             this.waitingForResponse = false;
             console.log("token is: " + res.token);
             this.saveTokenToCache(res.token);
-            this.saveUserPictureToCache(res.profile_picture);
+            this.userService.setUserPicture(res.profile_picture);
             this.userService.userLoggedIn = true;
             this.navigateToMap();
         }, err => this.handleError(err))
@@ -151,10 +153,6 @@ export class LoginComponent implements OnInit {
 
     saveTokenToCache(token) {
         setString("user_token", token);
-    }
-
-    saveUserPictureToCache(pic){
-        setString("user_picture", pic);
     }
 
     changeLanguage(lan) {
@@ -171,9 +169,6 @@ export class LoginComponent implements OnInit {
         console.log(err);
 
         switch (err.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'))
-                break;
             case 400:
                 this.alertService.showError(localize('login.requireDetails'));
                 break;
@@ -190,7 +185,7 @@ export class LoginComponent implements OnInit {
                 this.alertService.showError(localize('login.emailAlreadyExist'))
                 break;
             default:
-                this.alertService.showError(localize('messages.error.serverError'));
+                this.errorService.handleErorr(err);
                 break;
         }
     }

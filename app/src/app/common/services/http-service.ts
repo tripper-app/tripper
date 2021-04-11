@@ -228,6 +228,55 @@ export class HttpService {
     return this.httpClient.get(`${this.ApiURL}updateSpring?text=${text}&spring=${springId}`, {headers: {access_token: token}});
   }
 
+  getKahoot(){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+
+    return this.httpClient.get(this.ApiURL + `getKahoot?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+  }
+
+  getTriviaSubjects(){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+
+    return this.httpClient.get(this.ApiURL + `getTriviaSubjects?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+  }
+
+  getTriviaQuestion(triviaId, questionNumber){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+
+    return this.httpClient.get(this.ApiURL + `getTriviaQuestion?lang=${this.getLanguage()}&triviaId=${triviaId}&questionNumber=${questionNumber}`, {headers: {access_token: token}});
+  }
+
+  getBingoItems(){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+
+    return this.httpClient.get(this.ApiURL + `getBingoItems`, {headers: {access_token: token}});
+  }
+
+
 
   getLanguage() {
     if (!this.language) {

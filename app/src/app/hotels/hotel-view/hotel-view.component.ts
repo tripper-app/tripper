@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HotelsService } from '~/app/common/services/hotels-service';
 import { FullHotel } from '~/app/common/models/fullHotel';
 import { SpringsService } from '~/app/common/services/springs-service';
+import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-hotel-view',
@@ -15,7 +16,7 @@ import { SpringsService } from '~/app/common/services/springs-service';
 })
 export class HotelViewComponent implements OnInit {
     rightToLeft = true;
-    loading = true;
+    waitingForResponse = false;
     currentHotel: FullHotel;
 
     constructor(private page: Page,
@@ -24,11 +25,11 @@ export class HotelViewComponent implements OnInit {
         private hotelsService: HotelsService,
         private languageService: LanguageService,
         private alertService: AlertService,
-        private springService: SpringsService) {
+        private springService: SpringsService,
+        private errorService: ErrorsService) {
     }
 
     ngOnInit(): void {
-        // console.log(this.route.snapshot.params.hotelId);
         this.rightToLeft = this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
         
@@ -40,12 +41,13 @@ export class HotelViewComponent implements OnInit {
     }
 
     getHotel(){
+        this.waitingForResponse = true;
         this.hotelsService.getHotel(this.route.snapshot.params.hotelId).subscribe((hotel: FullHotel) => {
-            this.loading = false;
+            this.waitingForResponse = false;
             this.currentHotel = hotel;
             
         }, err => {
-            this.loading = false;
+            this.waitingForResponse = false;
             this.handleErrors(err);
         })
     }
@@ -66,16 +68,6 @@ export class HotelViewComponent implements OnInit {
 
 
     handleErrors(error) {
-        console.log(error);
-        switch (error.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'));
-                break;
-            case 500:
-                this.alertService.showError(localize("messages.error.serverError"));
-            default:
-                // alert default message
-                break;
-        }
+        this.errorService.handleErorr(error);
     }
 }

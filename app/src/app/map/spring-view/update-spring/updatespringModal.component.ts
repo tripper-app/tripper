@@ -12,7 +12,7 @@ import { UserService } from '~/app/common/services/userService';
   styleUrls: ['./updatespringModal.component.scss']
 })
 export class UpdateSpringModalComponent implements OnInit {
-  content = 'aaa';
+  content = '';
   constructor(private params: ModalDialogParams,
     private router: Router,
     private alertService: AlertService,

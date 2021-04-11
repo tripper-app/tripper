@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.getBingoItems = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -114,6 +114,10 @@ exports.getSpring = functionBuilder(async (req, res) => {
             data.preferredSeason = updateField(data.preferredSeason, currentLanguage);
             data.depth = updateField(data.depth, currentLanguage);
             data.isFavorite = false;
+            data.comments.forEach(async (comment) => {
+                comment.user_name = await (await db.collection(usersCollection).doc(comment.email).get()).get('userName');
+                comment.user_pic = await (await db.collection(usersCollection).doc(comment.email).get()).get('profile');
+            });
             if (email) {
                 const userRef = await db.collection(usersCollection).doc(email);
                 const favorites = (await userRef.get()).get("favoriteSprings");
@@ -126,7 +130,6 @@ exports.getSpring = functionBuilder(async (req, res) => {
                         historySprings: admin.firestore.FieldValue.arrayRemove(history[0])
                     });
                 }
-                functions.logger.debug("favorites: \n" + favorites);
                 if (favorites.includes(springId))
                     data.isFavorite = true;
             }
@@ -653,6 +656,60 @@ exports.updateUserName = functionBuilder(async (req, res) => {
         const user = await db.collection(usersCollection).doc(email).get();
         await user.ref.update({ "userName": req.body.newUserName });
         res.send();
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.getKahoot = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const result = [];
+        const quizes = (await db.collection('kahoot').get()).docs;
+        quizes.forEach(quiz => {
+            result.push({ url: quiz.get('url'), name: quiz.get('name')[currentLanguage] });
+        });
+        res.send(result);
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.getTriviaSubjects = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const quizes = (await db.collection('trivia').get()).docs;
+        const result = [];
+        quizes.forEach(quiz => {
+            result.push({ name: quiz.get('name')[currentLanguage], id: quiz.id, size: Object.keys(quiz.data()).length - 1 });
+            // result.push({ image: data.image, name: data.name[currentLanguage], text: data.text[currentLanguage], answers: data.answers.map((a: any) => a[currentLanguage]), rightAnswer: data.rightAnswer })
+        });
+        res.send(result);
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.getTriviaQuestion = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const quiz = (await db.collection('trivia').doc(req.query.triviaId).get());
+        const data = quiz.get(req.query.questionNumber);
+        res.send({ image: data.image, text: data.text[currentLanguage], answers: data.answers.map((a) => a[currentLanguage]), rightAnswer: data.rightAnswer });
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.getBingoItems = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const ref = await db.collection('bingo').get();
+        const items = [];
+        for (let index = 0; index < 4; index++) {
+            items.push(ref.docs.splice(Math.random() * ref.docs.length, 1)[0].get('name')[currentLanguage]);
+        }
+        res.send(items);
     }
     catch (error) {
         handleError(res, error);

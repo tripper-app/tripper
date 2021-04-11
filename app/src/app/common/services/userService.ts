@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpService } from './http-service';
-import { getString } from '@nativescript/core/application-settings';
+import { getString, setString } from '@nativescript/core/application-settings';
 
 @Injectable({
     providedIn: 'root'
@@ -64,5 +64,9 @@ export class UserService {
 
     getUserPicture(){
         return getString('user_picture')? getString('user_picture') : "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
+    }
+
+    setUserPicture(pic){
+        setString('user_picture', pic);
     }
 }

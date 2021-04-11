@@ -20,7 +20,6 @@ import { MainTabsComponent } from "./main-tabs/main-tabs.component";
 import { MapComponent } from "./map/map.component";
 import { registerElement } from "nativescript-angular/element-registry";
 // import { HomeComponent } from './home/home.component';
-import { SpringModalComponent } from './map/spring-modal/spring-modal.component';
 // import { CarouselComponent } from './home/carousel/carousel.component';
 import { SignUpComponent } from "./account/signUp/signUp.component";
 import { ResetPasswordComponent } from "./account/resetPassword/resetPassword.component";
@@ -36,14 +35,19 @@ import { ResetPasswordModalComponent } from "./account/resetPassword/resetPasswo
 import { ChangeLanguageModalComponent } from "./common/alerts/changeLanguage/change-language.component";
 import { ChangePasswordModalComponent } from "./common/alerts/changePassword/change-password.component";
 import { UpdateSpringModalComponent } from "./map/spring-view/update-spring/updateSpringModal.component";
+import { StartModalComponent } from "./games/landKing/startModal/startModal.component";
+import { WrongAnswerComponent } from "./games/trivia/trivia-question/wrong-answer/wrongAnswer.component";
+import { RightAnswerComponent } from "./games/trivia/trivia-question/right-answer/rightAnswer.component";
 import { GamesComponent } from "./games/games.component";
 import { BingoComponent } from "./games/bingo/bingo.component";
 import { KahootComponent } from "./games/kahoot/kahoot.component";
 import { LandKingComponent } from "./games/landKing/landKing.component";
 import { TriviaComponent } from "./games/trivia/trivia.component";
+import { TriviaQuestionComponent } from "./games/trivia/trivia-question/trivia-question.component";
+import { ScoreComponent } from "./games/score/score.component";
+import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
 
 registerElement('Carousel', () => Carousel);
-import { from } from "rxjs";
 registerElement('CarouselItem', () => CarouselItem);
 // registerElement("Carousel", () => require("nativescript-carousel").Carousel);
 // registerElement("CarouselItem", () => require("nativescript-carousel").CarouselItem);
@@ -73,16 +77,15 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         // NativeScriptFacebookModule
     ],
     entryComponents: [
-        SpringModalComponent,
         ResetPasswordModalComponent,
         ChangeLanguageModalComponent,
         ChangePasswordModalComponent,
-        UpdateSpringModalComponent
+        UpdateSpringModalComponent,
+        StartModalComponent
     ],
     declarations: [
         AppComponent,
         MapComponent,
-        SpringModalComponent,
         // HomeComponent,
         // CarouselComponent,
         SignUpComponent,
@@ -100,11 +103,17 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         ChangeLanguageModalComponent,
         ChangePasswordModalComponent,
         UpdateSpringModalComponent,
+        StartModalComponent,
+        WrongAnswerComponent,
+        RightAnswerComponent,
         GamesComponent,
         BingoComponent,
         KahootComponent,
         LandKingComponent,
-        TriviaComponent
+        TriviaComponent,
+        TriviaQuestionComponent,
+        ScoreComponent,
+        WinBingoComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

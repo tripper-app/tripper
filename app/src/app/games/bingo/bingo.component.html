@@ -1,3 +1,57 @@
-<StackLayout class="gif" verticalAlignment="center" horizontalAlignment="center">
-    <Lottie:LottieView src="jumpingDotsGif.json" speed="1" height="50%" loop="true" autoPlay="true" />
+<StackLayout>
+    <!-- <Lottie:LottieView src="jumpingDotsGif.json" speed="1" height="50%" loop="true" autoPlay="true" /> -->
+    <FlexboxLayout class="header title">
+        <label text="X" (tap)="exit()"></label>
+        <label text="בינגו"></label>
+    </FlexboxLayout>
+    <StackLayout class="line"></StackLayout>
+    <label class="text" text="{{ 'games.bingoMarkItems' | L }}"></label>
+    <label class="text" text="{{ 'games.bingoFirstWinner' | L }}"></label>
+
+    <StackLayout verticalAlignment="center" height="55%" margin="0 10 50">
+        <ns-waiting-gif marginTop="20" *ngIf="waitingForResponse"></ns-waiting-gif>
+        <AbsoluteLayout *ngIf="!waitingForResponse">
+            <FlexboxLayout *ngFor="let item of bingoItems; let i = index" flexDirection="column" [left]="screenWidth*i">
+                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
+                    [backgroundColor]="item.color">
+                    <label style="text-align: center;" horizontalAlignment="center" color="white" fontSize="20" [text]="item.name"></label>
+                </StackLayout>
+                <img [src]="item.found? 'res://icon' : 'res://waze_logo'" height="40" marginTop="10" (tap)="find(i)"/>
+            </FlexboxLayout>
+            <!-- <FlexboxLayout flexDirection="column" [left]="screenWidth*3">
+                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
+                    backgroundColor="green">
+                    <label horizontalAlignment="center" color="white" fontSize="20" text="333"></label>
+                </StackLayout>
+                <img src="res://icon" height="40" marginTop="10" (tap)="find(0)"/>
+            </FlexboxLayout>
+            <FlexboxLayout flexDirection="column" [left]="screenWidth*2">
+                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
+                    backgroundColor="yellow">
+                    <label horizontalAlignment="center" color="white" fontSize="20" text="333"></label>
+                </StackLayout>
+                <img src="res://icon" height="40" marginTop="10" (tap)="find(1)"/>
+            </FlexboxLayout>
+            <FlexboxLayout flexDirection="column" [left]="screenWidth">
+                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
+                    backgroundColor="blue">
+                    <label horizontalAlignment="center" color="white" fontSize="20" text="222"></label>
+                </StackLayout>
+                <img src="res://icon" height="40" marginTop="10" (tap)="find(2)"/>
+            </FlexboxLayout>
+            <FlexboxLayout flexDirection="column">
+                <StackLayout verticalAlignment="center" [height]="circleSize" [width]="circleSize" class="circle"
+                    backgroundColor="red">
+                    <label horizontalAlignment="center" color="white" fontSize="20" text="111"></label>
+                </StackLayout>
+                <img src="res://icon" height="40" marginTop="10" (tap)="find(3)"/>
+            </FlexboxLayout> -->
+        </AbsoluteLayout>
+    </StackLayout>
+    <FlexboxLayout marginBottom="20" flexDirection="column">
+        <FlexboxLayout style="align-items: center; justify-content: center;">
+            <img src="res://icon" />
+            <label text="{{ timer | date:'HH:mm:ss':'UTC'}}"></label>
+        </FlexboxLayout>
+    </FlexboxLayout>
 </StackLayout>

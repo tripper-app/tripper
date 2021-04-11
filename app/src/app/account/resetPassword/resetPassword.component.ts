@@ -7,6 +7,7 @@ import { localize } from "nativescript-localize";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from '~/app/common/services/language-service';
 import { AlertService } from '~/app/common/services/alert-service';
+import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-resetPassword',
@@ -26,7 +27,8 @@ export class ResetPasswordComponent implements OnInit {
                 private router: Router,
                 private languageService: LanguageService,
                 private route: ActivatedRoute,
-                private alertService: AlertService) {
+                private alertService: AlertService,
+                private errorService: ErrorsService) {
     }
 
     ngOnInit() {
@@ -69,9 +71,6 @@ export class ResetPasswordComponent implements OnInit {
         console.log(err);
 
         switch (err.status) {
-            case 0:
-                this.alertService.showError(localize('messages.error.connectionError'))
-                break;
             case 400:
                 this.alertService.showError(localize('login.requireDetails'));
                 break;
@@ -79,7 +78,7 @@ export class ResetPasswordComponent implements OnInit {
                 this.alertService.showError(localize('login.wrongDetails'));
                 break;
             default:
-                this.alertService.showError(localize('messages.error.serverError'));
+                this.errorService.handleErorr(err);
                 break;
         }
     }

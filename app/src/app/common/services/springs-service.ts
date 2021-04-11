@@ -13,7 +13,6 @@ import { map } from 'rxjs/operators';
 })
 export class SpringsService {
   private springsSubject: Subject<FlatSpring[]> = new Subject<FlatSpring[]>();;
-  // waitingForResponse: Subject<boolean> = new Subject();
   singleSpringSubject: Subject<string> = new Subject();
   currentLocation = { latitude: 0, longitude: 0 }
   // hotelLocation = { latitude: 0, longitude: 0 };

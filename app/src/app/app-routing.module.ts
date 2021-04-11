@@ -15,8 +15,14 @@ import { getString } from '@nativescript/core/application-settings';
 
 import { SpringsService } from './common/services/springs-service';
 import { BingoComponent } from "./games/bingo/bingo.component";
+import { KahootComponent } from "./games/kahoot/kahoot.component";
+import { TriviaComponent } from "./games/trivia/trivia.component";
+import { TriviaQuestionComponent } from "./games/trivia/trivia-question/trivia-question.component";
+import { ScoreComponent } from "./games/score/score.component";
+import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
+import { LandKingComponent } from "./games/landKing/landKing.component";
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '0' : '0');
+const firstPage = 'mainTabs/' +  (loggedUser? '1' : '1');
 
 const routes: Routes = [
     { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
@@ -33,7 +39,13 @@ const routes: Routes = [
     { path: "hotelView", component: HotelViewComponent },
     { path: "hotelView/:hotelId", component: HotelViewComponent },
     { path: "login", component: LoginComponent },
-    { path: "bingo", component: BingoComponent }
+    { path: "bingo", component: BingoComponent },
+    { path: "kahoot", component: KahootComponent },
+    { path: "trivia", component: TriviaComponent },
+    { path: "triviaQuestion", component: TriviaQuestionComponent },
+    { path: "score", component: ScoreComponent },
+    { path: "winBingo/:winTime", component: WinBingoComponent },
+    { path: "landKing", component: LandKingComponent }
 
 ];
 

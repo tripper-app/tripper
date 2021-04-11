@@ -29,6 +29,7 @@
         tools:replace="android:supportsRtl">
 
 		<activity
+			android:windowSoftInputMode="stateHidden|adjustResize"
 			android:name="com.tns.NativeScriptActivity"
 			android:launchMode="singleTask"
 			android:label="@string/title_activity_kimera"
