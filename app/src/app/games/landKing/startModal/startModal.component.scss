@@ -1,5 +1,16 @@
 @import '../../../../app-common';
 
+.header{
+    height: $headerHeight;
+    font-size: $headerFontSize;
+    margin: 0 10;
+    font-weight: bold;
+  }
+
+.text{
+    font-size: $titleFontSize;
+}
+
 .confirm{
     background-color: $themeColor;
     color: whitesmoke;
@@ -7,5 +18,5 @@
     height: $bottomHeight;
     justify-content: center;
     align-items: center;
-    font-size: 20;
+    font-size: $titleFontSize;
 }

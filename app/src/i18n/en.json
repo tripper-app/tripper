@@ -139,7 +139,10 @@
         "bingoMarkItems": "Mark the items you saw along the way",
         "bingoFirstWinner": "The first to mark all items - wins!",
         "wellDone": "Well done!",
-        "timeToFinishBingo": "Took you %s to complete the series"
+        "timeToFinishBingo": "Took you %s to complete the series",
+        "gameRules": "Game rules",
+        "start": "Start!",
+        "landKingText": "Locate the localities in the country. The more accurate you are, the more points you will receive. 3 minutes per game at your disposal"
 
     },
     "labels": {

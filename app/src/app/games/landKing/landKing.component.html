@@ -1,1 +1,10 @@
-<label style="font-size: 40;" text="land king"></label>
+<StackLayout>
+    <FlexboxLayout class="header" style="justify-content: space-between;" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-revrse'}">
+        <label text="x"></label>
+        <label text="{{ 'games.landKing' | L }}"></label>
+    </FlexboxLayout>
+    <StackLayout>
+        
+    </StackLayout>
+    <Label text="{{ timer | date:'mm:ss':'UTC'}}"></Label>
+</StackLayout>

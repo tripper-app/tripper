@@ -4,13 +4,14 @@ exports.getBingoItems = exports.getTriviaQuestion = exports.getTriviaSubjects = 
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const geohash = require("ngeohash");
+// import * as geohash from "ngeohash";
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const https = require("https");
 const firebase = require("firebase/app");
 require("firebase/storage");
+const geofire = require("geofire-common");
 const tripperEmail = {
     user: "tripper.app.il@gmail.com",
     password: "tripperapp"
@@ -60,7 +61,7 @@ exports.getAllSprings = functionBuilder(async (req, res) => {
     try {
         const springsDocs = await setSpringsQuery(req.body.filters);
         const springs = [];
-        springsDocs.forEach(doc => {
+        springsDocs.forEach((doc) => {
             const newSpring = { location: doc.get("location"), id: doc.id };
             springs.push(newSpring);
         });
@@ -748,8 +749,10 @@ const setSpringsQuery = async (filters) => {
             springsQuery = (springsQuery ? springsQuery : springsRef).where('filterDepth', '==', true);
         }
         if (filters.distance) {
-            const range = getGeohashRange(filters.location.latitude, filters.location.longitude, filters.distance);
-            springsQuery = (springsQuery ? springsQuery : springsRef).where('geohash', '>=', range.lower).where('geohash', '<=', range.upper);
+            functions.logger.debug("distance filter: " + filters.distance);
+            return await calculateRadius(springsQuery ? springsQuery : springsRef, filters.distance * 1000, [filters.location.latitude, filters.location.longitude]);
+            // const range = getGeohashRange(filters.location.latitude, filters.location.longitude, filters.distance);
+            // springsQuery = (springsQuery ? springsQuery : springsRef).where('geohash', '>=', range.lower).where('geohash', '<=', range.upper);
         }
     }
     return (springsQuery ? springsQuery : springsRef).get();
@@ -773,18 +776,50 @@ const setHotelsQuery = async (filters, language) => {
     }
     return (hotelsQuery ? hotelsQuery : hotelsRef).get();
 };
-const getGeohashRange = (latitude, longitude, distance // miles
-) => {
-    const lat = 0.009009009009009; // degrees latitude per mile
-    const lon = 0.0106382978723404; // degrees longitude per mile
-    // const lon = 0.0089830310543384; // degrees longitude per mile
-    const lowerLat = latitude - lat * distance;
-    const lowerLon = longitude - lon * distance;
-    const upperLat = latitude + lat * distance;
-    const upperLon = longitude + lon * distance;
-    const lower = geohash.encode(lowerLat, lowerLon);
-    const upper = geohash.encode(upperLat, upperLon);
-    return { lower, upper };
+// const getGeohashRange = (
+//     latitude: number,
+//     longitude: number,
+//     distance: number // miles
+// ) => {
+//     const lat = 0.004009009009009; // degrees latitude per mile
+//     const lon = 0.0066382978723404; // degrees longitude per mile
+//     // const lon = 0.0089830310543384; // degrees longitude per mile
+//     const lowerLat = latitude - lat * distance;
+//     const lowerLon = longitude - lon * distance;
+//     const upperLat = latitude + lat * distance;
+//     const upperLon = longitude + lon * distance;
+//     const lower = geohash.encode(lowerLat, lowerLon);
+//     const upper = geohash.encode(upperLat, upperLon);
+//     return { lower, upper };
+// };
+const calculateRadius = async (query, radius, center) => {
+    const bounds = geofire.geohashQueryBounds(center, radius);
+    const promises = [];
+    for (const b of bounds) {
+        const q = query
+            .orderBy('geohash')
+            .startAt(b[0])
+            .endAt(b[1]);
+        promises.push(q.get());
+    }
+    const matchingDocs = [];
+    await Promise.all(promises).then((snapshots) => {
+        for (const snap of snapshots) {
+            for (const doc of snap.docs) {
+                const loc = doc.get('location');
+                const lat = loc.latitude;
+                const lng = loc.longitude;
+                // We have to filter out a few false positives due to GeoHash
+                // accuracy, but most will match
+                const distanceInKm = geofire.distanceBetween([lat, lng], center);
+                const distanceInM = distanceInKm * 1000;
+                if (distanceInM <= radius) {
+                    matchingDocs.push(doc);
+                }
+            }
+        }
+    });
+    return matchingDocs;
 };
 const updateField = (field, language) => {
     return field ? field[language] : undefined;

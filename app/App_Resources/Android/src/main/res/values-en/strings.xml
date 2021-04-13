@@ -7,6 +7,9 @@
   <string name="_labels_language_Z1LvLi1">"Preferred language"</string>
   <string name="_labels_setting_HCebH">"Setting"</string>
   <string name="_labels_map_Z1UVRWy">"Map"</string>
+  <string name="_games_landKingText_ZuBWCl">"Locate the localities in the country. The more accurate you are, the more points you will receive. 3 minutes per game at your disposal"</string>
+  <string name="_games_start_Z1De6Ct">"Start!"</string>
+  <string name="_games_gameRules_1HiQBh">"Game rules"</string>
   <string name="_games_timeToFinishBingo_58baB">"Took you %1$s to complete the series"</string>
   <string name="_games_wellDone_Z2hrYvy">"Well done!"</string>
   <string name="_games_bingoFirstWinner_XdqSp">"The first to mark all items - wins!"</string>

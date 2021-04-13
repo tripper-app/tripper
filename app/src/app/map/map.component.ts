@@ -86,6 +86,8 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
+      console.log("springs count: " + springs.length);
+      
       this.loading = false;
       springs.forEach(spring => {
         this.addMarker(spring);
@@ -223,6 +225,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   handleErrors(error) {
+    // error service
     this.loading = false;
     console.log(error);
     switch (error.status) {

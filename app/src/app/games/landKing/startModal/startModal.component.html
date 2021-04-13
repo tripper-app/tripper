@@ -1,12 +1,15 @@
-<FlexboxLayout flexDirection="column" height="300">
-    <StackLayout margin="30" height="60%">
-        <FlexboxLayout class="header" [ngStyle]="{flex-direction: expression}" style="justify-content: space-between;">
+<FlexboxLayout flexDirection="column" height="350">
+    <StackLayout margin="30" height="70%">
+        <FlexboxLayout class="header" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}"
+            style="justify-content: space-between;">
             <label text="X" (tap)="exit()"></label>
-            <label text="{{ 'login.resetPassword' | L }}"></label>
+            <label text="{{ 'games.gameRules' | L }}"></label>
         </FlexboxLayout>
-        <label text="{{ 'login.codeSent' | L }}"></label>
+        <label class="text" text="{{ 'games.landKingText' | L }}"></label>
     </StackLayout>
-    <FlexboxLayout class="confirm" (tap)="confirm()">
-        <label text="{{ 'labels.OK' | L }}"></label>
+    <FlexboxLayout style="flex-direction: column; height: 30%; justify-content: flex-end;" flexDirection="column">
+        <FlexboxLayout class="confirm" (tap)="confirm()">
+            <label text="{{ 'labels.OK' | L }}"></label>
+        </FlexboxLayout>
     </FlexboxLayout>
 </FlexboxLayout>

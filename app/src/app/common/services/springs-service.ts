@@ -37,6 +37,7 @@ export class SpringsService {
 
   getSprings(){
     this.filters.location = this.filterByHotel? this.singleHotel.location : this.currentLocation;
+    
     return this.httpService.getAllsprings(this.filters);
   }
 
