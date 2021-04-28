@@ -1,19 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import { Page } from 'tns-core-modules/ui/page';
-import { Image } from 'tns-core-modules/ui/image';
-import { ImageSource } from "tns-core-modules/image-source";
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
+import { ModalDialogService } from "nativescript-angular/modal-dialog";
 import { SpringsService } from '../common/services/springs-service';
 import { FlatSpring } from '../common/models/flatSpring';
 import { localize } from "nativescript-localize";
 import { LanguageService } from '../common/services/language-service';
-// import { DrawerService } from '../common/services/drawer-service';
 import * as application from "tns-core-modules/application";
-import { SearchBar } from 'tns-core-modules';
 import { AlertService } from '../common/services/alert-service';
 import { Router } from "@angular/router";
-import { android } from 'tns-core-modules/application';
+import { ErrorsService } from '../common/services/errors-service';
 
 @Component({
   selector: 'ns-map',
@@ -34,10 +30,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(private page: Page,
     private router: Router,
-    private viewContainerRef: ViewContainerRef,
     private springsService: SpringsService,
-    private languageService: LanguageService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private errorService: ErrorsService) {
   }
 
   ngOnInit(): void {
@@ -65,11 +60,7 @@ export class MapComponent implements OnInit, OnDestroy {
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
     }
-    // if (this.springsService.showSingleSpring) {
-    //   this.addSingleSpring();
-    // } else {  // add with subject
     this.getSprings();
-    //}
   }
 
   async getSprings() {
@@ -86,14 +77,11 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     this.springsService.getSprings().subscribe((springs: FlatSpring[]) => {
-      console.log("springs count: " + springs.length);
-      
       this.loading = false;
       springs.forEach(spring => {
         this.addMarker(spring);
       })
     }, err => {
-      this.loading = false;
       this.handleErrors(err);
     })
   }
@@ -136,7 +124,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  centerMap(lat: number, lon: number){
+  centerMap(lat: number, lon: number) {
     this.mainMap.latitude = lat;
     this.mainMap.longitude = lon;
   }
@@ -147,14 +135,6 @@ export class MapComponent implements OnInit, OnDestroy {
     } else if (marker.userData.hotelId) {
       this.router.navigate(["hotelView", marker.userData.hotelId])
     }
-    //   if (marker != this.userMarker) {
-    //     const options: ModalDialogOptions = {
-    //       viewContainerRef: this.viewContainerRef,
-    //       fullscreen: false,
-    //       context: marker.userData
-    //     };
-    //   this.modalService.showModal(SpringModalComponent, options);
-    // }
   }
 
   clickOnMap() {
@@ -178,16 +158,12 @@ export class MapComponent implements OnInit, OnDestroy {
   addSingleSpring(spring) {
     this.clearMarkers();
     this.addMarker(spring);
-    
     this.centerMap(spring.location._latitude, spring.location._longitude);
-    // this.addMarker(this.springsService.singleSpring);
-    //this.springsService.showSingleSpring = false;
   }
 
   async clearMarkers() {
     if (this.mainMap) {
       this.mainMap.removeAllMarkers();
-      //await this.addUserMarker()
     }
   }
 
@@ -199,7 +175,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.searchBar.dismissSoftInput();
     const oldText = this.searchBar.text;
     this.loading = true;
-    this.springsService.getSpringByName(this.searchBar.text).subscribe(res => {      
+    this.springsService.getSpringByName(this.searchBar.text).subscribe(res => {
       this.searchBar.text += " ";
       this.searchBar.text = oldText;
       if (res.id) {
@@ -208,7 +184,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.addMarker(res);
         this.mainMap.latitude = res.location._latitude;
         this.mainMap.longitude = res.location._longitude;
-      } else {        
+      } else {
         this.loading = false;
         this.alertService.showError(localize("messages.error.springNotFound"));
       }
@@ -225,19 +201,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   handleErrors(error) {
-    // error service
     this.loading = false;
     console.log(error);
-    switch (error.status) {
-      case 0:
-        this.alertService.showError(localize('messages.error.connectionError'));
-        break;
-      case 500:
-        this.alertService.showError(localize("messages.error.serverError"));
-      default:
-        // alert default message
-        break;
-    }
+    this.errorService.handleErorr(error);
   }
 
   private addMarker(spring: FlatSpring) {
@@ -251,10 +217,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private onAndroidActivityResume(args) { // delete
     if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
       this.mainMap.nativeView.onResume();
-      // this.drawerService.sideDrawer = false;
-      // this.drawerService.closeDrawer();
-      // this.springsSubscription.unsubscribe();
-      // this.waitForResponseSubscription.unsubscribe();
     }
   }
 
@@ -263,20 +225,4 @@ export class MapComponent implements OnInit, OnDestroy {
       application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
     }
   }
-
-  // async addUserMarker() {
-  //   if (this.userMarker) {
-  //     this.mainMap.removeMarker(this.userMarker);
-  //   }
-  //   const img = new Image();
-  //   img.height = 10;
-  //   img.width = 1;
-  //   const imgsrc = await ImageSource.fromFile("~/assets/shoe_icon.png");
-  //   img.imageSource = imgsrc;
-  //   this.userMarker = new Marker();
-  //   this.userMarker.position = Position.positionFromLatLng(this.poolsService.currentLocation.latitude, this.poolsService.currentLocation.longitude);
-  //   this.userMarker.color = "#9058FF";
-  //   this.userMarker.icon = img;
-  //   this.mainMap.addMarker(this.userMarker);
-  // }
 }

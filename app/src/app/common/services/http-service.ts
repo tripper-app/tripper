@@ -16,10 +16,8 @@ export class HttpService {
   ApiURL = "https://europe-west1-tripper-d0e21.cloudfunctions.net/";
   language;
 
-
   constructor(private httpClient: HttpClient, private languageService: LanguageService) {
   }
-
 
   getAllsprings(filters) {
     if (getConnectionType() == connectionType.none) {
@@ -252,28 +250,37 @@ export class HttpService {
     return this.httpClient.get(this.ApiURL + `getTriviaSubjects?lang=${this.getLanguage()}`, {headers: {access_token: token}});
   }
 
-  getTriviaQuestion(triviaId, questionNumber){
+  getTriviaQuestions(triviaIds){
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
     const token = this.getToken();
-    if (!token) {
-      return this.throwUnRegisteredUser();
-    }
 
-    return this.httpClient.get(this.ApiURL + `getTriviaQuestion?lang=${this.getLanguage()}&triviaId=${triviaId}&questionNumber=${questionNumber}`, {headers: {access_token: token}});
+    return this.httpClient.post(this.ApiURL + `getTriviaQuestions?lang=${this.getLanguage()}`, {triviaIds: triviaIds}, {headers: {access_token: token}});
   }
 
   getBingoItems(){
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
-    const token = this.getToken();
-    if (!token) {
-      return this.throwUnRegisteredUser();
-    }
+     const token = this.getToken();
+    // if (!token) {
+    //   return this.throwUnRegisteredUser();
+    // }
 
-    return this.httpClient.get(this.ApiURL + `getBingoItems`, {headers: {access_token: token}});
+    return this.httpClient.get(this.ApiURL + `getBingoItems?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+  }
+
+  getLocations(){
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+     const token = this.getToken();    
+     return this.httpClient.get(this.ApiURL + `getLocations?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+  }
+
+  getNotification(messageTime){
+    return this.httpClient.get(this.ApiURL + `getNotification?lang=${this.getLanguage()}&messageTime=${messageTime}`);
   }
 
 

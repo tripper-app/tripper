@@ -1,11 +1,5 @@
 @import '../../../app-common';
 
-.header{
-    justify-content: space-between;
-    font-size: 25;
-    margin: 20;
-
-}
 
 .descriptionLabel{
     font-size: 15;
@@ -20,11 +14,15 @@
 .filterIcon{
     margin: 5;
     width: 30%;
-    // align-self: flex-start;
 }
 
 .filterLabel{
     width: 70%;
+}
+
+.attractionsTitle{
+    margin: 10 10 0;
+    font-weight: bold;
 }
 
 .navigation{

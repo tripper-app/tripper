@@ -15,11 +15,8 @@ export class SpringsService {
   private springsSubject: Subject<FlatSpring[]> = new Subject<FlatSpring[]>();;
   singleSpringSubject: Subject<string> = new Subject();
   currentLocation = { latitude: 0, longitude: 0 }
-  // hotelLocation = { latitude: 0, longitude: 0 };
   filterByHotel = false;
-  // singleSpring;
   singleHotel;
-  // showSingleSpring = false;
   geolocationWatching = false;
   geoWatchingEvent: Function;
   savedsprings: any[] = [];

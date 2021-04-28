@@ -36,7 +36,6 @@ export class SpringsViewComponent implements OnInit {
     isKeyboardOpen = false;
     constructor(private page: Page,
         private router: Router,
-        private route: ActivatedRoute,
         private springsService: SpringsService,
         private languageService: LanguageService,
         private alertService: AlertService,
@@ -45,6 +44,7 @@ export class SpringsViewComponent implements OnInit {
         private viewContainerRef: ViewContainerRef,
         private errorService: ErrorsService,
         private cd: ChangeDetectorRef,
+        private route: ActivatedRoute,
         private zone: NgZone) {
     }
 
@@ -58,8 +58,8 @@ export class SpringsViewComponent implements OnInit {
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.waitingForResponse = true;
-        this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-            // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
+            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.waitingForResponse = false;
             this.currentSpring = spring;
 

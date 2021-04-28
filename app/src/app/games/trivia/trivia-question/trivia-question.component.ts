@@ -15,8 +15,9 @@ export class TriviaQuestionComponent {
     @ViewChild("rightAnswer", { static: false }) rightAnswer: ElementRef;
     rightToLeft = true;
     waitingForResponse = false;
+    showingAnswer = false;
     question = new TriviaQuestion();
-    name = "ארץ ישראל";
+    pendingQuestion: TriviaQuestion;
 
     constructor(private page: Page,
         private gameService: GamesService,
@@ -40,31 +41,46 @@ export class TriviaQuestionComponent {
     }
 
     animateAnswer(stack: ElementRef) {
+        this.showingAnswer = true;
         stack.nativeElement.animate({ opacity: 0.9, duration: 200 });
+        this.nextQuestion();
         setTimeout(() => {
             stack.nativeElement.animate({ opacity: 0, duration: 200 });
-            this.nextQuestion();
+            this.showingAnswer = false;
+            this.afetrAnswer();
         }, 1800);
     }
 
     nextQuestion() {
-        const questionGetter = this.gameService.getTriviaQuestion();
-        
+        const questionGetter = this.gameService.getTriviaQuestions();
+
         if (questionGetter !== undefined) {
             this.waitingForResponse = true;
-            questionGetter.subscribe((res: TriviaQuestion) => {
+            questionGetter.subscribe((res) => {
+                this.pendingQuestion = res;
                 this.waitingForResponse = false;
-                this.question = res;
+                this.afetrAnswer();
             }, err => {
                 this.waitingForResponse = false;
                 this.errorService.handleErorr(err);
             })
-        } else {            
-            this.exit();
+        } else {
+            this.pendingQuestion = null;
+            // this.exit();
+        }
+    }
+
+    afetrAnswer() {
+        if (!this.waitingForResponse && !this.showingAnswer) {
+            if (this.pendingQuestion) {
+                this.question = this.pendingQuestion;
+            } else {
+                this.exit();
+            }
         }
     }
 
     exit() {
-        this.router.navigate(['score']);        
+        this.router.navigate(['score']);
     }
 }

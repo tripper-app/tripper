@@ -24,6 +24,6 @@
         <StackLayout opacity="0" #rightAnswer>
             <ns-right-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-right-answer>
         </StackLayout>
-        <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
+        <ns-waiting-gif *ngIf="waitingForResponse && !showingAnswer"></ns-waiting-gif>
     </GridLayout>
 </ScrollView>

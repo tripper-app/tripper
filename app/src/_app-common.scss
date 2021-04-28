@@ -9,7 +9,7 @@ $themeColor: rgb(35, 204, 153);
 $greyText: rgb(168, 151, 151);
 $headerHeight: 55;
 $bottomHeight: 65;
-$headerFontSize: 25;
+$headerFontSize: 16;
 $titleFontSize: 20;
 $subtitleFontSize: 15;
 
@@ -19,8 +19,9 @@ Label{
 
 .header{
     height: $headerHeight;
-    font-size: $headerFontSize;
+    font-size: $titleFontSize;
     margin: 20 10 0;
+    font-weight: 700;
   }
 
 .line{

@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { alert } from "tns-core-modules/ui/dialogs";
-import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { localize } from "nativescript-localize";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +16,7 @@ import { ErrorsService } from '~/app/common/services/errors-service';
 export class ResetPasswordComponent implements OnInit {
     rightToLeft = true;
     waitingForResponse = false;
-    email = 'odedoded777@gmail.com';
+    email = '';
     code = '';
     password = '';
     confirmPassword = '';
@@ -26,7 +25,6 @@ export class ResetPasswordComponent implements OnInit {
                 private userService: UserService, 
                 private router: Router,
                 private languageService: LanguageService,
-                private route: ActivatedRoute,
                 private alertService: AlertService,
                 private errorService: ErrorsService) {
     }
@@ -34,7 +32,6 @@ export class ResetPasswordComponent implements OnInit {
     ngOnInit() {
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
-        // this.email = this.route.snapshot.params.email        
     }
 
     submit() {
@@ -81,13 +78,5 @@ export class ResetPasswordComponent implements OnInit {
                 this.errorService.handleErorr(err);
                 break;
         }
-    }
-
-    alert(message: string) {
-        return alert({
-            title: localize('app.name'),
-            okButtonText: localize('labels.OK'),
-            message: message
-        });
     }
 }

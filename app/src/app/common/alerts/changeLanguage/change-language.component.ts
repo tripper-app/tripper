@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 
 
@@ -9,13 +9,6 @@ import { ModalDialogParams } from "nativescript-angular/modal-dialog";
     styleUrls: ['./change-language.component.scss']
 })
 
-export class ChangeLanguageModalComponent implements OnInit {
+export class ChangeLanguageModalComponent {
     constructor(private params: ModalDialogParams){}
-
-
-    ngOnInit(): void {
-        // setTimeout(() => {
-        //     // this.exit();
-        // }, 3000);
-    }
 }

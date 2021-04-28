@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http-service';
-import { Observable, Subject, Subscriber } from 'rxjs';
-import { FlatHotel } from '../models/flatHotel';
+import { Observable, Subscriber } from 'rxjs';
 import { HotelFilters } from '../models/hotelFilters';
 import { FullHotel } from '../models/fullHotel';
 import { map } from 'rxjs/operators';
@@ -11,6 +10,7 @@ import { map } from 'rxjs/operators';
 })
 export class HotelsService {
   savedHotels: any[] = [];
+  filteredHotels = [];
   filters: HotelFilters;
   showList = false;
 
@@ -18,12 +18,19 @@ export class HotelsService {
     this.filters = new HotelFilters();
   }
 
-  setFilters(filters: HotelFilters){
+  setFilters(filters: HotelFilters) {
     this.filters = filters;
   }
 
-  getHotels(){
-    return this.httpService.getAllHotels(this.filters);
+  getHotels() {
+      const hotelsMap = map((data: any) => {
+        this.filteredHotels = data;
+        return data;
+    }, error => {
+        console.log(error);
+        throw error;
+    })
+      return hotelsMap(this.httpService.getAllHotels(this.filters));
   }
 
   getHotel(id: string) {

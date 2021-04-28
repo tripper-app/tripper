@@ -1,10 +1,19 @@
 <StackLayout>
-    <FlexboxLayout class="header" style="justify-content: space-between;" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-revrse'}">
-        <label text="x"></label>
+    <FlexboxLayout class="header" style="justify-content: space-between;"
+        [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-revrse'}">
+        <label text="x" (tap)="navigateToScroe()"></label>
         <label text="{{ 'games.landKing' | L }}"></label>
     </FlexboxLayout>
-    <StackLayout>
-        
-    </StackLayout>
-    <Label text="{{ timer | date:'mm:ss':'UTC'}}"></Label>
+    <GridLayout #container>
+        <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
+        <img src="res://map" height="100%" width="100%" stretch="fill" />
+        <ns-location-component *ngFor="let location of locations" [location]="location" [container]="container" (draggedEmitter)="userLocate($event)">
+        </ns-location-component>
+        <FlexboxLayout style="justify-content: center; align-items: flex-end;" marginBottom="20">
+            <FlexboxLayout height="60" style="justify-content: center; align-items: center;">
+                <img height="100%" src="res://icon" />
+                <Label style="font-size: 15; text-align: center;" text="{{ timer | date:'mm:ss':'UTC'}}"></Label>
+            </FlexboxLayout>
+        </FlexboxLayout>
+    </GridLayout>
 </StackLayout>

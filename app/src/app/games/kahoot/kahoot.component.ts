@@ -40,4 +40,8 @@ export class KahootComponent implements OnInit {
     navigateToGames(){
         this.router.navigate(['mainTabs', 1]);
     }
+
+    exit(){
+        this.router.navigate(['mainTabs', 1]);
+    }
 }

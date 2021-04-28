@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBingoItems = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -35,6 +35,8 @@ const region = "europe-west1";
 const usersCollection = "users";
 const springsCollection = 'springs';
 const hotelsCollection = 'hotels';
+const notificationsCollection = 'notifications';
+const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
 const historyLimit = 30;
@@ -57,6 +59,14 @@ const mailOptions = {
     text: ""
 };
 const functionBuilder = functions.region(region).runWith(runtimeOpts).https.onRequest;
+// const execCall = (fu: (req: functions.https.Request, resp: functions.Response<any>) => void | Promise<void>) => {
+//     try {
+//         functions.region(region).runWith(runtimeOpts).https.onRequest(fu)
+//     } catch (error) {
+//     }
+//}
+// const check = execCall(async (req, res) => {
+// })
 exports.getAllSprings = functionBuilder(async (req, res) => {
     try {
         const springsDocs = await setSpringsQuery(req.body.filters);
@@ -528,7 +538,9 @@ exports.getAllHotels = functionBuilder(async (req, res) => {
                 description: updateField(fields.description, currentLanguage),
                 name: updateField(fields.name, currentLanguage),
                 price: fields.price,
-                region: updateField(fields.region, currentLanguage)
+                region: updateField(fields.region, currentLanguage),
+                city: updateField(fields.city, currentLanguage),
+                images: fields.images
             };
             hotels.push(newHotel);
         });
@@ -702,6 +714,25 @@ exports.getTriviaQuestion = functionBuilder(async (req, res) => {
         handleError(res, error);
     }
 });
+exports.getTriviaQuestions = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const triviaIds = req.body.triviaIds;
+        const arr = [];
+        for (const id of triviaIds) {
+            const quiz = (await db.collection('trivia').doc(id).get());
+            const data = await quiz.data() || {};
+            for (let i = 1; i < Object.keys(data).length - 1; i++) {
+                const q = data["q" + i];
+                arr.push({ image: q.image, text: q.text[currentLanguage], rightAnswer: q.rightAnswer, answers: q.answers.map((a) => a[currentLanguage]) });
+            }
+        }
+        res.send(arr);
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
 exports.getBingoItems = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
@@ -711,6 +742,38 @@ exports.getBingoItems = functionBuilder(async (req, res) => {
             items.push(ref.docs.splice(Math.random() * ref.docs.length, 1)[0].get('name')[currentLanguage]);
         }
         res.send(items);
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.getLocations = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const ref = await db.collection('locations').get();
+        const items = [];
+        ref.docs.forEach(async (doc) => {
+            const data = doc.data();
+            data.name = data.name[currentLanguage];
+            items.push(data);
+        });
+        res.send(items);
+    }
+    catch (error) {
+        handleError(res, error);
+    }
+});
+exports.getNotification = functionBuilder(async (req, res) => {
+    var _a;
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const oldTime = req.query.messageTime;
+        const ref = await db.collection(notificationsCollection).doc(notificationsUpdates).get();
+        let result = undefined;
+        if ((ref === null || ref === void 0 ? void 0 : ref.updateTime) && ref.updateTime.seconds > oldTime) {
+            result = ref.get('text')[currentLanguage];
+        }
+        res.send({ time: (_a = ref.updateTime) === null || _a === void 0 ? void 0 : _a.seconds, text: result });
     }
     catch (error) {
         handleError(res, error);
@@ -758,11 +821,14 @@ const setSpringsQuery = async (filters) => {
     return (springsQuery ? springsQuery : springsRef).get();
 };
 const setHotelsQuery = async (filters, language) => {
-    const hotelsRef = await db.collection("hotels");
+    const hotelsRef = await db.collection(hotelsCollection);
     let hotelsQuery = undefined;
     if (filters) {
-        if (filters.price) {
-            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.price);
+        if (filters.maxPrice) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.maxPrice);
+        }
+        if (filters.minPrice) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '>=', filters.minPrice);
         }
         if (filters.pool) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('pool', '==', true);
@@ -770,7 +836,7 @@ const setHotelsQuery = async (filters, language) => {
         if (filters.breakfast) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('breakfast', '==', true);
         }
-        if (filters.regions) {
+        if (filters.regions.length) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('region.' + language, 'in', filters.regions);
         }
     }

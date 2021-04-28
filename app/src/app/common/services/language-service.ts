@@ -1,12 +1,7 @@
-import { device, isAndroid } from '@nativescript/core/platform';
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { overrideLocale } from "nativescript-localize/localize";
-import * as dialogs from "tns-core-modules/ui/dialogs";
-import { localize } from "nativescript-localize";
 import { getString } from '@nativescript/core/application-settings';
 import { exit } from 'nativescript-exit';
-import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
-import { ChangeLanguageModalComponent } from '../alerts/changeLanguage/change-language.component';
 
 
 @Injectable({
@@ -32,16 +27,9 @@ export class LanguageService {
 
     switchLanguage(lan) {
         overrideLocale(lan);
-
         setTimeout(() => {
-
             exit();
         }, 3000);
-        // dialogs.alert({
-        //     title: localize(`switchLanguage.switchLanguageTitle.${lan}`),
-        //     message: localize(`switchLanguage.switchLanguageMessage.${lan}`),
-        //     okButtonText: localize(`switchLanguage.closeApp.${lan}`)
-        // })
     }
 
     getLanguages() {

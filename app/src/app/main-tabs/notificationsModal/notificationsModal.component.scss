@@ -1,0 +1,22 @@
+@import '../../../app-common';
+
+// .header{
+//     height: $headerHeight;
+//     font-size: $headerFontSize;
+//     margin: 0 10;
+//     font-weight: bold;
+//   }
+
+.text{
+    font-size: $titleFontSize;
+}
+
+.confirm{
+    background-color: $themeColor;
+    color: whitesmoke;
+    width: 100%;
+    height: $bottomHeight;
+    justify-content: center;
+    align-items: center;
+    font-size: $titleFontSize;
+}

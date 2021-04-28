@@ -1,7 +1,7 @@
 <ScrollView height="100%">
     <StackLayout>
         <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-            <label text="X"></label>
+            <label text="X" (tap)="exit()"></label>
             <label text="{{ 'games.chooseQuiz' | L }}"></label>
         </FlexboxLayout>
         <StackLayout class="line"></StackLayout>

@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
-import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
 import { LanguageService } from '../../common/services/language-service';
-import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
 import { HotelFilters } from '~/app/common/models/hotelFilters';
 import { HotelsService } from '~/app/common/services/hotels-service';
-import { ErrorsService } from '~/app/common/services/errors-service';
 
 @Component({
     selector: 'ns-hotels-filters',
@@ -24,7 +21,6 @@ export class HotelsFiltersComponent implements OnInit {
     scale = "1.3";
     leftToRight = false;
     areas = localize('hotelsFilters.areasList').split(', ');
-    // areas = ["שרון", "מרכז", "שומרון", "גולן", "אילת", "גליל", "נגב", "שומרון", "בנימין", "טלמון", "ירושלים"]
     areasBoolean: boolean[] = [];
     selectedAreas = [];
     areaLineHeight = 30;
@@ -38,9 +34,7 @@ export class HotelsFiltersComponent implements OnInit {
     constructor(private page: Page,
         private router: Router,
         private hotelsService: HotelsService,
-        private languageService: LanguageService,
-        private alertService: AlertService,
-        private errorService: ErrorsService) {
+        private languageService: LanguageService) {
     }
 
     ngOnInit(): void {
@@ -58,7 +52,7 @@ export class HotelsFiltersComponent implements OnInit {
         filters.maxPrice = this.finalMaxPrice;
         filters.minPrice = this.finalMinPrice;
         filters.pool = this.poolCheck;
-        filters.region = this.selectedAreas;
+        filters.regions = this.selectedAreas;
         this.hotelsService.setFilters(filters);
         this.navigateToFiltersView();
     }
@@ -92,10 +86,7 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     navigateToFiltersView() {
+        this.hotelsService.filteredHotels = undefined;
         this.hideFilters.emit();
     }
-
-    // handleErrors(error) {
-    //     this.errorService.handleErorr(error);
-    // }
 }

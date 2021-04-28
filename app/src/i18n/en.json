@@ -48,7 +48,8 @@
     },
     "messages": {
         "info": {
-            "waitingForData": "Waiting for data... "
+            "waitingForData": "Waiting for data... ",
+            "pleaseUpdate": "You are using an old version of Tripper. Please go to the app store and update it"
         },
         "error": {
             "springNotFound": "We can't find a spring with this name",
@@ -142,7 +143,7 @@
         "timeToFinishBingo": "Took you %s to complete the series",
         "gameRules": "Game rules",
         "start": "Start!",
-        "landKingText": "Locate the localities in the country. The more accurate you are, the more points you will receive. 3 minutes per game at your disposal"
+        "landKingText": "Drag the settlements to locate them in the country. The more accurate you are, the more points you will receive. Three minutes at your disposal"
 
     },
     "labels": {
@@ -152,6 +153,8 @@
         "OK": "OK",
         "cancel": "Cancel",
         "email": "Email address",
-        "all": "all"
+        "all": "all",
+        "about": "About",
+        "notification": "Notification"
     }
 }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { LanguageService } from '../common/services/language-service';
 import { UserService } from '../common/services/userService';
-import { device, screen, isAndroid, isIOS } from "tns-core-modules/platform";
+import { screen } from "tns-core-modules/platform";
 import { User } from '../common/models/user';
 import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
 import { ChangeLanguageModalComponent } from '../common/alerts/changeLanguage/change-language.component';
@@ -10,7 +10,6 @@ import * as btoa from 'btoa';
 import localize from 'nativescript-localize';
 import { AlertService } from '../common/services/alert-service';
 import { ChangePasswordModalComponent } from '../common/alerts/changePassword/change-password.component';
-import { Router } from '@angular/router';
 import { SpringsService } from '../common/services/springs-service';
 import { ErrorsService } from '../common/services/errors-service';
 
@@ -28,14 +27,12 @@ export class ProfileComponent implements OnInit {
     @ViewChild('showHistoryImage', { static: false }) showHistoryImage: ElementRef;
     @ViewChild('historyStack', { static: false }) historyStack: ElementRef;
     @Output() goToMap: EventEmitter<any> = new EventEmitter();
+    @Output() goToAbout: EventEmitter<any> = new EventEmitter();
 
-    // @ViewChild('usernameInput', {static: false}) usernameInput: TextField;
     animationTime = 150;
     favoritesGifHeight = 320;
     usernameInput;
     currentUser = new User();
-    // favoriteSprings: [];
-    // historySprings: [];
     rightToLeft = true;
     widthHalf = screen.mainScreen.widthDIPs / 2;
     editingUsername = false;
@@ -150,7 +147,7 @@ export class ProfileComponent implements OnInit {
 
     getHistory() {
         this.waitingForHistory = true;
-        return this.userService.getHistorySprings().subscribe(springs => { // change to history!
+        return this.userService.getHistorySprings().subscribe(springs => {
             this.waitingForHistory = false;
             this.currentUser.history = springs;
 
@@ -220,8 +217,7 @@ export class ProfileComponent implements OnInit {
     }
 
     navigatetoAbout() {
-        console.log("in about");
-
+        this.goToAbout.emit();
     }
 
     navigateToSpring(spring) {

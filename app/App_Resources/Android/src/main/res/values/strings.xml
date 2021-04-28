@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_labels_notification_2toIAr">"הודעה"</string>
+  <string name="_labels_about_Z2530gQ">"אודות"</string>
   <string name="_labels_all_Z1UVUX5">"הכול"</string>
   <string name="_labels_email_Z24Kl9J">"כתובת אימייל"</string>
   <string name="_labels_cancel_1B7I0U">"ביטול"</string>
@@ -7,7 +9,7 @@
   <string name="_labels_language_Z1LvLi1">"שפה מועדפת"</string>
   <string name="_labels_setting_HCebH">"הגדרות"</string>
   <string name="_labels_map_Z1UVRWy">"מפה"</string>
-  <string name="_games_landKingText_ZuBWCl">"מקמו את היישובים בארץ. ככל שתדייקו יותר תקבלו יותר נקודות. לרשותכם 3 דקות למשחק"</string>
+  <string name="_games_landKingText_ZuBWCl">"גררו את הישובים כדי למקם אותם בארץ. ככל שתדייקו יותר תקבלו יותר נקודות. לרשותכם שלוש דקות למשחק"</string>
   <string name="_games_start_Z1De6Ct">"מתחילים!"</string>
   <string name="_games_gameRules_1HiQBh">"חוקי המשחק"</string>
   <string name="_games_timeToFinishBingo_58baB">"לקח לך %1$s להשלים את הסדרה"</string>
@@ -90,6 +92,7 @@
   <string name="_messages_error_serverError_1f9C5t">"משהו השתבש אצלנו בשרתים :-( הבעיה בבדיקה"</string>
   <string name="_messages_error_connectionError_ZBYE1U">"בקשה נכשלה. אנא בדקו חיבור לאינטרנט"</string>
   <string name="_messages_error_springNotFound_23yS3">"לא נמצא מעיין בשם הזה"</string>
+  <string name="_messages_info_pleaseUpdate_oEvYK">"אתם משתמשים בגרסה ישנה של טריפר. נא ללכת לחנות האפליקציות ולעדכן אותה"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"ממתין לנתונים... "</string>
   <string name="_hotelView_reserve_ZuNjQn">"הזמנה"</string>
   <string name="_hotelView_openMap_1LUcvG">"פתיחה במפה"</string>

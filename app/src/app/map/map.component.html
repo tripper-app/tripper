@@ -1,11 +1,9 @@
 <GridLayout columns="*,*" rows="*,*,5*" >
     <StackLayout *ngIf="loading" rowSpan="3" colSpan="2" class="gif" horizontalAlignment="center" verticalAlignment="center">
-        <!-- <Gif:Gif rowSpan="2" src="~/assets/droplet_gif.gif" /> -->
         <ns-waiting-gif></ns-waiting-gif>
-        <!-- <label class="waitingLabel" text="{{ 'messages.info.waitingForData' | L }}" ></label> -->
     </StackLayout>
 
-    <maps:mapView (coordinateTapped)="clickOnMap()" row="0" rowSpan="3" col="0" colSpan="2" [zoom]="defaultZoom" (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
+    <maps:mapView region="IL" (coordinateTapped)="clickOnMap()" row="0" rowSpan="3" col="0" colSpan="2" [zoom]="defaultZoom" (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
         (markerSelect)="clickOnMarker($event.marker)" [latitude]="31.7962994" [longitude]="35.2453993" #map>
     </maps:mapView>
     

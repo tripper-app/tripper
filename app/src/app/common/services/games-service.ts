@@ -6,15 +6,19 @@ import { Subscriber } from 'rxjs';
 import { KahootQuiz } from '../models/kahootQuiz';
 import { HttpService } from './http-service';
 import { TriviaSubject } from '../models/triviaSubject';
+import { Location } from '../models/location';
+import { TriviaQuestion } from '../models/triviaQuestion';
+import * as dist from 'geo-distance';
 
 @Injectable({
     providedIn: 'root'
 })
 export class GamesService {
-
+    triviaQuestions = undefined;
     kahootQuizes: KahootQuiz[];
     triviaSubjects: TriviaSubject[];
-    selectedSubjects: {remainedQuestions: number[], subject: TriviaSubject}[];
+    locations: Location[] = undefined;
+    selectedSubjects: TriviaSubject[];
     score = 0;
     subjectName = '';
 
@@ -24,14 +28,10 @@ export class GamesService {
     chooseSubjects(subjects: TriviaSubject[]) {
         this.score = 0;
         this.selectedSubjects = [];
-        subjects.forEach(subject => {
-            const remainedQuestions = [];
-            for (let index = 0; index < subject.size; index++) {
-                remainedQuestions.push(index);
-            }
+        this.selectedSubjects = subjects;
+        this.subjectName = subjects.length > 1 ? localize('labels.all') : subjects[0].name;
 
-            this.selectedSubjects.push({remainedQuestions: remainedQuestions, subject: subject})
-        });
+        this.triviaQuestions = undefined;
     }
 
     getKahootQuizes() {
@@ -74,21 +74,76 @@ export class GamesService {
         }
     }
 
-    getTriviaQuestion() {
-        if (!this.selectedSubjects.length) {
-            return undefined;
+    getTriviaQuestions() {
+        if (this.triviaQuestions) {
+            if (this.triviaQuestions.length) {
+                return new Observable<TriviaQuestion>((subscriber: Subscriber<TriviaQuestion>) => {
+                    subscriber.next(this.triviaQuestions.splice(Math.random() * (this.triviaQuestions.length - 1), 1)[0])
+                });
+            } else {
+                return undefined;
+            }
+        } else {
+            const questionsMap = map((data: TriviaQuestion[]) => {
+                const question = data.splice(Math.random() * (data.length - 1), 1)[0];
+                this.triviaQuestions = data;
+                return question;
+            })
+            return questionsMap(this.httpService.getTriviaQuestions(this.selectedSubjects.map(s => s.id)));
         }
-        const randomSubject = this.selectedSubjects[Math.floor(Math.random() * this.selectedSubjects.length)]
-        this.subjectName = randomSubject.subject.name;
-        const questionIndex = randomSubject.remainedQuestions.splice(Math.floor(Math.random() * randomSubject.remainedQuestions.length), 1)[0];
-        if (!randomSubject.remainedQuestions.length) {
-            this.selectedSubjects.splice(this.selectedSubjects.indexOf(randomSubject), 1);
-        }
-        
-        return this.httpService.getTriviaQuestion(randomSubject.subject.id, 'q' + questionIndex);
     }
 
-    getBingoItems(){
+    getBingoItems() {
         return this.httpService.getBingoItems();
+    }
+
+    getLocations() {
+        this.score = 0;
+        if (this.locations) {
+            return new Observable<Location[]>((subscriber: Subscriber<Location[]>) => {
+                subscriber.next(this.locations)
+            });
+        }
+        else {
+            const locationsMap = map((data: any) => {
+                this.locations = data;
+                return data;
+            }, error => {
+                console.log(error);
+                throw error;
+            })
+            return locationsMap(this.httpService.getLocations());
+        }
+    }
+
+    locate(location: Location, userLocate) {
+        this.score += 50;
+        const upperLeft = { lat: 33.12831197751661, lon: 34.258082831539355 };
+        const lowerRight = { lat: 29.669710018637986, lon: 35.793557239728504 };
+        const click = { lat: 0, lon: 0 };
+        click.lat = ((upperLeft.lat - lowerRight.lat) * userLocate.y) + lowerRight.lat;
+        click.lon = ((lowerRight.lon - upperLeft.lon) * userLocate.x) + upperLeft.lon;        
+        
+        const distance = dist.between(click, { lat: location.location._latitude, lon: location.location._longitude });        
+        this.calculateLocationScore((Number)(distance.human_readable().distance));
+    }
+
+    calculateLocationScore(distance){
+        if (distance < 15) {
+            this.score += 100;
+            alert("מושלם")
+        } else {
+            if (distance < 30) {
+                this.score+= 70;
+                alert("קרוב...");
+            } else {
+                if (distance < 45) {
+                    this.score += 40;
+                    alert("בערך... דרוש דיוק");
+                } else {
+                    alert("אפילו לא קרוב!");
+                }
+            }
+        }
     }
 }

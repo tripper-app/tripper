@@ -10,7 +10,7 @@ import { AlertService } from '~/app/common/services/alert-service';
   styleUrls: ['./resetPasswordModal.component.scss']
 })
 export class ResetPasswordModalComponent {
-  email = 'odedoded777@gmail.com';
+  email = '';
   constructor(private params: ModalDialogParams,
     private alertService: AlertService) {
   }
@@ -21,7 +21,6 @@ export class ResetPasswordModalComponent {
     } else {
       this.alertService.showError(localize('login.requireEmail'));
     }
-
   }
 
   exit(email = undefined) {

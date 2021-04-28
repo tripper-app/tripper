@@ -7,9 +7,8 @@ import { Router } from '@angular/router';
 import { OauthService } from '../../common/services/oauth-service';
 import { HttpService } from '~/app/common/services/http-service';
 import { LanguageService } from '~/app/common/services/language-service';
-import { setString, getString } from '@nativescript/core/application-settings';
+import { setString } from '@nativescript/core/application-settings';
 import { GoogleLogin } from 'nativescript-google-login';
-import * as application from "tns-core-modules/application";
 import { AlertService } from '../../common/services/alert-service';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
@@ -23,6 +22,7 @@ import { ErrorsService } from '~/app/common/services/errors-service';
 })
 export class LoginComponent implements OnInit {
     @Output() goToMap: EventEmitter<any> = new EventEmitter();
+    @Output() goToAbout: EventEmitter<any> = new EventEmitter();
     waitingForResponse = false;
     // isLoggingIn = true;
     rightToLeft = true;
@@ -52,8 +52,8 @@ export class LoginComponent implements OnInit {
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.user = new User();
-        this.user.email = "odedoded777@gmail.com";
-        this.user.password = "12";
+        this.user.email = "";
+        this.user.password = "";
 
         this.oathService.configureOAuthProviders();
         // GoogleLogin.init({
@@ -87,7 +87,6 @@ export class LoginComponent implements OnInit {
             this.saveTokenToCache(data.token);
             this.userService.setUserPicture(data.profile_picture);
             this.userService.userLoggedIn = true;
-            // this.router.navigate(['mainTabs', 3]);
             this.navigateToMap();
         }, err => this.handleError(err))
     }
@@ -114,6 +113,7 @@ export class LoginComponent implements OnInit {
             //this.handleError(err);
             console.log("error while logging to facebook");
             console.log(err);
+            this.handleError(err);
         })
     }
 
@@ -208,6 +208,10 @@ export class LoginComponent implements OnInit {
 
     navigateToMap() {
         this.goToMap.emit();
+    }
+
+    navigateToAbout(){
+        this.goToAbout.emit();
     }
 }
     // activity: application.android.foregroundActivity

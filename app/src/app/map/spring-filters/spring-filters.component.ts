@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
-import { localize } from "nativescript-localize";
 import { LanguageService } from '../../common/services/language-service';
-import * as application from "tns-core-modules/application";
 import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
 import { SpringFilters } from '~/app/common/models/springFilters';
-import {  device } from "tns-core-modules/platform";
 
 @Component({
     selector: 'ns-spring-filters',
@@ -28,12 +25,11 @@ export class SpringsFiltersComponent implements OnInit {
     constructor(private page: Page,
         private router: Router,
         private springsService: SpringsService,
-        private languageService: LanguageService,
-        private alertService: AlertService) {
+        private languageService: LanguageService) {
     }
 
     ngOnInit(): void {
-        this.leftToRight = !this.languageService.getRightToLeft();    
+        this.leftToRight = !this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
         this.campingCheck = this.springsService.filters.camping;
         this.childrenCheck = this.springsService.filters.children;
@@ -59,18 +55,4 @@ export class SpringsFiltersComponent implements OnInit {
     navigateToMap() {
         this.router.navigate(["mainTabs/", 3]);
     }
-
-    // handleErrors(error) {
-    //     console.log(error);
-    //     switch (error.status) {
-    //         case 0:
-    //             this.alertService.showError(localize('messages.error.connectionError'));
-    //             break;
-    //         case 500:
-    //             this.alertService.showError(localize("messages.error.serverError"));
-    //         default:
-    //             // alert default message
-    //             break;
-    //     }
-    // }
 }

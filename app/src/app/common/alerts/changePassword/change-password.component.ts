@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import localize from 'nativescript-localize';
 import { AlertService } from '../../services/alert-service';
+import { ErrorsService } from '../../services/errors-service';
 import { UserService } from '../../services/userService';
 
 @Component({
@@ -16,7 +17,8 @@ export class ChangePasswordModalComponent {
     confirmPassword = "";
     constructor(private params: ModalDialogParams,
                 private alertService: AlertService,
-                private userService: UserService){}
+                private userService: UserService,
+                private errorService: ErrorsService){}
 
     ok(){
         if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
@@ -41,7 +43,6 @@ export class ChangePasswordModalComponent {
 
       handleError(err) {
         console.log(err);
-
         switch (err.status) {
             case 0:
                 this.alertService.showError(localize('messages.error.connectionError'))
@@ -62,7 +63,7 @@ export class ChangePasswordModalComponent {
                 this.alertService.showError(localize('login.emailAlreadyExist'))
                 break;
             default:
-                this.alertService.showError(localize('messages.error.serverError'));
+                this.errorService.handleErorr(err);
                 break;
         }
     }

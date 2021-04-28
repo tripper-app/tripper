@@ -46,6 +46,9 @@ import { TriviaComponent } from "./games/trivia/trivia.component";
 import { TriviaQuestionComponent } from "./games/trivia/trivia-question/trivia-question.component";
 import { ScoreComponent } from "./games/score/score.component";
 import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
+import { LocationComponentComponent } from "./games/landKing/locationComponent/locationComponent.component";
+import { AboutComponent } from "./about/about.component";
+import { NotificationsModalComponent } from "./main-tabs/notificationsModal/notificationsModal.component";
 
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
@@ -81,7 +84,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         ChangeLanguageModalComponent,
         ChangePasswordModalComponent,
         UpdateSpringModalComponent,
-        StartModalComponent
+        StartModalComponent,
+        NotificationsModalComponent
     ],
     declarations: [
         AppComponent,
@@ -104,6 +108,7 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         ChangePasswordModalComponent,
         UpdateSpringModalComponent,
         StartModalComponent,
+        NotificationsModalComponent,
         WrongAnswerComponent,
         RightAnswerComponent,
         GamesComponent,
@@ -113,7 +118,9 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         TriviaComponent,
         TriviaQuestionComponent,
         ScoreComponent,
-        WinBingoComponent
+        WinBingoComponent,
+        LocationComponentComponent,
+        AboutComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

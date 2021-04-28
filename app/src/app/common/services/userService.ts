@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpService } from './http-service';
 import { getString, setString } from '@nativescript/core/application-settings';
 

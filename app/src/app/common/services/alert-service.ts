@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TNSFancyAlert, TNSFancyAlertButton } from "nativescript-fancyalert";
 import { SweetAlert } from 'nativescript-sweet-alert';
 import { ShowSuccess, ShowError, ShowText, ShowNormal } from 'nativescript-sweet-alert/classes';
 import localize from 'nativescript-localize';
@@ -21,10 +20,6 @@ export class AlertService {
         SweetAlert.showError(options).then(value => {
             // result: true, false, CLOSED    
         });
-
-        // TNSFancyAlert.showError(" ", txt, localize("label.OK") );
-        // TNSFancyAlert.showCustomImage("res://icon", "#B3714F", "check check")
-        // alert(txt);
     }
 
     showInfo(txt: string) {

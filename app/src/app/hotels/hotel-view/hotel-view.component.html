@@ -44,15 +44,15 @@
         </GridLayout>
       </StackLayout>
       <StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
-      <label text="{{ 'hotelView.attractionsInArea' | L }}"></label>
-      <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+      <label class="attractionsTitle" text="{{ 'hotelView.attractionsInArea' | L }}"></label>
+      <FlexboxLayout flexWrap="wrap" margin="10" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
           <label *ngFor="let attraction of currentHotel.attractions; let i = index" text="{{attraction}}{{i<currentHotel.attractions.length-1? (', ') : ('')}}"></label>
       </FlexboxLayout>
     </StackLayout>
   </scrollView>
   <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
   <FlexboxLayout class="navigation" *ngIf="!waitingForResponse">
-    <label text="{{ 'hotelView.openMap' | L }}" (tap)="openMap()"></label>
-    <label text="{{ 'hotelView.reserve' | L }}" (tap)="openWebsite()"></label>
+    <label text="{{ 'hotelView.openMap' | L }}" (tap)="openMap()" *ngIf="currentHotel.location"></label>
+    <label text="{{ 'hotelView.reserve' | L }}" (tap)="openWebsite()" *ngIf="currentHotel.websiteLink"></label>
   </FlexboxLayout>
 </StackLayout>

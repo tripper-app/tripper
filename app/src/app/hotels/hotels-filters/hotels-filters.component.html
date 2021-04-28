@@ -1,7 +1,7 @@
 <FlexboxLayout flexDirection="column" style="justify-content: space-between; height: 100%">
     <ScrollView height="87%">
         <StackLayout>
-            <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
+            <FlexboxLayout class="header" style="justify-content: space-between; align-items: center;" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
                 <label style="font-size: 30;" text="X" (tap)="navigateToFiltersView()"></label>
                 <label text="{{ 'hotelsFilters.title' | L }}"></label>
             </FlexboxLayout>

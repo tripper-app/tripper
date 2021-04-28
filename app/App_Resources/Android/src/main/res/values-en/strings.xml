@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_labels_notification_2toIAr">"Notification"</string>
+  <string name="_labels_about_Z2530gQ">"About"</string>
   <string name="_labels_all_Z1UVUX5">"all"</string>
   <string name="_labels_email_Z24Kl9J">"Email address"</string>
   <string name="_labels_cancel_1B7I0U">"Cancel"</string>
@@ -7,7 +9,7 @@
   <string name="_labels_language_Z1LvLi1">"Preferred language"</string>
   <string name="_labels_setting_HCebH">"Setting"</string>
   <string name="_labels_map_Z1UVRWy">"Map"</string>
-  <string name="_games_landKingText_ZuBWCl">"Locate the localities in the country. The more accurate you are, the more points you will receive. 3 minutes per game at your disposal"</string>
+  <string name="_games_landKingText_ZuBWCl">"Drag the settlements to locate them in the country. The more accurate you are, the more points you will receive. Three minutes at your disposal"</string>
   <string name="_games_start_Z1De6Ct">"Start!"</string>
   <string name="_games_gameRules_1HiQBh">"Game rules"</string>
   <string name="_games_timeToFinishBingo_58baB">"Took you %1$s to complete the series"</string>
@@ -90,6 +92,7 @@
   <string name="_messages_error_serverError_1f9C5t">"something has failed in our servers :-( the problem is being checked"</string>
   <string name="_messages_error_connectionError_ZBYE1U">"Request failed. please check your internet connection"</string>
   <string name="_messages_error_springNotFound_23yS3">"We can\'t find a spring with this name"</string>
+  <string name="_messages_info_pleaseUpdate_oEvYK">"You are using an old version of Tripper. Please go to the app store and update it"</string>
   <string name="_messages_info_waitingForData_ZB0xSw">"Waiting for data... "</string>
   <string name="_hotelView_reserve_ZuNjQn">"reserve"</string>
   <string name="_hotelView_openMap_1LUcvG">"Open on the map"</string>

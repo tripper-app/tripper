@@ -1,0 +1,17 @@
+<FlexboxLayout flexDirection="column" height="350">
+    <stackLayout margin="20" height="70%">
+        <FlexboxLayout class="header" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}"
+            style="justify-content: space-between;">
+            <label text="X" (tap)="exit()"></label>
+            <label text="{{ 'labels.notification' | L }}"></label>
+        </FlexboxLayout>
+        <ScrollView height="80%">
+            <label class="text" text="{{ text }}"></label>
+        </ScrollView>
+    </stackLayout>
+    <FlexboxLayout style="flex-direction: column; height: 30%; justify-content: flex-end;" flexDirection="column">
+        <FlexboxLayout class="confirm" (tap)="confirm()">
+            <label text="{{ 'labels.OK' | L }}"></label>
+        </FlexboxLayout>
+    </FlexboxLayout>
+</FlexboxLayout>

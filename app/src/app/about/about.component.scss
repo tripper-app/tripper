@@ -1,0 +1,13 @@
+@import '../../app-common';
+
+.appName{
+    text-align: center;
+    color: $themeColor;
+    font-size: 50;
+    font-weight: 500;
+}
+
+.text{
+    margin: 10;
+    font-size: $subtitleFontSize;
+}

@@ -34,7 +34,9 @@ const db = admin.firestore();
 const region = "europe-west1";
 const usersCollection = "users";
 const springsCollection = 'springs';
-const hotelsCollection = 'hotels'
+const hotelsCollection = 'hotels';
+const notificationsCollection = 'notifications';
+const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
 const historyLimit = 30;
@@ -60,8 +62,17 @@ const mailOptions = {
 };
 
 const functionBuilder = functions.region(region).runWith(runtimeOpts).https.onRequest;
+// const execCall = (fu: (req: functions.https.Request, resp: functions.Response<any>) => void | Promise<void>) => {
+//     try {
+//         functions.region(region).runWith(runtimeOpts).https.onRequest(fu)
+//     } catch (error) {
 
+//     }
+//}
 
+// const check = execCall(async (req, res) => {
+
+// })
 
 export const getAllSprings = functionBuilder(async (req, res) => {
     try {
@@ -538,7 +549,9 @@ export const getAllHotels = functionBuilder(async (req, res) => {
                 description: updateField(fields.description, currentLanguage),
                 name: updateField(fields.name, currentLanguage),
                 price: fields.price,
-                region: updateField(fields.region, currentLanguage)
+                region: updateField(fields.region, currentLanguage),
+                city: updateField(fields.city, currentLanguage),
+                images: fields.images
             };
             hotels.push(newHotel);
         })
@@ -718,6 +731,25 @@ export const getTriviaQuestion = functionBuilder(async (req, res) => {
     }
 })
 
+export const getTriviaQuestions = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const triviaIds = req.body.triviaIds as string[];
+        const arr: any = [];
+        for (const id of triviaIds) {
+            const quiz = (await db.collection('trivia').doc(id).get());
+            const data = await quiz.data() || {};
+            for (let i = 1; i < Object.keys(data).length - 1; i++) {
+                const q = data["q" + i];
+                arr.push({ image: q.image, text: q.text[currentLanguage], rightAnswer: q.rightAnswer, answers: q.answers.map((a: any) => a[currentLanguage]) });
+            }
+        }
+        res.send(arr);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
 export const getBingoItems = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
@@ -728,6 +760,39 @@ export const getBingoItems = functionBuilder(async (req, res) => {
         }
 
         res.send(items);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getLocations = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const ref = await db.collection('locations').get();
+        const items: any[] = [];
+        ref.docs.forEach(async doc => {
+            const data = doc.data();
+            data.name = data.name[currentLanguage];
+            items.push(data);
+        });
+
+        res.send(items);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+
+export const getNotification = functionBuilder(async (req, res) => {
+    try {
+        const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+        const oldTime = req.query.messageTime as unknown as Number;
+        const ref = await db.collection(notificationsCollection).doc(notificationsUpdates).get();
+        let result = undefined;
+        if (ref?.updateTime && ref.updateTime.seconds > oldTime) {
+            result = ref.get('text')[currentLanguage];
+        }
+
+        res.send({ time: ref.updateTime?.seconds, text: result });
     } catch (error) {
         handleError(res, error);
     }
@@ -775,7 +840,7 @@ const setSpringsQuery = async (filters: any) => {
 
         if (filters.distance) {
             functions.logger.debug("distance filter: " + filters.distance);
-            return await calculateRadius(springsQuery ? springsQuery : springsRef, filters.distance*1000, [filters.location.latitude, filters.location.longitude]);
+            return await calculateRadius(springsQuery ? springsQuery : springsRef, filters.distance * 1000, [filters.location.latitude, filters.location.longitude]);
             // const range = getGeohashRange(filters.location.latitude, filters.location.longitude, filters.distance);
             // springsQuery = (springsQuery ? springsQuery : springsRef).where('geohash', '>=', range.lower).where('geohash', '<=', range.upper);
         }
@@ -785,11 +850,15 @@ const setSpringsQuery = async (filters: any) => {
 }
 
 const setHotelsQuery = async (filters: any, language: string) => {
-    const hotelsRef = await db.collection("hotels");
+    const hotelsRef = await db.collection(hotelsCollection);
     let hotelsQuery = undefined;
     if (filters) {
-        if (filters.price) {
-            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.price);
+        if (filters.maxPrice) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.maxPrice);
+        }
+
+        if (filters.minPrice) {
+            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '>=', filters.minPrice);
         }
 
         if (filters.pool) {
@@ -800,7 +869,7 @@ const setHotelsQuery = async (filters: any, language: string) => {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('breakfast', '==', true)
         }
 
-        if (filters.regions) {
+        if (filters.regions.length) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('region.' + language, 'in', filters.regions)
         }
     }

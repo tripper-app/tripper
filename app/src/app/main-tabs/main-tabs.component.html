@@ -1,5 +1,5 @@
 <BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
-    <TabStrip  [visibility]="tabsVisibility ? 'visible' : 'collapsed'">
+    <TabStrip [visibility]="tabsVisibility ? 'visible' : 'collapsed'">
         <TabStripItem>
             <Label text="חשבון"></Label>
             <Image src="res://icon" class="fas t-36"></Image>
@@ -19,7 +19,7 @@
     </TabStrip>
     <TabContentItem>
         <GridLayout>
-            <ns-login (goToMap)="navigateToMap()"></ns-login>
+            <ns-login (goToMap)="navigateToMap()" (goToAbout)="navigateToAbout()"></ns-login>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
@@ -35,6 +35,11 @@
     <TabContentItem>
         <GridLayout>
             <ns-map></ns-map>
+        </GridLayout>
+    </TabContentItem>
+    <TabContentItem>
+        <GridLayout>
+            <ns-about></ns-about>
         </GridLayout>
     </TabContentItem>
 </BottomNavigation>

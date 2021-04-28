@@ -8,6 +8,7 @@
                 <label text="{{ 'hotelsList.title' | L }}"></label>
             </FlexboxLayout>
             <StackLayout class="line"></StackLayout>
+            <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
             <StackLayout width="100%" height="100%" padding="18">
                 <FlexboxLayout flexWrap="wrap" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
                     <StackLayout (tap)="navigateToHotel(hotel.ID)" width="50%" paddingBottom="20"
@@ -20,8 +21,8 @@
                                 <CarouselItem *ngFor="let item of hotel.images">
                                     <GridLayout>
                                         <ns-waiting-gif></ns-waiting-gif>
-                                        <Image (tap)="navigateToHotel(hotel.ID)" style="z-index: 3;" [src]="item" width="100%" height="100%"
-                                            stretch="fill"></Image>
+                                        <Image (tap)="navigateToHotel(hotel.ID)" style="z-index: 3;" [src]="item"
+                                            width="100%" height="100%" stretch="fill"></Image>
                                     </GridLayout>
                                 </CarouselItem>
                             </Carousel>
