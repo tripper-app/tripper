@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import { localize } from "nativescript-localize";
 import { AlertService } from '~/app/common/services/alert-service';
+import { LanguageService } from '~/app/common/services/language-service';
 
 
 @Component({
@@ -11,8 +12,11 @@ import { AlertService } from '~/app/common/services/alert-service';
 })
 export class ResetPasswordModalComponent {
   email = '';
+  rightToLeft = true;
   constructor(private params: ModalDialogParams,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private languageService: LanguageService) {
+      this.rightToLeft = this.languageService.getRightToLeft();
   }
 
   navigateToResetPassword() {
@@ -22,6 +26,10 @@ export class ResetPasswordModalComponent {
       this.alertService.showError(localize('login.requireEmail'));
     }
   }
+
+  alignVertical(label) {
+    label.android.setGravity(17)
+}
 
   exit(email = undefined) {
     this.params.closeCallback(email);

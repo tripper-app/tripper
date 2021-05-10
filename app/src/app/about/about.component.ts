@@ -19,6 +19,10 @@ export class AboutComponent implements OnInit {
         this.page.actionBarHidden = true;
 
     }
+
+    alignVertical(label) {
+        label.android.setGravity(17)
+    }
  
     openWebsite() {
         Utils.openUrl("");

@@ -1,27 +1,27 @@
 @import '../../../_app-common.scss';
 
-.facebook{
-  height: 100%;
-  font-size: 20;
-  background-color: rgb(208, 63, 221);
-  align-items: center;
-  color: whitesmoke;
-  justify-content: center;
-}
+// .facebook{
+//   height: 100%;
+//   font-size: 20;
+//   background-color: rgb(208, 63, 221);
+//   align-items: center;
+//   color: whitesmoke;
+//   justify-content: center;
+// }
+
 
 .haveAccount{
-  font-size: 20; 
+  font-size: $subtitleFontSize; 
   text-align: center;
   margin-bottom: 20;
-  color: $greyText;
 }
 
 .signUp{
   height: $bottomHeight;
-  font-size: 20;
+  font-size: $subtitleFontSize;
   background-color: $themeColor;
   align-items: center;
-  color: whitesmoke;
+  color: white;
   justify-content: center;
 }
 
@@ -42,6 +42,5 @@
 }
 
 .title{
-  font-size: 15;
-  color: #A8A8A8;
+  font-size: $regularFontSize
 }

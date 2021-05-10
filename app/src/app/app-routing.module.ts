@@ -22,7 +22,7 @@ import { ScoreComponent } from "./games/score/score.component";
 import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
 import { LandKingComponent } from "./games/landKing/landKing.component";
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '2' : '2');
+const firstPage = 'mainTabs/' +  (loggedUser? '3' : '3');
 
 const routes: Routes = [
     { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
@@ -33,6 +33,7 @@ const routes: Routes = [
     { path: "mainTabs/:page", component: MainTabsComponent},
     { path: "signUp", component: SignUpComponent},
     { path: "resetPassword/:email", component: ResetPasswordComponent },
+    { path: "resetPassword", component: ResetPasswordComponent },
     { path: "springsFilter", component: SpringsFiltersComponent },
     { path: "profile", component: ProfileComponent },
     { path: "hotelsFilters", component: HotelsFiltersComponent },

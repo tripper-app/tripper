@@ -21,8 +21,18 @@ export class GamesService {
     selectedSubjects: TriviaSubject[];
     score = 0;
     subjectName = '';
+    upperLeft = { lat: 33.12831197751661, lon: 34.258082831539355 };
+    lowerRight = { lat: 29.669710018637986, lon: 35.793557239728504 };
 
     constructor(private httpService: HttpService) {
+    }
+
+    setHighScore(quiz: string, score: number){
+        return this.httpService.setHighScore(quiz, score);
+    }
+
+    getHighScore(quiz: string){
+        return this.httpService.getHighScore(quiz);
     }
 
     chooseSubjects(subjects: TriviaSubject[]) {
@@ -117,33 +127,49 @@ export class GamesService {
     }
 
     locate(location: Location, userLocate) {
-        this.score += 50;
-        const upperLeft = { lat: 33.12831197751661, lon: 34.258082831539355 };
-        const lowerRight = { lat: 29.669710018637986, lon: 35.793557239728504 };
         const click = { lat: 0, lon: 0 };
-        click.lat = ((upperLeft.lat - lowerRight.lat) * userLocate.y) + lowerRight.lat;
-        click.lon = ((lowerRight.lon - upperLeft.lon) * userLocate.x) + upperLeft.lon;        
-        
-        const distance = dist.between(click, { lat: location.location._latitude, lon: location.location._longitude });        
-        this.calculateLocationScore((Number)(distance.human_readable().distance));
+        click.lat = ((this.upperLeft.lat - this.lowerRight.lat) * userLocate.y) + this.lowerRight.lat;
+        click.lon = ((this.lowerRight.lon - this.upperLeft.lon) * userLocate.x) + this.upperLeft.lon;
+
+        const distance = dist.between(click, { lat: location.location._latitude, lon: location.location._longitude });
+        const numberedDistance = (Number)(distance.human_readable().distance)
+        const score = this.calculateLocationScore(numberedDistance);
+        const text = this.getScoreFeedback(score);
+        this.score += score;
+        return {score, text};
     }
 
-    calculateLocationScore(distance){
-        if (distance < 15) {
-            this.score += 100;
-            alert("מושלם")
-        } else {
-            if (distance < 30) {
-                this.score+= 70;
-                alert("קרוב...");
-            } else {
-                if (distance < 45) {
-                    this.score += 40;
-                    alert("בערך... דרוש דיוק");
-                } else {
-                    alert("אפילו לא קרוב!");
-                }
-            }
+    getTranslate(location: Location) {
+        const x = (location.location._longitude - this.upperLeft.lon) / (this.lowerRight.lon - this.upperLeft.lon);
+        const y = 1 - (location.location._latitude - this.lowerRight.lat) / (this.upperLeft.lat - this.lowerRight.lat);
+        return { x, y };
+    }
+
+    calculateLocationScore(distance) {
+        if (distance < 20)
+            return 100;
+        if (distance < 40)
+            return 70;
+        if (distance < 60)
+            return 40;
+        return 0;
+    }
+
+    getScoreFeedback(score){
+        switch (score) {
+            case 100:
+                return "מצויין";
+                break;
+            case 70:
+                return "כמעט";
+                break;
+            case 40:
+                return "קרוב";
+                break;
+            case 0:
+                return "פוזל";
+            default:
+                break;
         }
     }
 }

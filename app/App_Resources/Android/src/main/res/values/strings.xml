@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_labels_bnb_Z1UVUGt">"צימרים"</string>
+  <string name="_labels_games_Z24DILK">"משחקים"</string>
+  <string name="_labels_account_23m8Pk">"חשבון"</string>
   <string name="_labels_notification_2toIAr">"הודעה"</string>
   <string name="_labels_about_Z2530gQ">"אודות"</string>
   <string name="_labels_all_Z1UVUX5">"הכול"</string>
@@ -22,7 +25,7 @@
   <string name="_games_score_Z1Dgh7z">"עד עכשיו צברת %1$s נקודות"</string>
   <string name="_games_chooseQuiz_Z1eLoF4">"בחרו חידון"</string>
   <string name="_games_chooseSubject_ZtKRKO">"בחרו נושא"</string>
-  <string name="_games_landKing_1nlTda">"מלך הארץ"</string>
+  <string name="_games_landKing_1nlTda">"שבץ בה"</string>
   <string name="_games_bingo_Z1EnEGc">"בינגו"</string>
   <string name="_games_kahoot_ZmXmgu">"קהוט"</string>
   <string name="_games_trivia_Z3dQMo">"טריוויה"</string>
@@ -118,6 +121,7 @@
   <string name="_springsFilters_children_2wpXPD">"מתאים לילדים"</string>
   <string name="_springsFilters_camping_ZjdBkz">"מתאים לקאמפינג"</string>
   <string name="_springsFilters_title_ZnoprO">"איזה מעיין לחפש?"</string>
+  <string name="_map_springSearch_2iNEXf">"כאן מחפשים מעיין"</string>
   <string name="_switchLanguage_switchLanguageMessage_en_Z6nYab">"The application needs to be restarted in order to apply changes"</string>
   <string name="_switchLanguage_switchLanguageMessage_iw_Z6nY80">"כדי להחל את השינויים האפליקציה צריכה להסגר"</string>
   <string name="_switchLanguage_closeApp_en_2aUA9D">"OK, i will close the app"</string>

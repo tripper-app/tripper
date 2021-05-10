@@ -20,7 +20,7 @@ export class SpringsFiltersComponent implements OnInit {
     sliderValue = 25;
     mainColor = "rgb(35, 204, 153)";
     scale = "1.3";
-    leftToRight = false;
+    rightToLeft = true;
 
     constructor(private page: Page,
         private router: Router,
@@ -29,7 +29,9 @@ export class SpringsFiltersComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.leftToRight = !this.languageService.getRightToLeft();
+        console.log(this.languageService.getCurrentLanguage());
+        
+        this.rightToLeft = !this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
         this.campingCheck = this.springsService.filters.camping;
         this.childrenCheck = this.springsService.filters.children;
@@ -50,6 +52,10 @@ export class SpringsFiltersComponent implements OnInit {
 
         this.springsService.filters = filters;
         this.navigateToMap();
+    }
+
+    alignVertical(label) {
+        label.android.setGravity(17)
     }
 
     navigateToMap() {

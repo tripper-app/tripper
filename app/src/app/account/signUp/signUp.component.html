@@ -1,29 +1,30 @@
-<StackLayout>
+<!-- <StackLayout> -->
 	<GridLayout rows="7*,*">
 		<ns-waiting-gif rowSpan="2" *ngIf="waitingForResponse"></ns-waiting-gif>
 		<StackLayout height="90%">
 			<GridLayout columns="*,4*,*" class="header">
-				<Label width="100%" [isUserInteractionEnabled]="!waitingForResponse" [ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" text="X"
-					[col]="rightToLeft? 0 : 2" (tap)="exit()" (onloaded)="alignVertical(cancell)" #cancell></Label>
+				<SVGImage width="100%" [isUserInteractionEnabled]="!waitingForResponse" class="exit"
+					[col]="rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg" (tap)="exit()">
+				</SVGImage>
 				<Label text="{{ 'login.signUp' | L }}" col="1" (onloaded)="alignVertical(title)" #title></Label>
 			</GridLayout>
-			<StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
-			<label [isUserInteractionEnabled]="!waitingForResponse" class="haveAccount"
+			<StackLayout class="line"></StackLayout>
+			<label [isUserInteractionEnabled]="!waitingForResponse" class="haveAccount greyText"
 				text="{{ 'login.haveAccount' | L }}" (tap)="navigateToLogin()"></label>
 			<StackLayout margin="20">
 				<FlexboxLayout justifyContent="space-between" width="100%" height="100%" flexDirection="column">
-					<label class="title" text="{{ 'login.userName' | L }}"></label>
+					<label class="title greyText" text="{{ 'login.userName' | L }}"></label>
 					<TextField marginBottom="20" [(ngModel)]="user.userName" class="input" autocorrect="false"
 						autocapitalizationType="none" returnKeyType="next" [disabled]="waitingForResponse"></TextField>
-					<label class="title" text="{{ 'labels.email' | L }}"></label>
+					<label class="title greyText" text="{{ 'labels.email' | L }}"></label>
 					<TextField marginBottom="20" [(ngModel)]="user.email" class="input" keyboardType="email"
 						autocorrect="false" autocapitalizationType="none" returnKeyType="next"
 						[disabled]="waitingForResponse"></TextField>
-					<label class="title" text="{{ 'login.createPassword' | L }}"></label>
+					<label class="title greyText" text="{{ 'login.createPassword' | L }}"></label>
 					<TextField marginBottom="20" [(ngModel)]="user.password" class="input" autocorrect="false"
 						secure="true" autocapitalizationType="none" returnKeyType="next"
 						[disabled]="waitingForResponse"></TextField>
-					<label class="title" text="{{ 'login.confirmPassword' | L }}"></label>
+					<label class="title greyText" text="{{ 'login.confirmPassword' | L }}"></label>
 					<TextField marginBottom="20" [(ngModel)]="confirmPassword" class="input" autocorrect="false"
 						secure="true" autocapitalizationType="none" returnKeyType="go" (returnPress)="submit()"
 						[disabled]="waitingForResponse"></TextField>
@@ -32,8 +33,8 @@
 		</StackLayout>
 		<FlexboxLayout row="1" flexDirection="column" style="height: 100%; justify-content: flex-end;">
 			<FlexboxLayout class="signUp" (tap)="submit()" [isUserInteractionEnabled]="!waitingForResponse">
-				<label text="הרשמה"></label>
+				<label text="{{ 'login.signUp' | L }}"></label>
 			</FlexboxLayout>
 		</FlexboxLayout>
 	</GridLayout>
-</StackLayout>
+<!-- </StackLayout> -->

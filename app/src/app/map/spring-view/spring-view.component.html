@@ -1,7 +1,7 @@
 <StackLayout>
     <ScrollView [height]="!isKeyboardOpen? '91%' : '100%'" *ngIf="!waitingForResponse">
         <StackLayout>
-            <GridLayout columns="*,5*,*" class="header">
+             <GridLayout columns="*,5*,*" class="header">
                 <label #exit (onloaded)="alignVertical(exit)" [col]="rightToLeft? 0 : 2" text="X"
                     [ngStyle]="{'text-align': rightToLeft? 'left' : 'right'}" (tap)="navigateToMap()"></label>
                 <label textWrap="true" #title (onloaded)="alignVertical(title)" col="1"
@@ -114,9 +114,8 @@
                     <img src="res://waze_logo" class="navigationIcon" />
                     <label text="{{'springView.navigateWithWaze' | L }}"></label>
                 </FlexboxLayout>
-            </FlexboxLayout>
-        </StackLayout>
-    </ScrollView>
+            </FlexboxLayout> </StackLayout>
+    </ScrollView> 
     <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
     <FlexboxLayout class="navigation" *ngIf="!isKeyboardOpen">
         <FlexboxLayout style="align-items: center;" col="1" (tap)="navigateWithMaps()">

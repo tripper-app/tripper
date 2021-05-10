@@ -19,3 +19,13 @@
     z-index: 2;
     stretch: fill;
 }
+
+.lowerLine{
+    height: 10%;
+    font-size: $titleFontSize;
+    background-color: $themeColor;
+    align-items: center;
+    color: whitesmoke;
+    justify-content: space-around;
+    padding: 0 10;
+  }

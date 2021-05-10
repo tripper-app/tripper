@@ -14,6 +14,9 @@
             "en": "The application needs to be restarted in order to apply changes"
         }
     },
+    "map": {
+        "springSearch": "כאן מחפשים מעיין"
+    },
     "springsFilters": {
         "title": "איזה מעיין לחפש?",
         "camping": "מתאים לקאמפינג",
@@ -130,7 +133,7 @@
         "trivia": "טריוויה",
         "kahoot": "קהוט",
         "bingo": "בינגו",
-        "landKing": "מלך הארץ",
+        "landKing": "שבץ בה",
         "chooseSubject": "בחרו נושא",
         "chooseQuiz": "בחרו חידון",
         "score": "עד עכשיו צברת %s נקודות",
@@ -154,6 +157,9 @@
         "email": "כתובת אימייל",
         "all": "הכול",
         "about": "אודות",
-        "notification": "הודעה"
+        "notification": "הודעה",
+        "account": "חשבון",
+        "games": "משחקים",
+        "bnb": "צימרים"
     }
 }

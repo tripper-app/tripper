@@ -306,6 +306,7 @@ module.exports = env => {
                 { from: { glob: "**/*.jpg" } },
                 { from: { glob: "**/*.png" } },
                 { from: { glob: '**/*.gif' } },
+                { from: '**/*.svg', noErrorOnMissing: true }
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             new nsWebpack.GenerateNativeScriptEntryPointsPlugin("bundle"),
             // For instructions on how to set up workers with webpack

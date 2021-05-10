@@ -14,7 +14,6 @@ import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/mod
 import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
 import { ChangeLanguageModalComponent } from '~/app/common/alerts/changeLanguage/change-language.component';
 import { ErrorsService } from '~/app/common/services/errors-service';
-
 @Component({
     selector: 'ns-login',
     templateUrl: './login.component.html',
@@ -48,12 +47,11 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.languageService.getCurrentLanguage());
-
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.user = new User();
-        this.user.email = "";
-        this.user.password = "";
+        this.user.email = "odedoded777@gmail.com";
+        this.user.password = "12";
 
         this.oathService.configureOAuthProviders();
         // GoogleLogin.init({

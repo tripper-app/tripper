@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
     styleUrls: ['./games.component.scss']
 })
 export class GamesComponent {
-
+    itemSize = "45%";
     constructor(private router: Router){}
 
     navigateToGame(game){

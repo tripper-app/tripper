@@ -3,19 +3,20 @@
     <StackLayout class="line"></StackLayout>
     <GridLayout rows="*, *" columns="*, *" height="100%" margin="30">
         <FlexboxLayout flexDirection="column" row="0" col="0" (tap)="navigateToGame('trivia')">
-            <img src="res://icon" />
+            <!-- <img [height]="itemSize" [width]="itemSize" src="res://icon" /> -->
+            <SVGImage src="~/assets/icons/trivia.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
             <Label class="title" text="{{ 'games.trivia' | L }}"></Label>
         </FlexboxLayout>
         <FlexboxLayout flexDirection="column" row="0" col="1" (tap)="navigateToGame('kahoot')">
-            <img src="res://icon" />
+            <SVGImage src="~/assets/icons/kahoot.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
             <Label class="title" text="{{ 'games.kahoot' | L }}"></Label>
         </FlexboxLayout>
         <FlexboxLayout flexDirection="column" row="1" col="0" (tap)="navigateToGame('landKing')">
-            <img src="res://icon" />
+            <SVGImage src="~/assets/icons/king of the country.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
             <Label class="title" text="{{ 'games.landKing' | L }}"></Label>
         </FlexboxLayout>
         <FlexboxLayout flexDirection="column" row="1" col="1" (tap)="navigateToGame('bingo')">
-            <img src="res://icon" />
+            <SVGImage src="~/assets/icons/bingo.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
             <Label class="title" text="{{ 'games.bingo' | L }}"></Label>
         </FlexboxLayout>
     </GridLayout>

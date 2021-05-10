@@ -33,7 +33,7 @@ export class HttpService {
     return this.httpClient.get(`${this.ApiURL}getSpringByName?springName=${springName}&lang=${this.getLanguage()}`);
   }
 
-  getFavoritesprings(){
+  getFavoritesprings() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -41,10 +41,10 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    return this.httpClient.get(this.ApiURL + "getFavoriteSprings", {headers: {token: token}});
+    return this.httpClient.get(this.ApiURL + "getFavoriteSprings", { headers: { token: token } });
   }
 
-  addFavoriteSpring(springId: string){
+  addFavoriteSpring(springId: string) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -53,10 +53,10 @@ export class HttpService {
       return this.throwUnRegisteredUser();
     }
 
-    return this.httpClient.post(this.ApiURL + `addFavoriteSpring`, {springId: springId}, {headers: {access_token: token}});
+    return this.httpClient.post(this.ApiURL + `addFavoriteSpring`, { springId: springId }, { headers: { access_token: token } });
   }
 
-  removeFavoriteSpring(springId){
+  removeFavoriteSpring(springId) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -65,10 +65,10 @@ export class HttpService {
       return this.throwUnRegisteredUser();
     }
 
-    return this.httpClient.post(this.ApiURL + `removeFavoriteSpring`, {springId: springId}, {headers: {access_token: token}});
+    return this.httpClient.post(this.ApiURL + `removeFavoriteSpring`, { springId: springId }, { headers: { access_token: token } });
   }
 
-  getHistorySprings(){
+  getHistorySprings() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -76,7 +76,7 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    return this.httpClient.get(this.ApiURL + "getHistorySprings", {headers: {token: token}});
+    return this.httpClient.get(this.ApiURL + "getHistorySprings", { headers: { token: token } });
   }
 
   getspring(id: string) {
@@ -88,17 +88,17 @@ export class HttpService {
       return this.throwUnRegisteredUser();
     }
 
-    return this.httpClient.get(this.ApiURL + `getSpring?springId=${id}&lang=${this.getLanguage()}`, {headers: {access_token: token}});
+    return this.httpClient.get(this.ApiURL + `getSpring?springId=${id}&lang=${this.getLanguage()}`, { headers: { access_token: token } });
   }
 
-  getAllHotels(filters: HotelFilters){
+  getAllHotels(filters: HotelFilters) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
     return this.httpClient.post(this.ApiURL + "getAllHotels", { filters: filters });
   }
 
-  getHotel(id: string){
+  getHotel(id: string) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -119,31 +119,31 @@ export class HttpService {
     return this.httpClient.post(this.ApiURL + `signup`, user)
   }
 
-  getUserProfile(){
+  getUserProfile() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
     const token = this.getToken();
     if (!token) {
       return this.throwUnRegisteredUser();
-    }    
+    }
 
-    return this.httpClient.get(`${this.ApiURL}getUserProfile`, {headers: {access_token: token}});
+    return this.httpClient.get(`${this.ApiURL}getUserProfile`, { headers: { access_token: token } });
   }
 
-  updateUserName(newUserName){
+  updateUserName(newUserName) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
     const token = this.getToken();
     if (!token) {
       return this.throwUnRegisteredUser();
-    }    
+    }
 
-    return this.httpClient.post(`${this.ApiURL}updateUserName`, {newUserName: newUserName}, {headers: {access_token: token}});
+    return this.httpClient.post(`${this.ApiURL}updateUserName`, { newUserName: newUserName }, { headers: { access_token: token } });
   }
 
-  changePassword(oldPassword, newPassword){
+  changePassword(oldPassword, newPassword) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -151,8 +151,8 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    
-    return this.httpClient.post(`${this.ApiURL}changePassword`, { newPassword: newPassword, oldPassword: oldPassword }, {headers: {access_token: token}});
+
+    return this.httpClient.post(`${this.ApiURL}changePassword`, { newPassword: newPassword, oldPassword: oldPassword }, { headers: { access_token: token } });
   }
 
   resetPasswordCreateCode(email) {
@@ -198,7 +198,7 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    return this.httpClient.post(`${this.ApiURL}updateProfile`, { imageString: base64 }, {headers: {access_token: token}});
+    return this.httpClient.post(`${this.ApiURL}updateProfile`, { imageString: base64 }, { headers: { access_token: token } });
   }
 
   addComment(text: string, springId: string) {
@@ -214,7 +214,7 @@ export class HttpService {
       { headers: { token: token } });
   }
 
-  updateSpring(text, springId){
+  updateSpring(text, springId) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -223,10 +223,10 @@ export class HttpService {
       return this.throwUnRegisteredUser();
     }
 
-    return this.httpClient.get(`${this.ApiURL}updateSpring?text=${text}&spring=${springId}`, {headers: {access_token: token}});
+    return this.httpClient.get(`${this.ApiURL}updateSpring?text=${text}&spring=${springId}`, { headers: { access_token: token } });
   }
 
-  getKahoot(){
+  getKahoot() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -235,10 +235,10 @@ export class HttpService {
       return this.throwUnRegisteredUser();
     }
 
-    return this.httpClient.get(this.ApiURL + `getKahoot?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+    return this.httpClient.get(this.ApiURL + `getKahoot?lang=${this.getLanguage()}`, { headers: { access_token: token } });
   }
 
-  getTriviaSubjects(){
+  getTriviaSubjects() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
@@ -247,40 +247,65 @@ export class HttpService {
       return this.throwUnRegisteredUser();
     }
 
-    return this.httpClient.get(this.ApiURL + `getTriviaSubjects?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+    return this.httpClient.get(this.ApiURL + `getTriviaSubjects?lang=${this.getLanguage()}`, { headers: { access_token: token } });
   }
 
-  getTriviaQuestions(triviaIds){
+  getTriviaQuestions(triviaIds) {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
     const token = this.getToken();
 
-    return this.httpClient.post(this.ApiURL + `getTriviaQuestions?lang=${this.getLanguage()}`, {triviaIds: triviaIds}, {headers: {access_token: token}});
+    return this.httpClient.post(this.ApiURL + `getTriviaQuestions?lang=${this.getLanguage()}`, { triviaIds: triviaIds }, { headers: { access_token: token } });
   }
 
-  getBingoItems(){
+  getBingoItems() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
-     const token = this.getToken();
+    const token = this.getToken();
     // if (!token) {
     //   return this.throwUnRegisteredUser();
     // }
 
-    return this.httpClient.get(this.ApiURL + `getBingoItems?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+    return this.httpClient.get(this.ApiURL + `getBingoItems?lang=${this.getLanguage()}`, { headers: { access_token: token } });
   }
 
-  getLocations(){
+  getLocations() {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
-     const token = this.getToken();    
-     return this.httpClient.get(this.ApiURL + `getLocations?lang=${this.getLanguage()}`, {headers: {access_token: token}});
+    const token = this.getToken();
+    return this.httpClient.get(this.ApiURL + `getLocations?lang=${this.getLanguage()}`, { headers: { access_token: token } });
   }
 
-  getNotification(messageTime){
+  getNotification(messageTime) {
     return this.httpClient.get(this.ApiURL + `getNotification?lang=${this.getLanguage()}&messageTime=${messageTime}`);
+  }
+
+  setHighScore(quiz: string, score: number) {
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+
+    return this.httpClient.get(`${this.ApiURL}setHighScore?quiz=${quiz}&score=${score}`, { headers: { access_token: token } });
+  }
+
+  getHighScore(quiz: string) {
+    if (getConnectionType() == connectionType.none) {
+      return this.throwNoConnection();
+    }
+    const token = this.getToken();
+    if (!token) {
+      return this.throwUnRegisteredUser();
+    }
+
+    return this.httpClient.get(`${this.ApiURL}getHighScore?quiz=${quiz}`, { headers: { access_token: token } });
   }
 
 
@@ -304,7 +329,7 @@ export class HttpService {
     });
   }
 
-  throwUnRegisteredUser(){
+  throwUnRegisteredUser() {
     return new Observable<any>((subscriber: Subscriber<any>) => {
       subscriber.error(new unRegisteredUserError());
     })

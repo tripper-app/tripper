@@ -13,6 +13,7 @@ import { Carousel, CarouselItem } from 'nativescript-carousel';
 // import { init, initAnalytics } from "nativescript-facebook";
 import { LottieView } from 'nativescript-lottie';
 import { NativeScriptUIRangeSeekBarModule } from "nativescript-range-seek-bar/angular";
+import { NativeScriptSvgModule } from '@teammaestro/nativescript-svg/angular';
 
 registerElement('LottieView', () => LottieView);
 import { AppComponent } from "./app.component";
@@ -76,7 +77,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         NativeScriptLocalizeModule,
         NativeScriptRouterModule,
         TNSCheckBoxModule,
-        NativeScriptUIRangeSeekBarModule
+        NativeScriptUIRangeSeekBarModule,
+        NativeScriptSvgModule
         // NativeScriptFacebookModule
     ],
     entryComponents: [

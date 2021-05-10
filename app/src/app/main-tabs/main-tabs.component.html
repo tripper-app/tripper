@@ -1,19 +1,20 @@
 <BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
     <TabStrip [visibility]="tabsVisibility ? 'visible' : 'collapsed'">
         <TabStripItem>
-            <Label text="חשבון"></Label>
-            <Image src="res://icon" class="fas t-36"></Image>
+            <Label text="{{ 'labels.account' | L }}"></Label>
+            <Image [src]="currentIndex == 0? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'">
+            </Image>
         </TabStripItem>
         <TabStripItem class="special">
-            <Label text="משחקים"></Label>
+            <Label text="{{ 'labels.games' }}"></Label>
             <Image src="font://&#xf007;" class="fas"></Image>
         </TabStripItem>
         <TabStripItem class="special" >
-            <Label text="צימרים"></Label>
+            <Label text="{{ 'labels.bnb' }}"></Label>
             <Image src="font://&#xf00e;" class="fas t-36"></Image>
         </TabStripItem>
         <TabStripItem class="special">
-            <Label text="מפה"></Label>
+            <Label text="{{ 'labels.map' }}"></Label>
             <Image src="res://icon" class="fas t-36"></Image>
         </TabStripItem>
     </TabStrip>

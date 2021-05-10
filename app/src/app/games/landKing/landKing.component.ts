@@ -4,8 +4,10 @@ import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular/mo
 import { GridLayout, Image, Page, PanGestureEventData, StackLayout } from "@nativescript/core";
 import { LanguageService } from "~/app/common/services/language-service";
 import { StartModalComponent } from "./startModal/startModal.component";
-import { screen } from "tns-core-modules/platform";
 import { GamesService } from "~/app/common/services/games-service";
+import { screen } from "tns-core-modules/platform";
+import { UserService } from "~/app/common/services/userService";
+import { ErrorsService } from "~/app/common/services/errors-service";
 
 @Component({
     selector: 'ns-landKing',
@@ -16,23 +18,21 @@ export class LandKingComponent implements OnInit {
     timer = 180000;
     rightToLeft = true;
     waitingForResponse = false;
-    // @ViewChild("dragGrid", { static: false }) dragGrid: ElementRef;
-    // dragImageItem: GridLayout;
-    // @ViewChild("container", { static: false }) container: ElementRef;
-    // @ViewChild("dragImage", { static: false }) dragImage: ElementRef;
-    // itemContainer: GridLayout;
-    // prevDeltaX: number;
-    // prevDeltaY: number;
-    // first = true;
-    // mapGap = 150;
-    locations = [];
+    opacity = 0.5;
+    feedback;
+    @ViewChild("container", { static: false }) container: ElementRef;
+    guessedLocation;
     allLocations = [];
+    highScore = 0;
+    quizName = "landKing";
     constructor(private page: Page,
         private modalService: ModalDialogService,
         private viewContainerRef: ViewContainerRef,
         private router: Router,
         private languageService: LanguageService,
-        private gameService: GamesService) {
+        private gameService: GamesService,
+        private userService: UserService,
+        private errorService: ErrorsService) {
         this.page.actionBarHidden = true;
     }
     ngOnInit() {
@@ -48,6 +48,9 @@ export class LandKingComponent implements OnInit {
         this.modalService.showModal(StartModalComponent, options).then(ok => {
             if (ok) {
                 this.waitingForResponse = true;
+                if (this.userService.userLoggedIn) {
+                    this.getHighScore();
+                }
                 this.gameService.getLocations().subscribe(res => {
                     this.allLocations = res;
                     this.waitingForResponse = false;
@@ -60,80 +63,50 @@ export class LandKingComponent implements OnInit {
                         }
                     }, 1000)
                 }, err => {
-                    // handle errors
+                   this.errorService.handleErorr(err);
                 })
             } else {
                 setTimeout(() => {
-                    this.router.navigate(['mainTabs', 1]);
+                    this.exit();
                 }, 0);
             }
         });
     }
 
-    // initPanStats() {
-    //     this.dragImageItem = <GridLayout>this.dragGrid.nativeElement;
-    //     this.dragImageItem.translateX = 0;
-    //     this.dragImageItem.translateY = 0;
-    //     this.dragImageItem.scaleX = 1;
-    //     this.dragImageItem.scaleY = 1;
-
-    //     this.itemContainer = <GridLayout>this.container.nativeElement;
-    // }
-
-    // onPan(args: PanGestureEventData) {
-    //     // console.log("Pana: [" + args.deltaX + ", " + args.deltaY + "] state: " + args.state);        
-    //     if (this.first) {
-    //         this.first = false;
-    //         this.dragGrid.nativeElement.androidElevation = 0;
-    //         this.dragGrid.nativeElement.animate({ height: 70, duration: 200 }).then(() => {
-    //             this.dragGrid.nativeElement.columns = "*,*,*";
-    //             // this.dragGrid.nativeElement.backgroundColor = 'transparent';
-    //         });
-    //         this.dragGrid.nativeElement.animate({ backgroundColor: 'transparent', duration: 100 });
-    //     }
-    //     if (args.state === 1) // down
-    //     {
-    //         this.prevDeltaX = 0;
-    //         this.prevDeltaY = 0;
-    //     }
-    //     else if (args.state === 2) // panning
-    //     {
-    //         this.dragImageItem.translateX += args.deltaX - this.prevDeltaX;
-    //         this.dragImageItem.translateY += args.deltaY - this.prevDeltaY;
-
-    //         this.prevDeltaX = args.deltaX;
-    //         this.prevDeltaY = args.deltaY;
-
-    //         if (this.dragImageItem.translateX < screen.mainScreen.widthDIPs / -2) {
-    //             this.dragImageItem.translateX = screen.mainScreen.widthDIPs / -2;
-    //         }
-    //         else if (this.dragImageItem.translateX > screen.mainScreen.widthDIPs / 2) {
-    //             this.dragImageItem.translateX = screen.mainScreen.widthDIPs / 2;
-    //         }
-
-    //         if (this.dragImageItem.translateY < (screen.mainScreen.heightDIPs - this.mapGap) / -2) {
-    //             this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / -2
-    //         }
-    //         else if (this.dragImageItem.translateY > (screen.mainScreen.heightDIPs - this.mapGap) / 2) {
-    //             this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / 2;
-    //         }
-    //     }
-    //     else if (args.state === 3) // up
-    //     {
-    //         console.log("x: " + (this.dragImageItem.translateX + screen.mainScreen.widthDIPs / 2) / screen.mainScreen.widthDIPs);
-    //         console.log("y: " + (this.dragImageItem.translateY + (screen.mainScreen.heightDIPs - this.mapGap) / 2) / (screen.mainScreen.heightDIPs - this.mapGap));
-
-    //     }
-    // }
-
-    userLocate(data) {        
-        this.gameService.locate(this.locations[this.locations.length-1], data);
-        this.addLocation();
+    draggingStarted() {
+        this.opacity = 1;
     }
 
-    addLocation() {
+    userLocate(data) {
+        const img: Image = new Image();
+        img.src = "res://icon";
+        img.height = 60;
+        img.opacity = 0.5;
+        const translate = this.gameService.getTranslate(this.guessedLocation);
+        img.translateX = translate.x * screen.mainScreen.widthDIPs - (screen.mainScreen.widthDIPs / 2);
+        img.translateY = translate.y * this.container.nativeElement.getActualSize().height - (this.container.nativeElement.getActualSize().height / 2);
+
+        this.container.nativeElement.addChild(img);
+        setTimeout(() => {
+            // img.src = "res://waze_logo";
+            this.feedback = this.gameService.locate(this.guessedLocation, data);
+            this.addLocation(img);
+        }, 1000);
+    }
+
+    addLocation(image = undefined) {
+        this.guessedLocation = undefined;
         if (this.allLocations.length) {
-            this.locations.push(this.allLocations.splice(Math.random() * this.allLocations.length - 1, 1)[0]);
+            setTimeout(() => {
+                if (image) {
+                    image.opacity = 1;
+                    image.src = "res://waze_logo";
+                }
+                const location = this.allLocations.splice(Math.random() * this.allLocations.length - 1, 1)[0];
+                this.guessedLocation = location;
+                //this.locations.push(location);
+                this.opacity = 0.5;
+            }, 0);
         } else {
             this.navigateToScroe();
         }
@@ -144,7 +117,20 @@ export class LandKingComponent implements OnInit {
     }
 
     navigateToScroe() {
+        if (this.gameService.score > this.highScore) {
+            this.gameService.setHighScore(this.quizName, this.gameService.score).subscribe(res => {
+                console.log("new highscore is " + this.gameService.score);
+            })
+        }
         this.router.navigate(['score']);
+    }
+
+    getHighScore() {
+        this.gameService.getHighScore(this.quizName).subscribe(res => {
+            this.highScore = res.score;
+        }, err => {
+            this.errorService.handleErorr(err);
+        });
     }
 
     exit() {

@@ -1,8 +1,12 @@
 <StackLayout>
-    <!-- <Lottie:LottieView src="jumpingDotsGif.json" speed="1" height="50%" loop="true" autoPlay="true" /> -->
-    <FlexboxLayout class="header title">
-        <label text="X" (tap)="exit()"></label>
-        <label text="בינגו"></label>
+    <FlexboxLayout class="header">
+        <GridLayout width="100%" columns="*,2*,*">
+            <FlexboxLayout style="justify-content: center;" [col]="rightToLeft? 0 : 2" flexDirection="column">
+                <label text="{{ 'games.bingo' | L }}"></label>
+            </FlexboxLayout>
+            <SVGImage class="exit" [col]="rightToLeft? 2 : 0" src="~/assets/icons/times-light.svg" (tap)="exit()">
+            </SVGImage>
+        </GridLayout>
     </FlexboxLayout>
     <StackLayout class="line"></StackLayout>
     <label class="text" text="{{ 'games.bingoMarkItems' | L }}"></label>
@@ -14,9 +18,10 @@
             <FlexboxLayout *ngFor="let item of bingoItems; let i = index" flexDirection="column" [left]="screenWidth*i">
                 <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
                     [backgroundColor]="item.color">
-                    <label style="text-align: center;" horizontalAlignment="center" color="white" fontSize="20" [text]="item.name"></label>
+                    <label style="text-align: center;" horizontalAlignment="center" color="white" fontSize="20"
+                        [text]="item.name"></label>
                 </StackLayout>
-                <img [src]="item.found? 'res://icon' : 'res://waze_logo'" height="40" marginTop="10" (tap)="find(i)"/>
+                <img [src]="item.found? 'res://icon' : 'res://waze_logo'" height="40" marginTop="10" (tap)="find(i)" />
             </FlexboxLayout>
             <!-- <FlexboxLayout flexDirection="column" [left]="screenWidth*3">
                 <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"

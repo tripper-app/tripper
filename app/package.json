@@ -25,6 +25,7 @@
     "@angular/router": "~8.2.0",
     "@nativescript/theme": "~2.3.0",
     "@nstudio/nativescript-checkbox": "^1.0.0",
+    "@teammaestro/nativescript-svg": "^1.0.1",
     "btoa": "^1.2.1",
     "facebook-sdk": "^0.3.3",
     "geo-distance": "^0.2.0",

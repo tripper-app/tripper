@@ -1,19 +1,34 @@
 <StackLayout>
-    <FlexboxLayout class="header" style="justify-content: space-between;"
+    <FlexboxLayout class="header" [opacity]="opacity" style="justify-content: space-between;"
         [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-revrse'}">
         <label text="x" (tap)="navigateToScroe()"></label>
         <label text="{{ 'games.landKing' | L }}"></label>
     </FlexboxLayout>
-    <GridLayout #container>
-        <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
-        <img src="res://map" height="100%" width="100%" stretch="fill" />
-        <ns-location-component *ngFor="let location of locations" [location]="location" [container]="container" (draggedEmitter)="userLocate($event)">
-        </ns-location-component>
-        <FlexboxLayout style="justify-content: center; align-items: flex-end;" marginBottom="20">
-            <FlexboxLayout height="60" style="justify-content: center; align-items: center;">
-                <img height="100%" src="res://icon" />
+    <FlexboxLayout flexDirection="column">
+        <GridLayout #container height="87%">
+            <ns-waiting-gif [opacity]="opacity" *ngIf="waitingForResponse"></ns-waiting-gif>
+            <img src="res://map" [opacity]="opacity" height="100%" width="100%" stretch="fill" />
+            <ns-location-component [location]="guessedLocation" [container]="container" [feedback]="feedback" *ngIf="guessedLocation"
+                (draggedEmitter)="userLocate($event)" (draggStartEmitter)="draggingStarted()">
+            </ns-location-component>
+        </GridLayout>
+            <!-- <ns-location-component *ngFor="let location of locations" [location]="location" [container]="container"
+                (draggedEmitter)="userLocate($event)" (draggStartEmitter)="draggingStarted()">
+            </ns-location-component>
+        </GridLayout> -->
+        <FlexboxLayout class="lowerLine" [opacity]="opacity">
+            <FlexboxLayout *ngIf="userService.userLoggedIn" style="justify-content: space-around; align-items: center;">
+                <img height="70%" src="res://icon" />
+                <Label style="font-size: 15; text-align: center;" [text]="highScore"></Label>
+            </FlexboxLayout>
+            <FlexboxLayout style="justify-content: center; align-items: center;">
+                <img height="70%" src="res://icon" />
                 <Label style="font-size: 15; text-align: center;" text="{{ timer | date:'mm:ss':'UTC'}}"></Label>
             </FlexboxLayout>
+            <FlexboxLayout style="justify-content: center; align-items: center;">
+                <img height="70%" src="res://icon" />
+                <Label style="font-size: 15; text-align: center;" text="{{ gameService.score}}"></Label>
+            </FlexboxLayout>
         </FlexboxLayout>
-    </GridLayout>
+    </FlexboxLayout>
 </StackLayout>

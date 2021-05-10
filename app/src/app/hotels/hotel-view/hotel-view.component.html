@@ -1,7 +1,7 @@
 <StackLayout>
   <scrollView width="100%" height="91%" *ngIf="!waitingForResponse">
     <StackLayout>
-      <FlexboxLayout class="header">
+      <FlexboxLayout class="header" style="justify-content: space-between;">
         <label text="X" (tap)="backToList()"></label>
         <label [text]="currentHotel.name"></label>
       </FlexboxLayout>

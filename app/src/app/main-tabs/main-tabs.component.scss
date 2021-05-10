@@ -1,0 +1,10 @@
+@import '../../app-common';
+
+
+TabStripItem:active label{
+    color: black;
+}
+
+TabStripItem{
+    font-size: $regularFontSize;
+}

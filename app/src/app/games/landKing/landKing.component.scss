@@ -9,3 +9,13 @@
 image{
     height: 120;
 }
+
+.lowerLine{
+    height: 13%;
+    font-size: $titleFontSize;
+    background-color: $themeColor;
+    align-items: center;
+    color: whitesmoke;
+    justify-content: space-around;
+    // padding: 0 10;
+  }

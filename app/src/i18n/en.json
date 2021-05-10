@@ -14,6 +14,9 @@
             "en": "The application needs to be restarted in order to apply changes"
         }
     },
+    "map": {
+        "springSearch": "Here you search for a spring"
+    },
     "springsFilters": {
         "title": "What spring to look for?",
         "camping": "Suitable for camping",
@@ -155,6 +158,9 @@
         "email": "Email address",
         "all": "all",
         "about": "About",
-        "notification": "Notification"
+        "notification": "Notification",
+        "account": "Account",
+        "games": "Games",
+        "bnb": "BNB"
     }
 }

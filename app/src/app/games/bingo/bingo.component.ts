@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Page } from "@nativescript/core";
-import { screen, } from "tns-core-modules/platform";
+import { screen } from "tns-core-modules/platform";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
 

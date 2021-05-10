@@ -1,21 +1,23 @@
-<GridLayout columns="*,*" rows="*,*,5*" >
-    <StackLayout *ngIf="loading" rowSpan="3" colSpan="2" class="gif" horizontalAlignment="center" verticalAlignment="center">
+<GridLayout columns="*,*" rows="*,*,5*">
+    <StackLayout *ngIf="loading" rowSpan="3" colSpan="2" class="gif" horizontalAlignment="center"
+        verticalAlignment="center">
         <ns-waiting-gif></ns-waiting-gif>
     </StackLayout>
-
-    <maps:mapView region="IL" (coordinateTapped)="clickOnMap()" row="0" rowSpan="3" col="0" colSpan="2" [zoom]="defaultZoom" (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
+    <maps:mapView (coordinateTapped)="clickOnMap()" row="0" rowSpan="3" col="0" colSpan="2" [zoom]="defaultZoom"
+        (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
         (markerSelect)="clickOnMarker($event.marker)" [latitude]="31.7962994" [longitude]="35.2453993" #map>
     </maps:mapView>
-    
+
     <FlexboxLayout row="0" colSpan="2" class="iconsFlex imagesMargin">
-        <img class="iconButton" src="res://icon" (tap)="searchMode = true" *ngIf="!searchMode"/>
-        <img class="iconButton" src="res://icon" (tap)="setMyPosition()" *ngIf="!searchMode"/>
+        <img class="iconButton" src="res://icon" (tap)="searchMode = true" *ngIf="!searchMode" />
+        <img class="iconButton" src="res://icon" (tap)="setMyPosition()" *ngIf="!searchMode" />
     </FlexboxLayout>
     <GridLayout colSpan="2" *ngIf="searchMode" columns="*,3*" class="searchBar">
-        <img src="res://icon"  class="searchImg" (tap)="searchByName()"/>
-        <textField col="1" returnKeyType="search" hint="כאן מחפשים מעיין" colSpan="2" class="searchField" (loaded)="onSearchBarLoaded($event)" (returnPress)="searchByName()"></textField>
+        <img src="res://icon" class="searchImg" (tap)="searchByName()" />
+        <textField col="1" returnKeyType="search" hint="{{ 'map.springSearch' | L }}" colSpan="2" class="searchField"
+            (loaded)="onSearchBarLoaded($event)" (returnPress)="searchByName()"></textField>
     </GridLayout>
     <FlexboxLayout row="1" class="iconsFlex imagesMargin">
-        <img row="1" class="iconButton" src="res://icon" (tap)="navigateToFilters()" *ngIf="!searchMode"/>
+        <img row="1" class="iconButton" src="res://icon" (tap)="navigateToFilters()" *ngIf="!searchMode" />
     </FlexboxLayout>
 </GridLayout>

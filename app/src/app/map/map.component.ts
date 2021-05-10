@@ -10,6 +10,7 @@ import * as application from "tns-core-modules/application";
 import { AlertService } from '../common/services/alert-service';
 import { Router } from "@angular/router";
 import { ErrorsService } from '../common/services/errors-service';
+import { Image, ImageSource } from '@nativescript/core';
 
 @Component({
   selector: 'ns-map',
@@ -68,7 +69,11 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.springsService.filterByHotel) {
       this.hotelMarker = new Marker();
       this.hotelMarker.position = Position.positionFromLatLng(this.springsService.singleHotel.location.latitude, this.springsService.singleHotel.location.longitude);
-      this.hotelMarker.color = "#61ffa3";
+      // this.hotelMarker.color = "#61ffa3";
+      const img = new Image();
+      const imgsrc = ImageSource.fromFileSync("~/assets/images/zimmer.png");
+      img.imageSource = imgsrc;
+      this.hotelMarker.icon = img;
       this.hotelMarker.userData = { hotelId: this.springsService.singleHotel.id };
       this.mainMap.addMarker(this.hotelMarker);
       this.centerMap(this.hotelMarker.position.latitude, this.hotelMarker.position.longitude);
@@ -209,8 +214,13 @@ export class MapComponent implements OnInit, OnDestroy {
   private addMarker(spring: FlatSpring) {
     const marker = new Marker();
     marker.position = Position.positionFromLatLng(spring.location._latitude, spring.location._longitude);
-    marker.color = "#9061ff";
+    // marker.color = "#9061ff";
     marker.userData = { springId: spring.id };
+    const img = new Image();
+    // const imgsrc = ImageSource.fromResourceSync("icon");
+    const imgsrc = ImageSource.fromFileSync("~/assets/images/fountain.png");
+    img.imageSource = imgsrc;
+    marker.icon = img;
     this.mainMap.addMarker(marker);
   }
 
@@ -221,8 +231,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (application.android) {
-      application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
-    }
+    // if (application.android) {
+    //   application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
+    // }
   }
 }

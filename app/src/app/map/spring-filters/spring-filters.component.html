@@ -1,36 +1,60 @@
-<FlexboxLayout class="main">
-    <FlexboxLayout flexDirection="column">
-        <FlexboxLayout class="header" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
-            <label style="font-size: 30;" text="X" (tap)="navigateToMap()"></label>
-            <label text="{{ 'springsFilters.title' | L }}"></label>
+<!-- <StackLayout> -->
+<GridLayout rows="*, 6*">
+    <!-- <FlexboxLayout flexDirection="column"> -->
+    <!-- <FlexboxLayout class="header" style="justify-content: space-between;" margin="0 20"
+        [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
+        <SVGImage class="exit" src="~/assets/icons/times-light.svg" (tap)="navigateToMap()">
+        </SVGImage>
+        <label text="{{ 'springsFilters.title' | L }}" class="title"></label>
+    </FlexboxLayout> -->
+    <GridLayout columns="*,4*" class="header" [ngStyle]="{'margin': rightToLeft? '0 0 0 20' : '0 20 0 0'}">
+        <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit" [col]="rightToLeft? 2 : 0"
+            src="~/assets/icons/times-light.svg" (tap)="navigateToMap()" >
+        </SVGImage>
+        <FlexboxLayout [col]="rightToLeft? 0 : 2" [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}" style="align-items: center;">
+            <label text="{{ 'springsFilters.title' | L }}" class="title" ></label>
         </FlexboxLayout>
-        <StackLayout class="line"></StackLayout>
+    </GridLayout>
+    <StackLayout class="line" margin="50 0 0"></StackLayout>
+    <!-- </FlexboxLayout> -->
+    <FlexboxLayout class="main" row="1">
+        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            (tap)="cbCamping.toggle()">
+            <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                #cbCamping />
+            <label text="{{ 'springsFilters.camping' | L }}"></label>
+        </FlexboxLayout>
+        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            (tap)="cbChildren.toggle()">
+            <CheckBox:CheckBox [(ngModel)]="childrenCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                #cbChildren />
+            <label text="{{ 'springsFilters.children' | L }}"></label>
+        </FlexboxLayout>
+        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            (tap)="cbWater.toggle()">
+            <CheckBox:CheckBox [(ngModel)]="waterCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                #cbWater />
+            <label text="{{ 'springsFilters.water' | L }}"></label>
+        </FlexboxLayout>
+        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            (tap)="cbCar.toggle()">
+            <CheckBox:CheckBox [(ngModel)]="carCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                #cbCar />
+            <label text="{{ 'springsFilters.car' | L }}"></label>
+        </FlexboxLayout>
+        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+            (tap)="cbDepth.toggle()">
+            <CheckBox:CheckBox [(ngModel)]="depthCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                #cbDepth />
+            <label text="{{ 'springsFilters.depth' | L }}"></label>
+        </FlexboxLayout>
+        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+            <Slider class="slider" [(ngModel)]="sliderValue" minValue="0" maxValue="100"></Slider>
+            <label text="{{ 'springsFilters.radius' | L }} {{sliderValue}} KM"></label>
+        </FlexboxLayout>
+        <StackLayout verticalAlignment="center" class="search" (tap)="search()">
+            <label text="{{ 'springsFilters.search' | L }}"></label>
+        </StackLayout>
     </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" (tap)="cbCamping.toggle()">
-        <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbCamping/>
-        <label text="{{ 'springsFilters.camping' | L }}"></label>
-    </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" (tap)="cbChildren.toggle()">
-        <CheckBox:CheckBox [(ngModel)]="childrenCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbChildren/>
-        <label text="{{ 'springsFilters.children' | L }}"></label>
-    </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" (tap)="cbWater.toggle()">
-        <CheckBox:CheckBox [(ngModel)]="waterCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbWater/>
-        <label text="{{ 'springsFilters.water' | L }}"></label>
-    </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" (tap)="cbCar.toggle()">
-        <CheckBox:CheckBox [(ngModel)]="carCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbCar/>
-        <label text="{{ 'springsFilters.car' | L }}"></label>
-    </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" (tap)="cbDepth.toggle()">
-        <CheckBox:CheckBox [(ngModel)]="depthCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbDepth/>
-        <label text="{{ 'springsFilters.depth' | L }}"></label>
-    </FlexboxLayout>
-    <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
-        <Slider class="slider" [(ngModel)]="sliderValue" minValue="0" maxValue="100"></Slider>
-        <label text="{{ 'springsFilters.radius' | L }} {{sliderValue}} KM"></label>
-    </FlexboxLayout>
-    <StackLayout verticalAlignment="center" class="search" (tap)="search()">
-        <label text="{{ 'springsFilters.search' | L }}"></label>
-    </StackLayout>
-</FlexboxLayout>
+</GridLayout>
+<!-- </StackLayout> -->

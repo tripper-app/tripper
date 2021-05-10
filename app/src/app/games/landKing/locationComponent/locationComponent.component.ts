@@ -12,9 +12,11 @@ import { Location } from "~/app/common/models/location";
     styleUrls: ['./locationComponent.component.scss']
 })
 export class LocationComponentComponent implements OnInit {
-    @Input() container: ElementRef;
+    @Input() container;
     @Input() location: Location;
-    @Output() draggedEmitter: EventEmitter<{x, y}> = new EventEmitter();
+    @Input() feedback;
+    @Output() draggedEmitter: EventEmitter<{ x, y }> = new EventEmitter();
+    @Output() draggStartEmitter: EventEmitter<any> = new EventEmitter();
     @ViewChild("dragGrid", { static: false }) dragGrid: ElementRef;
     // @ViewChild("container", { static: false }) container: ElementRef;
     @ViewChild("dragImage", { static: false }) dragImage: ElementRef;
@@ -23,9 +25,11 @@ export class LocationComponentComponent implements OnInit {
     itemContainer: GridLayout;
     prevDeltaX: number;
     prevDeltaY: number;
-    mapGap = 150;
+    //mapGap = 150;
+    showFeedback = true;
     first = true;
     placed = false;
+    //scr = screen;
     constructor(private page: Page,
         private languageService: LanguageService) {
     }
@@ -35,6 +39,10 @@ export class LocationComponentComponent implements OnInit {
         setTimeout(() => {
             this.initPanStats();
         }, 0);
+
+        setTimeout(() => {
+            this.feedback = undefined;
+        }, 1000);
     }
 
     initPanStats() {
@@ -51,8 +59,9 @@ export class LocationComponentComponent implements OnInit {
         if (!this.placed) {
             if (this.first) {
                 this.first = false;
+                this.draggStartEmitter.emit();
                 this.dragGrid.nativeElement.androidElevation = 0;
-                this.dragGrid.nativeElement.animate({ height: 50, duration: 200 }).then(() => {
+                this.dragGrid.nativeElement.animate({ height: 60, duration: 200 }).then(() => {
                     this.dragGrid.nativeElement.columns = "*,*,*";
                     // this.dragGrid.nativeElement.backgroundColor = 'transparent';
                 });
@@ -71,6 +80,20 @@ export class LocationComponentComponent implements OnInit {
                 this.prevDeltaX = args.deltaX;
                 this.prevDeltaY = args.deltaY;
 
+                // if (this.dragImageItem.translateX < screen.mainScreen.widthDIPs / -2) {
+                //     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / -2;
+                // }
+                // else if (this.dragImageItem.translateX > screen.mainScreen.widthDIPs / 2) {
+                //     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / 2;
+                // }
+
+                // if (this.dragImageItem.translateY < (screen.mainScreen.heightDIPs - this.mapGap) / -2) {
+                //     this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / -2
+                // }
+                // else if (this.dragImageItem.translateY > (screen.mainScreen.heightDIPs - this.mapGap) / 2) {
+                //     this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / 2;
+                // }
+
                 if (this.dragImageItem.translateX < screen.mainScreen.widthDIPs / -2) {
                     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / -2;
                 }
@@ -78,18 +101,19 @@ export class LocationComponentComponent implements OnInit {
                     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / 2;
                 }
 
-                if (this.dragImageItem.translateY < (screen.mainScreen.heightDIPs - this.mapGap) / -2) {
-                    this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / -2
+                if (this.dragImageItem.translateY < (this.container.getActualSize().height) / -2) {
+                    this.dragImageItem.translateY = (this.container.getActualSize().height) / -2
                 }
-                else if (this.dragImageItem.translateY > (screen.mainScreen.heightDIPs - this.mapGap) / 2) {
-                    this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / 2;
+                else if (this.dragImageItem.translateY > (this.container.getActualSize().height) / 2) {
+                    this.dragImageItem.translateY = (this.container.getActualSize().height) / 2;
                 }
             }
             else if (args.state === 3) // up
             {
-                const click = { x: (this.dragImageItem.translateX + screen.mainScreen.widthDIPs / 2) / screen.mainScreen.widthDIPs, y: 1-((this.dragImageItem.translateY + (screen.mainScreen.heightDIPs - this.mapGap) / 2) / (screen.mainScreen.heightDIPs - this.mapGap)) };
-                // console.log("x: " + (this.dragImageItem.translateX + screen.mainScreen.widthDIPs / 2) / screen.mainScreen.widthDIPs);
-                // console.log("y: " + (this.dragImageItem.translateY + (screen.mainScreen.heightDIPs - this.mapGap) / 2) / (screen.mainScreen.heightDIPs - this.mapGap));
+                const click = {
+                    x: (this.dragImageItem.translateX + screen.mainScreen.widthDIPs / 2) / screen.mainScreen.widthDIPs,
+                    y: 1 - ((this.dragImageItem.translateY + (this.container.getActualSize().height) / 2) / (this.container.getActualSize().height))
+                };
                 this.placed = true;
                 this.draggedEmitter.emit(click);
             }
@@ -98,9 +122,5 @@ export class LocationComponentComponent implements OnInit {
 
     alignVertical(label) {
         label.android.setGravity(17)
-    }
-
-    exit() {
-
     }
 }

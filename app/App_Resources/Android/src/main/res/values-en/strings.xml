@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_labels_bnb_Z1UVUGt">"BNB"</string>
+  <string name="_labels_games_Z24DILK">"Games"</string>
+  <string name="_labels_account_23m8Pk">"Account"</string>
   <string name="_labels_notification_2toIAr">"Notification"</string>
   <string name="_labels_about_Z2530gQ">"About"</string>
   <string name="_labels_all_Z1UVUX5">"all"</string>
@@ -118,6 +121,7 @@
   <string name="_springsFilters_children_2wpXPD">"Suitable for children"</string>
   <string name="_springsFilters_camping_ZjdBkz">"Suitable for camping"</string>
   <string name="_springsFilters_title_ZnoprO">"What spring to look for?"</string>
+  <string name="_map_springSearch_2iNEXf">"Here you search for a spring"</string>
   <string name="_switchLanguage_switchLanguageMessage_en_Z6nYab">"The application needs to be restarted in order to apply changes"</string>
   <string name="_switchLanguage_switchLanguageMessage_iw_Z6nY80">"כדי להחל את השינויים האפליקציה צריכה להסגר"</string>
   <string name="_switchLanguage_closeApp_en_2aUA9D">"OK, i will close the app"</string>

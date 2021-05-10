@@ -5,26 +5,16 @@
     justify-content: space-between;
 }
 
-.header{
-    height: $headerHeight;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20;
-    font-size: 20;
+.title{
+    font-size: $subtitleFontSize;
+    font-weight: 600;
 }
 
 .filterLine{
     justify-content: space-between;
     align-items: center;
     padding: 0 20;
-    font-size: 18;
-}
-
-.mainActivityIndicator{
-    width: 100;
-    height: 100;
-    margin: 20;
-    color: rgb(195, 216, 99);
+    font-size: $subtitleFontSize;
 }
 
 .search{
@@ -32,7 +22,7 @@
     height: $bottomHeight;
     margin-top: 30;
     background-color: $themeColor;
-    font-size: 25;
+    font-size: $subtitleFontSize;
     color: white;
 }
 

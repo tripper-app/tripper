@@ -1,12 +1,13 @@
 @import '../../../_app-common.scss';
 
 .greyText{
-  color: $greyText;
+  color: black;
+  opacity: 0.5;
 }
 
 .facebook{
   height: $bottomHeight;
-  font-size: $titleFontSize;
+  font-size: $subtitleFontSize;
   background-color: rgb(0, 134, 212);
   align-items: center;
   color: whitesmoke;
@@ -14,16 +15,16 @@
 }
 
 .title{
-  font-size: $subtitleFontSize;
+  font-size: $regularFontSize;
 }
 
 .signUp{
-  font-size: $titleFontSize; 
+  font-size: $subtitleFontSize; 
   text-align: center;
 }
 
 .loginBtn{
-  font-size: $titleFontSize;
+  font-size: $subtitleFontSize;
   color: whitesmoke;
   background-color: $themeColor;
   height: $bottomHeight;
@@ -31,8 +32,8 @@
 }
 
 .langLabel{
-  font-size: 18;
-  font-weight: bold;
+  font-size: $subtitleFontSize; 
+  color: black;
 }
 
 .input {
@@ -42,4 +43,8 @@
   border-bottom-width: 2;
   border-color:$themeColor;
   margin: 0; // BUG: if margin is not set there is default of about 10 from the sides
+}
+
+.forgotPassword{
+  font-size: $smallFontSize;
 }

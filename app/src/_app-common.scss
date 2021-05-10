@@ -7,11 +7,13 @@
 // Font icon class
 $themeColor: rgb(35, 204, 153);
 $greyText: rgb(168, 151, 151);
-$headerHeight: 55;
+$headerHeight: 12%;
 $bottomHeight: 65;
 $headerFontSize: 16;
-$titleFontSize: 20;
-$subtitleFontSize: 15;
+$titleFontSize: 25%;
+$subtitleFontSize: 21%;
+$regularFontSize: 17%;
+$smallFontSize: 14%;
 
 Label{
     text-wrap: true;
@@ -20,24 +22,35 @@ Label{
 .header{
     height: $headerHeight;
     font-size: $titleFontSize;
-    margin: 20 10 0;
-    font-weight: 700;
+    // margin: 20 10 0;
+    font-weight: 600;
+    font-family: "Heebo";
+  }
+
+  .exit{
+      opacity: 0.2;
+      height: 55%;
   }
 
 .line{
-    height: 3;
-    background-color: $greyText;
+    height: 4;
+    background-color: rgb(246, 246, 246);
 }
 
-.fab {
-    font-family: "Font Awesome 5 Brands", "fa-brands-400";
-    font-weight: 400;
+.greyText{
+    color: black;
+    opacity: 0.5;
 }
 
-.fas {
-    font-family: "Font Awesome 5 Free", "fa-solid-900";
-    font-weight: 900;
-}
+// .fab {
+//     font-family: "Font Awesome 5 Brands", "fa-brands-400";
+//     font-weight: 400;
+// }
+
+// .fas {
+//     font-family: "Font Awesome 5 Free", "fa-solid-900";
+//     font-weight: 900;
+// }
 
 .far {
     font-family: "Font Awesome 5 Free", "fa-regular-400";

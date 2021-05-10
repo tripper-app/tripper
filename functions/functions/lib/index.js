@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.setHighScore = exports.getHighScore = exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -39,7 +39,7 @@ const notificationsCollection = 'notifications';
 const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
-const historyLimit = 30;
+const historyLimit = 10;
 const runtimeOpts = {
     timeoutSeconds: 60,
     memory: '128MB'
@@ -78,7 +78,7 @@ exports.getAllSprings = functionBuilder(async (req, res) => {
         res.send(springs);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
     }
 });
 exports.getSpringByName = functionBuilder(async (req, res) => {
@@ -97,7 +97,8 @@ exports.getSpringByName = functionBuilder(async (req, res) => {
         res.send(flatSpring);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getSpring = functionBuilder(async (req, res) => {
@@ -148,7 +149,8 @@ exports.getSpring = functionBuilder(async (req, res) => {
         res.send(data);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.login = functionBuilder(async (req, res) => {
@@ -177,7 +179,8 @@ exports.login = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.loginWithThirdParty = functionBuilder(async (req, res) => {
@@ -212,7 +215,8 @@ exports.loginWithThirdParty = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.signUp = functionBuilder(async (req, res) => {
@@ -253,7 +257,8 @@ exports.signUp = functionBuilder(async (req, res) => {
             res.status(422).send("Wrong email address");
         }
         else {
-            handleError(res, error);
+            handleError(req, res, error);
+            ;
         }
     }
 });
@@ -271,7 +276,8 @@ exports.updateSpring = functionBuilder(async (req, res) => {
         res.send(mailRes);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.verifyEmail = functionBuilder(async (req, res) => {
@@ -287,7 +293,8 @@ exports.verifyEmail = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
@@ -312,7 +319,8 @@ exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
             res.status(422).send("Wrong email address");
         }
         else {
-            handleError(res, error);
+            handleError(req, res, error);
+            ;
         }
     }
 });
@@ -341,7 +349,8 @@ exports.resetPasswordRecieveCode = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.changePassword = functionBuilder(async (req, res) => {
@@ -369,7 +378,8 @@ exports.changePassword = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.updateProfile = functionBuilder(async (req, res) => {
@@ -390,7 +400,8 @@ exports.updateProfile = functionBuilder(async (req, res) => {
         });
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.addComment = functionBuilder(async (req, res) => {
@@ -421,7 +432,8 @@ exports.addComment = functionBuilder(async (req, res) => {
         }
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.addFavoriteSpring = functionBuilder(async (req, res) => {
@@ -435,7 +447,8 @@ exports.addFavoriteSpring = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.removeFavoriteSpring = functionBuilder(async (req, res) => {
@@ -449,7 +462,8 @@ exports.removeFavoriteSpring = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getFavoriteSprings = functionBuilder(async (req, res) => {
@@ -477,7 +491,8 @@ exports.getFavoriteSprings = functionBuilder(async (req, res) => {
         res.send(actualSprings);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 // export const addHistorySpring = functionBuilder(async (req, res) => {
@@ -495,7 +510,7 @@ exports.getFavoriteSprings = functionBuilder(async (req, res) => {
 //             });
 //         }
 //     } catch (error) {
-//         handleError(res, error);
+//         handleError(req, res, error);;
 //     }
 // })
 exports.getHistorySprings = functionBuilder(async (req, res) => {
@@ -523,7 +538,8 @@ exports.getHistorySprings = functionBuilder(async (req, res) => {
         res.send(actualSprings);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getAllHotels = functionBuilder(async (req, res) => {
@@ -547,7 +563,8 @@ exports.getAllHotels = functionBuilder(async (req, res) => {
         res.send(hotels);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getHotel = functionBuilder(async (req, res) => {
@@ -590,7 +607,8 @@ exports.getHotel = functionBuilder(async (req, res) => {
         res.send(data);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.addFavoriteHotel = functionBuilder(async (req, res) => {
@@ -604,7 +622,8 @@ exports.addFavoriteHotel = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.removeFavoriteHotel = functionBuilder(async (req, res) => {
@@ -618,7 +637,8 @@ exports.removeFavoriteHotel = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getFavoriteHotels = functionBuilder(async (req, res) => {
@@ -629,7 +649,8 @@ exports.getFavoriteHotels = functionBuilder(async (req, res) => {
         res.send(favorites);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getUserProfile = functionBuilder(async (req, res) => {
@@ -671,7 +692,8 @@ exports.updateUserName = functionBuilder(async (req, res) => {
         res.send();
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getKahoot = functionBuilder(async (req, res) => {
@@ -685,7 +707,8 @@ exports.getKahoot = functionBuilder(async (req, res) => {
         res.send(result);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getTriviaSubjects = functionBuilder(async (req, res) => {
@@ -700,7 +723,8 @@ exports.getTriviaSubjects = functionBuilder(async (req, res) => {
         res.send(result);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getTriviaQuestion = functionBuilder(async (req, res) => {
@@ -711,7 +735,8 @@ exports.getTriviaQuestion = functionBuilder(async (req, res) => {
         res.send({ image: data.image, text: data.text[currentLanguage], answers: data.answers.map((a) => a[currentLanguage]), rightAnswer: data.rightAnswer });
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getTriviaQuestions = functionBuilder(async (req, res) => {
@@ -730,7 +755,8 @@ exports.getTriviaQuestions = functionBuilder(async (req, res) => {
         res.send(arr);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getBingoItems = functionBuilder(async (req, res) => {
@@ -744,7 +770,8 @@ exports.getBingoItems = functionBuilder(async (req, res) => {
         res.send(items);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getLocations = functionBuilder(async (req, res) => {
@@ -760,7 +787,8 @@ exports.getLocations = functionBuilder(async (req, res) => {
         res.send(items);
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
     }
 });
 exports.getNotification = functionBuilder(async (req, res) => {
@@ -776,7 +804,37 @@ exports.getNotification = functionBuilder(async (req, res) => {
         res.send({ time: (_a = ref.updateTime) === null || _a === void 0 ? void 0 : _a.seconds, text: result });
     }
     catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
+        ;
+    }
+});
+exports.getHighScore = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.access_token);
+        const quiz = req.query.quiz;
+        const userRef = await db.collection('users').doc(email);
+        const score = (await userRef.get()).get(quiz + "HighScore");
+        res.send({ score: score });
+    }
+    catch (error) {
+        handleError(req, res, error);
+        ;
+    }
+});
+exports.setHighScore = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.access_token);
+        const quiz = req.query.quiz;
+        const score = req.query.score;
+        const userRef = await db.collection('users').doc(email);
+        let data = {};
+        data[`${quiz}HighScore`] = score;
+        await userRef.update(data);
+        res.send({ score: score });
+    }
+    catch (error) {
+        handleError(req, res, error);
+        ;
     }
 });
 // remove
@@ -788,8 +846,8 @@ exports.getNotification = functionBuilder(async (req, res) => {
 //         res.status(500).send(error);
 //     }
 // })
-const handleError = (res, err) => {
-    functions.logger.error(err);
+const handleError = (req, res, err) => {
+    functions.logger.error({ request: req }, err);
     res.status(500).send(err);
 };
 const setSpringsQuery = async (filters) => {

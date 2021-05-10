@@ -1,9 +1,10 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Page } from "@nativescript/core";
 import { TriviaQuestion } from "~/app/common/models/triviaQuestion";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
+import { UserService } from "~/app/common/services/userService";
 
 @Component({
     selector: 'ns-trivia-question',
@@ -18,16 +19,18 @@ export class TriviaQuestionComponent {
     showingAnswer = false;
     question = new TriviaQuestion();
     pendingQuestion: TriviaQuestion;
-
+    highScore = 0;
+    quizName = "trivia";
     constructor(private page: Page,
         private gameService: GamesService,
         private router: Router,
-        private route: ActivatedRoute,
-        private errorService: ErrorsService) {
+        private errorService: ErrorsService,
+        private userService: UserService) {
         this.page.actionBarHidden = true;
     }
 
     ngOnInit() {
+        this.getHighScore();
         this.nextQuestion();
     }
 
@@ -80,7 +83,20 @@ export class TriviaQuestionComponent {
         }
     }
 
+    getHighScore(){
+        this.gameService.getHighScore(this.quizName).subscribe(res => {
+            this.highScore = res.score;
+        }, err => {
+            this.errorService.handleErorr(err);
+        })
+    }
+
     exit() {
+        if (this.gameService.score > this.highScore) {
+            this.gameService.setHighScore(this.quizName, this.gameService.score).subscribe(res => {
+                console.log("new highscore is " + this.gameService.score);
+            })
+        }
         this.router.navigate(['score']);
     }
 }

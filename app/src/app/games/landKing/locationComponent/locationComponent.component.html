@@ -1,9 +1,13 @@
-<GridLayout androidElevation="5" style="height: 200; width: 200; background-color: whitesmoke; border-radius: 100%;"
+<GridLayout androidElevation="5" style="height: 200; width: 200; background-color: white; border-radius: 100%;"
     columns="*,2*,*" #dragGrid>
-    <label [text]="location.name" style="font-size: 15; text-align: center;" *ngIf="!first && !placed" (onloaded)="alignVertical(name)"
+    <label [text]="location.name" [ngStyle]="{margin: rightToLeft? '0 -10 0 0' : '0 0 0 -10'}" style="font-size: 15; text-align: center;" *ngIf="!first && !placed && !feedback" (onloaded)="alignVertical(name)"
         #name></label>
-    <img (pan)="onPan($event)"  src="res://icon" height="80" width="80" col="1" #dragImage />
-    <FlexboxLayout col="1" style="justify-content: center; align-items: flex-end;margin-bottom: 20;" *ngIf="first">
+    <img *ngIf="!feedback" (pan)="onPan($event)" src="res://icon" height="80" width="80" col="1" #dragImage />
+    <FlexboxLayout col="1" style="justify-content: center; align-items: flex-end;margin-bottom: 20;" *ngIf="first && !feedback">
         <label [text]="location.name"></label>
+    </FlexboxLayout>
+    <FlexboxLayout col="1" class="feedback" flexDirection="column" *ngIf="feedback && !placed">
+        <label text="+{{feedback.score}}" class="score"></label>
+        <label text="{{feedback.text}}"></label>
     </FlexboxLayout>
 </GridLayout>

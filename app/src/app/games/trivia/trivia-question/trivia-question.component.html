@@ -1,29 +1,41 @@
-<ScrollView height="100%">
-    <GridLayout>
-       <StackLayout>
-            <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                <label text="X" (tap)="exit()"></label>
-                <Label text="{{'games.trivia' | L }}: {{gameService.subjectName}}"></Label>
-            </FlexboxLayout>
-            <StackLayout class="line"></StackLayout>
-            <StackLayout marginBottom="80">
-                <label class="answer" [text]="question.text"></label>
-                <GridLayout height="200" *ngIf="question.image">
-                    <ns-waiting-gif></ns-waiting-gif>
-                    <img class="questionImage" [src]="question.image" />
-                </GridLayout>
-            </StackLayout>
-            <StackLayout *ngFor="let answer of question.answers; let i = index">
+<StackLayout>
+    <ScrollView height="90%">
+        <GridLayout>
+            <StackLayout>
+                <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                    <label text="X" (tap)="exit()"></label>
+                    <Label text="{{'games.trivia' | L }}: {{gameService.subjectName}}"></Label>
+                </FlexboxLayout>
                 <StackLayout class="line"></StackLayout>
-                <label class="answer" text="{{answer}}" (tap)="checkAnswer(i)"></label>
+                <StackLayout marginBottom="80">
+                    <label class="answer" [text]="question.text"></label>
+                    <GridLayout height="200" *ngIf="question.image">
+                        <ns-waiting-gif></ns-waiting-gif>
+                        <img class="questionImage" [src]="question.image" />
+                    </GridLayout>
+                </StackLayout>
+                <StackLayout *ngFor="let answer of question.answers; let i = index">
+                    <StackLayout class="line"></StackLayout>
+                    <label class="answer" text="{{answer}}" (tap)="checkAnswer(i)"></label>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
-        <StackLayout opacity="0" #wrongAnswer>
-            <ns-wrong-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-wrong-answer>
-        </StackLayout>
-        <StackLayout opacity="0" #rightAnswer>
-            <ns-right-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-right-answer>
-        </StackLayout>
-        <ns-waiting-gif *ngIf="waitingForResponse && !showingAnswer"></ns-waiting-gif>
-    </GridLayout>
-</ScrollView>
+            <StackLayout opacity="0" #wrongAnswer>
+                <ns-wrong-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-wrong-answer>
+            </StackLayout>
+            <StackLayout opacity="0" #rightAnswer>
+                <ns-right-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-right-answer>
+            </StackLayout>
+            <ns-waiting-gif *ngIf="waitingForResponse && !showingAnswer"></ns-waiting-gif>
+        </GridLayout>
+    </ScrollView>
+    <FlexboxLayout class="lowerLine">
+        <FlexboxLayout *ngIf="userService.userLoggedIn" style="justify-content: center; align-items: center;">
+            <img height="70%" src="res://icon" />
+            <Label style="font-size: 15; text-align: center;" [text]="highScore"></Label>
+        </FlexboxLayout>
+        <FlexboxLayout style="justify-content: center; align-items: center;">
+            <img height="70%" src="res://icon" />
+            <Label style="font-size: 15; text-align: center;" text="{{ gameService.score}}"></Label>
+        </FlexboxLayout>
+    </FlexboxLayout>
+</StackLayout>

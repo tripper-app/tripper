@@ -1,13 +1,18 @@
 @import '../../app-common';
 
-.appName{
+.title{
     text-align: center;
-    color: $themeColor;
-    font-size: 50;
-    font-weight: 500;
+    font-size: $titleFontSize;
 }
 
 .text{
     margin: 10;
-    font-size: $subtitleFontSize;
+    font-size: $regularFontSize;
+    color: black;
+}
+
+.svgImage{
+    fill-colors: yellow;
+    stroke-colors: yellow;
+    stroke-width: 5;
 }

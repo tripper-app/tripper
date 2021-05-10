@@ -39,7 +39,7 @@ const notificationsCollection = 'notifications';
 const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
-const historyLimit = 30;
+const historyLimit = 10;
 const runtimeOpts: functions.RuntimeOptions = {
     timeoutSeconds: 60,
     memory: '128MB'
@@ -85,7 +85,7 @@ export const getAllSprings = functionBuilder(async (req, res) => {
 
         res.send(springs)
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);
     }
 })
 
@@ -104,7 +104,7 @@ export const getSpringByName = functionBuilder(async (req, res) => {
         }
         res.send(flatSpring);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -157,7 +157,7 @@ export const getSpring = functionBuilder(async (req, res) => {
         }
         res.send(data)
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -185,7 +185,7 @@ export const login = functionBuilder(async (req, res) => {
             res.status(400).send("email and password required");
         }
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 
 })
@@ -222,7 +222,7 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
         }
 
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -262,7 +262,7 @@ export const signUp = functionBuilder(async (req, res) => {
         if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         } else {
-            handleError(res, error);
+            handleError(req, res, error);;
         }
     }
 })
@@ -281,7 +281,7 @@ export const updateSpring = functionBuilder(async (req, res) => {
         const mailRes = await transporter.sendMail(mailOptions);
         res.send(mailRes);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -296,7 +296,7 @@ export const verifyEmail = functionBuilder(async (req, res) => {
             res.status(400).send("can't find this email address");
         }
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -321,7 +321,7 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
         if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         } else {
-            handleError(res, error);
+            handleError(req, res, error);;
         }
     }
 })
@@ -349,7 +349,7 @@ export const resetPasswordRecieveCode = functionBuilder(async (req, res) => {
         }
 
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -375,7 +375,7 @@ export const changePassword = functionBuilder(async (req, res) => { // should us
             res.status(400).send("please provide old and new passwords");
         }
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -396,7 +396,7 @@ export const updateProfile = functionBuilder(async (req, res) => {
             throw err;
         });
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -427,7 +427,7 @@ export const addComment = functionBuilder(async (req, res) => {
 
         }
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -442,7 +442,7 @@ export const addFavoriteSpring = functionBuilder(async (req, res) => {
 
         res.send();
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -457,7 +457,7 @@ export const removeFavoriteSpring = functionBuilder(async (req, res) => {
 
         res.send();
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -485,7 +485,7 @@ export const getFavoriteSprings = functionBuilder(async (req, res) => {
         })
         res.send(actualSprings);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -505,7 +505,7 @@ export const getFavoriteSprings = functionBuilder(async (req, res) => {
 //             });
 //         }
 //     } catch (error) {
-//         handleError(res, error);
+//         handleError(req, res, error);;
 //     }
 // })
 
@@ -533,7 +533,7 @@ export const getHistorySprings = functionBuilder(async (req, res) => {
         })
         res.send(actualSprings);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -557,7 +557,7 @@ export const getAllHotels = functionBuilder(async (req, res) => {
         })
         res.send(hotels)
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -600,7 +600,7 @@ export const getHotel = functionBuilder(async (req, res) => {
         }
         res.send(data);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -615,7 +615,7 @@ export const addFavoriteHotel = functionBuilder(async (req, res) => {
 
         res.send();
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -630,7 +630,7 @@ export const removeFavoriteHotel = functionBuilder(async (req, res) => {
 
         res.send();
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -641,7 +641,7 @@ export const getFavoriteHotels = functionBuilder(async (req, res) => {
         const favorites = user.get('favoriteHotels');
         res.send(favorites);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -685,7 +685,7 @@ export const updateUserName = functionBuilder(async (req, res) => {
 
         res.send();
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -700,7 +700,7 @@ export const getKahoot = functionBuilder(async (req, res) => {
 
         res.send(result);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -715,7 +715,7 @@ export const getTriviaSubjects = functionBuilder(async (req, res) => {
         })
         res.send(result);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -727,7 +727,7 @@ export const getTriviaQuestion = functionBuilder(async (req, res) => {
 
         res.send({ image: data.image, text: data.text[currentLanguage], answers: data.answers.map((a: any) => a[currentLanguage]), rightAnswer: data.rightAnswer });
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -746,7 +746,7 @@ export const getTriviaQuestions = functionBuilder(async (req, res) => {
         }
         res.send(arr);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -761,7 +761,7 @@ export const getBingoItems = functionBuilder(async (req, res) => {
 
         res.send(items);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -778,7 +778,7 @@ export const getLocations = functionBuilder(async (req, res) => {
 
         res.send(items);
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
     }
 })
 
@@ -794,7 +794,34 @@ export const getNotification = functionBuilder(async (req, res) => {
 
         res.send({ time: ref.updateTime?.seconds, text: result });
     } catch (error) {
-        handleError(res, error);
+        handleError(req, res, error);;
+    }
+})
+
+export const getHighScore = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.access_token as string);
+        const quiz = req.query.quiz as string;
+        const userRef = await db.collection('users').doc(email);
+        const score = (await userRef.get()).get(quiz + "HighScore");
+        res.send({score: score});
+    } catch (error) {
+        handleError(req, res, error);;
+    }
+})
+
+export const setHighScore = functionBuilder(async (req, res) => {
+    try {
+        const email = validateJwtToken(req.headers.access_token as string);
+        const quiz = req.query.quiz;
+        const score = req.query.score;
+        const userRef = await db.collection('users').doc(email);
+        let data: any = {};
+        data[`${quiz}HighScore`] = score;
+        await userRef.update(data)
+        res.send({score: score});
+    } catch (error) {
+        handleError(req, res, error);;
     }
 })
 
@@ -809,8 +836,8 @@ export const getNotification = functionBuilder(async (req, res) => {
 // })
 
 
-const handleError = (res: functions.Response, err: Error) => {
-    functions.logger.error(err);
+const handleError = (req: functions.Request, res: functions.Response, err: Error) => {
+    functions.logger.error({request: req}, err);
     res.status(500).send(err);
 }
 

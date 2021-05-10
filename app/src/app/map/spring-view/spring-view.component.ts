@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { localize } from "nativescript-localize";
@@ -21,7 +21,7 @@ import { registerSoftKeyboardCallback } from 'nativescript-soft-keyboard';
     templateUrl: './spring-view.component.html',
     styleUrls: ['./spring-view.component.scss']
 })
-export class SpringsViewComponent implements OnInit {
+export class SpringsViewComponent implements OnInit, OnDestroy {
     commentHeight = 60;
     rightToLeft = true;
     mainColor = "rgb(35, 204, 153)";
@@ -34,6 +34,8 @@ export class SpringsViewComponent implements OnInit {
     fullComments = false;
     thereIsComment = false;
     isKeyboardOpen = false;
+    navigated = false;
+
     constructor(private page: Page,
         private router: Router,
         private springsService: SpringsService,
@@ -43,23 +45,28 @@ export class SpringsViewComponent implements OnInit {
         private modalService: ModalDialogService,
         private viewContainerRef: ViewContainerRef,
         private errorService: ErrorsService,
-        private cd: ChangeDetectorRef,
         private route: ActivatedRoute,
+        private cd: ChangeDetectorRef,
         private zone: NgZone) {
+    }
+    ngOnDestroy(): void {
+        this.navigated = true;
     }
 
     ngOnInit(): void {
         registerSoftKeyboardCallback(h => {
-            this.zone.run(() => {
-                this.isKeyboardOpen = h>0;
-                this.cd.detectChanges();
-            })
+            if (this.navigated) {
+                this.zone.run(() => {
+                    this.isKeyboardOpen = h > 0;
+                    this.cd.detectChanges();
+                })
+            }
         })
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.waitingForResponse = true;
         // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.waitingForResponse = false;
             this.currentSpring = spring;
 
@@ -178,8 +185,12 @@ export class SpringsViewComponent implements OnInit {
         return txt;
     }
 
-    tapComment(){
+    tapComment() {
         this.isKeyboardOpen = true;
+    }
+
+    closeKeyboard() {
+
     }
 
     handleErrors(error) {

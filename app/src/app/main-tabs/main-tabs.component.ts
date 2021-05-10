@@ -16,11 +16,12 @@ import { NotificationsModalComponent } from './notificationsModal/notificationsM
 @Component({
     selector: 'ns-mainTabs',
     templateUrl: './main-tabs.component.html',
-    styleUrls: ['./main-tabs.component.css']
+    styleUrls: ['./main-tabs.component.scss']
 })
 export class MainTabsComponent implements OnInit {
     @ViewChild('tabs', { static: true }) tabs;
     selectedPageIndex = 0;
+    currentIndex;
     tabsVisibility = true;
     showList = false;
     constructor(private route: ActivatedRoute,
@@ -29,7 +30,7 @@ export class MainTabsComponent implements OnInit {
         private modalService: ModalDialogService,
         private languageService: LanguageService,
         private httpService: HttpService,
-        
+
         private hotelService: HotelsService,
         private userService: UserService) {
     }
@@ -52,6 +53,8 @@ export class MainTabsComponent implements OnInit {
     }
 
     pageChange(index) {
+        this.currentIndex = index;
+
         if (index != 2) {
             this.hotelService.showList = false;
             if (index == 0 && !this.userService.userLoggedIn) {
@@ -75,9 +78,9 @@ export class MainTabsComponent implements OnInit {
                 const options: ModalDialogOptions = {
                     viewContainerRef: this.viewContainerRef,
                     fullscreen: false,
-                    context: {text: res.text}
+                    context: { text: res.text }
                 };
-                this.modalService.showModal(NotificationsModalComponent, options)                
+                this.modalService.showModal(NotificationsModalComponent, options)
                 setString('notificationTimeStamp', res.time.toString());
             }
         })
