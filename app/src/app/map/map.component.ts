@@ -64,7 +64,7 @@ export class MapComponent implements OnInit, OnDestroy {
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
     }
-    this.getSprings();
+    // this.getSprings();
   }
 
   async getSprings() {

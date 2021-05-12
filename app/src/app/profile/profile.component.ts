@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
     @Output() goToMap: EventEmitter<any> = new EventEmitter();
     @Output() goToAbout: EventEmitter<any> = new EventEmitter();
 
-    animationTime = 150;
+    animationTime = 200;
     favoritesGifHeight = 320;
     usernameInput;
     currentUser = new User();

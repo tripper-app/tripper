@@ -1,29 +1,31 @@
 <StackLayout>
     <ScrollView height="100%">
         <StackLayout (tap)="tappedAnywhere()">
-            <GridLayout class="header" columns="*,3*,*">
-                <label col="1" text="{{ 'profile.title' | L }}" class="title" (onloaded)="alignVertical(title)"
-                    #title></label>
-                <img src="res://icon" (tap)="navigatetoAbout()" height="60%" [col]="rightToLeft? 2 : 0" />
+            <GridLayout class="header secondFontSize" columns="*,5*,*">
+                <label col="1" text="{{ 'profile.title' | L }}" (onloaded)="alignVertical(title)" #title></label>
+                <SVGImage height="70%" [col]="rightToLeft? 2 : 0" src="~/assets/icons/logo line.svg"
+                    (tap)="navigatetoAbout()">
+                </SVGImage>
             </GridLayout>
-            <StackLayout class="line"></StackLayout>
+            <StackLayout class="line" marginBottom="20"></StackLayout>
             <StackLayout margin="10">
                 <GridLayout [height]="widthHalf-10" columns="*,2*,*">
                     <FlexboxLayout flexDirection="column" [col]="rightToLeft? 0 : 2"
                         [ngStyle]="{'align-items': rightToLeft? 'flex-start' : 'flex-end'}"
                         style="justify-content: flex-end;">
-                        <img src="res://icon" height="30" (tap)="uploadImage()" />
+                        <SVGImage height="20" width="20" src="~/assets/icons/pen.svg" (tap)="uploadImage()">
+                        </SVGImage>
                     </FlexboxLayout>
-                    <img col="1" class="pic" stretch="fill" [src]="currentUser.profile" *ngIf="!waitingForUserPic"/>
-                    <StackLayout col="1" class="gif" borderRadius="100" >
+                    <img col="1" class="pic" stretch="fill" [src]="currentUser.profile" *ngIf="!waitingForUserPic" />
+                    <StackLayout col="1" class="gif" borderRadius="100">
                         <Lottie:LottieView src="waitingGif.json" speed="1" loop="true" autoPlay="true" />
                     </StackLayout>
                 </GridLayout>
                 <GridLayout columns="*,3*,*" row="*" marginTop="20">
-                    <label col="1" [text]="currentUser.userName" style="font-size: 20; font-weight: bold;"
+                    <label col="1" [text]="currentUser.userName" class="semiBoldFont titleFontSize"
                         (onloaded)="alignVertical(name)"
                         [ngStyle]="{'visibility': editingUsername? 'collapse' : 'visible'}" #name></label>
-                    <TextField col="1" style="font-size: 20; margin-top: -6;" autocorrect="false"
+                    <TextField class="semiBoldFont titleFontSize input" col="1" autocorrect="false"
                         autocapitalizationType="none" returnKeyType="done"
                         [ngStyle]="{'visibility': editingUsername? 'visible' : 'collapse'}"
                         (returnPress)="submitUsername()" (onloaded)="alignVertical(usernameInput)"
@@ -31,36 +33,42 @@
                     </TextField>
                     <FlexboxLayout height="100%" style="align-items: center;" [col]="rightToLeft? 0 : 2"
                         [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}">
-                        <img src="res://icon" height="30" (tap)="editUsername()" />
+                        <SVGImage height="20" width="20" src="~/assets/icons/pen.svg" (tap)="editUsername()">
+                        </SVGImage>
                     </FlexboxLayout>
                 </GridLayout>
                 <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
-                    <label class="greyText" text="{{ 'labels.email' | L }}"></label>
+                    <label marginTop="20" class="greyText smallFontSize regularBoldFont"
+                        text="{{ 'labels.email' | L }}"></label>
                 </FlexboxLayout>
                 <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
-                    <label style="font-size: 15;" [text]="currentUser.email"></label>
+                    <label class="thirdFontSize regularBoldFont" [text]="currentUser.email"></label>
                 </FlexboxLayout>
                 <FlexboxLayout width="100%" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
-                    <label class="greyText" text="{{ 'login.password' | L }}"></label>
+                    <label marginTop="20" class="greyText smallFontSize regularBoldFont"
+                        text="{{ 'login.password' | L }}"></label>
                 </FlexboxLayout>
                 <FlexboxLayout width="100%" style="justify-content: space-between;"
                     [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                    <img src="res://icon" height="30" (tap)="changePassword()" />
-                    <label (onloaded)="alignVertical(password)" style="font-size: 15;" text="******" #password></label>
+                    <SVGImage height="20" width="20" src="~/assets/icons/pen.svg" (tap)="changePassword()">
+                    </SVGImage>
+                    <label (onloaded)="alignVertical(password)" class="thirdFontSize regularBoldFont" text="******"
+                        #password></label>
                 </FlexboxLayout>
 
-                <label width="100%" marginTop="30" text="{{ 'labels.language' | L }}"></label>
-                <FlexboxLayout margin="0 -6 20" justifyContent="space-between" style="font-size: 15;">
+                <label width="100%" marginTop="30" class="smallFontSize greyText"
+                    text="{{ 'labels.language' | L }}"></label>
+                <FlexboxLayout margin="0 -6 20" justifyContent="space-between">
                     <FlexboxLayout style="align-items: center;">
                         <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" height="40"
                             [isUserInteractionEnabled]="!waitingForResponse"
                             (checkedChange)="$event.value? cbIw.checked = false : changeLanguage('iw')"
                             [checked]="!rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
-                        <label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true"
-                            text="English"></label>
+                        <label class="thirdFontSize" [isUserInteractionEnabled]="!waitingForResponse"
+                            (tap)="cbEn.checked = true" text="English"></label>
                     </FlexboxLayout>
                     <FlexboxLayout style="align-items: center;">
-                        <label [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
+                        <label class="thirdFontSize" [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
                             (tap)="cbIw.checked = true"></label>
                         <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale"
                             [isUserInteractionEnabled]="!waitingForResponse"
@@ -68,13 +76,15 @@
                             [checked]="rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
                     </FlexboxLayout>
                 </FlexboxLayout>
-                <StackLayout class="line" marginBottom="20"></StackLayout>
-                <GridLayout columns="*,5*,*">
-                    <img src="res://icon" (tap)="showFavorites()" [col]="rightToLeft? 0 : 2" #showFavoritesImage />
+                <StackLayout class="line" marginBottom="10"></StackLayout>
+                <GridLayout columns="*,5*,*" height="50" (tap)="showFavorites()">
+                    <SVGImage height="50%" [col]="rightToLeft? 0 : 2" #showFavoritesImage
+                        src="~/assets/icons/arrowDown.svg">
+                    </SVGImage>
                     <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
-                        <label text="{{ 'profile.favorites' | L }}"></label>
+                        <label class="secondFontSize semiBoldFont" text="{{ 'profile.favorites' | L }}"></label>
                     </FlexboxLayout>
-                    <img src="res://icon" [col]="rightToLeft? 2 : 0" />
+                    <SVGImage height="50%" [col]="rightToLeft? 2 : 0" src="~/assets/icons/starFull.svg"></SVGImage>
                 </GridLayout>
                 <StackLayout width="100%" height="0" #favoritesStack>
                     <ns-waiting-gif *ngIf="waitingForFavorites"></ns-waiting-gif>
@@ -95,17 +105,19 @@
                                     </CarouselItem>
                                 </Carousel>
                             </GridLayout>
-                            <label text="{{spring.name}}"></label>
+                            <label class="semiBoldFont thirdFontSize" text="{{spring.name}}"></label>
                         </StackLayout>
                     </FlexboxLayout>
                 </StackLayout>
                 <StackLayout class="line"></StackLayout>
-                <GridLayout columns="*,5*,*">
-                    <img src="res://icon" (tap)="showHistory()" [col]="rightToLeft? 0 : 2" #showHistoryImage />
+                <GridLayout columns="*,5*,*" height="50" (tap)="showHistory()">
+                    <SVGImage height="50%" [col]="rightToLeft? 0 : 2" #showHistoryImage
+                        src="~/assets/icons/arrowDown.svg">
+                    </SVGImage>
                     <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
-                        <label text="{{ 'profile.history' | L }}"></label>
+                        <label class="secondFontSize semiBoldFont" text="{{ 'profile.history' | L }}"></label>
                     </FlexboxLayout>
-                    <img src="res://icon" [col]="rightToLeft? 2 : 0" />
+                    <SVGImage height="50%" [col]="rightToLeft? 2 : 0" src="~/assets/icons/history.svg"></SVGImage>
                 </GridLayout>
                 <StackLayout class="line"> </StackLayout>
                 <StackLayout width="100%" height="0" #historyStack>

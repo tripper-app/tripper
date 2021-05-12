@@ -6,11 +6,15 @@ $themeColor: rgb(35, 204, 153);
 $greyText: rgb(168, 151, 151);
 $headerHeight: 65;
 $bottomHeight: 65;
-$headerFontSize: 16;
-$titleFontSize: 25%;
-$subtitleFontSize: 21%;
-$regularFontSize: 17%;
-$smallFontSize: 14%;
+// $headerFontSize: 16;
+$titleFontSize: 23%;
+$subtitleFontSize: 19%;
+$regularFontSize: 15%;
+$smallFontSize: 12%;
+$boldFont: 'Heebo-Bold';
+$semiBoldFont: 'Heebo-SemiBold';
+$mediumBoldFont: 'Heebo-Medium';
+$regularBoldFont: 'Heebo-Regular';
 
 Label{
     text-wrap: true;
@@ -20,17 +24,16 @@ Label{
     height: $headerHeight;
     font-size: $titleFontSize;
     // margin: 20 10 0;
-    font-weight: 600;
-    font-family: "Heebo";
+    font-family: $semiBoldFont;
   }
 
-  .exit{
+.exit{
       opacity: 0.2;
-    }
+}
     
-    .titleIcon{
-        height: 55%;
-  }
+.titleIcon{
+    height: 55%;
+}
 
 .line{
     height: 4;
@@ -41,6 +44,31 @@ Label{
     color: black;
     opacity: 0.5;
 }
+
+.titleFontSize{
+    font-size: $titleFontSize;
+}
+
+.regularBoldFont{
+    font-family: $regularBoldFont;
+}
+
+.secondFontSize{
+    font-size: $subtitleFontSize;
+}
+
+.thirdFontSize{
+    font-size: $regularFontSize;
+}
+
+.smallFontSize{
+    font-size: $smallFontSize;
+}
+
+.semiBoldFont{
+    font-family: $semiBoldFont;
+}
+
 
 // .fab {
 //     font-family: "Font Awesome 5 Brands", "fa-brands-400";

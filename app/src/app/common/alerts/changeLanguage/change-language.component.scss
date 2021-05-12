@@ -1,5 +1,7 @@
+@import '../../../../app-common';
+
 .message{
-    font-size: 15;
+    font-size: $regularFontSize;
     margin-bottom: 40;
     text-align: center;
 }

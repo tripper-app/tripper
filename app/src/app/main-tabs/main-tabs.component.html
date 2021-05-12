@@ -1,6 +1,6 @@
 <BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
     <TabStrip [visibility]="tabsVisibility ? 'visible' : 'collapsed'" backgroundColor="white">
-        <TabStripItem>
+        <TabStripItem class="thirdFontSize">
             <Label text="{{ 'labels.account' | L }}"></Label>
             <Image [src]="currentIndex == 0? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'">
             </Image>

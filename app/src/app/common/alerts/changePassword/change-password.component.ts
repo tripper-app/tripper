@@ -3,6 +3,7 @@ import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import localize from 'nativescript-localize';
 import { AlertService } from '../../services/alert-service';
 import { ErrorsService } from '../../services/errors-service';
+import { LanguageService } from '../../services/language-service';
 import { UserService } from '../../services/userService';
 
 @Component({
@@ -15,15 +16,19 @@ export class ChangePasswordModalComponent {
     oldPassword = "";
     newPassword = "";
     confirmPassword = "";
+    rightToLeft = true;
     constructor(private params: ModalDialogParams,
-                private alertService: AlertService,
-                private userService: UserService,
-                private errorService: ErrorsService){}
+        private alertService: AlertService,
+        private userService: UserService,
+        private errorService: ErrorsService,
+        private languageService: LanguageService) { 
+            this.rightToLeft = this.languageService.getRightToLeft();
+        }
 
-    ok(){
+    ok() {
         if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
             this.alertService.showError(localize('login.requireDetails'));
-        } else{
+        } else {
             if (this.newPassword !== this.confirmPassword) {
                 this.alertService.showError(localize('login.passwordsNotMuch'));
             } else {
@@ -39,9 +44,13 @@ export class ChangePasswordModalComponent {
 
     exit() {
         this.params.closeCallback();
-      }
+    }
 
-      handleError(err) {
+    alignVertical(label) {
+        label.android.setGravity(17)
+    }
+
+    handleError(err) {
         console.log(err);
         switch (err.status) {
             case 0:
