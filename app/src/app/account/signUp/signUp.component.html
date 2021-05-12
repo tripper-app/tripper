@@ -3,7 +3,7 @@
 		<ns-waiting-gif rowSpan="2" *ngIf="waitingForResponse"></ns-waiting-gif>
 		<StackLayout height="90%">
 			<GridLayout columns="*,4*,*" class="header">
-				<SVGImage width="100%" [isUserInteractionEnabled]="!waitingForResponse" class="exit"
+				<SVGImage width="100%" [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon"
 					[col]="rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg" (tap)="exit()">
 				</SVGImage>
 				<Label text="{{ 'login.signUp' | L }}" col="1" (onloaded)="alignVertical(title)" #title></Label>

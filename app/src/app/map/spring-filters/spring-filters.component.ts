@@ -28,9 +28,7 @@ export class SpringsFiltersComponent implements OnInit {
         private languageService: LanguageService) {
     }
 
-    ngOnInit(): void {
-        console.log(this.languageService.getCurrentLanguage());
-        
+    ngOnInit(): void {        
         this.rightToLeft = !this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
         this.campingCheck = this.springsService.filters.camping;

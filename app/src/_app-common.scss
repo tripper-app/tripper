@@ -1,13 +1,10 @@
 @import "~@nativescript/theme/core";
 @import "~@nativescript/theme/blue";
 
-// Place any CSS rules you want to apply on both iOS and Android here.
-// This is where the vast majority of your CSS code goes.
-
 // Font icon class
 $themeColor: rgb(35, 204, 153);
 $greyText: rgb(168, 151, 151);
-$headerHeight: 12%;
+$headerHeight: 65;
 $bottomHeight: 65;
 $headerFontSize: 16;
 $titleFontSize: 25%;
@@ -29,7 +26,10 @@ Label{
 
   .exit{
       opacity: 0.2;
-      height: 55%;
+    }
+    
+    .titleIcon{
+        height: 55%;
   }
 
 .line{
@@ -55,30 +55,4 @@ Label{
 .far {
     font-family: "Font Awesome 5 Free", "fa-regular-400";
     font-weight: 400;
-}
-
-.themeColor{
-    color: blue;
-}
-
-// Common page class
-.page__content {
-    &-icon,
-    &-placeholder {
-        color: const(grey);
-        font-size: 20;
-        vertical-align: center;
-        horizontal-align: center;
-    }
-
-    &-icon {
-        font-size: 72;
-        vertical-align: top;
-        margin-top: 20%;
-    }
-}
-
-// Drawer navigation custom styles
-.nt-drawer__header-image {
-    color: const(grey);
 }

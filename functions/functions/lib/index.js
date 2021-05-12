@@ -847,7 +847,7 @@ exports.setHighScore = functionBuilder(async (req, res) => {
 //     }
 // })
 const handleError = (req, res, err) => {
-    functions.logger.error({ request: req }, err);
+    functions.logger.error({ request: req.query }, err);
     res.status(500).send(err);
 };
 const setSpringsQuery = async (filters) => {
@@ -894,7 +894,7 @@ const setHotelsQuery = async (filters, language) => {
         if (filters.breakfast) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('breakfast', '==', true);
         }
-        if (filters.regions.length) {
+        if (filters.regions && filters.regions.length) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('region.' + language, 'in', filters.regions);
         }
     }

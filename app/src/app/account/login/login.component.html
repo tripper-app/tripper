@@ -5,8 +5,8 @@
 		<ns-waiting-gif *ngIf="waitingForResponse" rowSpan="2"></ns-waiting-gif>
 		<StackLayout>
 			<GridLayout columns="*,4*,*" class="header">
-				<SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit" [col]="rightToLeft? 0 : 2"
-					src="~/assets/icons/times-light.svg" (tap)="navigateToMap()" >
+				<SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon" [col]="rightToLeft? 0 : 2"
+					src="~/assets/icons/times-light.svg" (tap)="navigateToMap()">
 				</SVGImage>
 				<Label text="{{ 'login.login' | L }}" col="1" (onloaded)="alignVertical(title)" #title></Label>
 			</GridLayout>
@@ -52,7 +52,7 @@
 			<FlexboxLayout (tap)="loginWithFacebook()" class="facebook"
 				[isUserInteractionEnabled]="!waitingForResponse">
 				<label text="{{ 'login.loginFacebook' | L }}"></label>
-				<img src="res://icon" height="60%" />
+				<SVGImage width="15%" height="50%" src="~/assets/icons/facebook-white.svg"></SVGImage>
 			</FlexboxLayout>
 		</FlexboxLayout>
 	</GridLayout>

@@ -16,12 +16,8 @@
     width: 30%;
 }
 
-ActivityIndicator{
-    color: $themeColor;
-}
-
 .descriptionLabel{
-    font-size: 15;
+    font-size: $regularFontSize;
     margin-bottom: 10;
 }
 
@@ -32,8 +28,9 @@ ActivityIndicator{
 
 .filterIcon{
     margin: 5;
-    width: 30%;
-    align-self: flex-start;
+    height: 30;
+    width: 30;
+    // align-self: flex-start;
 }
 
 .filterLabel{

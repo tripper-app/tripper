@@ -52,7 +52,7 @@ export class MainTabsComponent implements OnInit {
         this.tabs.nativeElement.selectedIndex = 4;
     }
 
-    pageChange(index) {
+    pageChange(index) {        
         this.currentIndex = index;
 
         if (index != 2) {

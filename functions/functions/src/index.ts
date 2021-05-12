@@ -837,7 +837,7 @@ export const setHighScore = functionBuilder(async (req, res) => {
 
 
 const handleError = (req: functions.Request, res: functions.Response, err: Error) => {
-    functions.logger.error({request: req}, err);
+    functions.logger.error({request: req.query}, err);
     res.status(500).send(err);
 }
 
@@ -896,7 +896,7 @@ const setHotelsQuery = async (filters: any, language: string) => {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('breakfast', '==', true)
         }
 
-        if (filters.regions.length) {
+        if (filters.regions && filters.regions.length) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('region.' + language, 'in', filters.regions)
         }
     }

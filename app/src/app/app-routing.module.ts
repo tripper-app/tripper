@@ -22,7 +22,7 @@ import { ScoreComponent } from "./games/score/score.component";
 import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
 import { LandKingComponent } from "./games/landKing/landKing.component";
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '3' : '3');
+const firstPage = 'mainTabs/' +  (loggedUser? '3' : '0');
 
 const routes: Routes = [
     { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },

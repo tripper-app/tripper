@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import { Page } from 'tns-core-modules/ui/page';
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
@@ -11,12 +11,13 @@ import { AlertService } from '../common/services/alert-service';
 import { Router } from "@angular/router";
 import { ErrorsService } from '../common/services/errors-service';
 import { Image, ImageSource } from '@nativescript/core';
+import { screen } from "tns-core-modules/platform";
 
 @Component({
   selector: 'ns-map',
   providers: [ModalDialogService], // delete
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, OnDestroy {
   mainMap: MapView;
@@ -28,6 +29,8 @@ export class MapComponent implements OnInit, OnDestroy {
   searchBar;
   hotelMarker: Marker;
   singleSpringSubject;
+  screen = screen;
+  singleRowHeight = (screen.mainScreen.heightDIPs*0.83789)/15*2-20 // the percentage without the bottom navigation
 
   constructor(private page: Page,
     private router: Router,

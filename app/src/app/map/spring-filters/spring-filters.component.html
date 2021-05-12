@@ -1,14 +1,6 @@
-<!-- <StackLayout> -->
-<GridLayout rows="*, 6*">
-    <!-- <FlexboxLayout flexDirection="column"> -->
-    <!-- <FlexboxLayout class="header" style="justify-content: space-between;" margin="0 20"
-        [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
-        <SVGImage class="exit" src="~/assets/icons/times-light.svg" (tap)="navigateToMap()">
-        </SVGImage>
-        <label text="{{ 'springsFilters.title' | L }}" class="title"></label>
-    </FlexboxLayout> -->
+<GridLayout rows="*, 7*">
     <GridLayout columns="*,4*" class="header" [ngStyle]="{'margin': rightToLeft? '0 0 0 20' : '0 20 0 0'}">
-        <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit" [col]="rightToLeft? 2 : 0"
+        <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon" [col]="rightToLeft? 2 : 0"
             src="~/assets/icons/times-light.svg" (tap)="navigateToMap()" >
         </SVGImage>
         <FlexboxLayout [col]="rightToLeft? 0 : 2" [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}" style="align-items: center;">
@@ -16,7 +8,6 @@
         </FlexboxLayout>
     </GridLayout>
     <StackLayout class="line" margin="50 0 0"></StackLayout>
-    <!-- </FlexboxLayout> -->
     <FlexboxLayout class="main" row="1">
         <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
             (tap)="cbCamping.toggle()">
@@ -57,4 +48,3 @@
         </StackLayout>
     </FlexboxLayout>
 </GridLayout>
-<!-- </StackLayout> -->

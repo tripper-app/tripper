@@ -1,21 +1,21 @@
 <BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
-    <TabStrip [visibility]="tabsVisibility ? 'visible' : 'collapsed'">
+    <TabStrip [visibility]="tabsVisibility ? 'visible' : 'collapsed'" backgroundColor="white">
         <TabStripItem>
             <Label text="{{ 'labels.account' | L }}"></Label>
             <Image [src]="currentIndex == 0? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'">
             </Image>
         </TabStripItem>
         <TabStripItem class="special">
-            <Label text="{{ 'labels.games' }}"></Label>
-            <Image src="font://&#xf007;" class="fas"></Image>
+            <Label text="{{ 'labels.games' | L }}"></Label>
+            <Image [src]="currentIndex == 1? '~/assets/images/dice-bold.png' : '~/assets/images/dice-light.png'"></Image>
         </TabStripItem>
         <TabStripItem class="special" >
-            <Label text="{{ 'labels.bnb' }}"></Label>
-            <Image src="font://&#xf00e;" class="fas t-36"></Image>
+            <Label text="{{ 'labels.bnb' | L }}"></Label>
+            <Image [src]="currentIndex == 2? '~/assets/images/bed-bold.png' : '~/assets/images/bed-light.png'"></Image>
         </TabStripItem>
         <TabStripItem class="special">
-            <Label text="{{ 'labels.map' }}"></Label>
-            <Image src="res://icon" class="fas t-36"></Image>
+            <Label text="{{ 'labels.map' | L }}"></Label>
+            <Image [src]="currentIndex == 3? '~/assets/images/map-bold.png' : '~/assets/images/map-light.png'"></Image>
         </TabStripItem>
     </TabStrip>
     <TabContentItem>
