@@ -1,33 +1,40 @@
 <StackLayout>
-    <FlexboxLayout class="header" [opacity]="opacity" style="justify-content: space-between;"
-        [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-revrse'}">
-        <label text="x" (tap)="navigateToScroe()"></label>
-        <label text="{{ 'games.landKing' | L }}"></label>
-    </FlexboxLayout>
+    <GridLayout class="header secondFontSize" [columns]="rightToLeft? '*,5*' : '5*,*'">
+        <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
+            [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+            <label text="{{ 'games.landKing' | L }}"></label>
+        </FlexboxLayout>
+        <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+            (tap)="navigateToScroe()">
+        </SVGImage>
+    </GridLayout>
+    <StackLayout class="line"></StackLayout>
     <FlexboxLayout flexDirection="column">
         <GridLayout #container height="87%">
             <ns-waiting-gif [opacity]="opacity" *ngIf="waitingForResponse"></ns-waiting-gif>
-            <img src="res://map" [opacity]="opacity" height="100%" width="100%" stretch="fill" />
-            <ns-location-component [location]="guessedLocation" [container]="container" [feedback]="feedback" *ngIf="guessedLocation"
-                (draggedEmitter)="userLocate($event)" (draggStartEmitter)="draggingStarted()">
+            <SVGImage [opacity]="opacity" src="~/assets/icons/map.svg">
+            </SVGImage>
+            <ns-location-component [location]="guessedLocation" [container]="container" [feedback]="feedback"
+                *ngIf="guessedLocation" (draggedEmitter)="userLocate($event)" (draggStartEmitter)="draggingStarted()">
             </ns-location-component>
         </GridLayout>
-            <!-- <ns-location-component *ngFor="let location of locations" [location]="location" [container]="container"
-                (draggedEmitter)="userLocate($event)" (draggStartEmitter)="draggingStarted()">
-            </ns-location-component>
-        </GridLayout> -->
         <FlexboxLayout class="lowerLine" [opacity]="opacity">
             <FlexboxLayout *ngIf="userService.userLoggedIn" style="justify-content: space-around; align-items: center;">
-                <img height="70%" src="res://icon" />
-                <Label style="font-size: 15; text-align: center;" [text]="highScore"></Label>
+                <SVGImage class="icon" src="~/assets/icons/trophy.svg">
+                </SVGImage>
+                <Label class="thirdFontSize regularBoldFont" style="text-align: center;" [text]="highScore"></Label>
             </FlexboxLayout>
             <FlexboxLayout style="justify-content: center; align-items: center;">
-                <img height="70%" src="res://icon" />
-                <Label style="font-size: 15; text-align: center;" text="{{ timer | date:'mm:ss':'UTC'}}"></Label>
+                <SVGImage class="icon" src="~/assets/icons/clock.svg">
+                </SVGImage>
+                <Label class="thirdFontSize regularBoldFont" style="text-align: center;"
+                    text="{{ timer | date:'mm:ss':'UTC'}}"></Label>
             </FlexboxLayout>
             <FlexboxLayout style="justify-content: center; align-items: center;">
-                <img height="70%" src="res://icon" />
-                <Label style="font-size: 15; text-align: center;" text="{{ gameService.score}}"></Label>
+                <SVGImage class="icon" src="~/assets/icons/starWhite.svg">
+                </SVGImage>
+                <Label class="thirdFontSize regularBoldFont" style="text-align: center;"
+                    text="{{ gameService.score}}"></Label>
             </FlexboxLayout>
         </FlexboxLayout>
     </FlexboxLayout>

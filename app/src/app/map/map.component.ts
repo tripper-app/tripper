@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import { Page } from 'tns-core-modules/ui/page';
-import { ModalDialogService } from "nativescript-angular/modal-dialog";
 import { SpringsService } from '../common/services/springs-service';
 import { FlatSpring } from '../common/models/flatSpring';
 import { localize } from "nativescript-localize";
@@ -15,11 +14,11 @@ import { screen } from "tns-core-modules/platform";
 
 @Component({
   selector: 'ns-map',
-  providers: [ModalDialogService], // delete
+  // providers: [ModalDialogService], // delete
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, OnDestroy {
+export class MapComponent implements OnInit {
   mainMap: MapView;
   loading = false;
   defaultZoom = 10;
@@ -64,7 +63,7 @@ export class MapComponent implements OnInit, OnDestroy {
     else {
       this.alertService.showError(localize('messages.error.noLocationPermissions'));
     }
-    // this.getSprings();
+    this.getSprings();
   }
 
   async getSprings() {
@@ -231,11 +230,5 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.mainMap && this.mainMap.nativeView && this.mainMap._context === args.activity) {
       this.mainMap.nativeView.onResume();
     }
-  }
-
-  ngOnDestroy() {
-    // if (application.android) {
-    //   application.android.off(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
-    // }
   }
 }

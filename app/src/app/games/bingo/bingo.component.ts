@@ -4,6 +4,8 @@ import { Page } from "@nativescript/core";
 import { screen } from "tns-core-modules/platform";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
+import { LanguageService } from "~/app/common/services/language-service";
+import { UserService } from "~/app/common/services/userService";
 
 @Component({
     selector: 'ns-bingo',
@@ -14,26 +16,31 @@ export class BingoComponent implements OnInit {
     screenWidth;
     circleSize;
     timer = 0;
+    highScore = 0;
+    rightToLeft = true;
     waitingForResponse = false;
 
-    bingoItems = [{name: "", found: false, color: "rgb(242, 232, 36)"}, 
-                  {name: "", found: false, color: "rgb(35, 204, 153)"}, 
-                  {name: "", found: false, color: "rgb(0, 134, 212)"}, 
+    bingoItems = [{name: "", found: true, color: "rgb(242, 232, 36)"}, 
+                  {name: "", found: true, color: "rgb(35, 204, 153)"}, 
+                  {name: "", found: true, color: "rgb(0, 134, 212)"}, 
                   {name: "", found: false, color: "rgb(224, 50, 40)"}];
 
     constructor(private page: Page,
                 private router: Router,
-                private gamesService: GamesService,
-                private errorService: ErrorsService){
+                private gameService: GamesService,
+                private errorService: ErrorsService,
+                private languageService: LanguageService,
+                private userService: UserService){
         this.page.actionBarHidden = true;
     }
 
     ngOnInit() {
+        this.rightToLeft = this.languageService.getRightToLeft();
         this.circleSize = (screen.mainScreen.widthDIPs+20)/4;
         this.screenWidth = (screen.mainScreen.widthDIPs-35)/4;
 
         this.waitingForResponse = true;
-        this.gamesService.getBingoItems().subscribe(res => {
+        this.gameService.getBingoItems().subscribe(res => {
             for (let index = 0; index < res.length; index++) {
                this.bingoItems[index].name = res[index];
             }

@@ -1,16 +1,11 @@
 @import '../../../_app-common.scss';
 
-.greyText{
-  color: black;
-  opacity: 0.5;
-}
-
 .facebook{
   height: $bottomHeight;
   font-size: $subtitleFontSize;
   background-color: rgb(0, 134, 212);
   align-items: center;
-  color: whitesmoke;
+  color: white;
   justify-content: center;
 }
 
@@ -25,7 +20,7 @@
 
 .loginBtn{
   font-size: $subtitleFontSize;
-  color: whitesmoke;
+  color: white;
   background-color: $themeColor;
   height: $bottomHeight;
   width: 100%;

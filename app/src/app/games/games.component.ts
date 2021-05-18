@@ -7,10 +7,14 @@ import { Router } from "@angular/router";
     styleUrls: ['./games.component.scss']
 })
 export class GamesComponent {
-    itemSize = "45%";
+    itemSize = "38%";
     constructor(private router: Router){}
 
     navigateToGame(game){
         this.router.navigate([game]);
+    }
+
+    alignVertical(label) {
+        label.android.setGravity(17)
     }
 }

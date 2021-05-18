@@ -1,52 +1,62 @@
 <FlexboxLayout flexDirection="column" style="justify-content: space-between; height: 100%">
     <ScrollView height="87%">
         <StackLayout>
-            <FlexboxLayout class="header" style="justify-content: space-between; align-items: center;" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
-                <label style="font-size: 30;" text="X" (tap)="navigateToFiltersView()"></label>
-                <label text="{{ 'hotelsFilters.title' | L }}"></label>
-            </FlexboxLayout>
-            <StackLayout class="line" marginBottom="20"></StackLayout>
-            <GridLayout class="areasGrid" [columns]="leftToRight? '3*,4*,*,*' : '*,*,4*,3*' " (tap)="expandAreas()">
-                <StackLayout height="100%" verticalAlignment="center" [col]="leftToRight? 0 : 3">
-                    <label textWrap="true" text="{{ 'hotelsFilters.area' | L }}" #area></label>
+            <GridLayout class="header secondFontSize" columns="*,5*">
+                <StackLayout [col]="rightToLeft? 1 : 0" verticalAlignment="center"
+                    [horizontalAlignment]="rightToLeft? 'right' : 'left'">
+                    <label text="{{ 'hotelsFilters.title' | L }}"></label>
                 </StackLayout>
-                <FlexboxLayout [ngStyle]="{'justify-content': leftToRight? 'flex-start' : 'flex-end'}"
-                    style="align-items: center;" *ngIf="!areasExpanded" [col]="leftToRight? 1 : 2">
-                    <label textWrap="false" class="grayText" [text]="getAreasString()" #areasList></label>
-                </FlexboxLayout>
-                <img src="res://icon" [col]="leftToRight? 3 : 0" #expandImage />
+                <SVGImage class="exit titleIcon" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                    (tap)="navigateToFiltersView()">
+                </SVGImage>
             </GridLayout>
+            <StackLayout class="line" marginBottom="20"></StackLayout>
+            <GridLayout class="areasGrid" [columns]="rightToLeft? '*,*,4*,3*' : '3*,4*,*,*'" (tap)="expandAreas()">
+                <StackLayout height="100%" verticalAlignment="center" [col]="rightToLeft? 3 : 0">
+                    <label class="secondFontSize regularBoldFont" text="{{ 'hotelsFilters.area' | L }}" #area></label>
+                </StackLayout>
+                <SVGImage class="titleIcon" [col]="rightToLeft? 0 : 3" src="~/assets/icons/arrowDown.svg" #expandImage>
+                </SVGImage>
+            </GridLayout>
+            <FlexboxLayout margin="-10 20 0" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}"
+                style="align-items: center;" *ngIf="!areasExpanded" [col]="rightToLeft? 2 : 1">
+                <label textWrap="false" class="greyText smallFontSize" [text]="getAreasString()" #areasList></label>
+            </FlexboxLayout>
             <StackLayout height="0" #aresStack>
                 <FlexboxLayout *ngFor="let area of areas; let i = index" [height]="areaLineHeight"
                     style="justify-content: space-between; margin: 0 40; font-size: 15;" (tap)="cbArea.toggle()">
-                    <CheckBox:CheckBox (checkedChange)="checkChange(area, cbArea.checked)"
-                        [(ngModel)]="areasBoolean[i]" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
-                        #cbArea />
-                    <label [text]="area"></label>
+                    <CheckBox:CheckBox (checkedChange)="checkChange(area, cbArea.checked)" [(ngModel)]="areasBoolean[i]"
+                        [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbArea />
+                    <label class="smallFontSize" [text]="area"></label>
                 </FlexboxLayout>
             </StackLayout>
             <GridLayout rows="*, *" columns="*, *" style="margin: 30 20;">
-                <FlexboxLayout colSpan="2" [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}">
+                <FlexboxLayout colSpan="2" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
                     <RangeSeekBar width="50%" [maxValue]="maxPrice" [maxStartValue]="maxPrice" step="10"
                         class="range-seek-bar" (rangeSeekBarChanged)="rangeSeekBarChanged($event)" #priceBar
                         minRange="100"></RangeSeekBar>
-                    <label width="50%" text="{{ 'hotelsFilters.pricePerNight' | L }}"></label>
+                    <label class="secondFontSize regularBoldFont" width="50%"
+                        text="{{ 'hotelsFilters.pricePerNight' | L }}"></label>
                 </FlexboxLayout>
-                <Label style="text-align: right;" text="&#8362; {{finalMaxPrice}}-{{finalMinPrice}}" row="1"
-                    col="1"></Label>
+                <Label class="regularBoldFont greyText thirdFontSize"
+                    [ngStyle]="{'text-align': rightToLeft? 'right' : 'left'}"
+                    text="&#8362; {{finalMaxPrice}}-{{finalMinPrice}}" row="1" col="1"></Label>
             </GridLayout>
-            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine" (tap)="cbPool.toggle()">
-                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbPool/>
-                <label text="{{ 'hotelsFilters.pool' | L }}"></label>
+            <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}" class="filterLine"
+                (tap)="cbPool.toggle()">
+                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                    #cbPool />
+                <label class="secondFontSize regularBoldFont" text="{{ 'hotelsFilters.pool' | L }}"></label>
             </FlexboxLayout>
-            <FlexboxLayout [ngStyle]="{'flex-direction': leftToRight? 'row-reverse' : 'row'}" class="filterLine" (tap)="cbBreakfast.toggle()">
+            <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}" class="filterLine"
+                (tap)="cbBreakfast.toggle()">
                 <CheckBox:CheckBox [(ngModel)]="breakfastCheck" [fillColor]="mainColor" [scaleX]="scale"
-                    [scaleY]="scale" #cbBreakfast/>
-                <label text="{{ 'hotelsFilters.breakfast' | L }}"></label>
+                    [scaleY]="scale" #cbBreakfast />
+                <label class="secondFontSize regularBoldFont" text="{{ 'hotelsFilters.breakfast' | L }}"></label>
             </FlexboxLayout>
         </StackLayout>
     </ScrollView>
-    <StackLayout verticalAlignment="center" class="search" (tap)="search()">
+    <StackLayout verticalAlignment="center" class="search secondFontSize regularBoldFont" (tap)="search()">
         <label text="{{ 'springsFilters.search' | L }}"></label>
     </StackLayout>
 </FlexboxLayout>

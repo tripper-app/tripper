@@ -2,27 +2,27 @@
 
 
 .descriptionLabel{
-    font-size: 15;
     margin-bottom: 10;
-}
-
-.filterLine{
-    align-items: center;
-    font-size: 15;
 }
 
 .filterIcon{
     margin: 5;
     width: 30%;
+    height: 30;
+    align-self: flex-start;
 }
 
 .filterLabel{
     width: 70%;
+    font-size: $regularFontSize;
+    font-family: $regularBoldFont;
+    align-self: center;
 }
 
 .attractionsTitle{
     margin: 10 10 0;
-    font-weight: bold;
+    font-family: $semiBoldFont;
+    font-size: $regularFontSize;
 }
 
 .navigation{
@@ -30,6 +30,7 @@
     justify-content: space-around;
     align-items: center;
     height: 13%;
-    font-size: 15;
+    font-size: $subtitleFontSize;
+    font-family: $semiBoldFont;
     color: white;
 }

@@ -2,11 +2,40 @@
 
 .text{
     font-size: $subtitleFontSize;
+    font-family: $regularBoldFont;
     margin: 10 10 -5;
 }
 
 .circle{
     border-radius: 100%; 
+}
+
+.icon{
+    height: 40;
+    width: 40;
+    border-radius: 100%;
+    margin-top: 10;
+}
+
+.lower{
+    height: 30%;
+    width: 10%;
+    justify-content: center;
+    align-items: center;
+}
+
+.lowerLine{
+    height: 100%;
+    font-size: $regularFontSize;
+    font-family: $regularBoldFont;    
+    background-color: $themeColor;
+    align-items: center;
+    color: white;
+    justify-content: space-around;
+  }
+
+.lowerColor{
+    background-color: $themeColor;
 }
 
 .gif{

@@ -1,21 +1,15 @@
 @import '../../../_app-common';
 
-
-.title{
-    text-align: center;
-    font-size: $titleFontSize;
-}
-
-image{
-    height: 120;
-}
-
 .lowerLine{
     height: 13%;
     font-size: $titleFontSize;
     background-color: $themeColor;
     align-items: center;
-    color: whitesmoke;
+    color: white;
     justify-content: space-around;
-    // padding: 0 10;
+  }
+
+  .icon{
+      height: 30%;
+      width: 10%;
   }

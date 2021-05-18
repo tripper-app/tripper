@@ -19,7 +19,7 @@ export class HotelsFiltersComponent implements OnInit {
     breakfastCheck = false;
     mainColor = "rgb(35, 204, 153)";
     scale = "1.3";
-    leftToRight = false;
+    rightToLeft = true;
     areas = localize('hotelsFilters.areasList').split(', ');
     areasBoolean: boolean[] = [];
     selectedAreas = [];
@@ -38,7 +38,7 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.leftToRight = !this.languageService.getRightToLeft();
+        this.rightToLeft = this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
     }
 
@@ -88,5 +88,9 @@ export class HotelsFiltersComponent implements OnInit {
     navigateToFiltersView() {
         this.hotelsService.filteredHotels = undefined;
         this.hideFilters.emit();
+    }
+
+    alignVertical(label) {
+        label.android.setGravity(17)
     }
 }

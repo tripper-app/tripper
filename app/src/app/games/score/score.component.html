@@ -1,7 +1,14 @@
-<GridLayout [height]="screenHeight" [width]="screenWidth" rows="*,2*,2*">
-    <label class="title" text="X" [ngStyle]="{'text-align': rigthToLeft? 'left' : 'right'}" (tap)="exit()"></label>
-    <img src="res://icon" row="1"/>
-    <StackLayout row="2" style="text-align: center;" horizontalAlignment="center">
-        <label class="text" text="{{ 'games.score' | L: gameService.score }}"></label>
-    </StackLayout>
-</GridLayout>
+<StackLayout>
+    <GridLayout class="header" columns="*,4*,*">
+        <SVGImage class="exit" height="50%" [col]="rightToLeft? 2 : 0" src="~/assets/icons/times-light.svg"
+            (tap)="exit()">
+        </SVGImage>
+    </GridLayout>
+    <GridLayout rows="*,3*,3*">
+        <SVGImage row="1" src="~/assets/icons/starEmpty.svg">
+        </SVGImage>
+        <StackLayout margin="10" row="2" style="text-align: center;" horizontalAlignment="center">
+            <label class="text" text="{{ 'games.score' | L: gameService.score }}"></label>
+        </StackLayout>
+    </GridLayout>
+</StackLayout>

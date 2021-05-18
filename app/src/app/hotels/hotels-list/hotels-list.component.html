@@ -2,11 +2,14 @@
     <ns-hotels-filters (hideFilters)="hideTheFilters()" *ngIf="!hotelsService.showList"></ns-hotels-filters>
     <scrollView width="100%" height="100%" *ngIf="hotelsService.showList">
         <StackLayout>
-            <FlexboxLayout height="60" class="header"
-                [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                <img height="100%" src="res://icon" (tap)="navigateToFilters()" />
-                <label text="{{ 'hotelsList.title' | L }}"></label>
-            </FlexboxLayout>
+            <GridLayout class="header secondFontSize" columns="*,5*">
+                <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0" [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                    <label text="{{ 'hotelsList.title' | L }}"></label>
+                </FlexboxLayout>
+                <SVGImage height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/sliders-green.svg"
+                    (tap)="navigateToFilters()">
+                </SVGImage>
+            </GridLayout>
             <StackLayout class="line"></StackLayout>
             <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
             <StackLayout width="100%" height="100%" padding="18">
@@ -27,8 +30,8 @@
                                 </CarouselItem>
                             </Carousel>
                         </GridLayout>
-                        <label text="{{hotel.name}}"></label>
-                        <label text="{{hotel.city}}, {{'hotelsList.startingFrom' | L}}{{hotel.price}} &#8362;"></label>
+                        <label class="thirdFontSize semiBoldFont" text="{{hotel.name}}"></label>
+                        <label class="smallFontSize regularBoldFont" text="{{hotel.city}}, {{'hotelsList.startingFrom' | L}}{{hotel.price}} &#8362;"></label>
                     </StackLayout>
                 </FlexboxLayout>
             </StackLayout>

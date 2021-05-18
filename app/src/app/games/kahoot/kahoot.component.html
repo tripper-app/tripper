@@ -1,14 +1,24 @@
 <ScrollView height="100%">
     <StackLayout>
-        <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+        <!-- <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
             <label text="X" (tap)="exit()"></label>
             <label text="{{ 'games.chooseQuiz' | L }}"></label>
-        </FlexboxLayout>
+        </FlexboxLayout> -->
+        <GridLayout class="header secondFontSize" [columns]="rightToLeft? '*,5*' : '5*,*'">
+            <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
+                [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                <label text="{{ 'games.chooseQuiz' | L }}"></label>
+            </FlexboxLayout>
+            <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                (tap)="exit()">
+            </SVGImage>
+        </GridLayout>
         <StackLayout class="line"></StackLayout>
         <ns-waiting-gif class="gif" *ngIf="waitingForResponse"></ns-waiting-gif>
         <StackLayout *ngFor="let quiz of quizes" (tap)="openUrl(quiz.url)">
-            <FlexboxLayout class="quizLine" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                <img src="res://icon"/>
+            <FlexboxLayout class="quizLine regularBoldFont secondFontSize" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                <SVGImage height="50%" width="10%" src="~/assets/icons/arrowLeft.svg">
+                </SVGImage>
                 <label [text]="quiz.name"></label>
             </FlexboxLayout>
             <StackLayout class="line"></StackLayout>

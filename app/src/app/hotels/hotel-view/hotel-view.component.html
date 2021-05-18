@@ -1,52 +1,64 @@
 <StackLayout>
   <scrollView width="100%" height="91%" *ngIf="!waitingForResponse">
     <StackLayout>
-      <FlexboxLayout class="header" style="justify-content: space-between;">
-        <label text="X" (tap)="backToList()"></label>
-        <label [text]="currentHotel.name"></label>
-      </FlexboxLayout>
+      <GridLayout class="header secondFontSize" columns="*,5*">
+        <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
+          [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+          <label [text]="currentHotel.name"></label>
+        </FlexboxLayout>
+        <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+          (tap)="backToList()">
+        </SVGImage>
+      </GridLayout>
       <GridLayout height="250">
         <Carousel [items]="currentHotel.images" android:indicatorAnimation="scale" indicatorColor="#fff"
           indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 10" showIndicator="true">
           <CarouselItem *ngFor="let item of currentHotel.images">
-            <GridLayout>                
-                <ns-waiting-gif></ns-waiting-gif>
-                <Image style="z-index: 3;" [src]="item" width="100%" height="100%" stretch="fill"></Image>
+            <GridLayout>
+              <ns-waiting-gif></ns-waiting-gif>
+              <Image style="z-index: 3;" [src]="item" width="100%" height="100%" stretch="fill"></Image>
             </GridLayout>
           </CarouselItem>
         </Carousel>
       </GridLayout>
       <StackLayout style="width: 100%; padding: 10;">
-        <label class="descriptionLabel" [text]="currentHotel.description"></label>
+        <label class="descriptionLabel secondFontSize" [text]="currentHotel.description"></label>
         <GridLayout rows="*, *" columns="*, *">
-          <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+          <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
             [col]="rightToLeft? 0 : 1">
-            <img src="res://icon" class="filterIcon" />
+            <SVGImage class="filterIcon"
+              [src]="currentHotel.breakfast? '~/assets/icons/utensils-green.svg' : '~/assets/icons/utensils-grey.svg'">
+            </SVGImage>
             <label class="filterLabel"
               text="{{currentHotel.breakfast? ('hotelView.breakfast' | L: currentHotel.breakfastPrice : ' &#8362;') : ('hotelView.noBreakfast' | L)}}"></label>
           </FlexboxLayout>
-          <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+          <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
             [col]="rightToLeft? 1 : 0">
-            <img src="res://icon" class="filterIcon" />
+            <SVGImage class="filterIcon" src="~/assets/icons/map-green.svg">
+            </SVGImage>
             <label class="filterLabel" [text]="currentHotel.region"></label>
           </FlexboxLayout>
-          <FlexboxLayout row="1" class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+          <FlexboxLayout row="1" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
             [col]="rightToLeft? 0 : 1">
-            <img src="res://icon" class="filterIcon" />
+            <SVGImage class="filterIcon"
+              [src]="currentHotel.pool? '~/assets/icons/swimmingPool-green.svg' : '~/assets/icons/swimmingPool-grey.svg'">
+            </SVGImage>
             <label class="filterLabel"
               text="{{ currentHotel.pool? ('hotelView.pool' | L) : ('hotelView.noPool' | L) }}"></label>
           </FlexboxLayout>
-          <FlexboxLayout row="1" class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+          <FlexboxLayout row="1" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
             [col]="rightToLeft? 1 : 0">
-            <img src="res://icon" class="filterIcon" />
+            <SVGImage class="filterIcon" src="~/assets/icons/moneyCheck-green.svg">
+            </SVGImage>
             <label class="filterLabel" text="{{ 'hotelView.price' | L: currentHotel.price : ' &#8362;' }}"></label>
           </FlexboxLayout>
         </GridLayout>
       </StackLayout>
-      <StackLayout style="height: 3; background-color: rgb(185, 185, 190); margin: 10 0"></StackLayout>
+      <StackLayout class="line" margin="10 0"></StackLayout>
       <label class="attractionsTitle" text="{{ 'hotelView.attractionsInArea' | L }}"></label>
-      <FlexboxLayout flexWrap="wrap" margin="10" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
-          <label *ngFor="let attraction of currentHotel.attractions; let i = index" text="{{attraction}}{{i<currentHotel.attractions.length-1? (', ') : ('')}}"></label>
+      <FlexboxLayout flexWrap="wrap" margin="0 10 10" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+        <label class="regularBoldFont thirdFontSize" *ngFor="let attraction of currentHotel.attractions; let i = index"
+          text="{{attraction}}{{i<currentHotel.attractions.length-1? (', ') : ('')}}"></label>
       </FlexboxLayout>
     </StackLayout>
   </scrollView>

@@ -65,8 +65,8 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.waitingForResponse = true;
-        this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-        // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
+        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.waitingForResponse = false;
             this.currentSpring = spring;
 

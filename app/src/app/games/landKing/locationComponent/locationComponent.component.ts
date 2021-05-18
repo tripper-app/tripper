@@ -1,7 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from "@angular/core";
-import { Router } from "@angular/router";
-import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular/modal-dialog";
-import { GridLayout, Image, Page, PanGestureEventData, StackLayout } from "@nativescript/core";
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { GridLayout, Page, PanGestureEventData } from "@nativescript/core";
 import { LanguageService } from "~/app/common/services/language-service";
 import { screen } from "tns-core-modules/platform";
 import { Location } from "~/app/common/models/location";
@@ -18,18 +16,15 @@ export class LocationComponentComponent implements OnInit {
     @Output() draggedEmitter: EventEmitter<{ x, y }> = new EventEmitter();
     @Output() draggStartEmitter: EventEmitter<any> = new EventEmitter();
     @ViewChild("dragGrid", { static: false }) dragGrid: ElementRef;
-    // @ViewChild("container", { static: false }) container: ElementRef;
     @ViewChild("dragImage", { static: false }) dragImage: ElementRef;
     rightToLeft = true;
     dragImageItem: GridLayout;
     itemContainer: GridLayout;
     prevDeltaX: number;
     prevDeltaY: number;
-    //mapGap = 150;
     showFeedback = true;
     first = true;
     placed = false;
-    //scr = screen;
     constructor(private page: Page,
         private languageService: LanguageService) {
     }
@@ -61,9 +56,8 @@ export class LocationComponentComponent implements OnInit {
                 this.first = false;
                 this.draggStartEmitter.emit();
                 this.dragGrid.nativeElement.androidElevation = 0;
-                this.dragGrid.nativeElement.animate({ height: 60, duration: 200 }).then(() => {
+                this.dragGrid.nativeElement.animate({ height: 40, duration: 200 }).then(() => {
                     this.dragGrid.nativeElement.columns = "*,*,*";
-                    // this.dragGrid.nativeElement.backgroundColor = 'transparent';
                 });
                 this.dragGrid.nativeElement.animate({ backgroundColor: 'transparent', duration: 100 });
             }
@@ -79,20 +73,6 @@ export class LocationComponentComponent implements OnInit {
 
                 this.prevDeltaX = args.deltaX;
                 this.prevDeltaY = args.deltaY;
-
-                // if (this.dragImageItem.translateX < screen.mainScreen.widthDIPs / -2) {
-                //     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / -2;
-                // }
-                // else if (this.dragImageItem.translateX > screen.mainScreen.widthDIPs / 2) {
-                //     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / 2;
-                // }
-
-                // if (this.dragImageItem.translateY < (screen.mainScreen.heightDIPs - this.mapGap) / -2) {
-                //     this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / -2
-                // }
-                // else if (this.dragImageItem.translateY > (screen.mainScreen.heightDIPs - this.mapGap) / 2) {
-                //     this.dragImageItem.translateY = (screen.mainScreen.heightDIPs - this.mapGap) / 2;
-                // }
 
                 if (this.dragImageItem.translateX < screen.mainScreen.widthDIPs / -2) {
                     this.dragImageItem.translateX = screen.mainScreen.widthDIPs / -2;

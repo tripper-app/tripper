@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular/modal-dialog";
-import { GridLayout, Image, Page, PanGestureEventData, StackLayout } from "@nativescript/core";
+import { Image, Page } from "@nativescript/core";
 import { LanguageService } from "~/app/common/services/language-service";
 import { StartModalComponent } from "./startModal/startModal.component";
 import { GamesService } from "~/app/common/services/games-service";
@@ -79,8 +79,8 @@ export class LandKingComponent implements OnInit {
 
     userLocate(data) {
         const img: Image = new Image();
-        img.src = "res://icon";
-        img.height = 60;
+        img.src = "~/assets/images/locate.png";
+        img.height = 40;
         img.opacity = 0.5;
         const translate = this.gameService.getTranslate(this.guessedLocation);
         img.translateX = translate.x * screen.mainScreen.widthDIPs - (screen.mainScreen.widthDIPs / 2);
@@ -88,7 +88,6 @@ export class LandKingComponent implements OnInit {
 
         this.container.nativeElement.addChild(img);
         setTimeout(() => {
-            // img.src = "res://waze_logo";
             this.feedback = this.gameService.locate(this.guessedLocation, data);
             this.addLocation(img);
         }, 1000);
@@ -100,11 +99,10 @@ export class LandKingComponent implements OnInit {
             setTimeout(() => {
                 if (image) {
                     image.opacity = 1;
-                    image.src = "res://waze_logo";
+                    image.src = "~/assets/images/locate-grey.png";
                 }
                 const location = this.allLocations.splice(Math.random() * this.allLocations.length - 1, 1)[0];
                 this.guessedLocation = location;
-                //this.locations.push(location);
                 this.opacity = 0.5;
             }, 0);
         } else {

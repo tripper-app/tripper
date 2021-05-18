@@ -1,15 +1,22 @@
 <ScrollView height="100%">
     <StackLayout>
-        <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-            <label text="X" (tap)="navigateToGames()"></label>
-            <label text="{{ 'games.chooseSubject' | L }}"></label>
-        </FlexboxLayout>
+        <GridLayout class="header secondFontSize" [columns]="rightToLeft? '*,5*' : '5*,*'">
+            <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
+                [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                <label text="{{ 'games.chooseSubject' | L }}"></label>
+            </FlexboxLayout>
+            <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                (tap)="navigateToGames()">
+            </SVGImage>
+        </GridLayout>
         <StackLayout class="line"></StackLayout>
         <ns-waiting-gif class="gif" *ngIf="waitingForResponse"></ns-waiting-gif>
         <StackLayout *ngFor="let subject of subjects">
-            <FlexboxLayout (tap)="goToQuestion(subject)" class="questionLine" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                <img src="res://icon"/>
-                <label [text]="subject.name"></label>
+            <FlexboxLayout (tap)="goToQuestion(subject)" class="questionLine"
+                [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                <SVGImage height="50%" width="10%" src="~/assets/icons/arrowLeft.svg">
+                </SVGImage>
+                <label class="regularBoldFont secondFontSize" [text]="subject.name"></label>
             </FlexboxLayout>
             <StackLayout class="line"></StackLayout>
         </StackLayout>

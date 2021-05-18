@@ -1,7 +1,7 @@
 <GridLayout [height]="screenHeight" [width]="screenWidth" backgroundColor="red" rows="*,2*,2*">
-    <img src="res://icon" row="1"/>
+    <SVGImage row="1" height="25%" src="~/assets/icons/wrongAnswer.svg"></SVGImage>
     <StackLayout row="2" style="text-align: center;" color="white" horizontalAlignment="center">
-        <label text="{{ 'games.triviaWrong' | L }}"></label>
-        <label text="{{ 'games.triviaRightAnswerIs' | L: rightAnswer }}"></label>
+        <label class="titleFontSize semiBoldFont" text="{{ 'games.triviaWrong' | L }}"></label>
+        <label class="secondFontSize regularBoldFont" text="{{ 'games.triviaRightAnswerIs' | L: rightAnswer }}"></label>
     </StackLayout>
 </GridLayout>

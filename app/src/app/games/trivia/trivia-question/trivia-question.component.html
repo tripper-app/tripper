@@ -2,10 +2,15 @@
     <ScrollView height="90%">
         <GridLayout>
             <StackLayout>
-                <FlexboxLayout class="header title" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
-                    <label text="X" (tap)="exit()"></label>
-                    <Label text="{{'games.trivia' | L }}: {{gameService.subjectName}}"></Label>
-                </FlexboxLayout>
+                <GridLayout class="header secondFontSize" [columns]="rightToLeft? '*,5*' : '5*,*'">
+                    <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
+                        [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
+                        <label text="{{'games.trivia' | L }}: {{gameService.subjectName}}"></label>
+                    </FlexboxLayout>
+                    <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                        (tap)="exit()">
+                    </SVGImage>
+                </GridLayout>
                 <StackLayout class="line"></StackLayout>
                 <StackLayout marginBottom="80">
                     <label class="answer" [text]="question.text"></label>
@@ -30,12 +35,15 @@
     </ScrollView>
     <FlexboxLayout class="lowerLine">
         <FlexboxLayout *ngIf="userService.userLoggedIn" style="justify-content: center; align-items: center;">
-            <img height="70%" src="res://icon" />
-            <Label style="font-size: 15; text-align: center;" [text]="highScore"></Label>
+            <SVGImage height="50%" width="10%" margin="10" src="~/assets/icons/trophy.svg">
+            </SVGImage>
+            <Label class="regularBoldFont thirdFontSize" style="text-align: center;" [text]="highScore"></Label>
         </FlexboxLayout>
         <FlexboxLayout style="justify-content: center; align-items: center;">
-            <img height="70%" src="res://icon" />
-            <Label style="font-size: 15; text-align: center;" text="{{ gameService.score}}"></Label>
+            <SVGImage height="50%" width="10%" margin="10" src="~/assets/icons/starWhite.svg">
+            </SVGImage>
+            <Label class="regularBoldFont thirdFontSize" style="text-align: center;"
+                text="{{ gameService.score}}"></Label>
         </FlexboxLayout>
     </FlexboxLayout>
 </StackLayout>

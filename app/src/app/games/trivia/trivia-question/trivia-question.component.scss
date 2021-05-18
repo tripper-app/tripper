@@ -10,7 +10,8 @@
 
 .answer{
     margin: 10;
-    font-size: $titleFontSize;
+    font-size: $subtitleFontSize;
+    font-family: $regularBoldFont;
 }
 
 .questionImage{
@@ -25,7 +26,7 @@
     font-size: $titleFontSize;
     background-color: $themeColor;
     align-items: center;
-    color: whitesmoke;
+    color: white;
     justify-content: space-around;
     padding: 0 10;
   }

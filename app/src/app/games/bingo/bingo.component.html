@@ -1,10 +1,12 @@
 <StackLayout>
     <FlexboxLayout class="header">
-        <GridLayout width="100%" columns="*,2*,*">
-            <FlexboxLayout style="justify-content: center;" [col]="rightToLeft? 0 : 2" flexDirection="column">
+        <GridLayout class="header secondFontSize" [columns]="rightToLeft? '*,5*' : '5*,*'">
+            <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
+                [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
                 <label text="{{ 'games.bingo' | L }}"></label>
             </FlexboxLayout>
-            <SVGImage class="exit titleIcon" [col]="rightToLeft? 2 : 0" src="~/assets/icons/times-light.svg" (tap)="exit()">
+            <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                (tap)="exit()">
             </SVGImage>
         </GridLayout>
     </FlexboxLayout>
@@ -18,45 +20,32 @@
             <FlexboxLayout *ngFor="let item of bingoItems; let i = index" flexDirection="column" [left]="screenWidth*i">
                 <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
                     [backgroundColor]="item.color">
-                    <label style="text-align: center;" horizontalAlignment="center" color="white" fontSize="20"
-                        [text]="item.name"></label>
+                    <label style="text-align: center;" horizontalAlignment="center" color="white"
+                        class="secondFontSize semiBoldFont" [text]="item.name"></label>
                 </StackLayout>
-                <img [src]="item.found? 'res://icon' : 'res://waze_logo'" height="40" marginTop="10" (tap)="find(i)" />
+                <SVGImage class="icon" (tap)="find(i)"
+                    [src]="item.found? '~/assets/icons/found.svg' : '~/assets/icons/notFound.svg'">
+                </SVGImage>
             </FlexboxLayout>
-            <!-- <FlexboxLayout flexDirection="column" [left]="screenWidth*3">
-                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
-                    backgroundColor="green">
-                    <label horizontalAlignment="center" color="white" fontSize="20" text="333"></label>
-                </StackLayout>
-                <img src="res://icon" height="40" marginTop="10" (tap)="find(0)"/>
-            </FlexboxLayout>
-            <FlexboxLayout flexDirection="column" [left]="screenWidth*2">
-                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
-                    backgroundColor="yellow">
-                    <label horizontalAlignment="center" color="white" fontSize="20" text="333"></label>
-                </StackLayout>
-                <img src="res://icon" height="40" marginTop="10" (tap)="find(1)"/>
-            </FlexboxLayout>
-            <FlexboxLayout flexDirection="column" [left]="screenWidth">
-                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
-                    backgroundColor="blue">
-                    <label horizontalAlignment="center" color="white" fontSize="20" text="222"></label>
-                </StackLayout>
-                <img src="res://icon" height="40" marginTop="10" (tap)="find(2)"/>
-            </FlexboxLayout>
-            <FlexboxLayout flexDirection="column">
-                <StackLayout verticalAlignment="center" [height]="circleSize" [width]="circleSize" class="circle"
-                    backgroundColor="red">
-                    <label horizontalAlignment="center" color="white" fontSize="20" text="111"></label>
-                </StackLayout>
-                <img src="res://icon" height="40" marginTop="10" (tap)="find(3)"/>
-            </FlexboxLayout> -->
         </AbsoluteLayout>
     </StackLayout>
-    <FlexboxLayout marginBottom="20" flexDirection="column">
-        <FlexboxLayout style="align-items: center; justify-content: center;">
-            <img src="res://icon" />
+    <FlexboxLayout class="lowerLine">
+        <!-- <StackLayout orientation="horizontal" *ngIf="userService.userLoggedIn">
+                <SVGImage class="lower" src="~/assets/icons/trophy.svg">
+                </SVGImage>
+                <Label class="regularBoldFont thirdFontSize" [text]="highScore"></Label>
+        </StackLayout> -->
+        <StackLayout orientation="horizontal">
+            <SVGImage class="lower"
+                src="~/assets/icons/clock.svg">
+            </SVGImage>
             <label text="{{ timer | date:'HH:mm:ss':'UTC'}}"></label>
-        </FlexboxLayout>
+        </StackLayout>
+        <!-- <StackLayout orientation="horizontal">
+                <SVGImage class="lower" src="~/assets/icons/starWhite.svg">
+                </SVGImage>
+                <Label class="regularBoldFont thirdFontSize"
+                text="{{ gameService.score}}"></Label>
+        </StackLayout> -->
     </FlexboxLayout>
 </StackLayout>

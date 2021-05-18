@@ -2,12 +2,12 @@
     <ScrollView [height]="!isKeyboardOpen? '91%' : '100%'" *ngIf="!waitingForResponse">
         <StackLayout>
             <GridLayout columns="*,5*,*" class="header">
-                <SVGImage class="exit" [col]="rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg"
+                <SVGImage class="exit titleIcon" [col]="rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg"
                     (tap)="navigateToMap()">
                 </SVGImage>
                 <label textWrap="true" #title (onloaded)="alignVertical(title)" col="1"
                     [text]="currentSpring.name"></label>
-                <SVGImage [col]="rightToLeft? 2 : 0" (tap)="clickOnFavorites()"
+                <SVGImage class="titleIcon" [col]="rightToLeft? 2 : 0" (tap)="clickOnFavorites()"
                     [src]="currentSpring.isFavorite? '~/assets/icons/starFull.svg' : '~/assets/icons/starEmpty-light.svg'">
                 </SVGImage>
             </GridLayout>
