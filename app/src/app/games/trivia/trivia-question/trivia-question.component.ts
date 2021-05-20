@@ -4,6 +4,7 @@ import { Page } from "@nativescript/core";
 import { TriviaQuestion } from "~/app/common/models/triviaQuestion";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
+import { LanguageService } from "~/app/common/services/language-service";
 import { UserService } from "~/app/common/services/userService";
 
 @Component({
@@ -22,6 +23,7 @@ export class TriviaQuestionComponent {
     highScore = 0;
     quizName = "trivia";
     constructor(private page: Page,
+        private languageService: LanguageService,
         private gameService: GamesService,
         private router: Router,
         private errorService: ErrorsService,

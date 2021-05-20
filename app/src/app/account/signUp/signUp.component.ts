@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
-import { alert } from "tns-core-modules/ui/dialogs";
 import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
-import { localize } from "nativescript-localize";
 import { Router } from '@angular/router';
 import { OauthService } from '../../common/services/oauth-service';
 import { HttpService } from '~/app/common/services/http-service';
@@ -48,17 +46,17 @@ export class SignUpComponent implements OnInit {
 
     submit() {
         if (!this.user.email || !this.user.password || !this.confirmPassword) {
-            this.alertService.showError(localize('login.emailAndPasswordRequired'));
+            this.alertService.showError(this.languageService.getText('login.emailAndPasswordRequired'));
             return;
         }
 
         if (!this.user.userName) {
-            this.alertService.showError(localize('login.requireDetails'));
+            this.alertService.showError(this.languageService.getText('login.requireDetails'));
             return;
         }
 
         if (this.user.password != this.confirmPassword) {
-            this.alertService.showError(localize('login.passwordsNotMuch'));
+            this.alertService.showError(this.languageService.getText('login.passwordsNotMuch'));
             return;
         }
 
@@ -69,7 +67,7 @@ export class SignUpComponent implements OnInit {
         this.waitingForResponse = true;
         this.userService.signUp(this.user).subscribe(res => {
             this.waitingForResponse = false;
-            this.alertService.showSuccess(localize('login.accountCreated'));
+            this.alertService.showSuccess(this.languageService.getText('login.accountCreated'));
             this.router.navigate(['login']);
         }, err => this.handleError(err))
     }
@@ -121,19 +119,19 @@ export class SignUpComponent implements OnInit {
 
         switch (err.status) {
             case 400:
-                this.alertService.showError(localize('login.requireDetails'));
+                this.alertService.showError(this.languageService.getText('login.requireDetails'));
                 break;
             case 401:
-                this.alertService.showError(localize('login.wrongDetails'));
+                this.alertService.showError(this.languageService.getText('login.wrongDetails'));
                 break;
             case 407:
-                this.alertService.showError(localize('login.emailNotVerified'))
+                this.alertService.showError(this.languageService.getText('login.emailNotVerified'))
                 break;
             case 409:
-                this.alertService.showError(localize('login.emailAlreadyExist'))
+                this.alertService.showError(this.languageService.getText('login.emailAlreadyExist'))
                 break;
             case 422:
-                this.alertService.showError(localize('login.wrongEmail'));
+                this.alertService.showError(this.languageService.getText('login.wrongEmail'));
                 break
             default:
                 this.errorService.handleErorr(err);

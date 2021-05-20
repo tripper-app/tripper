@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
-import { localize } from "nativescript-localize";
 import { LanguageService } from '../../common/services/language-service';
-import { Router } from "@angular/router";
 import { HotelFilters } from '~/app/common/models/hotelFilters';
 import { HotelsService } from '~/app/common/services/hotels-service';
 
@@ -19,8 +17,8 @@ export class HotelsFiltersComponent implements OnInit {
     breakfastCheck = false;
     mainColor = "rgb(35, 204, 153)";
     scale = "1.3";
-    rightToLeft = true;
-    areas = localize('hotelsFilters.areasList').split(', ');
+    //rightToLeft = true;
+    areas = this.languageService.getText('hotelsFilters.areasList').split(', ');
     areasBoolean: boolean[] = [];
     selectedAreas = [];
     areaLineHeight = 30;
@@ -32,13 +30,12 @@ export class HotelsFiltersComponent implements OnInit {
     finalMaxPrice = 2000;
 
     constructor(private page: Page,
-        private router: Router,
         private hotelsService: HotelsService,
         private languageService: LanguageService) {
     }
 
     ngOnInit(): void {
-        this.rightToLeft = this.languageService.getRightToLeft();
+        //this.rightToLeft = this.languageService.getRightToLeft();
         this.page.actionBarHidden = true;
     }
 

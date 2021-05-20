@@ -41,7 +41,7 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    return this.httpClient.get(this.ApiURL + "getFavoriteSprings", { headers: { token: token } });
+    return this.httpClient.get(this.ApiURL + `getFavoriteSprings?lang=${this.getLanguage()}`, { headers: { token: token } });
   }
 
   addFavoriteSpring(springId: string) {
@@ -76,7 +76,7 @@ export class HttpService {
     if (!token) {
       return this.throwUnRegisteredUser();
     }
-    return this.httpClient.get(this.ApiURL + "getHistorySprings", { headers: { token: token } });
+    return this.httpClient.get(this.ApiURL + `getHistorySprings?lang=${this.getLanguage()}`, { headers: { token: token } });
   }
 
   getspring(id: string) {
@@ -95,7 +95,7 @@ export class HttpService {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
-    return this.httpClient.post(this.ApiURL + "getAllHotels", { filters: filters });
+    return this.httpClient.post(this.ApiURL + `getAllHotels?lang=${this.getLanguage()}`, { filters: filters });
   }
 
   getHotel(id: string) {
@@ -311,11 +311,11 @@ export class HttpService {
 
 
   getLanguage() {
-    if (!this.language) {
-      this.language = this.languageService.getCurrentLanguage();
-    }
+    //if (!this.language) {
+      return this.languageService.currentLanguage;
+    //}
 
-    return this.language;
+    // return this.language;
   }
 
   getToken() {
@@ -325,13 +325,13 @@ export class HttpService {
 
   throwNoConnection() {
     return new Observable<any>((subscriber: Subscriber<any>) => {
-      subscriber.error(new noConnectionError());
+      subscriber.error(new noConnectionError(this.languageService.getText('messages.error.connectionError')));
     });
   }
 
   throwUnRegisteredUser() {
     return new Observable<any>((subscriber: Subscriber<any>) => {
-      subscriber.error(new unRegisteredUserError());
+      subscriber.error(new unRegisteredUserError(this.languageService.getText('messages.error.unRegisteredUser')));
     })
   }
 }

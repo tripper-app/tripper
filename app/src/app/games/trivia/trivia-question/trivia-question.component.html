@@ -2,12 +2,12 @@
     <ScrollView height="90%">
         <GridLayout>
             <StackLayout>
-                <GridLayout class="header secondFontSize" [columns]="rightToLeft? '*,5*' : '5*,*'">
-                    <FlexboxLayout marginRight="10" style="align-items: center;" [col]="rightToLeft? 1 : 0"
-                        [ngStyle]="{'justify-content': rightToLeft? 'flex-end' : 'flex-start'}">
-                        <label text="{{'games.trivia' | L }}: {{gameService.subjectName}}"></label>
+                <GridLayout class="header secondFontSize" [columns]="languageService.rightToLeft? '*,5*' : '5*,*'">
+                    <FlexboxLayout marginRight="10" style="align-items: center;" [col]="languageService.rightToLeft? 1 : 0"
+                        [ngStyle]="{'justify-content': languageService.rightToLeft? 'flex-end' : 'flex-start'}">
+                        <label text="{{'games.trivia' | odedI18N:languageService.dummyUpdate }}: {{gameService.subjectName}}"></label>
                     </FlexboxLayout>
-                    <SVGImage class="exit" height="50%" [col]="rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                    <SVGImage class="exit" height="50%" [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
                         (tap)="exit()">
                     </SVGImage>
                 </GridLayout>

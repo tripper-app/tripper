@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import { AlertService } from '~/app/common/services/alert-service';
+import { LanguageService } from '~/app/common/services/language-service';
 import { UserService } from '~/app/common/services/userService';
 
 
@@ -12,7 +13,8 @@ import { UserService } from '~/app/common/services/userService';
 })
 export class UpdateSpringModalComponent {
   content = '';
-  constructor(private params: ModalDialogParams) {
+  constructor(private params: ModalDialogParams,
+    private languageService: LanguageService) {
   }
 
   confirm() {

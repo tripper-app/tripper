@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
-import { localize } from "nativescript-localize";
 import { LanguageService } from '../../common/services/language-service';
 import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
@@ -65,11 +64,11 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         this.page.actionBarHidden = true;
         this.rightToLeft = this.languageService.getRightToLeft();
         this.waitingForResponse = true;
-        // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
+        // this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.waitingForResponse = false;
             this.currentSpring = spring;
-
+            
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
 
         }, err => {
@@ -117,7 +116,7 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         this.modalService.showModal(UpdateSpringModalComponent, options).then(text => {
             if (text) {
                 this.springsService.updateSpring(text + ".\n", this.currentSpring.ID).subscribe(() => {
-                    this.alertService.showSuccess(localize('springView.thankYou'));
+                    this.alertService.showSuccess(this.languageService.getText('springView.thankYou'));
                 }, err => this.handleErrors(err));
             }
         });
@@ -143,8 +142,8 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         const imgsrc = await ImageSource.fromUrl(this.currentSpring.images[0]);
         try {
             var springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}
-        \n${this.getTextFromFields()}\n${localize("springView.navigateWithWaze")}:
-        https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n\n${localize("springView.shareLink")}:\n123456 just some link here lorem ipsum`; // to do - put here real link!!!
+        \n${this.getTextFromFields()}\n${this.languageService.getText("springView.navigateWithWaze")}:
+        https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n\n${this.languageService.getText("springView.shareLink")}:\n123456 just some link here lorem ipsum`; // to do - put here real link!!!
             SocialShare.shareImage(imgsrc, springText)
         } catch (error) {
             console.log(error);
@@ -171,15 +170,15 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
     getTextFromFields() {
         var txt = "";
         if (this.currentSpring.depth) {
-            txt += `${localize("springView.depth")}: ${this.currentSpring.depth}\n`;
+            txt += `${this.languageService.getText("springView.depth")}: ${this.currentSpring.depth}\n`;
         }
 
         if (this.currentSpring.distanceFromCar) {
-            txt += `${localize("springView.walkingDistanceFromCar")}: ${this.currentSpring.distanceFromCar}\n`;
+            txt += `${this.languageService.getText("springView.walkingDistanceFromCar")}: ${this.currentSpring.distanceFromCar}\n`;
         }
 
         if (this.currentSpring.preferredSeason) {
-            txt += `${localize("springView.preferredSeason")}: ${this.currentSpring.preferredSeason}\n`;
+            txt += `${this.languageService.getText("springView.preferredSeason")}: ${this.currentSpring.preferredSeason}\n`;
         }
 
         return txt;

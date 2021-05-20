@@ -21,11 +21,12 @@ import { TriviaQuestionComponent } from "./games/trivia/trivia-question/trivia-q
 import { ScoreComponent } from "./games/score/score.component";
 import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
 import { LandKingComponent } from "./games/landKing/landKing.component";
+import { TestComponent } from "./test/test";
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '2' : '0');
+const firstPage = 'mainTabs/' +  (loggedUser? '3' : '1');
 
 const routes: Routes = [
-    { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
+    { path: "", redirectTo: 'test', data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },
@@ -46,7 +47,8 @@ const routes: Routes = [
     { path: "triviaQuestion", component: TriviaQuestionComponent },
     { path: "score", component: ScoreComponent },
     { path: "winBingo/:winTime", component: WinBingoComponent },
-    { path: "landKing", component: LandKingComponent }
+    { path: "landKing", component: LandKingComponent },
+    { path: "test", component: TestComponent }
 
 ];
 

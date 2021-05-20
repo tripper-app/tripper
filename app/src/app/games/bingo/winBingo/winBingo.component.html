@@ -1,6 +1,6 @@
 <StackLayout class="main">
     <GridLayout class="header" columns="*,4*,*">
-        <SVGImage class="exit" height="50%" [col]="rightToLeft? 2 : 0" src="~/assets/icons/times-light.svg"
+        <SVGImage class="exit" height="50%" [col]="languageService.rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg"
             (tap)="exit()">
         </SVGImage>
     </GridLayout>
@@ -8,18 +8,9 @@
         <SVGImage height="29%" row="1" src="~/assets/icons/rightAnswer.svg">
         </SVGImage>
         <StackLayout margin="10" row="2" style="text-align: center; color: white;" horizontalAlignment="center">
-            <label class="titleFontSize semiBoldFont" text="{{ 'games.wellDone' | L }}"></label>
+            <label class="titleFontSize semiBoldFont" text="{{ 'games.wellDone' | odedI18N:languageService.dummyUpdate }}"></label>
             <label class="secondFontSize regularBoldFont"
-                text="{{ 'games.timeToFinishBingo' | L: (timeToWin | date:'HH:mm:ss':'UTC') }}"></label>
+                text="{{ 'games.timeToFinishBingo' | odedI18N: {value: [timeToWin | date:'HH:mm:ss':'UTC']} }}"></label>
         </StackLayout>
     </GridLayout>
 </StackLayout>
-
-<!-- <GridLayout [height]="screenHeight" [width]="screenWidth" class="main" rows="*,2*,2*">
-    <label class="title" text="X" [ngStyle]="{'text-align': rigthToLeft? 'left' : 'right'}" (tap)="exit()"></label>
-    <img src="res://icon" row="1"/>
-    <StackLayout row="2" style="text-align: center;" color="white" horizontalAlignment="center">
-        <label class="wellDone" text="{{ 'games.wellDone' | L }}"></label>
-        <label class="result" text="{{ 'games.timeToFinishBingo' | L: (timeToWin | date:'HH:mm:ss':'UTC') }}"></label>
-    </StackLayout>
-</GridLayout> -->

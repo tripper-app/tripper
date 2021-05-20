@@ -5,6 +5,7 @@ import { KahootQuiz } from "~/app/common/models/kahootQuiz";
 import { GamesService } from "~/app/common/services/games-service";
 import { openUrl } from "tns-core-modules/utils/utils";
 import { ErrorsService } from "~/app/common/services/errors-service";
+import { LanguageService } from "~/app/common/services/language-service";
 
 @Component({
     selector: 'ns-kahoot',
@@ -19,7 +20,8 @@ export class KahootComponent implements OnInit {
     constructor(private page: Page,
                 private gameService: GamesService,
                 private router: Router,
-                private errorService: ErrorsService){
+                private errorService: ErrorsService,
+                private languageService: LanguageService){
         this.page.actionBarHidden = true;
     }
     ngOnInit() {

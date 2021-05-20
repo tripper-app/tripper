@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import localize from 'nativescript-localize';
 import { Subscriber } from 'rxjs';
 import { KahootQuiz } from '../models/kahootQuiz';
 import { HttpService } from './http-service';
@@ -9,6 +8,7 @@ import { TriviaSubject } from '../models/triviaSubject';
 import { Location } from '../models/location';
 import { TriviaQuestion } from '../models/triviaQuestion';
 import * as dist from 'geo-distance';
+import { LanguageService } from './language-service';
 
 @Injectable({
     providedIn: 'root'
@@ -21,10 +21,13 @@ export class GamesService {
     selectedSubjects: TriviaSubject[];
     score = 0;
     subjectName = '';
-    upperLeft = { lat: 33.12831197751661, lon: 34.258082831539355 };
-    lowerRight = { lat: 29.669710018637986, lon: 35.793557239728504 };
+    upperLeft = { lat: 33.415225, lon: 33.6891567 };
+    // upperLeft = { lat: 33.12831197751661, lon: 34.258082831539355 };
+    lowerRight = { lat: 29.390395, lon: 36.369588 };
+    // lowerRight = { lat: 29.669710018637986, lon: 35.793557239728504 };
 
-    constructor(private httpService: HttpService) {
+    constructor(private httpService: HttpService,
+        private languageService: LanguageService) {
     }
 
     setHighScore(quiz: string, score: number){
@@ -39,7 +42,7 @@ export class GamesService {
         this.score = 0;
         this.selectedSubjects = [];
         this.selectedSubjects = subjects;
-        this.subjectName = subjects.length > 1 ? localize('labels.all') : subjects[0].name;
+        this.subjectName = subjects.length > 1 ? this.languageService.getText('labels.all') : subjects[0].name;
 
         this.triviaQuestions = undefined;
     }
@@ -73,7 +76,7 @@ export class GamesService {
                 this.triviaSubjects = data;
                 const allSubjects = new TriviaSubject();
                 allSubjects.id = 'all';
-                allSubjects.name = localize('labels.all');
+                allSubjects.name = this.languageService.getText('labels.all');
                 this.triviaSubjects.push(allSubjects);
                 return data;
             }, error => {
@@ -132,7 +135,7 @@ export class GamesService {
         click.lon = ((this.lowerRight.lon - this.upperLeft.lon) * userLocate.x) + this.upperLeft.lon;
 
         const distance = dist.between(click, { lat: location.location._latitude, lon: location.location._longitude });
-        const numberedDistance = (Number)(distance.human_readable().distance)
+        const numberedDistance = (Number)(distance.human_readable().distance);
         const score = this.calculateLocationScore(numberedDistance);
         const text = this.getScoreFeedback(score);
         this.score += score;

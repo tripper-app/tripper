@@ -21,7 +21,6 @@ export class HotelViewComponent implements OnInit {
 
     constructor(private page: Page,
         private router: Router,
-        private route: ActivatedRoute,
         private hotelsService: HotelsService,
         private languageService: LanguageService,
         private alertService: AlertService,

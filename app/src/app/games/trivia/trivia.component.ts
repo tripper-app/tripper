@@ -4,6 +4,7 @@ import { Page } from "@nativescript/core";
 import { TriviaSubject } from "~/app/common/models/triviaSubject";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
+import { LanguageService } from "~/app/common/services/language-service";
 
 @Component({
     selector: 'ns-trivia',
@@ -18,6 +19,7 @@ export class TriviaComponent {
 
     constructor(private page: Page,
         private gameService: GamesService,
+        private languageService: LanguageService,
         private router: Router,
         private errorService: ErrorsService) {
         this.page.actionBarHidden = true;

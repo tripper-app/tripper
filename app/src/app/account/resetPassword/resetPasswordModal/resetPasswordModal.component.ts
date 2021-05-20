@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
-import { localize } from "nativescript-localize";
 import { AlertService } from '~/app/common/services/alert-service';
 import { LanguageService } from '~/app/common/services/language-service';
 
@@ -23,7 +22,7 @@ export class ResetPasswordModalComponent {
     if (this.email) {
       this.exit(this.email);
     } else {
-      this.alertService.showError(localize('login.requireEmail'));
+      this.alertService.showError(this.languageService.getText('login.requireEmail'));
     }
   }
 

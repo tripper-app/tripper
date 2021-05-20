@@ -19,7 +19,7 @@
     </FlexboxLayout>
     <GridLayout *ngIf="searchMode" columns="*,3*" class="searchBar imagesMargin">
         <SVGImage height="42.5%" marginRight="20" src="~/assets/icons/search.svg"></SVGImage>
-        <textField col="1" returnKeyType="search" hint="{{ 'map.springSearch' | L }}" colSpan="2" class="searchField"
+        <textField col="1" returnKeyType="search" hint="{{ 'map.springSearch' | odedI18N:languageService.dummyUpdate }}" colSpan="2" class="searchField"
             (loaded)="onSearchBarLoaded($event)" (returnPress)="searchByName()"></textField>
     </GridLayout>
     <FlexboxLayout row="1" class="iconsFlex imagesMargin">

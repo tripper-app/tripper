@@ -1,9 +1,9 @@
 <StackLayout>
   <GridLayout class="header" columns="*,2*,*">
-    <SVGImage height="60%" [col]="rightToLeft? 0 : 2" fillColors="yellow"
+    <SVGImage height="60%" [col]="languageService.rightToLeft? 0 : 2" fillColors="yellow"
       src="~/assets/icons/facebook-green.svg" (tap)="openWebsite()" class="svgImage">
     </SVGImage>
-    <label text="{{ 'labels.about' | L }}" col="1" class="title" (onloaded)="alignVertical(title)" #title></label>
+    <label text="{{ 'labels.about' | odedI18N:languageService.dummyUpdate }}" col="1" class="title" (onloaded)="alignVertical(title)" #title></label>
   </GridLayout>
   <StackLayout class="line"></StackLayout>
   <SVGImage margin="40 0 20" height="40%" src="~/assets/icons/logo line with text.svg">

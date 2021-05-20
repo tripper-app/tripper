@@ -1,17 +1,5 @@
 @import '../../../../_app-common.scss';
 
-.upper{
-    justify-content: space-between;
-    font-size: 20;
-    margin-bottom: 40;
-}
-
-.title{
-    font-size: 15;
-    width: 100%;
-    text-align: center;
-}
-
 .confirm{
     background-color: $themeColor;
     color: white;
@@ -19,7 +7,8 @@
     height: $bottomHeight;
     justify-content: center;
     align-items: center;
-    font-size: 20;
+    font-size: $subtitleFontSize;
+    font-family: $semiBoldFont;
 }
 
 .input{

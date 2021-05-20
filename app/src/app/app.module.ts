@@ -1,11 +1,9 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptFormsModule } from "nativescript-angular/forms"
-import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 import { Gif } from 'nativescript-gif';
 import { AppRoutingModule } from "./app-routing.module";
-import { NativeScriptLocalizeModule } from "nativescript-localize/angular";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { TNSCheckBoxModule } from '@nstudio/nativescript-checkbox/angular';
 import { Carousel, CarouselItem } from 'nativescript-carousel';
@@ -15,13 +13,13 @@ import { LottieView } from 'nativescript-lottie';
 import { NativeScriptUIRangeSeekBarModule } from "nativescript-range-seek-bar/angular";
 import { NativeScriptSvgModule } from '@teammaestro/nativescript-svg/angular';
 
+import { OdedI18NPipe } from './common/pipes/i18nPipe';
+
 registerElement('LottieView', () => LottieView);
 import { AppComponent } from "./app.component";
 import { MainTabsComponent } from "./main-tabs/main-tabs.component";
 import { MapComponent } from "./map/map.component";
 import { registerElement } from "nativescript-angular/element-registry";
-// import { HomeComponent } from './home/home.component';
-// import { CarouselComponent } from './home/carousel/carousel.component';
 import { SignUpComponent } from "./account/signUp/signUp.component";
 import { ResetPasswordComponent } from "./account/resetPassword/resetPassword.component";
 import { SpringsFiltersComponent } from "./map/spring-filters/spring-filters.component";
@@ -50,6 +48,7 @@ import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
 import { LocationComponentComponent } from "./games/landKing/locationComponent/locationComponent.component";
 import { AboutComponent } from "./about/about.component";
 import { NotificationsModalComponent } from "./main-tabs/notificationsModal/notificationsModal.component";
+import { TestComponent } from "./test/test";
 
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
@@ -71,10 +70,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
     imports: [
         AppRoutingModule,
         NativeScriptModule,
-        NativeScriptUISideDrawerModule,
         NativeScriptHttpClientModule,
         NativeScriptFormsModule,
-        NativeScriptLocalizeModule,
         NativeScriptRouterModule,
         TNSCheckBoxModule,
         NativeScriptUIRangeSeekBarModule,
@@ -90,10 +87,9 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         NotificationsModalComponent
     ],
     declarations: [
+        OdedI18NPipe,
         AppComponent,
         MapComponent,
-        // HomeComponent,
-        // CarouselComponent,
         SignUpComponent,
         ResetPasswordComponent,
         MainTabsComponent,
@@ -122,7 +118,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         ScoreComponent,
         WinBingoComponent,
         LocationComponentComponent,
-        AboutComponent
+        AboutComponent,
+        TestComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

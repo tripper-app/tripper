@@ -1,50 +1,63 @@
 <GridLayout rows="*, 7*">
-    <GridLayout columns="*,4*" class="header" [ngStyle]="{'margin': rightToLeft? '0 0 0 20' : '0 20 0 0'}">
-        <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon" [col]="rightToLeft? 2 : 0"
+    <GridLayout class="header secondFontSize" [columns]="languageService.rightToLeft? '*,5*' : '5*,*'">
+        <StackLayout margin="0 20" [col]="languageService.rightToLeft? 1 : 0" verticalAlignment="center"
+            [horizontalAlignment]="languageService.rightToLeft? 'right' : 'left'">
+            <label text="{{ 'springsFilters.title' | odedI18N:languageService.dummyUpdate }}"></label>
+        </StackLayout>
+        <SVGImage [margin]="languageService.rightToLeft? '0 0 0 10' : '0 10 0 0'" class="exit titleIcon" [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+            (tap)="navigateToMap()">
+        </SVGImage>
+    </GridLayout>
+    <!-- <GridLayout columns="*,4*" class="header" [ngStyle]="{'margin': languageService.rightToLeft? '0 0 0 20' : '0 20 0 0'}">
+        <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon" [col]="languageService.rightToLeft? 0 : 1"
             src="~/assets/icons/times-light.svg" (tap)="navigateToMap()" >
         </SVGImage>
-        <FlexboxLayout [col]="rightToLeft? 0 : 2" [ngStyle]="{'justify-content': rightToLeft? 'flex-start' : 'flex-end'}" style="align-items: center;">
-            <label text="{{ 'springsFilters.title' | L }}" class="title" ></label>
+        <FlexboxLayout [col]="languageService.rightToLeft? 1 : 0" [ngStyle]="{'justify-content': languageService.rightToLeft? 'flex-start' : 'flex-end'}" style="align-items: center;">
+            <label text="{{ 'springsFilters.title' | odedI18N:languageService.dummyUpdate }}" class="title" ></label>
         </FlexboxLayout>
-    </GridLayout>
+    </GridLayout> -->
     <StackLayout class="line" margin="50 0 0"></StackLayout>
     <FlexboxLayout class="main" row="1">
-        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+        <FlexboxLayout class="filterLine"
+            [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}"
             (tap)="cbCamping.toggle()">
             <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
                 #cbCamping />
-            <label text="{{ 'springsFilters.camping' | L }}"></label>
+            <label text="{{ 'springsFilters.camping' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
-        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+        <FlexboxLayout class="filterLine"
+            [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}"
             (tap)="cbChildren.toggle()">
             <CheckBox:CheckBox [(ngModel)]="childrenCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
                 #cbChildren />
-            <label text="{{ 'springsFilters.children' | L }}"></label>
+            <label text="{{ 'springsFilters.children' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
-        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
-            (tap)="cbWater.toggle()">
+        <FlexboxLayout class="filterLine"
+            [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" (tap)="cbWater.toggle()">
             <CheckBox:CheckBox [(ngModel)]="waterCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
                 #cbWater />
-            <label text="{{ 'springsFilters.water' | L }}"></label>
+            <label text="{{ 'springsFilters.water' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
-        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
-            (tap)="cbCar.toggle()">
+        <FlexboxLayout class="filterLine"
+            [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" (tap)="cbCar.toggle()">
             <CheckBox:CheckBox [(ngModel)]="carCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
                 #cbCar />
-            <label text="{{ 'springsFilters.car' | L }}"></label>
+            <label text="{{ 'springsFilters.car' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
-        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
-            (tap)="cbDepth.toggle()">
+        <FlexboxLayout class="filterLine"
+            [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" (tap)="cbDepth.toggle()">
             <CheckBox:CheckBox [(ngModel)]="depthCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
                 #cbDepth />
-            <label text="{{ 'springsFilters.depth' | L }}"></label>
+            <label text="{{ 'springsFilters.depth' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
-        <FlexboxLayout class="filterLine" [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+        <FlexboxLayout class="filterLine"
+            [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}">
             <Slider class="slider" [(ngModel)]="sliderValue" minValue="0" maxValue="100"></Slider>
-            <label text="{{ 'springsFilters.radius' | L }} {{sliderValue}} KM"></label>
+            <label
+                text="{{ 'springsFilters.radius' | odedI18N:languageService.dummyUpdate }} {{sliderValue}} KM"></label>
         </FlexboxLayout>
         <StackLayout verticalAlignment="center" class="search" (tap)="search()">
-            <label text="{{ 'springsFilters.search' | L }}"></label>
+            <label text="{{ 'springsFilters.search' | odedI18N:languageService.dummyUpdate }}"></label>
         </StackLayout>
     </FlexboxLayout>
 </GridLayout>

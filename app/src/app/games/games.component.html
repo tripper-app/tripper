@@ -1,23 +1,22 @@
 <StackLayout>
-    <label class="header" style="text-align: center;" text="{{ 'games.title' | L }}" (onloaded)="alignVertical(title)" #title></label>
+    <label class="header" style="text-align: center;" text="{{ 'games.title' | odedI18N:languageService.dummyUpdate }}" (onloaded)="alignVertical(title)" #title></label>
     <StackLayout class="line"></StackLayout>
     <GridLayout rows="*, *" columns="*, *" height="100%" margin="30">
         <FlexboxLayout flexDirection="column" row="0" col="0" (tap)="navigateToGame('trivia')">
-            <!-- <img [height]="itemSize" [width]="itemSize" src="res://icon" /> -->
             <SVGImage src="~/assets/icons/trivia.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
-            <Label class="title" text="{{ 'games.trivia' | L }}"></Label>
+            <Label class="title" text="{{ 'games.trivia' | odedI18N:languageService.dummyUpdate }}"></Label>
         </FlexboxLayout>
         <FlexboxLayout flexDirection="column" row="0" col="1" (tap)="navigateToGame('kahoot')">
             <SVGImage src="~/assets/icons/kahoot.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
-            <Label class="title" text="{{ 'games.kahoot' | L }}"></Label>
+            <Label class="title" text="{{ 'games.kahoot' | odedI18N:languageService.dummyUpdate }}"></Label>
         </FlexboxLayout>
         <FlexboxLayout flexDirection="column" row="1" col="0" (tap)="navigateToGame('landKing')">
             <SVGImage src="~/assets/icons/king of the country.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
-            <Label class="title" text="{{ 'games.landKing' | L }}"></Label>
+            <Label class="title" text="{{ 'games.landKing' | odedI18N:languageService.dummyUpdate }}"></Label>
         </FlexboxLayout>
         <FlexboxLayout flexDirection="column" row="1" col="1" (tap)="navigateToGame('bingo')">
             <SVGImage src="~/assets/icons/bingo.svg" [height]="itemSize" [width]="itemSize"></SVGImage>
-            <Label class="title" text="{{ 'games.bingo' | L }}"></Label>
+            <Label class="title" text="{{ 'games.bingo' | odedI18N:languageService.dummyUpdate }}"></Label>
         </FlexboxLayout>
     </GridLayout>
 </StackLayout>

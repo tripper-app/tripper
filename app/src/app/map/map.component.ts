@@ -3,7 +3,6 @@ import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../common/services/springs-service';
 import { FlatSpring } from '../common/models/flatSpring';
-import { localize } from "nativescript-localize";
 import { LanguageService } from '../common/services/language-service';
 import * as application from "tns-core-modules/application";
 import { AlertService } from '../common/services/alert-service';
@@ -29,13 +28,14 @@ export class MapComponent implements OnInit {
   hotelMarker: Marker;
   singleSpringSubject;
   screen = screen;
-  singleRowHeight = (screen.mainScreen.heightDIPs*0.83789)/15*2-20 // the percentage without the bottom navigation
+  singleRowHeight = ((screen.mainScreen.heightDIPs*0.83789)/15)*2-20 // the percentage without the bottom navigation
 
   constructor(private page: Page,
     private router: Router,
     private springsService: SpringsService,
     private alertService: AlertService,
-    private errorService: ErrorsService) {
+    private errorService: ErrorsService,
+    private languageService: LanguageService) {
   }
 
   ngOnInit(): void {
@@ -61,9 +61,9 @@ export class MapComponent implements OnInit {
       }
     }
     else {
-      this.alertService.showError(localize('messages.error.noLocationPermissions'));
+      this.alertService.showError(this.languageService.getText('messages.error.noLocationPermissions'));
     }
-    this.getSprings();
+    //this.getSprings();
   }
 
   async getSprings() {
@@ -126,7 +126,7 @@ export class MapComponent implements OnInit {
       this.centerMap(location.latitude, location.longitude);
     }
     else {
-      this.alertService.showError(localize('messages.error.noLocationPermissions'));
+      this.alertService.showError(this.languageService.getText('messages.error.noLocationPermissions'));
       console.log("recieved location is NULL");
     }
   }
@@ -193,7 +193,7 @@ export class MapComponent implements OnInit {
         this.mainMap.longitude = res.location._longitude;
       } else {
         this.loading = false;
-        this.alertService.showError(localize("messages.error.springNotFound"));
+        this.alertService.showError(this.languageService.getText("messages.error.springNotFound"));
       }
     }, err => {
       this.loading = false;

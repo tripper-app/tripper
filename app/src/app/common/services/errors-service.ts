@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
-import localize from 'nativescript-localize';
 import { AlertService } from './alert-service';
+import { LanguageService } from './language-service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ErrorsService {
 
-    constructor(private alertService: AlertService) {
+    constructor(private alertService: AlertService,
+        private languageService: LanguageService) {
     }
 
     handleErorr(error) {
         console.log(error);
         switch (error.status) {
             case 0:
-                this.alertService.showError(localize('messages.error.connectionError'));
+                this.alertService.showError(this.languageService.getText('messages.error.connectionError'));
                 break;
             case 299:
-                this.alertService.showInfo(localize('messages.info.pleaseUpdate'));
+                this.alertService.showInfo(this.languageService.getText('messages.info.pleaseUpdate'));
                 break;
             case 500:
-                this.alertService.showError(localize("messages.error.serverError"));
+                this.alertService.showError(this.languageService.getText("messages.error.serverError"));
                 break;
             default:
-                this.alertService.showError(localize("messages.error.unknownError"));
+                this.alertService.showError(this.languageService.getText("messages.error.unknownError"));
                 break;
         }
     }

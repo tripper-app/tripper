@@ -4,10 +4,8 @@ import { UserService } from '../common/services/userService';
 import { screen } from "tns-core-modules/platform";
 import { User } from '../common/models/user';
 import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
-import { ChangeLanguageModalComponent } from '../common/alerts/changeLanguage/change-language.component';
 import * as imagepicker from "nativescript-imagepicker";
 import * as btoa from 'btoa';
-import localize from 'nativescript-localize';
 import { AlertService } from '../common/services/alert-service';
 import { ChangePasswordModalComponent } from '../common/alerts/changePassword/change-password.component';
 import { SpringsService } from '../common/services/springs-service';
@@ -33,7 +31,6 @@ export class ProfileComponent implements OnInit {
     favoritesGifHeight = 320;
     usernameInput;
     currentUser = new User();
-    rightToLeft = true;
     widthHalf = screen.mainScreen.widthDIPs / 2;
     editingUsername = false;
     waitingForResponse = false;
@@ -55,9 +52,6 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.rightToLeft = this.languageService.getRightToLeft();
-        console.log(this.languageService.getCurrentLanguage());
-
         this.getUser();
     }
 
@@ -83,7 +77,7 @@ export class ProfileComponent implements OnInit {
             image.getImageAsync((img, err) => {
                 if (err) {
                     console.log(err);
-                    this.alertService.showError(localize('profile.cantPickImage'));
+                    this.alertService.showError(this.languageService.getText('profile.cantPickImage'));
                 } else {
                     this.waitingForUserPic = true;
                     let byteArrayOutputStream = new java.io.ByteArrayOutputStream();
@@ -227,12 +221,21 @@ export class ProfileComponent implements OnInit {
 
     changeLanguage(lan) {
         this.languageService.switchLanguage(lan);
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.viewContainerRef,
-            fullscreen: false,
-            cancelable: false
-        };
-        this.modalService.showModal(ChangeLanguageModalComponent, options);
+        this.currentUser.favorites = undefined;
+        this.currentUser.history = undefined;
+        if (this.showingHistory) {
+            this.showHistory();
+        }
+
+        if (this.showingFavorites) {
+            this.showFavorites();
+        }
+        // const options: ModalDialogOptions = {
+        //     viewContainerRef: this.viewContainerRef,
+        //     fullscreen: false,
+        //     cancelable: false
+        // };
+        // this.modalService.showModal(ChangeLanguageModalComponent, options);
     }
 
     changePassword() {
@@ -252,19 +255,19 @@ export class ProfileComponent implements OnInit {
 
         switch (err.status) {
             case 400:
-                this.alertService.showError(localize('login.requireDetails'));
+                this.alertService.showError(this.languageService.getText('login.requireDetails'));
                 break;
             case 401:
-                this.alertService.showError(localize('login.wrongDetails'));
+                this.alertService.showError(this.languageService.getText('login.wrongDetails'));
                 break;
             case 404:
-                this.alertService.showError(localize('login.wrongEmail'));
+                this.alertService.showError(this.languageService.getText('login.wrongEmail'));
                 break;
             case 407:
-                this.alertService.showError(localize('login.emailNotVerified'))
+                this.alertService.showError(this.languageService.getText('login.emailNotVerified'))
                 break;
             case 409:
-                this.alertService.showError(localize('login.emailAlreadyExist'))
+                this.alertService.showError(this.languageService.getText('login.emailAlreadyExist'))
                 break;
             default:
                 this.errorService.handleErorr(err);

@@ -799,7 +799,10 @@ exports.getNotification = functionBuilder(async (req, res) => {
         const ref = await db.collection(notificationsCollection).doc(notificationsUpdates).get();
         let result = undefined;
         if ((ref === null || ref === void 0 ? void 0 : ref.updateTime) && ref.updateTime.seconds > oldTime) {
-            result = ref.get('text')[currentLanguage];
+            const text = ref.get('text');
+            if (text) {
+                result = text[currentLanguage];
+            }
         }
         res.send({ time: (_a = ref.updateTime) === null || _a === void 0 ? void 0 : _a.seconds, text: result });
     }

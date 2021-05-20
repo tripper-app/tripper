@@ -1,25 +1,22 @@
-import { Component, ViewContainerRef, OnInit, Output, EventEmitter } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
-import { User } from '~/app/common/models/user';
-import { UserService } from '~/app/common/services/userService';
-import { Router } from '@angular/router';
-import { OauthService } from '../../common/services/oauth-service';
-import { HttpService } from '~/app/common/services/http-service';
-import { LanguageService } from '~/app/common/services/language-service';
-import { setString, getString } from '@nativescript/core/application-settings';
-import { GoogleLogin } from 'nativescript-google-login';
-import { AlertService } from '../../common/services/alert-service';
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
-import { ChangeLanguageModalComponent } from '~/app/common/alerts/changeLanguage/change-language.component';
-import { ErrorsService } from '~/app/common/services/errors-service';
-import { OdedI18NPipe } from "../../common/pipes/i18nPipe";
+import { Component, EventEmitter, OnInit, Output, ViewContainerRef } from "@angular/core";
+import { Router } from "@angular/router";
+import { ModalDialogService } from "@nativescript/angular/modal-dialog";
+import { Page } from "@nativescript/core";
+import { User } from "../common/models/user";
+import { OdedI18NPipe } from "../common/pipes/i18nPipe";
+import { AlertService } from "../common/services/alert-service";
+import { ErrorsService } from "../common/services/errors-service";
+import { HttpService } from "../common/services/http-service";
+import { LanguageService } from "../common/services/language-service";
+import { OauthService } from "../common/services/oauth-service";
+import { UserService } from "../common/services/userService";
+
 @Component({
-    selector: 'ns-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    selector: 'ns-test',
+    templateUrl: './test.html',
+    styleUrls: ['./test.scss']
 })
-export class LoginComponent implements OnInit {
+export class TestComponent implements OnInit {
     @Output() goToMap: EventEmitter<any> = new EventEmitter();
     @Output() goToAbout: EventEmitter<any> = new EventEmitter();
     waitingForResponse = false;
@@ -83,18 +80,18 @@ export class LoginComponent implements OnInit {
     }
 
     forgotPassword() {
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.viewContainerRef,
-            fullscreen: false
-        };
-        this.modalService.showModal(ResetPasswordModalComponent, options).then(email => {            
-            if (email) {
-                this.waitingForResponse = true;
-                this.userService.resetPasswordCreateCode(email).subscribe(() => {
-                    this.router.navigate(['resetPassword', email]);
-                }, err => this.handleError(err));
-            }
-        });
+        // const options: ModalDialogOptions = {
+        //     viewContainerRef: this.viewContainerRef,
+        //     fullscreen: false
+        // };
+        // this.modalService.showModal(ResetPasswordModalComponent, options).then(email => {            
+        //     if (email) {
+        //         this.waitingForResponse = true;
+        //         this.userService.resetPasswordCreateCode(email).subscribe(() => {
+        //             this.router.navigate(['resetPassword', email]);
+        //         }, err => this.handleError(err));
+        //     }
+        // });
     }
 
     loginWithFacebook() {
@@ -108,25 +105,7 @@ export class LoginComponent implements OnInit {
         })
     }
 
-    loginWithGoogle() {
-        GoogleLogin.login(res => {
-            console.log(res);
-        })
-        // this.oathService.tnsOauthLogin("google", data => {
-        //     alert(data)
-        //     console.log(data);
-        //     this.httpService.getEmailByFacebookToken(data.accessToken).subscribe(res => {
-        //         console.log("SUCCESS!!");
 
-        //         console.log(res);
-
-        //     }, err => this.handleError(err))
-        // }, err => {
-        //     console.log("in error callback");
-        //     console.log(err);
-
-        // })
-    }
 
     loginWithThirdParty(token, thirdParty) {
         this.waitingForResponse = true;
@@ -143,7 +122,7 @@ export class LoginComponent implements OnInit {
     }
 
     saveTokenToCache(token) {
-        setString("user_token", token);
+        //setString("user_token", token);
     }
 
     changeLanguage(lan) {
@@ -205,5 +184,3 @@ export class LoginComponent implements OnInit {
         this.goToAbout.emit();
     }
 }
-    // activity: application.android.foregroundActivity
-    // serverClientId: "761150329649-cd3pjk9elh5ncrhq4seah28c4as7qfl5.apps.googleusercontent.com",

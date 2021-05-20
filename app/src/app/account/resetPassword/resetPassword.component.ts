@@ -2,11 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { alert } from "tns-core-modules/ui/dialogs";
 import { UserService } from '~/app/common/services/userService';
-import { localize } from "nativescript-localize";
+//import { localize } from "nativescript-localize";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from '~/app/common/services/language-service';
 import { AlertService } from '~/app/common/services/alert-service';
 import { ErrorsService } from '~/app/common/services/errors-service';
+import { OdedI18NPipe } from '~/app/common/pipes/i18nPipe';
 
 @Component({
     selector: 'ns-resetPassword',
@@ -26,7 +27,8 @@ export class ResetPasswordComponent implements OnInit {
                 private router: Router,
                 private languageService: LanguageService,
                 private alertService: AlertService,
-                private errorService: ErrorsService) {
+                private errorService: ErrorsService,
+                private odedi18n: OdedI18NPipe) {
     }
 
     ngOnInit() {
@@ -36,19 +38,19 @@ export class ResetPasswordComponent implements OnInit {
 
     submit() {
         if (!this.code || !this.password || !this.confirmPassword) {
-            this.alertService.showError(localize('login.requireDetails'));
+            this.alertService.showError(this.odedi18n.transform('login.requireDetails'));
             return;
         }
 
         if (this.password !== this.confirmPassword) {
-            this.alertService.showError(localize('login.passwordsNotMuch'));
+            this.alertService.showError(this.odedi18n.transform('login.passwordsNotMuch'));
             return
         }
 
         this.waitingForResponse = true;
         this.userService.resetPasswordRecieveCode(this.code, this.email, this.password).subscribe(() => {
             this.waitingForResponse = false;
-            this.alertService.showSuccess(localize('login.passwordChanged'));
+            this.alertService.showSuccess(this.odedi18n.transform('login.passwordChanged'));
             this.router.navigate(['login']);
         }, err => {
             this.handleError(err);
@@ -69,10 +71,10 @@ export class ResetPasswordComponent implements OnInit {
 
         switch (err.status) {
             case 400:
-                this.alertService.showError(localize('login.requireDetails'));
+                this.alertService.showError(this.odedi18n.transform('login.requireDetails'));
                 break;
             case 401:
-                this.alertService.showError(localize('login.wrongDetails'));
+                this.alertService.showError(this.odedi18n.transform('login.wrongDetails'));
                 break;
             default:
                 this.errorService.handleErorr(err);

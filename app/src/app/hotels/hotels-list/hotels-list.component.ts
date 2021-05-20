@@ -33,20 +33,19 @@ export class HotelsListComponent implements OnInit {
             this.hotelsList = this.hotelsService.filteredHotels;
         }
     }
-    
+
     hideTheFilters() {
         this.hotelsService.showList = true;
         this.getHotels();
         this.showTabs.emit();
     }
 
-
     getHotels() {
-        this.hotelsList = [];        
+        this.hotelsList = [];
         this.waitingForResponse = true;
-        this.hotelsService.getHotels().subscribe(res => {   
+        this.hotelsService.getHotels().subscribe(res => {
             this.waitingForResponse = false;
-            this.hotelsList = res;            
+            this.hotelsList = res;
         }, err => {
             this.errorService.handleErorr(err);
         })

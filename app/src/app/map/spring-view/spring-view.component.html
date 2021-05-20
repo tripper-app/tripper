@@ -2,12 +2,12 @@
     <ScrollView [height]="!isKeyboardOpen? '91%' : '100%'" *ngIf="!waitingForResponse">
         <StackLayout>
             <GridLayout columns="*,5*,*" class="header">
-                <SVGImage class="exit titleIcon" [col]="rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg"
+                <SVGImage class="exit titleIcon" [col]="languageService.rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg"
                     (tap)="navigateToMap()">
                 </SVGImage>
                 <label textWrap="true" #title (onloaded)="alignVertical(title)" col="1"
                     [text]="currentSpring.name"></label>
-                <SVGImage class="titleIcon" [col]="rightToLeft? 2 : 0" (tap)="clickOnFavorites()"
+                <SVGImage class="titleIcon" [col]="languageService.rightToLeft? 2 : 0" (tap)="clickOnFavorites()"
                     [src]="currentSpring.isFavorite? '~/assets/icons/starFull.svg' : '~/assets/icons/starEmpty-light.svg'">
                 </SVGImage>
             </GridLayout>
@@ -25,112 +25,111 @@
             <StackLayout style="width: 100%; padding: 10;">
                 <label [text]="currentSpring.description" class="descriptionLabel"></label>
                 <GridLayout rows="*,*,*" columns="*,*">
-                    <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}"
+                    <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
                         class="filterLine">
                         <SVGImage class="filterIcon" src="~/assets/icons/manWalks-green.svg">
                         </SVGImage>
                         <label class="filterLabel" [text]="currentSpring.distanceFromCar"></label>
                     </FlexboxLayout>
-                    <FlexboxLayout [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}" class="filterLine"
+                    <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}" class="filterLine"
                         col="1">
                         <SVGImage class="filterIcon"
                             [src]="currentSpring.filterCamping? '~/assets/icons/campFire-green.svg' : '~/assets/icons/campFire-grey.svg'">
                         </SVGImage>
                         <label class="filterLabel"
-                            text="{{currentSpring.filterCamping? ('springView.suitableForCamping' | L) : ('springView.notSuitableForCamping' | L)}}"></label>
+                            text="{{currentSpring.filterCamping? ('springView.suitableForCamping' | odedI18N:languageService.dummyUpdate) : ('springView.notSuitableForCamping' | odedI18N:languageService.dummyUpdate)}})"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="1" class="filterLine"
-                        [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+                        [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
                         <SVGImage class="filterIcon" src="~/assets/icons/rulerVertical-green.svg">
                         </SVGImage>
-                        <label class="filterLabel" text="{{ 'springView.depth' | L }}: {{currentSpring.depth}}"></label>
+                        <label class="filterLabel" text="{{ 'springView.depth' | odedI18N:languageService.dummyUpdate }}: {{currentSpring.depth}}"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="1" col="1" class="filterLine"
-                        [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+                        [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
                         <SVGImage class="filterIcon"
                             [src]="currentSpring.filterChildren? '~/assets/icons/manCheers-green.svg' : '~/assets/icons/manCheers-grey.svg'">
                         </SVGImage>
                         <label class="filterLabel"
-                            text="{{currentSpring.filterChildren? ('springView.suitableableForChildren' | L) : ('springView.notSuitableForChildren' | L)}}"></label>
+                            text="{{currentSpring.filterChildren? ('springView.suitableableForChildren' | odedI18N:languageService.dummyUpdate) : ('springView.notSuitableForChildren' | odedI18N:languageService.dummyUpdate)}}"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="2" class="filterLine"
-                        [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+                        [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
                         <SVGImage class="filterIcon" src="~/assets/icons/clouds-green.svg">
                         </SVGImage>
                         <label class="filterLabel" textWrap="true" [text]="currentSpring.preferredSeason"></label>
                     </FlexboxLayout>
                     <FlexboxLayout row="2" col="1" class="filterLine"
-                        [ngStyle]="{'flex-direction': rightToLeft? 'row-reverse' : 'row'}">
+                        [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
                         <SVGImage class="filterIcon"
                             [src]="currentSpring.filterWater? '~/assets/icons/faucet-green.svg' : '~/assets/icons/faucet-grey.svg'">
                         </SVGImage>
                         <label class="filterLabel"
-                            text="{{currentSpring.filterWater? ('springView.thereIsDrinkingWater' | L) : ('springView.noDrinkingWater' | L)}}"></label>
+                            text="{{currentSpring.filterWater? ('springView.thereIsDrinkingWater' | odedI18N:languageService.dummyUpdate) : ('springView.noDrinkingWater' | odedI18N:languageService.dummyUpdate)}}"></label>
                     </FlexboxLayout>
                 </GridLayout>
             </StackLayout>
             <StackLayout class="line" margin="10"></StackLayout>
             <StackLayout *ngFor="let comment of currentSpring.comments; let i = index" style="margin: 10;"
                 [ngStyle]="{visibility: (expandComments || i<3)? 'visible' : 'collapse'}">
-                <GridLayout rows="5*,*" [columns]="rightToLeft? '5*,*' : '*,5*'">
-                    <FlexboxLayout [col]="rightToLeft? 0 : 1" class="comment"
-                        [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}">
+                <GridLayout rows="5*,*" [columns]="languageService.rightToLeft? '5*,*' : '*,5*'">
+                    <FlexboxLayout [col]="languageService.rightToLeft? 0 : 1" class="comment"
+                        [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}">
                         <label class="regularBoldFont smallFontSize" text="{{ comment.date._seconds * 1000 | date: 'dd/MM/yyyy' }}"></label>
                         <label class="semiBoldFont regulafFontSize" text="{{comment.user_name}}"></label>
                     </FlexboxLayout>
                     <FlexboxLayout flexDirection="column" rowSpan="2" width="37"
-                        [margin]="rightToLeft? '0 0 0 10' : '0 10 0 0'" [col]="rightToLeft? 1 : 0"
+                        [margin]="languageService.rightToLeft? '0 0 0 10' : '0 10 0 0'" [col]="languageService.rightToLeft? 1 : 0"
                         style="justify-content: flex-end;">
                         <img src="{{comment.user_pic}}" class="userPic" />
                     </FlexboxLayout>
-                    <StackLayout [col]="rightToLeft? 0 : 1" row="1" class="commentLine"></StackLayout>
+                    <StackLayout [col]="languageService.rightToLeft? 0 : 1" row="1" class="commentLine"></StackLayout>
                 </GridLayout>
                 <label textWrap="true" class="regularBoldFont regulafFontSize" text="{{ comment.text }}"></label>
             </StackLayout>
             <label style="text-align: center; opacity: 0.5;"
-                text="{{ expandComments? ('springView.showLessComments' | L) : ('springView.showMoreComments' | L) }}"
+                text="{{ expandComments? ('springView.showLessComments' | odedI18N:languageService.dummyUpdate) : ('springView.showMoreComments' | odedI18N:languageService.dummyUpdate) }}" 
                 (tap)="expandComments = !expandComments"
                 *ngIf="(currentSpring.comments && currentSpring.comments.length>3)" class="semiBoldFont smallFontSize"></label>
             <GridLayout *ngIf="userService.userLoggedIn" rows="*,*" columns="*,5*,*" margin="10">
                 <SVGImage style="height: 20; width: 20;"
                     [src]="thereIsComment? '~/assets/icons/paperPlane-green.svg' : '~/assets/icons/paperPlane-grey.svg'"
-                    [margin]="rightToLeft? '0 10 0 0' : '0 0 0 10'" (tap)="addComment(commentInput)"
-                    [col]="rightToLeft? 0 : 2">
+                    [margin]="languageService.rightToLeft? '0 10 0 0' : '0 0 0 10'" (tap)="addComment(commentInput)"
+                    [col]="languageService.rightToLeft? 0 : 2">
                 </SVGImage>
-                <textField class="input regularBoldFont regulafFontSize" hint="{{ 'springView.newComment' | L }}" col="1" returnKeyType="go"
+                <textField class="input regularBoldFont regulafFontSize" hint="{{ 'springView.newComment' | odedI18N:languageService.dummyUpdate }}" col="1" returnKeyType="go"
                     (textChange)="commentTextChanged(commentInput.text)" (tap)="tapComment()" #commentInput></textField>
-                <StackLayout row="1" class="inputLine" [colSpan]="rightToLeft? 2 : 0" [col]="rightToLeft? 0 : 1">
+                <StackLayout row="1" class="inputLine" [colSpan]="languageService.rightToLeft? 2 : 0" [col]="languageService.rightToLeft? 0 : 1">
                 </StackLayout>
-                <img opacity="0.4" rowSpan="2" [col]="rightToLeft? 2 : 0" class="userPic"
-                    [margin]="rightToLeft? '0 0 0 10' : '0 10 0 0'" [src]="userService.getUserPicture()" />
+                <img opacity="0.4" rowSpan="2" [col]="languageService.rightToLeft? 2 : 0" class="userPic"
+                    [margin]="languageService.rightToLeft? '0 0 0 10' : '0 10 0 0'" [src]="userService.getUserPicture()" />
             </GridLayout>
             <StackLayout *ngIf="currentSpring.info" class="line"></StackLayout>
             <label textWrap="true" [text]="currentSpring.info" *ngIf="currentSpring.info" class="info"></label>
             <GridLayout columns="*,*" style="background-color: #E9ECEE; height: 50;">
-                <FlexboxLayout (tap)="updateSpring()" [ngStyle]="{'flex-direction': rightToLeft? 'row' : 'row-reverse'}"
-                    [col]="rightToLeft? 0 : 1" style="justify-content: center;">
+                <FlexboxLayout (tap)="updateSpring()" [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}"
+                    [col]="languageService.rightToLeft? 0 : 1" style="justify-content: center;">
                     <SVGImage class="filterIcon" src="~/assets/icons/comment-exclamation-light.svg">
                     </SVGImage>
                     <label (onloaded)="alignVertical(support)" class="regulafFontSize" #support
-                        text="{{ 'springView.foundError' | L }}"></label>
+                        text="{{ 'springView.foundError' | odedI18N:languageService.dummyUpdate }}"></label>
                 </FlexboxLayout>
-                <FlexboxLayout [col]="rightToLeft? 1 : 0" style="justify-content: center;" (tap)="shareSpring()">
+                <FlexboxLayout [col]="languageService.rightToLeft? 1 : 0" style="justify-content: center;" (tap)="shareSpring()">
                     <SVGImage class="filterIcon" src="~/assets/icons/share-alt-light.svg">
                     </SVGImage>
-                    <label class="regulafFontSize" (onloaded)="alignVertical(share)" #share text="{{ 'springView.share' | L }}"></label>
+                    <label class="regulafFontSize" (onloaded)="alignVertical(share)" #share text="{{ 'springView.share' | odedI18N:languageService.dummyUpdate }}"></label>
                 </FlexboxLayout>
             </GridLayout>
             <FlexboxLayout class="navigation" height="50" *ngIf="isKeyboardOpen">
                 <FlexboxLayout style="align-items: center;" (tap)="navigateWithMaps()">
                     <SVGImage class="navigationIcon" src="~/assets/icons/mapsLogo.svg"> 
                     </SVGImage>
-                    <!-- <img src="res://google_maps_logo" class="navigationIcon" /> -->
-                    <label class="secondFontSize semiBoldFont" text="{{'springView.navigateWithMaps' | L }}"></label>
+                    <label class="secondFontSize semiBoldFont" text="{{'springView.navigateWithMaps' | odedI18N:languageService.dummyUpdate }}"></label>
                 </FlexboxLayout>
                 <FlexboxLayout style="align-items: center;" (tap)="navigateWithWaze()">
                     <SVGImage class="navigationIcon" src="~/assets/icons/wazeLogo.svg"> 
                     </SVGImage>
-                    <label class="secondFontSize semiBoldFont" text="{{'springView.navigateWithWaze' | L }}"></label>
+                    <label class="secondFontSize semiBoldFont" text="{{'springView.navigateWithWaze' | odedI18N:languageService.dummyUpdate }}"></label>
                 </FlexboxLayout>
             </FlexboxLayout>
         </StackLayout>
@@ -140,13 +139,12 @@
         <FlexboxLayout style="align-items: center;" (tap)="navigateWithMaps()">
             <SVGImage class="navigationIcon" src="~/assets/icons/mapsLogo.svg"> 
             </SVGImage>
-            <!-- <img src="res://google_maps_logo" class="navigationIcon" /> -->
-            <label class="secondFontSize semiBoldFont" text="{{'springView.navigateWithMaps' | L }}"></label>
+            <label class="smallFontSize semiBoldFont" text="{{'springView.navigateWithMaps' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
         <FlexboxLayout style="align-items: center;" (tap)="navigateWithWaze()">
             <SVGImage class="navigationIcon" src="~/assets/icons/wazeLogo.svg"> 
             </SVGImage>
-            <label class="secondFontSize semiBoldFont" text="{{'springView.navigateWithWaze' | L }}"></label>
+            <label class="smallFontSize semiBoldFont" text="{{'springView.navigateWithWaze' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
     </FlexboxLayout>
 </StackLayout>

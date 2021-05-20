@@ -1,14 +1,8 @@
 @import '../../../app-common';
 
-// .header{
-//     height: $headerHeight;
-//     font-size: $headerFontSize;
-//     margin: 0 10;
-//     font-weight: bold;
-//   }
-
 .text{
-    font-size: $titleFontSize;
+    font-size: $subtitleFontSize;
+    text-align: center;
 }
 
 .confirm{

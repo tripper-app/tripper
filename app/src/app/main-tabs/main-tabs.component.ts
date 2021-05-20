@@ -9,6 +9,7 @@ import { HttpService } from '../common/services/http-service';
 import { HotelsService } from '../common/services/hotels-service';
 import { UserService } from '../common/services/userService';
 import { NotificationsModalComponent } from './notificationsModal/notificationsModal.component';
+import { ErrorsService } from '../common/services/errors-service';
 
 //declare let android: any; // or use tns-platform-declarations
 //declare let java: any;
@@ -30,7 +31,7 @@ export class MainTabsComponent implements OnInit {
         private modalService: ModalDialogService,
         private languageService: LanguageService,
         private httpService: HttpService,
-
+        private errorService: ErrorsService,
         private hotelService: HotelsService,
         private userService: UserService) {
     }
@@ -73,7 +74,7 @@ export class MainTabsComponent implements OnInit {
 
     checkNotifications() {
         const messageTime = getString('notificationTimeStamp');
-        this.httpService.getNotification(messageTime ? messageTime : 0).subscribe((res: any) => {
+        this.httpService.getNotification(messageTime ? messageTime : 0).subscribe((res: any) => {            
             if (res.text) {
                 const options: ModalDialogOptions = {
                     viewContainerRef: this.viewContainerRef,
@@ -83,6 +84,8 @@ export class MainTabsComponent implements OnInit {
                 this.modalService.showModal(NotificationsModalComponent, options)
                 setString('notificationTimeStamp', res.time.toString());
             }
+        }, err => {
+            this.errorService.handleErorr(err);
         })
     }
 }

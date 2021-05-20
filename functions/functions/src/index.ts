@@ -489,26 +489,6 @@ export const getFavoriteSprings = functionBuilder(async (req, res) => {
     }
 })
 
-// export const addHistorySpring = functionBuilder(async (req, res) => {
-//     try {
-//         const email = validateJwtToken(req.headers.token as string);
-//         const springId = req.query.springId;
-//         const userRef = await db.collection('users').doc(email);
-//         await userRef.update({
-//             historySprings: admin.firestore.FieldValue.arrayUnion(springId)
-//         });
-
-//         if ((await userRef.get()).get("historySprings").length > historyLimit) {
-//             const first = await (await userRef.get()).get("historySprings")
-//             await userRef.update({
-//                 historySprings: admin.firestore.FieldValue.arrayRemove(first[0])
-//             });
-//         }
-//     } catch (error) {
-//         handleError(req, res, error);;
-//     }
-// })
-
 export const getHistorySprings = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
@@ -789,7 +769,10 @@ export const getNotification = functionBuilder(async (req, res) => {
         const ref = await db.collection(notificationsCollection).doc(notificationsUpdates).get();
         let result = undefined;
         if (ref?.updateTime && ref.updateTime.seconds > oldTime) {
-            result = ref.get('text')[currentLanguage];
+            const text = ref.get('text');
+            if (text) {
+                result = text[currentLanguage];
+            }
         }
 
         res.send({ time: ref.updateTime?.seconds, text: result });
@@ -804,7 +787,7 @@ export const getHighScore = functionBuilder(async (req, res) => {
         const quiz = req.query.quiz as string;
         const userRef = await db.collection('users').doc(email);
         const score = (await userRef.get()).get(quiz + "HighScore");
-        res.send({score: score});
+        res.send({ score: score });
     } catch (error) {
         handleError(req, res, error);;
     }
@@ -819,7 +802,7 @@ export const setHighScore = functionBuilder(async (req, res) => {
         let data: any = {};
         data[`${quiz}HighScore`] = score;
         await userRef.update(data)
-        res.send({score: score});
+        res.send({ score: score });
     } catch (error) {
         handleError(req, res, error);;
     }
@@ -837,7 +820,7 @@ export const setHighScore = functionBuilder(async (req, res) => {
 
 
 const handleError = (req: functions.Request, res: functions.Response, err: Error) => {
-    functions.logger.error({request: req.query}, err);
+    functions.logger.error({ request: req.query }, err);
     res.status(500).send(err);
 }
 
