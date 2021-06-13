@@ -1,0 +1,22 @@
+@import '../../app';
+
+.gif{
+    height: 100%;
+    width: 100%; 
+    background-color: white;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.pic{
+    border-radius: 100%;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+}
+
+.input{
+    margin-bottom: -2;
+    margin-top: -6;
+    
+}

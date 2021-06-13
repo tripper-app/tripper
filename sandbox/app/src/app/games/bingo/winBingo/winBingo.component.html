@@ -1,0 +1,16 @@
+<StackLayout class="main">
+    <GridLayout class="header" columns="*,4*,*">
+        <SVGImage class="exit" height="50%" [col]="languageService.rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg"
+            (tap)="exit()">
+        </SVGImage>
+    </GridLayout>
+    <GridLayout rows="*,3*,3*">
+        <SVGImage height="29%" row="1" src="~/assets/icons/rightAnswer.svg">
+        </SVGImage>
+        <StackLayout margin="10" row="2" style="text-align: center; color: white;" horizontalAlignment="center">
+            <label color="white" class="titleFontSize semiBoldFont" text="{{ 'games.wellDone' | odedI18N:languageService.dummyUpdate }}"></label>
+            <label class="secondFontSize regularBoldFont" color="white"
+                text="{{ 'games.timeToFinishBingo' | odedI18N: {value: [timeToWin | date:'HH:mm:ss':'UTC']} }}"></label>
+        </StackLayout>
+    </GridLayout>
+</StackLayout>

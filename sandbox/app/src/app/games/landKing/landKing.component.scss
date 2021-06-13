@@ -1,0 +1,15 @@
+@import '../../../app';
+
+.lowerLine{
+    height: $bottomHeight;
+    font-size: $titleFontSize;
+    background-color: $themeColor;
+    align-items: center;
+    color: white;
+    justify-content: space-around;
+  }
+
+  .icon{
+      height: 30%;
+      width: 10%;
+  }

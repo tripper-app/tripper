@@ -1,0 +1,78 @@
+<StackLayout>
+  <scrollView width="100%" height="91%" *ngIf="!waitingForResponse">
+    <StackLayout>
+      <GridLayout class="header secondFontSize" [columns]="languageService.rightToLeft? '*,5*' : '5*,*'">
+        <StackLayout margin="0 20" [col]="languageService.rightToLeft? 1 : 0" verticalAlignment="center"
+          [horizontalAlignment]="languageService.rightToLeft? 'right' : 'left'">
+          <label [text]="currentHotel.name"></label>
+        </StackLayout>
+        <SVGImage class="exit titleIcon" [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+          (tap)="backToList()">
+        </SVGImage>
+      </GridLayout>
+      <GridLayout height="250">
+        <Carousel [items]="currentHotel.images" android:indicatorAnimation="scale" indicatorColor="#fff"
+          indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 10" showIndicator="true">
+          <CarouselItem *ngFor="let item of currentHotel.images">
+            <GridLayout>
+              <ns-waiting-gif></ns-waiting-gif>
+              <Image style="z-index: 3;" [src]="item" width="100%" height="100%" stretch="fill"></Image>
+            </GridLayout>
+          </CarouselItem>
+        </Carousel>
+      </GridLayout>
+      <StackLayout style="width: 100%; padding: 10;">
+        <label class="descriptionLabel secondFontSize" [text]="currentHotel.description"></label>
+        <GridLayout rows="*, *" columns="*, *">
+          <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
+            [col]="languageService.rightToLeft? 0 : 1">
+            <SVGImage class="filterIcon"
+              [src]="currentHotel.breakfast? '~/assets/icons/utensils-green.svg' : '~/assets/icons/utensils-grey.svg'">
+            </SVGImage>
+            <label class="filterLabel"
+              text="{{currentHotel.breakfast? ('hotelView.breakfast' | odedI18N:languageService.dummyUpdate) : ('hotelView.noBreakfast' | odedI18N:languageService.dummyUpdate)}}">
+            </label>
+            <!-- <label class="filterLabel"
+              text="{{currentHotel.breakfast? ('hotelView.breakfast' | odedI18N: {value: [currentHotel.breakfastPrice, ' &#8362;']}) : ('hotelView.noBreakfast' | odedI18N:languageService.dummyUpdate)}}"></label> -->
+          </FlexboxLayout>
+          <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
+            [col]="languageService.rightToLeft? 1 : 0">
+            <SVGImage class="filterIcon" src="~/assets/icons/map-green.svg">
+            </SVGImage>
+            <label class="filterLabel" [text]="currentHotel.region"></label>
+          </FlexboxLayout>
+          <FlexboxLayout row="1" [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
+            [col]="languageService.rightToLeft? 0 : 1">
+            <SVGImage class="filterIcon"
+              [src]="currentHotel.pool? '~/assets/icons/swimmingPool-green.svg' : '~/assets/icons/swimmingPool-grey.svg'">
+            </SVGImage>
+            <label class="filterLabel"
+              text="{{ currentHotel.pool? ('hotelView.pool' | odedI18N:languageService.dummyUpdate) : ('hotelView.noPool' | odedI18N:languageService.dummyUpdate) }}"></label>
+          </FlexboxLayout>
+          <FlexboxLayout row="1" [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
+            [col]="languageService.rightToLeft? 1 : 0">
+            <SVGImage class="filterIcon" [src]="currentHotel.price? '~/assets/icons/moneyCheck-green.svg' : '~/assets/icons/moneyCheck-grey.svg'">
+            </SVGImage>
+            <label class="filterLabel"
+              text="{{ currentHotel.price? ('hotelView.price' | odedI18N: {value: [currentHotel.price, ' &#8362;']}) : ('hotelView.noPrice' | odedI18N:languageService.dummyUpdate) }}"></label>
+          </FlexboxLayout>
+        </GridLayout>
+      </StackLayout>
+      <StackLayout class="line" margin="10 0"></StackLayout>
+      <label class="attractionsTitle"
+        text="{{ 'hotelView.attractionsInArea' | odedI18N:languageService.dummyUpdate }}"></label>
+      <FlexboxLayout flexWrap="wrap" margin="0 10 10"
+        [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
+        <label class="regularBoldFont thirdFontSize" *ngFor="let attraction of currentHotel.attractions; let i = index"
+          text="{{attraction}}{{i<currentHotel.attractions.length-1? (', ') : ('')}}"></label>
+      </FlexboxLayout>
+    </StackLayout>
+  </scrollView>
+  <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
+  <FlexboxLayout class="navigation" *ngIf="!waitingForResponse">
+    <label color="white" text="{{ 'hotelView.openMap' | odedI18N:languageService.dummyUpdate }}" (tap)="openMap()"
+      *ngIf="currentHotel.location"></label>
+    <label color="white" text="{{ 'hotelView.reserve' | odedI18N:languageService.dummyUpdate }}" (tap)="reserve()"
+      *ngIf="currentHotel.websiteLink || currentHotel.phone"></label>
+  </FlexboxLayout>
+</StackLayout>

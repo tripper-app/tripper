@@ -38,7 +38,7 @@ const hotelsCollection = 'hotels';
 const notificationsCollection = 'notifications';
 const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
-const defaultUserPicture = "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
+const defaultUserPicture = "https://firebasestorage.googleapis.com/v0/b/tripper-d0e21.appspot.com/o/assets%2FuserProfile.png?alt=media&token=a6c2eff3-af9e-4207-be7a-a1b4abef75a1";
 const historyLimit = 10;
 const runtimeOpts = {
     timeoutSeconds: 60,
@@ -47,8 +47,8 @@ const runtimeOpts = {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: tripperEmail.user,
-        pass: tripperEmail.password
+        user: "tripper.app.il@gmail.com",
+        pass: "tripperapp"
     }
 });
 const mailOptions = {
@@ -103,13 +103,10 @@ exports.getSpringByName = functionBuilder(async (req, res) => {
 });
 exports.getSpring = functionBuilder(async (req, res) => {
     try {
+        const token = req.headers.access_token;
         let email;
-        try {
+        if (token) {
             email = validateJwtToken(req.headers.access_token);
-        }
-        catch (error) {
-            functions.logger.debug("cant find email: \n" + error);
-            // to check if spring is favorite
         }
         const springId = req.query.springId;
         const spring = await db
@@ -126,6 +123,9 @@ exports.getSpring = functionBuilder(async (req, res) => {
             data.preferredSeason = updateField(data.preferredSeason, currentLanguage);
             data.depth = updateField(data.depth, currentLanguage);
             data.isFavorite = false;
+            if (!data.comments) {
+                data.comments = [];
+            }
             data.comments.forEach(async (comment) => {
                 comment.user_name = await (await db.collection(usersCollection).doc(comment.email).get()).get('userName');
                 comment.user_pic = await (await db.collection(usersCollection).doc(comment.email).get()).get('profile');
@@ -196,6 +196,7 @@ exports.loginWithThirdParty = functionBuilder(async (req, res) => {
                 });
                 response.on('end', async () => {
                     const data = JSON.parse(user);
+                    functions.logger.info(data);
                     const doc = await db.collection('users').doc(data.email).get();
                     if (!doc.exists) {
                         await doc.ref.set({
@@ -223,7 +224,7 @@ exports.signUp = functionBuilder(async (req, res) => {
     try {
         if (req.body.email && req.body.password) {
             if ((await db.collection('users').doc(req.body.email).get()).exists) {
-                res.status(409).send("this email is already registered");
+                res.status(409).send({ err: "this email is already registered" });
             }
             else {
                 const email = req.body.email;
@@ -245,16 +246,16 @@ exports.signUp = functionBuilder(async (req, res) => {
                 mailOptions.text = "https://europe-west1-tripper-d0e21.cloudfunctions.net/verifyEmail?email=" + req.body.email;
                 await transporter.sendMail(mailOptions);
                 await db.collection('users').doc(email).set(data);
-                res.send(data);
+                res.send({ data: "great" });
             }
         }
         else {
-            res.status(400).send("email and password required");
+            res.status(400).send({ err: "email and password required" });
         }
     }
     catch (error) {
         if (error.code === "EENVELOPE") {
-            res.status(422).send("Wrong email address");
+            res.status(422).send({ err: "Wrong email address" });
         }
         else {
             handleError(req, res, error);
@@ -289,7 +290,7 @@ exports.verifyEmail = functionBuilder(async (req, res) => {
             <h1 style="text-align: center">Email address verified. You can return to the application and login to your account</h1>`);
         }
         else {
-            res.status(400).send("can't find this email address");
+            res.status(400).send({ err: "can't find this email address" });
         }
     }
     catch (error) {
@@ -469,15 +470,17 @@ exports.removeFavoriteSpring = functionBuilder(async (req, res) => {
 exports.getFavoriteSprings = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
-        const email = validateJwtToken(req.headers.token);
+        const email = validateJwtToken(req.headers.access_token);
         const user = await db.collection('users').doc(email).get();
         const favorites = user.get('favoriteSprings');
         const springPromises = [];
         let springsData = [];
         const actualSprings = [];
-        favorites.forEach(async (element) => {
-            springPromises.push(db.collection('springs').doc(element).get());
-        });
+        if (favorites) {
+            favorites.forEach(async (element) => {
+                springPromises.push(db.collection('springs').doc(element).get());
+            });
+        }
         springsData = await Promise.all(springPromises);
         springsData.forEach((spring) => {
             const final = {
@@ -495,36 +498,20 @@ exports.getFavoriteSprings = functionBuilder(async (req, res) => {
         ;
     }
 });
-// export const addHistorySpring = functionBuilder(async (req, res) => {
-//     try {
-//         const email = validateJwtToken(req.headers.token as string);
-//         const springId = req.query.springId;
-//         const userRef = await db.collection('users').doc(email);
-//         await userRef.update({
-//             historySprings: admin.firestore.FieldValue.arrayUnion(springId)
-//         });
-//         if ((await userRef.get()).get("historySprings").length > historyLimit) {
-//             const first = await (await userRef.get()).get("historySprings")
-//             await userRef.update({
-//                 historySprings: admin.firestore.FieldValue.arrayRemove(first[0])
-//             });
-//         }
-//     } catch (error) {
-//         handleError(req, res, error);;
-//     }
-// })
 exports.getHistorySprings = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
-        const email = validateJwtToken(req.headers.token);
+        const email = validateJwtToken(req.headers.access_token);
         const user = await db.collection('users').doc(email).get();
         const history = user.get('historySprings');
         const springPromises = [];
         let springsData = [];
         const actualSprings = [];
-        history.forEach(async (element) => {
-            springPromises.push(db.collection('springs').doc(element).get());
-        });
+        if (history) {
+            history.forEach(async (element) => {
+                springPromises.push(db.collection('springs').doc(element).get());
+            });
+        }
         springsData = await Promise.all(springPromises);
         springsData.forEach((spring) => {
             const final = {
@@ -553,7 +540,7 @@ exports.getAllHotels = functionBuilder(async (req, res) => {
                 ID: doc.id,
                 description: updateField(fields.description, currentLanguage),
                 name: updateField(fields.name, currentLanguage),
-                price: fields.price,
+                //price: fields.price,
                 region: updateField(fields.region, currentLanguage),
                 city: updateField(fields.city, currentLanguage),
                 images: fields.images
@@ -588,7 +575,7 @@ exports.getHotel = functionBuilder(async (req, res) => {
             // data.pool = data.pool;
             // data.price = data.price;
             data.region = updateField(data.region, currentLanguage);
-            data.websiteLink = data.websiteLink;
+            //data.websiteLink = data.websiteLink;
             // newHotel = {
             //     name: updateField(data.name, currentLanguage),
             //     attractions: data.attractions.map((h: string) => updateField(h, currentLanguage)),
@@ -813,11 +800,17 @@ exports.getNotification = functionBuilder(async (req, res) => {
 });
 exports.getHighScore = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.access_token);
-        const quiz = req.query.quiz;
-        const userRef = await db.collection('users').doc(email);
-        const score = (await userRef.get()).get(quiz + "HighScore");
-        res.send({ score: score });
+        const token = req.headers.access_token;
+        if (token) {
+            const email = validateJwtToken(req.headers.access_token);
+            const quiz = req.query.quiz;
+            const userRef = await db.collection('users').doc(email);
+            const score = (await userRef.get()).get(quiz + "HighScore");
+            res.send({ score: score });
+        }
+        else {
+            res.send();
+        }
     }
     catch (error) {
         handleError(req, res, error);
@@ -840,15 +833,6 @@ exports.setHighScore = functionBuilder(async (req, res) => {
         ;
     }
 });
-// remove
-// export const checkJWT = functions.runWith(runtimeOpts).https.onRequest(async (req, res) => {
-//     try {
-//         res.send(validateJwtToken(req.headers.token as string));
-//     } catch (error) {
-//         functions.logger.error(error, { structuredData: true });
-//         res.status(500).send(error);
-//     }
-// })
 const handleError = (req, res, err) => {
     functions.logger.error({ request: req.query }, err);
     res.status(500).send(err);
@@ -885,12 +869,12 @@ const setHotelsQuery = async (filters, language) => {
     const hotelsRef = await db.collection(hotelsCollection);
     let hotelsQuery = undefined;
     if (filters) {
-        if (filters.maxPrice) {
-            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.maxPrice);
-        }
-        if (filters.minPrice) {
-            hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '>=', filters.minPrice);
-        }
+        // if (filters.maxPrice) {
+        //     hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '<=', filters.maxPrice);
+        // }
+        // if (filters.minPrice) {
+        //     hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('price', '>=', filters.minPrice);
+        // }
         if (filters.pool) {
             hotelsQuery = (hotelsQuery ? hotelsQuery : hotelsRef).where('pool', '==', true);
         }

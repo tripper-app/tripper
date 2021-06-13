@@ -1,0 +1,13 @@
+@import '../../app';
+
+.title{
+    text-align: center;
+    font-size: $titleFontSize;
+}
+
+.text{
+    margin: 10;
+    font-size: $regularFontSize;
+    color: black;
+    font-family: $regularBoldFont;
+}

@@ -1,0 +1,15 @@
+@import '../../../../app';
+
+.main{
+    background-color: $themeColor;
+}
+
+.title{
+    font-size: $titleFontSize;
+    margin: 10;
+    margin-top: 20;
+}
+
+.result{
+    font-size: $subtitleFontSize;
+}

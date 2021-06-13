@@ -1,0 +1,16 @@
+<FlexboxLayout flexDirection="column" height="300">
+    <StackLayout margin="30" height="60%">
+        <GridLayout class="header" columns="*,4*,*">
+            <SVGImage class="exit" height="50%" [col]="languageService.rightToLeft? 0 : 2"
+                src="~/assets/icons/times-light.svg" (tap)="exit()">
+            </SVGImage>
+        </GridLayout>
+        <label class="secondFontSize semiBoldFont"
+            text="{{ 'springView.update' | odedI18N: {value: [params.context]} }}"></label>
+        <TextField [(ngModel)]="content" keyboardType="email" autocapitalizationType="none" class="input"
+            autocorrect="false" returnKeyType="done" (returnPress)="confirm()"></TextField>
+    </StackLayout>
+    <FlexboxLayout class="confirm" (tap)="confirm()">
+        <label color="white" text="{{ 'labels.OK' | odedI18N:languageService.dummyUpdate }}"></label>
+    </FlexboxLayout>
+</FlexboxLayout>

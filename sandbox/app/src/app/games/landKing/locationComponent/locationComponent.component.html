@@ -1,0 +1,13 @@
+<GridLayout androidElevation="5" style="height: 200; width: 200; background-color: white; border-radius: 100%;"
+    columns="*,2*,*" #dragGrid>
+    <label class="smallFontSize regularBoldFont" [text]="location.name" [ngStyle]="{margin: languageService.rightToLeft? '0 -10 0 0' : '0 0 0 -10'}" *ngIf="!first && !placed && !feedback"></label>
+    <SVGImage *ngIf="!feedback" (pan)="onPan($event)" [marginBottom]="first? 30 : 0" height="80" width="80" col="1" #dragImage src="~/assets/icons/locate.svg">
+    </SVGImage>
+    <FlexboxLayout col="1" *ngIf="first && !feedback" style="align-items: flex-end; justify-content: center; margin-bottom: 10;">
+        <label class="semiBoldFont titleFontSize" style="text-align: center;" [text]="location.name"></label>
+    </FlexboxLayout>
+    <FlexboxLayout col="1" class="feedback" flexDirection="column" *ngIf="feedback && !placed">
+        <label text="+{{feedback.score}}" class="score semiBoldFont titleFontSize"></label>
+        <label class="regularBoldFont secondFontSize" text="{{feedback.text}}"></label>
+    </FlexboxLayout>
+</GridLayout>

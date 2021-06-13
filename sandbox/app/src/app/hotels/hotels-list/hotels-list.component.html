@@ -1,0 +1,44 @@
+<StackLayout>
+    <ns-hotels-filters (hideFilters)="hideTheFilters()" *ngIf="!hotelsService.showList"></ns-hotels-filters>
+    <scrollView width="100%" height="100%" *ngIf="hotelsService.showList">
+        <StackLayout>
+            <GridLayout class="header secondFontSize" [columns]="languageService.rightToLeft? '*,5*' : '5*,*'">
+                <StackLayout margin="0 20" [col]="languageService.rightToLeft? 1 : 0" verticalAlignment="center"
+                    [horizontalAlignment]="languageService.rightToLeft? 'right' : 'left'">
+                    <label text="{{ 'hotelsList.title' | odedI18N:languageService.dummyUpdate }}"></label>
+                </StackLayout>
+                <SVGImage class="titleIcon" [col]="languageService.rightToLeft? 0 : 1"
+                    src="~/assets/icons/sliders-green.svg" (tap)="navigateToFilters()">
+                </SVGImage>
+            </GridLayout>
+            <StackLayout class="line"></StackLayout>
+            <ns-waiting-gif *ngIf="waitingForResponse"></ns-waiting-gif>
+            <StackLayout width="100%" height="100%" padding="18">
+                <FlexboxLayout flexWrap="wrap"
+                    [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
+                    <StackLayout (tap)="navigateToHotel(hotel.ID)" width="50%" paddingBottom="20"
+                        [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
+                        *ngFor="let hotel of hotelsList; let i = index">
+                        <GridLayout height="150">
+                            <Carousel [items]="hotel.images" android:indicatorAnimation="scale" indicatorColor="#fff"
+                                indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 20"
+                                showIndicator="true">
+                                <CarouselItem *ngFor="let item of hotel.images">
+                                    <GridLayout>
+                                        <ns-waiting-gif></ns-waiting-gif>
+                                        <Image (tap)="navigateToHotel(hotel.ID)" style="z-index: 3;" [src]="item"
+                                            width="100%" height="100%" stretch="fill"></Image>
+                                    </GridLayout>
+                                </CarouselItem>
+                            </Carousel>
+                        </GridLayout>
+                        <label class="thirdFontSize semiBoldFont" text="{{hotel.name}}"></label>
+                        <label class="smallFontSize regularBoldFont"
+                            text="{{hotel.city}}"></label>
+                            <!-- <label text=", {{'hotelsList.startingFrom' | odedI18N:languageService.dummyUpdate}} {{hotel.price}} &#8362;"></label> -->
+                    </StackLayout>
+                </FlexboxLayout>
+            </StackLayout>
+        </StackLayout>
+    </scrollView>
+</StackLayout>

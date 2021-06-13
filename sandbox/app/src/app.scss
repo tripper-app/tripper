@@ -1,0 +1,77 @@
+$themeColor: rgb(35, 204, 153);
+$greyText: rgb(168, 151, 151);
+$headerHeight: 85;
+$bottomHeight: 70;
+// $headerFontSize: 16;
+$titleFontSize: 23%;
+$subtitleFontSize: 19%;
+$regularFontSize: 15%;
+$smallFontSize: 12%;
+$boldFont: 'Heebo-Bold';
+$semiBoldFont: 'Heebo-SemiBold';
+$mediumBoldFont: 'Heebo-Medium';
+$regularBoldFont: 'Heebo-Regular';
+
+Label{
+    text-wrap: true;
+    color: black;
+}
+
+Button{
+    color: white;
+}
+
+.header{
+    height: $headerHeight;
+    font-size: $titleFontSize;
+    // margin: 20 10 0;
+    font-family: $semiBoldFont;
+}
+
+.exit{
+      opacity: 0.2;
+      height: 60;
+}
+    
+.titleIcon{
+    height: 55%;
+}
+
+.line{
+    height: 4;
+    background-color: rgb(246, 246, 246);
+}
+
+.greyText{
+    color: black;
+    opacity: 0.5;
+}
+
+.titleFontSize{
+    font-size: $titleFontSize;
+}
+
+.regularBoldFont{
+    font-family: $regularBoldFont;
+}
+
+.secondFontSize{
+    font-size: $subtitleFontSize;
+}
+
+.thirdFontSize{
+    font-size: $regularFontSize;
+}
+
+.smallFontSize{
+    font-size: $smallFontSize;
+}
+
+.semiBoldFont{
+    font-family: $semiBoldFont;
+}
+
+TextField{
+    border-bottom-width: 2;
+    border-color: $themeColor;
+}

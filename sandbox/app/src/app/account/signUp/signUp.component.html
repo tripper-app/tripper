@@ -1,0 +1,41 @@
+<GridLayout rows="7*,*">
+	<ns-waiting-gif rowSpan="2" *ngIf="waitingForResponse"></ns-waiting-gif>
+	<StackLayout height="90%">
+		<GridLayout columns="*,4*,*" class="header">
+			<SVGImage width="100%" [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon"
+				[col]="languageService.rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg" (tap)="exit()">
+			</SVGImage>
+			<Label text="{{ 'login.signUp' | odedI18N:languageService.dummyUpdate }}" col="1" (onloaded)="alignVertical(title)" #title></Label>
+		</GridLayout>
+		<StackLayout class="line"></StackLayout>
+		<label [isUserInteractionEnabled]="!waitingForResponse" class="haveAccount greyText"
+			text="{{ 'login.haveAccount' | odedI18N:languageService.dummyUpdate }}" (tap)="navigateToLogin()"></label>
+		<StackLayout margin="20">
+			<FlexboxLayout justifyContent="space-between" width="100%" height="100%" flexDirection="column">
+				<label class="title greyText"
+					text="{{ 'login.userName' | odedI18N:languageService.dummyUpdate }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="user.userName" class="input" autocorrect="false"
+					autocapitalizationType="none" returnKeyType="next" [disabled]="waitingForResponse"></TextField>
+				<label class="title greyText"
+					text="{{ 'labels.email' | odedI18N:languageService.dummyUpdate }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="user.email" class="input" keyboardType="email"
+					autocorrect="false" autocapitalizationType="none" returnKeyType="next"
+					[disabled]="waitingForResponse"></TextField>
+				<label class="title greyText"
+					text="{{ 'login.createPassword' | odedI18N:languageService.dummyUpdate }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="user.password" class="input" autocorrect="false" secure="true"
+					autocapitalizationType="none" returnKeyType="next" [disabled]="waitingForResponse"></TextField>
+				<label class="title greyText"
+					text="{{ 'login.confirmPassword' | odedI18N:languageService.dummyUpdate }}"></label>
+				<TextField marginBottom="20" [(ngModel)]="confirmPassword" class="input" autocorrect="false"
+					secure="true" autocapitalizationType="none" returnKeyType="go" (returnPress)="submit()"
+					[disabled]="waitingForResponse"></TextField>
+			</FlexboxLayout>
+		</StackLayout>
+	</StackLayout>
+	<FlexboxLayout row="1" flexDirection="column" style="height: 100%; justify-content: flex-end;">
+		<FlexboxLayout class="signUp" (tap)="submit()" [isUserInteractionEnabled]="!waitingForResponse">
+			<label color="white" text="{{ 'login.signUp' | odedI18N:languageService.dummyUpdate }}"></label>
+		</FlexboxLayout>
+	</FlexboxLayout>
+</GridLayout>

@@ -1,0 +1,11 @@
+@import '../../../../app';
+
+.score{
+    color: $themeColor;
+}
+
+.feedback{
+    font-size: $titleFontSize;
+    justify-content: center;
+    align-items: center;
+}

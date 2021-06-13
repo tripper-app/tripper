@@ -1,0 +1,49 @@
+<StackLayout>
+    <ScrollView height="90%">
+        <GridLayout>
+            <StackLayout>
+                <GridLayout class="header secondFontSize" [columns]="languageService.rightToLeft? '*,5*' : '5*,*'">
+                    <FlexboxLayout marginRight="10" style="align-items: center;" [col]="languageService.rightToLeft? 1 : 0"
+                        [ngStyle]="{'justify-content': languageService.rightToLeft? 'flex-end' : 'flex-start'}">
+                        <label text="{{'games.trivia' | odedI18N:languageService.dummyUpdate }}: {{gameService.subjectName}}"></label>
+                    </FlexboxLayout>
+                    <SVGImage class="exit" height="50%" [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
+                        (tap)="exit()">
+                    </SVGImage>
+                </GridLayout>
+                <StackLayout class="line"></StackLayout>
+                <StackLayout marginBottom="80">
+                    <label class="answer" [text]="question.text"></label>
+                    <GridLayout height="200" *ngIf="question.image">
+                        <ns-waiting-gif></ns-waiting-gif>
+                        <img class="questionImage" [src]="question.image" />
+                    </GridLayout>
+                </StackLayout>
+                <StackLayout *ngFor="let answer of question.answers; let i = index">
+                    <StackLayout class="line"></StackLayout>
+                    <label class="answer" text="{{answer}}" (tap)="checkAnswer(i)"></label>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout opacity="0" #wrongAnswer>
+                <ns-wrong-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-wrong-answer>
+            </StackLayout>
+            <StackLayout opacity="0" #rightAnswer>
+                <ns-right-answer [rightAnswer]="question.answers[question.rightAnswer]"></ns-right-answer>
+            </StackLayout>
+            <ns-waiting-gif *ngIf="waitingForResponse && !showingAnswer"></ns-waiting-gif>
+        </GridLayout>
+    </ScrollView>
+    <FlexboxLayout class="lowerLine">
+        <FlexboxLayout *ngIf="userService.userLoggedIn" style="justify-content: center; align-items: center;">
+            <SVGImage height="50%" width="10%" margin="10" src="~/assets/icons/trophy.svg">
+            </SVGImage>
+            <Label class="regularBoldFont thirdFontSize" style="text-align: center;" [text]="highScore"></Label>
+        </FlexboxLayout>
+        <FlexboxLayout style="justify-content: center; align-items: center;">
+            <SVGImage height="50%" width="10%" margin="10" src="~/assets/icons/starWhite.svg">
+            </SVGImage>
+            <Label class="regularBoldFont thirdFontSize" style="text-align: center;"
+                text="{{ gameService.score}}"></Label>
+        </FlexboxLayout>
+    </FlexboxLayout>
+</StackLayout>

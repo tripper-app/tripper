@@ -1,0 +1,22 @@
+<FlexboxLayout flexDirection="column" height="350">
+    <stackLayout margin="20 20 50" height="70%">
+        <GridLayout columns="*,4*" class="header">
+            <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon"
+                [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg" (tap)="exit()">
+            </SVGImage>
+            <FlexboxLayout [col]="languageService.rightToLeft? 1 : 0"
+                [ngStyle]="{'justify-content': languageService.rightToLeft? 'flex-end' : 'flex-start'}"
+                style="align-items: center;">
+                <label text="{{ 'labels.notification' | odedI18N:languageService.dummyUpdate }}" class="title"></label>
+            </FlexboxLayout>
+        </GridLayout>
+        <ScrollView height="80%">
+            <label class="text" text="{{ text }}"></label>
+        </ScrollView>
+    </stackLayout>
+    <FlexboxLayout style="flex-direction: column; height: 30%; justify-content: flex-end;" flexDirection="column">
+        <FlexboxLayout class="confirm" (tap)="confirm()">
+            <label text="{{ 'labels.OK' | odedI18N:languageService.dummyUpdate }}"></label>
+        </FlexboxLayout>
+    </FlexboxLayout>
+</FlexboxLayout>

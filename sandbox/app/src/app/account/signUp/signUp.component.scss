@@ -1,0 +1,36 @@
+@import '../../../app.scss';
+
+.haveAccount{
+  font-size: $subtitleFontSize; 
+  text-align: center;
+  margin-bottom: 20;
+}
+
+.signUp{
+  height: $bottomHeight;
+  font-size: $subtitleFontSize;
+  background-color: $themeColor;
+  align-items: center;
+  color: white;
+  justify-content: center;
+}
+
+.login{
+  font-size: 20;
+  color: white;
+  background-color: $themeColor;
+  height: $bottomHeight;
+}
+
+.input {
+  width: 100%;
+  font-size: $subtitleFontSize;
+  placeholder-color: #A8A8A8;
+  margin: 0 0 0;
+  border-bottom-width: 2;
+  border-color: $themeColor;
+}
+
+.title{
+  font-size: $regularFontSize
+}

@@ -1,0 +1,20 @@
+@import '../../../app';
+
+.title{
+    text-align: center;
+    font-size: $titleFontSize;
+    justify-content: space-between;
+    margin-right: 10;
+    margin-left: 10;
+}
+
+.questionLine{
+    height: 40;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5 10;
+}
+
+.gif{
+    height: 100%;
+}

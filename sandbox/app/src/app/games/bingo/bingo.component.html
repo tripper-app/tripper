@@ -1,0 +1,41 @@
+<FlexboxLayout style="flex-direction: column; justify-content: space-between;">
+    <!-- <FlexboxLayout class="header"> -->
+        <GridLayout class="header secondFontSize" [columns]="languageService.rightToLeft? '*,5*' : '5*,*'">
+            <FlexboxLayout marginRight="10" style="align-items: center;" [col]="languageService.rightToLeft? 1 : 0"
+                [ngStyle]="{'justify-content': languageService.rightToLeft? 'flex-end' : 'flex-start'}">
+                <label text="{{ 'games.bingo' | odedI18N:languageService.dummyUpdate }}"></label>
+            </FlexboxLayout>
+            <SVGImage class="exit" height="50%" [col]="languageService.rightToLeft? 0 : 1"
+                src="~/assets/icons/times-light.svg" (tap)="exit()">
+            </SVGImage>
+        </GridLayout>
+    <!-- </FlexboxLayout> -->
+    <StackLayout class="line"></StackLayout>
+    <label class="text" text="{{ 'games.bingoMarkItems' | odedI18N:languageService.dummyUpdate }}"></label>
+    <label class="text" text="{{ 'games.bingoFirstWinner' | odedI18N:languageService.dummyUpdate }}"></label>
+
+    <StackLayout verticalAlignment="center" height="55%" margin="0 10 50">
+        <ns-waiting-gif marginTop="20" *ngIf="waitingForResponse"></ns-waiting-gif>
+        <AbsoluteLayout *ngIf="!waitingForResponse">
+            <FlexboxLayout *ngFor="let item of bingoItems; let i = index" flexDirection="column" [left]="screenWidth*i">
+                <StackLayout verticalAlignment="center" class="circle" [height]="circleSize" [width]="circleSize"
+                    [backgroundColor]="item.color">
+                    <label style="text-align: center;" horizontalAlignment="center" color="white"
+                        class="secondFontSize semiBoldFont" [text]="item.name"></label>
+                </StackLayout>
+                <SVGImage class="icon" (tap)="find(i)"
+                    [src]="item.found? '~/assets/icons/found.svg' : '~/assets/icons/notFound.svg'">
+                </SVGImage>
+            </FlexboxLayout>
+        </AbsoluteLayout>
+    </StackLayout>
+    <FlexboxLayout style="justify-content: flex-end;" flexDirection="column">
+        <FlexboxLayout class="lowerLine">
+            <StackLayout orientation="horizontal">
+                <SVGImage class="lower" src="~/assets/icons/clock.svg">
+                </SVGImage>
+                <label color="white" text="{{ timer | date:'HH:mm:ss':'UTC'}}"></label>
+            </StackLayout>
+        </FlexboxLayout>
+    </FlexboxLayout>
+</FlexboxLayout>

@@ -1,0 +1,16 @@
+@import '../../../app';
+
+.title{
+    text-align: center;
+    font-size: $titleFontSize;
+    justify-content: space-between;
+    margin-right: 10;
+    margin-left: 10;
+}
+
+.quizLine{
+    height: 40;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5 10;
+}
