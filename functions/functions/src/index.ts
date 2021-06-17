@@ -153,7 +153,7 @@ export const getSpring = functionBuilder(async (req, res) => {
                         historySprings: admin.firestore.FieldValue.arrayRemove(history[0])
                     });
                 }
-                if (favorites.includes(springId)) data.isFavorite = true;
+                if (favorites && favorites.includes(springId)) data.isFavorite = true;
             }
         }
         res.send(data)
@@ -205,13 +205,15 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
 
                 response.on('end', async () => {
                     const data = JSON.parse(user);
-                    functions.logger.info(data);
+                    if (!data.email) {
+                        res.status(406).send({err: "There is no email connected to this account"});
+                    }
                     const doc = await db.collection('users').doc(data.email).get();
                     if (!doc.exists) {
                         await doc.ref.set({
                             email: data.email,
                             password: 'logged with third party',
-                            nick: data.name,
+                            userName: data.name,
                             pendingVerification: false,
                             profile: data.picture.data.url
                         })
@@ -289,6 +291,9 @@ export const updateSpring = functionBuilder(async (req, res) => {
 
 export const verifyEmail = functionBuilder(async (req, res) => {
     try {
+        if (!req.query.email) {
+            res.status(400).send({ err: "can't find this email address" });
+        }
         const userRef = await db.collection('users').doc(req.query.email as string);
         if ((await userRef.get()).exists) {
             await userRef.update({ "pendingVerification": false });
@@ -298,7 +303,7 @@ export const verifyEmail = functionBuilder(async (req, res) => {
             res.status(400).send({ err: "can't find this email address" });
         }
     } catch (error) {
-        handleError(req, res, error);;
+        handleError(req, res, error);
     }
 })
 
@@ -404,7 +409,7 @@ export const updateProfile = functionBuilder(async (req, res) => {
 
 export const addComment = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token as string);
+        const email = validateJwtToken(req.headers.access_token as string);
         const comment = {
             text: req.body.text,
             date: new Date,
@@ -478,15 +483,17 @@ export const getFavoriteSprings = functionBuilder(async (req, res) => {
             });
         }
         springsData = await Promise.all(springPromises)
-        springsData.forEach((spring: any) => {
-            const final = {
-                id: spring.id,
-                images: spring.get('images'),
-                name: updateField(spring.get('name'), currentLanguage),
-                location: spring.get('location')
-            };
-            actualSprings.push(final)
-        })
+        if (springsData) {
+            springsData.forEach((spring: any) => {
+                const final = {
+                    id: spring.id,
+                    images: spring.get('images'),
+                    name: updateField(spring.get('name'), currentLanguage),
+                    location: spring.get('location')
+                };
+                actualSprings.push(final)
+            })
+        }
         res.send(actualSprings);
     } catch (error) {
         handleError(req, res, error);;
@@ -507,16 +514,19 @@ export const getHistorySprings = functionBuilder(async (req, res) => {
                 springPromises.push(db.collection('springs').doc(element).get());
             });
         }
-        springsData = await Promise.all(springPromises)
-        springsData.forEach((spring: any) => {
-            const final = {
-                id: spring.id,
-                images: spring.get('images'),
-                name: updateField(spring.get('name'), currentLanguage),
-                location: spring.get('location')
-            };
-            actualSprings.push(final)
-        })
+        springsData = await Promise.all(springPromises);
+        if (springsData) {
+
+            springsData.forEach((spring: any) => {
+                const final = {
+                    id: spring.id,
+                    images: spring.get('images'),
+                    name: updateField(spring.get('name'), currentLanguage),
+                    location: spring.get('location')
+                };
+                actualSprings.push(final)
+            })
+        }
         res.send(actualSprings);
     } catch (error) {
         handleError(req, res, error);;
@@ -558,7 +568,9 @@ export const getHotel = functionBuilder(async (req, res) => {
         // let newHotel;
         if (data) {
             data.name = updateField(data.name, currentLanguage);
-            data.attractions = data.attractions.map((h: string) => updateField(h, currentLanguage));
+            if (data.attractions) {
+                data.attractions = data.attractions.map((h: string) => updateField(h, currentLanguage));
+            }
             // data.breakfast = data.breakfast;
             data.city = updateField(data.city, currentLanguage);
             data.description = updateField(data.description, currentLanguage);
@@ -794,7 +806,10 @@ export const getHighScore = functionBuilder(async (req, res) => {
             const email = validateJwtToken(req.headers.access_token as string);
             const quiz = req.query.quiz as string;
             const userRef = await db.collection('users').doc(email);
-            const score = (await userRef.get()).get(quiz + "HighScore");
+            let score = (await userRef.get()).get(quiz + "HighScore");
+            if (!score) {
+                score = 0;
+            }
             res.send({ score: score });
         } else {
             res.send();

@@ -142,7 +142,7 @@ exports.getSpring = functionBuilder(async (req, res) => {
                         historySprings: admin.firestore.FieldValue.arrayRemove(history[0])
                     });
                 }
-                if (favorites.includes(springId))
+                if (favorites && favorites.includes(springId))
                     data.isFavorite = true;
             }
         }
@@ -196,13 +196,15 @@ exports.loginWithThirdParty = functionBuilder(async (req, res) => {
                 });
                 response.on('end', async () => {
                     const data = JSON.parse(user);
-                    functions.logger.info(data);
+                    if (!data.email) {
+                        res.status(406).send({ err: "There is no email connected to this account" });
+                    }
                     const doc = await db.collection('users').doc(data.email).get();
                     if (!doc.exists) {
                         await doc.ref.set({
                             email: data.email,
                             password: 'logged with third party',
-                            nick: data.name,
+                            userName: data.name,
                             pendingVerification: false,
                             profile: data.picture.data.url
                         });
@@ -283,6 +285,9 @@ exports.updateSpring = functionBuilder(async (req, res) => {
 });
 exports.verifyEmail = functionBuilder(async (req, res) => {
     try {
+        if (!req.query.email) {
+            res.status(400).send({ err: "can't find this email address" });
+        }
         const userRef = await db.collection('users').doc(req.query.email);
         if ((await userRef.get()).exists) {
             await userRef.update({ "pendingVerification": false });
@@ -295,7 +300,6 @@ exports.verifyEmail = functionBuilder(async (req, res) => {
     }
     catch (error) {
         handleError(req, res, error);
-        ;
     }
 });
 exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
@@ -407,7 +411,7 @@ exports.updateProfile = functionBuilder(async (req, res) => {
 });
 exports.addComment = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.token);
+        const email = validateJwtToken(req.headers.access_token);
         const comment = {
             text: req.body.text,
             date: new Date,
@@ -482,15 +486,17 @@ exports.getFavoriteSprings = functionBuilder(async (req, res) => {
             });
         }
         springsData = await Promise.all(springPromises);
-        springsData.forEach((spring) => {
-            const final = {
-                id: spring.id,
-                images: spring.get('images'),
-                name: updateField(spring.get('name'), currentLanguage),
-                location: spring.get('location')
-            };
-            actualSprings.push(final);
-        });
+        if (springsData) {
+            springsData.forEach((spring) => {
+                const final = {
+                    id: spring.id,
+                    images: spring.get('images'),
+                    name: updateField(spring.get('name'), currentLanguage),
+                    location: spring.get('location')
+                };
+                actualSprings.push(final);
+            });
+        }
         res.send(actualSprings);
     }
     catch (error) {
@@ -513,15 +519,17 @@ exports.getHistorySprings = functionBuilder(async (req, res) => {
             });
         }
         springsData = await Promise.all(springPromises);
-        springsData.forEach((spring) => {
-            const final = {
-                id: spring.id,
-                images: spring.get('images'),
-                name: updateField(spring.get('name'), currentLanguage),
-                location: spring.get('location')
-            };
-            actualSprings.push(final);
-        });
+        if (springsData) {
+            springsData.forEach((spring) => {
+                const final = {
+                    id: spring.id,
+                    images: spring.get('images'),
+                    name: updateField(spring.get('name'), currentLanguage),
+                    location: spring.get('location')
+                };
+                actualSprings.push(final);
+            });
+        }
         res.send(actualSprings);
     }
     catch (error) {
@@ -565,7 +573,9 @@ exports.getHotel = functionBuilder(async (req, res) => {
         // let newHotel;
         if (data) {
             data.name = updateField(data.name, currentLanguage);
-            data.attractions = data.attractions.map((h) => updateField(h, currentLanguage));
+            if (data.attractions) {
+                data.attractions = data.attractions.map((h) => updateField(h, currentLanguage));
+            }
             // data.breakfast = data.breakfast;
             data.city = updateField(data.city, currentLanguage);
             data.description = updateField(data.description, currentLanguage);
@@ -805,7 +815,10 @@ exports.getHighScore = functionBuilder(async (req, res) => {
             const email = validateJwtToken(req.headers.access_token);
             const quiz = req.query.quiz;
             const userRef = await db.collection('users').doc(email);
-            const score = (await userRef.get()).get(quiz + "HighScore");
+            let score = (await userRef.get()).get(quiz + "HighScore");
+            if (!score) {
+                score = 0;
+            }
             res.send({ score: score });
         }
         else {
