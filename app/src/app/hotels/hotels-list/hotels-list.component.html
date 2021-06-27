@@ -7,7 +7,7 @@
                     [horizontalAlignment]="languageService.rightToLeft? 'right' : 'left'">
                     <label text="{{ 'hotelsList.title' | odedI18N:languageService.dummyUpdate }}"></label>
                 </StackLayout>
-                <SVGImage class="titleIcon" [col]="languageService.rightToLeft? 0 : 1"
+                <SVGImage class="titleIcon" margin="15" [col]="languageService.rightToLeft? 0 : 1"
                     src="~/assets/icons/sliders-green.svg" (tap)="navigateToFilters()">
                 </SVGImage>
             </GridLayout>
@@ -19,7 +19,7 @@
                     <StackLayout (tap)="navigateToHotel(hotel.ID)" width="50%" paddingBottom="20"
                         [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
                         *ngFor="let hotel of hotelsList; let i = index">
-                        <GridLayout height="150">
+                        <GridLayout [height]="imageHeight">
                             <Carousel [items]="hotel.images" android:indicatorAnimation="scale" indicatorColor="#fff"
                                 indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 20"
                                 showIndicator="true">

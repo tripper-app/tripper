@@ -19,6 +19,7 @@ export class SpringsFiltersComponent implements OnInit {
     depthCheck = false;
     sliderValue = 0;
     mainColor = "rgb(35, 204, 153)";
+    greyColor = "rgb(225, 225, 225)";
     scale = "1.3";
 
     constructor(private page: Page,

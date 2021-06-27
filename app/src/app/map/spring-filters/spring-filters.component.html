@@ -4,49 +4,41 @@
             [horizontalAlignment]="languageService.rightToLeft? 'right' : 'left'">
             <label text="{{ 'springsFilters.title' | odedI18N:languageService.dummyUpdate }}"></label>
         </StackLayout>
-        <SVGImage [margin]="languageService.rightToLeft? '0 0 0 10' : '0 10 0 0'" class="exit titleIcon" [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg"
-            (tap)="navigateToMap()">
+        <SVGImage [margin]="languageService.rightToLeft? '0 0 0 10' : '0 10 0 0'" class="exit titleIcon"
+            [col]="languageService.rightToLeft? 0 : 1" src="~/assets/icons/times-light.svg" (tap)="navigateToMap()">
         </SVGImage>
     </GridLayout>
-    <!-- <GridLayout columns="*,4*" class="header" [ngStyle]="{'margin': languageService.rightToLeft? '0 0 0 20' : '0 20 0 0'}">
-        <SVGImage [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon" [col]="languageService.rightToLeft? 0 : 1"
-            src="~/assets/icons/times-light.svg" (tap)="navigateToMap()" >
-        </SVGImage>
-        <FlexboxLayout [col]="languageService.rightToLeft? 1 : 0" [ngStyle]="{'justify-content': languageService.rightToLeft? 'flex-start' : 'flex-end'}" style="align-items: center;">
-            <label text="{{ 'springsFilters.title' | odedI18N:languageService.dummyUpdate }}" class="title" ></label>
-        </FlexboxLayout>
-    </GridLayout> -->
     <StackLayout class="line" margin="50 0 0"></StackLayout>
     <FlexboxLayout class="main" row="1">
         <FlexboxLayout class="filterLine"
             [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}"
             (tap)="cbCamping.toggle()">
-            <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+            <CheckBox:CheckBox [(ngModel)]="campingCheck" [fillColor]="campingCheck? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale"
                 #cbCamping />
             <label text="{{ 'springsFilters.camping' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
         <FlexboxLayout class="filterLine"
             [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}"
             (tap)="cbChildren.toggle()">
-            <CheckBox:CheckBox [(ngModel)]="childrenCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+            <CheckBox:CheckBox [(ngModel)]="childrenCheck" [fillColor]="childrenCheck? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale"
                 #cbChildren />
             <label text="{{ 'springsFilters.children' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
         <FlexboxLayout class="filterLine"
             [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" (tap)="cbWater.toggle()">
-            <CheckBox:CheckBox [(ngModel)]="waterCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+            <CheckBox:CheckBox [(ngModel)]="waterCheck" [fillColor]="waterCheck? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale"
                 #cbWater />
             <label text="{{ 'springsFilters.water' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
         <FlexboxLayout class="filterLine"
             [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" (tap)="cbCar.toggle()">
-            <CheckBox:CheckBox [(ngModel)]="carCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+            <CheckBox:CheckBox [(ngModel)]="carCheck" [fillColor]="carCheck? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale"
                 #cbCar />
             <label text="{{ 'springsFilters.car' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
         <FlexboxLayout class="filterLine"
             [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" (tap)="cbDepth.toggle()">
-            <CheckBox:CheckBox [(ngModel)]="depthCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+            <CheckBox:CheckBox [(ngModel)]="depthCheck" [fillColor]="depthCheck? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale"
                 #cbDepth />
             <label text="{{ 'springsFilters.depth' | odedI18N:languageService.dummyUpdate }}"></label>
         </FlexboxLayout>
@@ -54,7 +46,7 @@
             [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}">
             <Slider class="slider" [(ngModel)]="sliderValue" minValue="0" maxValue="200"></Slider>
             <label
-                text="{{ 'springsFilters.radius' | odedI18N:languageService.dummyUpdate }} {{sliderValue}} KM"></label>
+                text="{{ 'springsFilters.radius' | odedI18N:languageService.dummyUpdate }} {{sliderValue? sliderValue : '∞'}} KM"></label>
         </FlexboxLayout>
         <StackLayout verticalAlignment="center" class="search" (tap)="search()">
             <label color="white" text="{{ 'springsFilters.search' | odedI18N:languageService.dummyUpdate }}"></label>

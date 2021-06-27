@@ -9,6 +9,11 @@
   justify-content: center;
 }
 
+.upper{
+  border-bottom-width: $lineWidth;
+  border-color: rgba(221, 207, 207, 0.37);
+}
+
 .title{
   font-size: $regularFontSize;
 }
@@ -38,6 +43,7 @@
   border-bottom-width: 2;
   border-color: $themeColor;
   margin: 0; // BUG: if margin is not set there is default of about 10 from the sides
+  margin-top: -40;
 }
 
 .forgotPassword{

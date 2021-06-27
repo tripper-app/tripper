@@ -16,6 +16,7 @@ export class HotelsFiltersComponent implements OnInit {
     poolCheck = false;
     breakfastCheck = false;
     mainColor = "rgb(35, 204, 153)";
+    greyColor = "rgb(225, 225, 225)";
     scale = "1.3";
     //rightToLeft = true;
     areas = this.languageService.getText('hotelsFilters.areasList').split(', ');

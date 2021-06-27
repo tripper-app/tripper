@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { HotelsService } from '~/app/common/services/hotels-service';
 import { FlatHotel } from '~/app/common/models/flatHotel';
 import { ErrorsService } from '~/app/common/services/errors-service';
+import { screen } from "tns-core-modules/platform";
 
 @Component({
     selector: 'ns-hotels-list',
@@ -17,6 +18,8 @@ export class HotelsListComponent implements OnInit {
     @Output() hideTabs: EventEmitter<any> = new EventEmitter();
     hotelsList: FlatHotel[];
     waitingForResponse = false;
+    imageHeight = ((screen.mainScreen.widthDIPs-27)/2)*(2/3);
+
     constructor(private page: Page,
         private router: Router,
         private hotelsService: HotelsService,
@@ -25,7 +28,7 @@ export class HotelsListComponent implements OnInit {
         private errorService: ErrorsService) {
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void {        
         this.page.actionBarHidden = true;
         if (this.hotelsService.filteredHotels) {
             this.hotelsList = this.hotelsService.filteredHotels;

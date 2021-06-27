@@ -51,7 +51,10 @@ export class MapComponent implements OnInit {
 
   async onMapReady(map: MapView) {
     //this.singleRowHeight = ((map.getActualSize().height)/16)*2-20
-
+    setTimeout(() => {
+      this.singleRowHeight = (1/15)*(map.getMeasuredHeight())-15
+      // this.singleRowHeight = (1/16)*map.getMeasuredHeight()
+    }, 0);
     this.mainMap = map;
     map.settings.mapToolbarEnabled = false;
     map.settings.myLocationButtonEnabled = false;
@@ -65,7 +68,7 @@ export class MapComponent implements OnInit {
     else {
       this.alertService.showError(this.languageService.getText('messages.error.noLocationPermissions'));
     }
-    this.getSprings();
+    //this.getSprings();
   }
 
   async getSprings() {

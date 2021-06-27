@@ -10,6 +10,7 @@ import { setString } from '@nativescript/core/application-settings';
 import { GoogleLogin } from 'nativescript-google-login';
 import { AlertService } from '../../common/services/alert-service';
 import { ErrorsService } from '~/app/common/services/errors-service';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 @Component({
     selector: 'ns-signUp',
@@ -30,7 +31,8 @@ export class SignUpComponent implements OnInit {
         private httpService: HttpService,
         private languageService: LanguageService,
         private alertService: AlertService,
-        private errorService: ErrorsService) {
+        private errorService: ErrorsService,
+        private routerExtensions: RouterExtensions) {
     }
 
     ngOnInit() {
@@ -40,8 +42,12 @@ export class SignUpComponent implements OnInit {
         this.oathService.configureOAuthProviders();
     }
 
+    changeLanguage(lan) {
+        this.languageService.switchLanguage(lan);
+    }
+
     navigateToLogin() {
-        this.router.navigate(['mainTabs', 0]);
+        this.routerExtensions.navigate(["mainTabs", 0], {animated: true, transition: {duration: 200, name: "slideRight", curve: "easeOut"}})
     }
 
     submit() {
@@ -154,8 +160,12 @@ export class SignUpComponent implements OnInit {
         //this.oathService.disConnect();
     }
 
+    goToMap(){
+        this.routerExtensions.navigate(["mainTabs", 3])
+    }
+
     exit() {
-        this.router.navigate(['mainTabs', 3])
+        this.router.navigate(['login'])
     }
 }
     // activity: application.android.foregroundActivity

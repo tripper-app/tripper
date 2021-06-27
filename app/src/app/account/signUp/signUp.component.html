@@ -1,39 +1,60 @@
-<GridLayout rows="7*,*">
+<GridLayout rows="7*,*,*">
 	<ns-waiting-gif rowSpan="2" *ngIf="waitingForResponse"></ns-waiting-gif>
 	<StackLayout height="90%">
-		<GridLayout columns="*,4*,*" class="header">
-			<SVGImage width="100%" [isUserInteractionEnabled]="!waitingForResponse" class="exit titleIcon"
-				[col]="languageService.rightToLeft? 0 : 2" src="~/assets/icons/times-light.svg" (tap)="exit()">
-			</SVGImage>
-			<Label text="{{ 'login.signUp' | odedI18N:languageService.dummyUpdate }}" col="1" (onloaded)="alignVertical(title)" #title></Label>
+		<GridLayout columns="*,*" height="15%" marginBottom="20" class="titleFontSize semiBoldFont">
+			<label class="greyText upper" borderRightWidth="3" (onloaded)="alignVertical(login)"
+				(tap)="navigateToLogin()" text="{{ 'login.login' | odedI18N:languageService.dummyUpdate }}"
+				#login></label>
+			<label (onloaded)="alignVertical(signUp)" text="{{ 'login.signUp' | odedI18N:languageService.dummyUpdate }}"
+				col="1" #signUp></label>
 		</GridLayout>
-		<StackLayout class="line"></StackLayout>
-		<label [isUserInteractionEnabled]="!waitingForResponse" class="haveAccount greyText"
-			text="{{ 'login.haveAccount' | odedI18N:languageService.dummyUpdate }}" (tap)="navigateToLogin()"></label>
+		<label [isUserInteractionEnabled]="!waitingForResponse" style="text-align: center;"
+			class="secondFontSize greyText" text="{{ 'login.skip' | odedI18N:languageService.dummyUpdate }}"
+			enabled="false" (tap)="goToMap()"></label>
 		<StackLayout margin="20">
 			<FlexboxLayout justifyContent="space-between" width="100%" height="100%" flexDirection="column">
 				<label class="title greyText"
 					text="{{ 'login.userName' | odedI18N:languageService.dummyUpdate }}"></label>
-				<TextField marginBottom="20" [(ngModel)]="user.userName" class="input" autocorrect="false"
+				<TextField [(ngModel)]="user.userName" class="input" autocorrect="false"
 					autocapitalizationType="none" returnKeyType="next" [disabled]="waitingForResponse"></TextField>
 				<label class="title greyText"
 					text="{{ 'labels.email' | odedI18N:languageService.dummyUpdate }}"></label>
-				<TextField marginBottom="20" [(ngModel)]="user.email" class="input" keyboardType="email"
+				<TextField [(ngModel)]="user.email" class="input" keyboardType="email"
 					autocorrect="false" autocapitalizationType="none" returnKeyType="next"
 					[disabled]="waitingForResponse"></TextField>
 				<label class="title greyText"
 					text="{{ 'login.createPassword' | odedI18N:languageService.dummyUpdate }}"></label>
-				<TextField marginBottom="20" [(ngModel)]="user.password" class="input" autocorrect="false" secure="true"
+				<TextField [(ngModel)]="user.password" class="input" autocorrect="false" secure="true"
 					autocapitalizationType="none" returnKeyType="next" [disabled]="waitingForResponse"></TextField>
 				<label class="title greyText"
 					text="{{ 'login.confirmPassword' | odedI18N:languageService.dummyUpdate }}"></label>
-				<TextField marginBottom="20" [(ngModel)]="confirmPassword" class="input" autocorrect="false"
+				<TextField [(ngModel)]="confirmPassword" class="input" autocorrect="false"
 					secure="true" autocapitalizationType="none" returnKeyType="go" (returnPress)="submit()"
 					[disabled]="waitingForResponse"></TextField>
 			</FlexboxLayout>
 		</StackLayout>
 	</StackLayout>
-	<FlexboxLayout row="1" flexDirection="column" style="height: 100%; justify-content: flex-end;">
+	<StackLayout row="1" marginRight="10" marginLeft="10">
+		<label class="title greyText" width="100%" [marginLeft]="languageService.rightToLeft? '0' : '10'" [marginRight]="languageService.rightToLeft? '10' : '0'"
+			text="{{ 'labels.language' | odedI18N:languageService.dummyUpdate }}"></label>
+		<FlexboxLayout justifyContent="space-between" class="subtitleFontSize">
+			<FlexboxLayout style="align-items: center;">
+				<CheckBox:CheckBox [isUserInteractionEnabled]="!waitingForResponse"
+					(checkedChange)="$event.value? cbIw.checked = false : changeLanguage('iw')"
+					[checked]="!languageService.rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
+				<label [isUserInteractionEnabled]="!waitingForResponse" (tap)="cbEn.checked = true" text="English"
+					class="langLabel"></label>
+			</FlexboxLayout>
+			<FlexboxLayout style="align-items: center;">
+				<label [isUserInteractionEnabled]="!waitingForResponse" text="עברית" (tap)="cbIw.checked = true"
+					class="langLabel"></label>
+				<CheckBox:CheckBox [isUserInteractionEnabled]="!waitingForResponse"
+					(checkedChange)="$event.value? cbEn.checked = false : changeLanguage('en')"
+					[checked]="languageService.rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
+			</FlexboxLayout>
+		</FlexboxLayout>
+	</StackLayout>
+	<FlexboxLayout row="2" flexDirection="column" style="height: 100%; justify-content: flex-end;">
 		<FlexboxLayout class="signUp" (tap)="submit()" [isUserInteractionEnabled]="!waitingForResponse">
 			<label color="white" text="{{ 'login.signUp' | odedI18N:languageService.dummyUpdate }}"></label>
 		</FlexboxLayout>

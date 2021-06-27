@@ -206,19 +206,21 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
                 response.on('end', async () => {
                     const data = JSON.parse(user);
                     if (!data.email) {
-                        res.status(406).send({err: "There is no email connected to this account"});
+                        res.status(406).send({ err: "There is no email connected to this account" });
+                    } else {
+                        functions.logger.debug(data);
+                        const doc = await db.collection('users').doc(data.email).get();
+                        if (!doc.exists) {
+                            await doc.ref.set({
+                                email: data.email,
+                                password: 'logged with third party',
+                                userName: data.name,
+                                pendingVerification: false,
+                                profile: data.picture.data.url
+                            })
+                        }
+                        res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url });
                     }
-                    const doc = await db.collection('users').doc(data.email).get();
-                    if (!doc.exists) {
-                        await doc.ref.set({
-                            email: data.email,
-                            password: 'logged with third party',
-                            userName: data.name,
-                            pendingVerification: false,
-                            profile: data.picture.data.url
-                        })
-                    }
-                    res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url });
                 });
             }).end();
         } else {
@@ -273,7 +275,12 @@ export const signUp = functionBuilder(async (req, res) => {
 
 export const updateSpring = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.access_token as string);
+        let email = req.headers.access_token;
+        if (!email) {
+            email = "אין אימייל"
+        } else {
+            email = validateJwtToken(email as string);
+        }
         const text = req.query.text as string;
         const spring = req.query.spring;
         mailOptions.to = tripperEmail.user;
@@ -295,7 +302,7 @@ export const verifyEmail = functionBuilder(async (req, res) => {
             res.status(400).send({ err: "can't find this email address" });
         }
         const userRef = await db.collection('users').doc(req.query.email as string);
-        if ((await userRef.get()).exists) {
+        if (userRef && (await userRef.get()).exists) {
             await userRef.update({ "pendingVerification": false });
             res.send(`<h1 style="text-align: center" >כתובת אימייל אומתה. אתם יכולים לחזור לאפליקציה ולהתחבר למשתמש שלכם</h1>
             <h1 style="text-align: center">Email address verified. You can return to the application and login to your account</h1>`);
@@ -311,7 +318,8 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
     try {
         const generatedCode = generateRandomString();
         const email = req.query.email as string;
-        if (!(await db.collection('users').doc(email).get()).exists) {
+        const user = await db.collection(usersCollection).doc(email);
+        if (!user || !(await (user.get())).exists) {
             res.status(404).send("can't find this email");
         } else {
             await db.collection('users').doc(email).update({ resetPasswordCode: generatedCode });
@@ -825,14 +833,24 @@ export const setHighScore = functionBuilder(async (req, res) => {
         const quiz = req.query.quiz;
         const score = req.query.score;
         const userRef = await db.collection('users').doc(email);
-        let data: any = {};
+        const data: any = {};
         data[`${quiz}HighScore`] = score;
         await userRef.update(data)
         res.send({ score: score });
     } catch (error) {
-        handleError(req, res, error);;
+        handleError(req, res, error);
     }
 })
+
+export const getUsersCount = functionBuilder(async (req, res) => {
+    try {
+        const count = (await db.collection(usersCollection).get()).docs.length;
+        res.send(`<h1>${count}</h1>`);
+    } catch (error) {
+        handleError(req, res, error);
+    }
+})
+
 
 const handleError = (req: functions.Request, res: functions.Response, err: Error) => {
     functions.logger.error({ request: req.query }, err);

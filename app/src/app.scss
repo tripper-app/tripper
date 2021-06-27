@@ -1,10 +1,12 @@
 $themeColor: rgb(35, 204, 153);
 $greyText: rgb(168, 151, 151);
+$lineColor: rgb(246, 246, 246);
+$lineWidth: 4;
 $headerHeight: 85;
 $bottomHeight: 70;
 // $headerFontSize: 16;
 $titleFontSize: 23%;
-$subtitleFontSize: 19%;
+$subtitleFontSize: 20%;
 $regularFontSize: 15%;
 $smallFontSize: 12%;
 $boldFont: 'Heebo-Bold';
@@ -34,12 +36,12 @@ Button{
 }
     
 .titleIcon{
-    height: 55%;
+    height: 40%;
 }
 
 .line{
-    height: 4;
-    background-color: rgb(246, 246, 246);
+    height: $lineWidth;
+    background-color: $lineColor;
 }
 
 .greyText{
@@ -47,12 +49,12 @@ Button{
     opacity: 0.5;
 }
 
-.titleFontSize{
-    font-size: $titleFontSize;
-}
-
 .regularBoldFont{
     font-family: $regularBoldFont;
+}
+
+.titleFontSize{
+    font-size: $titleFontSize;
 }
 
 .secondFontSize{

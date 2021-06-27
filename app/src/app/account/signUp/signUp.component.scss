@@ -6,6 +6,11 @@
   margin-bottom: 20;
 }
 
+.upper{
+  border-bottom-width: 3;
+  border-color: rgba(211, 195, 195, 0.486);
+}
+
 .signUp{
   height: $bottomHeight;
   font-size: $subtitleFontSize;
@@ -29,6 +34,7 @@
   margin: 0 0 0;
   border-bottom-width: 2;
   border-color: $themeColor;
+  margin-bottom: 10;
 }
 
 .title{

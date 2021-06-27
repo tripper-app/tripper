@@ -1,4 +1,4 @@
-<GridLayout rows="*,2*,2*,11*">
+<GridLayout rows="*,2*,2*,10*">
     <StackLayout *ngIf="loading" rowSpan="4" class="gif" horizontalAlignment="center"
         verticalAlignment="center">
         <ns-waiting-gif></ns-waiting-gif>
@@ -8,7 +8,7 @@
         (markerSelect)="clickOnMarker($event.marker)" [latitude]="31.7962994" [longitude]="35.2453993" #map>
     </maps:mapView>
     <FlexboxLayout row="1" class="iconsFlex imagesMargin">
-        <StackLayout [height]="singleRowHeight" [width]="singleRowHeight" class="circle" (tap)="searchMode = true" *ngIf="!searchMode">
+        <StackLayout androidElevation="20" [height]="singleRowHeight" [width]="singleRowHeight" class="circle" (tap)="searchMode = true" *ngIf="!searchMode">
             <SVGImage height="42.5%" src="~/assets/icons/search-white.svg">
             </SVGImage>
         </StackLayout>

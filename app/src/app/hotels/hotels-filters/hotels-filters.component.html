@@ -24,33 +24,21 @@
             </FlexboxLayout>
             <StackLayout height="0" #aresStack>
                 <FlexboxLayout *ngFor="let area of areas; let i = index" [height]="areaLineHeight"
-                    style="justify-content: space-between; margin: 0 40; font-size: 15;" (tap)="cbArea.toggle()">
+                    style="justify-content: space-between;" [margin]="languageService.rightToLeft? '0,50,0,40' : '0,40,0,50'" (tap)="cbArea.toggle()">
                     <CheckBox:CheckBox (checkedChange)="checkChange(area, cbArea.checked)" [(ngModel)]="areasBoolean[i]"
-                        [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale" #cbArea />
-                    <label class="smallFontSize" [text]="area"></label>
+                        [fillColor]="areasBoolean[i]? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale" #cbArea />
+                    <label class="smallFontSize regularBoldFont" [text]="area"></label>
                 </FlexboxLayout>
             </StackLayout>
-            <!-- <GridLayout rows="*, *" columns="*, *" style="margin: 30 20;">
-                <FlexboxLayout colSpan="2" [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}">
-                    <RangeSeekBar width="50%" [maxValue]="maxPrice" [maxStartValue]="maxPrice" step="10"
-                        class="range-seek-bar" (rangeSeekBarChanged)="rangeSeekBarChanged($event)" #priceBar
-                        minRange="100"></RangeSeekBar>
-                    <label class="secondFontSize regularBoldFont" width="50%"
-                        text="{{ 'hotelsFilters.pricePerNight' | odedI18N:languageService.dummyUpdate }}"></label>
-                </FlexboxLayout>
-                <Label class="regularBoldFont greyText thirdFontSize"
-                    [ngStyle]="{'text-align': languageService.rightToLeft? 'right' : 'left'}"
-                    text="&#8362; {{finalMaxPrice}}-{{finalMinPrice}}" row="1" col="1"></Label>
-            </GridLayout> -->
             <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" class="filterLine"
                 (tap)="cbPool.toggle()">
-                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="mainColor" [scaleX]="scale" [scaleY]="scale"
+                <CheckBox:CheckBox [(ngModel)]="poolCheck" [fillColor]="poolCheck? mainColor : greyColor" [scaleX]="scale" [scaleY]="scale"
                     #cbPool />
                 <label class="secondFontSize regularBoldFont" text="{{ 'hotelsFilters.pool' | odedI18N:languageService.dummyUpdate }}"></label>
             </FlexboxLayout>
             <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row' : 'row-reverse'}" class="filterLine"
                 (tap)="cbBreakfast.toggle()">
-                <CheckBox:CheckBox [(ngModel)]="breakfastCheck" [fillColor]="mainColor" [scaleX]="scale"
+                <CheckBox:CheckBox [(ngModel)]="breakfastCheck" [fillColor]="breakfastCheck? mainColor : greyColor" [scaleX]="scale"
                     [scaleY]="scale" #cbBreakfast />
                 <label class="secondFontSize regularBoldFont" text="{{ 'hotelsFilters.breakfast' | odedI18N:languageService.dummyUpdate }}"></label>
             </FlexboxLayout>

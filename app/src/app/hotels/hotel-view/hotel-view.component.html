@@ -21,8 +21,8 @@
           </CarouselItem>
         </Carousel>
       </GridLayout>
-      <StackLayout style="width: 100%; padding: 10;">
-        <label class="descriptionLabel secondFontSize" [text]="currentHotel.description"></label>
+      <StackLayout style="width: 100%; padding: 15;">
+        <label class="descriptionLabel secondFontSize regularBoldFont" [text]="currentHotel.description"></label>
         <GridLayout rows="*, *" columns="*, *">
           <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
             [col]="languageService.rightToLeft? 0 : 1">
@@ -32,8 +32,6 @@
             <label class="filterLabel"
               text="{{currentHotel.breakfast? ('hotelView.breakfast' | odedI18N:languageService.dummyUpdate) : ('hotelView.noBreakfast' | odedI18N:languageService.dummyUpdate)}}">
             </label>
-            <!-- <label class="filterLabel"
-              text="{{currentHotel.breakfast? ('hotelView.breakfast' | odedI18N: {value: [currentHotel.breakfastPrice, ' &#8362;']}) : ('hotelView.noBreakfast' | odedI18N:languageService.dummyUpdate)}}"></label> -->
           </FlexboxLayout>
           <FlexboxLayout [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}"
             [col]="languageService.rightToLeft? 1 : 0">
@@ -61,7 +59,7 @@
       <StackLayout class="line" margin="10 0"></StackLayout>
       <label class="attractionsTitle"
         text="{{ 'hotelView.attractionsInArea' | odedI18N:languageService.dummyUpdate }}"></label>
-      <FlexboxLayout flexWrap="wrap" margin="0 10 10"
+      <FlexboxLayout flexWrap="wrap" margin="0 15 10"
         [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
         <label class="regularBoldFont thirdFontSize" *ngFor="let attraction of currentHotel.attractions; let i = index"
           text="{{attraction}}{{i<currentHotel.attractions.length-1? (', ') : ('')}}"></label>

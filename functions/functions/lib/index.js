@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setHighScore = exports.getHighScore = exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.getUsersCount = exports.setHighScore = exports.getHighScore = exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -199,17 +199,20 @@ exports.loginWithThirdParty = functionBuilder(async (req, res) => {
                     if (!data.email) {
                         res.status(406).send({ err: "There is no email connected to this account" });
                     }
-                    const doc = await db.collection('users').doc(data.email).get();
-                    if (!doc.exists) {
-                        await doc.ref.set({
-                            email: data.email,
-                            password: 'logged with third party',
-                            userName: data.name,
-                            pendingVerification: false,
-                            profile: data.picture.data.url
-                        });
+                    else {
+                        functions.logger.debug(data);
+                        const doc = await db.collection('users').doc(data.email).get();
+                        if (!doc.exists) {
+                            await doc.ref.set({
+                                email: data.email,
+                                password: 'logged with third party',
+                                userName: data.name,
+                                pendingVerification: false,
+                                profile: data.picture.data.url
+                            });
+                        }
+                        res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url });
                     }
-                    res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url });
                 });
             }).end();
         }
@@ -267,7 +270,13 @@ exports.signUp = functionBuilder(async (req, res) => {
 });
 exports.updateSpring = functionBuilder(async (req, res) => {
     try {
-        const email = validateJwtToken(req.headers.access_token);
+        let email = req.headers.access_token;
+        if (!email) {
+            email = "אין אימייל";
+        }
+        else {
+            email = validateJwtToken(email);
+        }
         const text = req.query.text;
         const spring = req.query.spring;
         mailOptions.to = tripperEmail.user;
@@ -289,7 +298,7 @@ exports.verifyEmail = functionBuilder(async (req, res) => {
             res.status(400).send({ err: "can't find this email address" });
         }
         const userRef = await db.collection('users').doc(req.query.email);
-        if ((await userRef.get()).exists) {
+        if (userRef && (await userRef.get()).exists) {
             await userRef.update({ "pendingVerification": false });
             res.send(`<h1 style="text-align: center" >כתובת אימייל אומתה. אתם יכולים לחזור לאפליקציה ולהתחבר למשתמש שלכם</h1>
             <h1 style="text-align: center">Email address verified. You can return to the application and login to your account</h1>`);
@@ -306,7 +315,8 @@ exports.resetPasswordCreateCode = functionBuilder(async (req, res) => {
     try {
         const generatedCode = generateRandomString();
         const email = req.query.email;
-        if (!(await db.collection('users').doc(email).get()).exists) {
+        const user = await db.collection(usersCollection).doc(email);
+        if (!user || !(await (user.get())).exists) {
             res.status(404).send("can't find this email");
         }
         else {
@@ -836,14 +846,22 @@ exports.setHighScore = functionBuilder(async (req, res) => {
         const quiz = req.query.quiz;
         const score = req.query.score;
         const userRef = await db.collection('users').doc(email);
-        let data = {};
+        const data = {};
         data[`${quiz}HighScore`] = score;
         await userRef.update(data);
         res.send({ score: score });
     }
     catch (error) {
         handleError(req, res, error);
-        ;
+    }
+});
+exports.getUsersCount = functionBuilder(async (req, res) => {
+    try {
+        const count = (await db.collection(usersCollection).get()).docs.length;
+        res.send(`<h1>${count}</h1>`);
+    }
+    catch (error) {
+        handleError(req, res, error);
     }
 });
 const handleError = (req, res, err) => {

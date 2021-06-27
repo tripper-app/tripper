@@ -43,8 +43,8 @@ export class HotelViewComponent implements OnInit {
 
     getHotel() {
         this.waitingForResponse = true;
-        // this.hotelsService.getHotel('הכפר האינדיאני').subscribe((hotel: FullHotel) => {
-            this.hotelsService.getHotel(this.route.snapshot.params.hotelId).subscribe((hotel: FullHotel) => {
+        this.hotelsService.getHotel('הכפר האינדיאני').subscribe((hotel: FullHotel) => {
+            // this.hotelsService.getHotel(this.route.snapshot.params.hotelId).subscribe((hotel: FullHotel) => {
             this.waitingForResponse = false;
             this.currentHotel = hotel;
 

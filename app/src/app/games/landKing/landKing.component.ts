@@ -42,9 +42,9 @@ export class LandKingComponent implements OnInit {
         this.openModal();
     }
 
-    getScale() {
+    getScale() {        
         if (this.map) {
-            return (this.map.getActualSize().height / screen.mainScreen.heightDIPs) + 0.50;
+            return 1.75-(this.map.getActualSize().height / screen.mainScreen.heightPixels);
         }
         return 1;
     }
@@ -130,7 +130,7 @@ export class LandKingComponent implements OnInit {
     }
 
     navigateToScroe() {
-        if (this.userService.userLoggedIn) {               
+        if (this.userService.userLoggedIn) {
             if (this.gameService.score > this.highScore) {                
                 this.gameService.setHighScore(this.quizName, this.gameService.score).subscribe(res => {
                     console.log("new highscore is " + this.gameService.score);

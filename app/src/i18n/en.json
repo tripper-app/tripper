@@ -119,7 +119,8 @@
         "dontHaveAccount": "I don't have an account yet",
         "haveAccount": "I already have an account",
         "loginFacebook": "Login with facebook",
-        "noMailForThisAccount": "There is no email connected to this account. Login failed"
+        "noMailForThisAccount": "There is no email connected to this account. Login failed",
+        "skip": "Skip"
     },
     "profile": {
         "title": "Profile",

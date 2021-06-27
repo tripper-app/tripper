@@ -14,6 +14,7 @@ import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal
 import { ChangeLanguageModalComponent } from '~/app/common/alerts/changeLanguage/change-language.component';
 import { ErrorsService } from '~/app/common/services/errors-service';
 import { OdedI18NPipe } from "../../common/pipes/i18nPipe";
+import { RouterExtensions } from 'nativescript-angular/router';
 @Component({
     selector: 'ns-login',
     templateUrl: './login.component.html',
@@ -37,7 +38,8 @@ export class LoginComponent implements OnInit {
         private modalService: ModalDialogService,
         private viewContainerRef: ViewContainerRef,
         private errorService: ErrorsService,
-        private odedi18n: OdedI18NPipe) {
+        private odedi18n: OdedI18NPipe,
+        private routerExtensions: RouterExtensions) {
     }
 
     ngOnInit() {
@@ -59,7 +61,8 @@ export class LoginComponent implements OnInit {
     }
 
     goToSignUp() {
-        this.router.navigate(['signUp']);
+        this.routerExtensions.navigate(["signUp"], {animated: true, transition: {duration: 200, name: "slideLeft", curve: "easeOut"}})
+        // this.router.navigate(['signUp'], {animated});
     }
 
     submit() {
@@ -146,14 +149,9 @@ export class LoginComponent implements OnInit {
         setString("user_token", token);
     }
 
-    changeLanguage(lan) {
-        this.languageService.switchLanguage(lan);
-        // const options: ModalDialogOptions = {
-        //     viewContainerRef: this.viewContainerRef,
-        //     fullscreen: false
-        // };
-        //this.modalService.showModal(ChangeLanguageModalComponent, options);
-    }
+    // changeLanguage(lan) {
+    //     this.languageService.switchLanguage(lan);
+    // }
 
     handleError(err) {
         this.waitingForResponse = false;
