@@ -25,7 +25,7 @@ export class SpringsService {
 
   constructor(private httpService: HttpService) {
     this.filters = new SpringFilters();
-    this.filters.distance = 30;
+    this.filters.distance = 40;
   }
 
   setFilters(filers: SpringFilters){

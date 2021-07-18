@@ -12,7 +12,7 @@ export class HotelsService {
   savedHotels: any[] = [];
   filteredHotels = [];
   filters: HotelFilters;
-  showList = false;
+  //showList = false;
 
   constructor(private httpService: HttpService) {
     this.filters = new HotelFilters();

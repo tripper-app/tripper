@@ -44,7 +44,7 @@ export class LandKingComponent implements OnInit {
 
     getScale() {        
         if (this.map) {
-            return 1.75-(this.map.getActualSize().height / screen.mainScreen.heightPixels);
+            return 1.45-(this.map.getActualSize().height / screen.mainScreen.heightPixels);
         }
         return 1;
     }

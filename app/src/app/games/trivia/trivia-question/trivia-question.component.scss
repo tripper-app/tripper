@@ -9,7 +9,7 @@
 }
 
 .answer{
-    margin: 10;
+    margin: 10, 15;
     font-size: $subtitleFontSize;
     font-family: $regularBoldFont;
 }
@@ -29,4 +29,9 @@
     color: white;
     justify-content: space-around;
     padding: 0 10;
+}
+
+  .icon{
+      height: 30%;
+      width: 10%;
   }

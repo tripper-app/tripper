@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../../common/services/springs-service';
 import { LanguageService } from '../../common/services/language-service';
@@ -14,6 +14,8 @@ import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/mod
 import { UpdateSpringModalComponent } from './update-spring/updateSpringModal.component';
 import { ErrorsService } from '~/app/common/services/errors-service';
 import { registerSoftKeyboardCallback } from 'nativescript-soft-keyboard';
+import { Image } from 'tns-core-modules/ui/image';
+import * as obs from 'rxjs';
 
 @Component({
     selector: 'ns-spring-view',
@@ -25,7 +27,7 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
     mainColor = "rgb(35, 204, 153)";
     spring: FullSpring;
     waitingForResponse = false;
-    currentSpring: any = {}
+    currentSpring: any = {};
     googleMapsURL = "https://maps.google.com/?daddr=";
     wazeURL = "waze://?ll=";
     springLocation;
@@ -52,6 +54,7 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.page.actionBarHidden = true;
         registerSoftKeyboardCallback(h => {
             if (!this.navigated) {
                 this.zone.run(() => {
@@ -60,13 +63,12 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
                 })
             }
         })
-        this.page.actionBarHidden = true;
+
         this.waitingForResponse = true;
-        // this.springsService.getSpring("מעיין אביאל").subscribe((spring: FullSpring) => {
-        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        // this.springsService.getSpring("מעיין מאיר").subscribe((spring: FullSpring) => {
+            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.waitingForResponse = false;
             this.currentSpring = spring;
-            
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
 
         }, err => {
@@ -137,8 +139,9 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
     }
 
     async shareSpring() {
-        const imgsrc = await ImageSource.fromUrl(this.currentSpring.images[0]);
         try {
+            const imgsrc = await ImageSource.fromUrl(this.currentSpring.images[0]);
+            // const imgsrc = await ImageSource.fromUrl("https://s3-us-west-2.amazonaws.com/melingoimages/Images/14337.jpg");
             var springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}
         \n${this.getTextFromFields()}\n${this.languageService.getText("springView.navigateWithWaze")}:
         https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n\n${this.languageService.getText("springView.shareLink")}:\nhttps://play.google.com/store/apps/details?id=org.nativescript.tripper`;

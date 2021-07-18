@@ -1,9 +1,15 @@
 @import '../../app';
 
+.upper{
+    height: $headerHeight;
+    font-size: $subtitleFontSize;
+    font-family: $mediumBoldFont;
+}
 
 .title{
     text-align: center;
     font-size: $titleFontSize;
+    font-family: $semiBoldFont;
 }
 
 image{

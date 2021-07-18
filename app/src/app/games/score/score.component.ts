@@ -11,22 +11,18 @@ import { Page } from "@nativescript/core";
     styleUrls: ['./score.component.scss']
 })
 export class ScoreComponent {
-    screenHeight = 1;
-    screenWidth = 1;
     rigthToLeft = true;
     constructor(private page: Page,
-                private gameService: GamesService,
-                private router: Router,
-                private languageService: LanguageService) {
+        private gameService: GamesService,
+        private router: Router,
+        private languageService: LanguageService) {
 
     }
 
     ngOnInit(): void {
         this.page.actionBarHidden = true;
         this.rigthToLeft = this.languageService.getRightToLeft();
-        this.screenHeight = screen.mainScreen.heightDIPs;
-        this.screenWidth = screen.mainScreen.widthDIPs;
-      }
+    }
 
     exit() {
         this.gameService.score = 0;

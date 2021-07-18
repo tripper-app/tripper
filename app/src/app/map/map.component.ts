@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../common/services/springs-service';
@@ -18,6 +18,7 @@ import { screen } from "tns-core-modules/platform";
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
+  @ViewChild('searchField', {static: false}) searchField;
   mainMap: MapView;
   loading = false;
   defaultZoom = 10;
@@ -50,16 +51,17 @@ export class MapComponent implements OnInit {
   }
 
   async onMapReady(map: MapView) {
-    //this.singleRowHeight = ((map.getActualSize().height)/16)*2-20
     setTimeout(() => {
-      this.singleRowHeight = (1/15)*(map.getMeasuredHeight())-15
-      // this.singleRowHeight = (1/16)*map.getMeasuredHeight()
+      this.singleRowHeight = (1 / 8.5) * (screen.mainScreen.heightDIPs-60) - 15
+      // this.singleRowHeight = (1 / 8.5) * (map.getActualSize().height) - 15
     }, 0);
     this.mainMap = map;
     map.settings.mapToolbarEnabled = false;
     map.settings.myLocationButtonEnabled = false;
     if (await this.springsService.getCurrentLocation()) {
-      map.settings.compassEnabled = false;
+      if (map.settings) {
+        map.settings.compassEnabled = false;
+      }
       map.myLocationEnabled = true;
       if (!this.springsService.filterByHotel) {
         this.centerMapToUser();
@@ -68,7 +70,7 @@ export class MapComponent implements OnInit {
     else {
       this.alertService.showError(this.languageService.getText('messages.error.noLocationPermissions'));
     }
-    //this.getSprings();
+    this.getSprings();
   }
 
   async getSprings() {
@@ -156,7 +158,7 @@ export class MapComponent implements OnInit {
     if (this.searchBar && this.searchBar.android) {
       this.searchBar.android.clearFocus();
     }
-    this.searchMode = false;
+    this.closeSearchBar();
   }
 
   coordinateLongPress(cords) {
@@ -209,6 +211,18 @@ export class MapComponent implements OnInit {
       this.searchBar = oldText;
       this.handleErrors(err);
     })
+  }
+
+  openSearchBar(){
+    this.searchMode = true
+    this.searchField.nativeElement.animate({width: screen.mainScreen.widthDIPs-20, duration: 150});
+  }
+
+  closeSearchBar(){
+    this.searchField.nativeElement.animate({width: 0, duration: 150}).then(() => {
+
+      this.searchMode = false;
+    });
   }
 
   navigateToFilters() {

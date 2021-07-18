@@ -43,6 +43,7 @@ import { ScoreComponent } from "./games/score/score.component";
 import { WinBingoComponent } from "./games/bingo/winBingo/winBingo.component";
 import { LocationComponentComponent } from "./games/landKing/locationComponent/locationComponent.component";
 import { NotificationsModalComponent } from "./main-tabs/notificationsModal/notificationsModal.component";
+import { CarouselComponent } from "./common/carousel/carousel.component";
 
 registerElement('LottieView', () => LottieView);
 registerElement('Carousel', () => Carousel);
@@ -102,7 +103,8 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         ResetPasswordModalComponent,
         AboutComponent,
         MainTabsComponent,
-        MapComponent
+        MapComponent,
+        CarouselComponent
     ],
     providers: [],
     schemas: [

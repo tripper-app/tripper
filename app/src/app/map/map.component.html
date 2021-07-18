@@ -1,4 +1,4 @@
-<GridLayout rows="*,2*,2*,10*">
+<GridLayout rows="3.5*,3.5*,12*">
     <StackLayout *ngIf="loading" rowSpan="4" class="gif" horizontalAlignment="center"
         verticalAlignment="center">
         <ns-waiting-gif></ns-waiting-gif>
@@ -7,8 +7,8 @@
         (mapReady)="onMapReady(map)" (coordinateLongPress)="coordinateLongPress($event.position)"
         (markerSelect)="clickOnMarker($event.marker)" [latitude]="31.7962994" [longitude]="35.2453993" #map>
     </maps:mapView>
-    <FlexboxLayout row="1" class="iconsFlex imagesMargin">
-        <StackLayout androidElevation="20" [height]="singleRowHeight" [width]="singleRowHeight" class="circle" (tap)="searchMode = true" *ngIf="!searchMode">
+    <FlexboxLayout row="0" class="iconsFlex" style="align-items: flex-end;">
+        <StackLayout [height]="singleRowHeight" [width]="singleRowHeight" class="circle" (tap)="openSearchBar()" *ngIf="!searchMode">
             <SVGImage height="42.5%" src="~/assets/icons/search-white.svg">
             </SVGImage>
         </StackLayout>
@@ -17,14 +17,14 @@
             </SVGImage>
         </StackLayout>
     </FlexboxLayout>
-    <GridLayout row="1" *ngIf="searchMode" columns="*,3*" class="searchBar imagesMargin">
+    <GridLayout [height]="singleRowHeight" row="0" width="0" columns="*,3*" class="searchBar" #searchField>
         <SVGImage height="42.5%" marginRight="20" src="~/assets/icons/search-green.svg"></SVGImage>
         <textField col="1" returnKeyType="search" hint="{{ 'map.springSearch' | odedI18N:languageService.dummyUpdate }}" colSpan="2" class="searchField"
             (loaded)="onSearchBarLoaded($event)" (returnPress)="searchByName()"></textField>
     </GridLayout>
-    <FlexboxLayout row="2" class="iconsFlex imagesMargin">
+    <FlexboxLayout row="1" class="iconsFlex" style="align-items: flex-start;">
         <StackLayout [height]="singleRowHeight" [width]="singleRowHeight" class="circle" (tap)="navigateToFilters()" *ngIf="!searchMode">
-            <SVGImage row="2" height="42.5%" src="~/assets/icons/sliders-white.svg">
+            <SVGImage row="1" height="42.5%" src="~/assets/icons/sliders-white.svg">
             </SVGImage>
         </StackLayout>
     </FlexboxLayout>

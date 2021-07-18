@@ -10,8 +10,9 @@
           (tap)="backToList()">
         </SVGImage>
       </GridLayout>
-      <GridLayout height="250">
-        <Carousel [items]="currentHotel.images" android:indicatorAnimation="scale" indicatorColor="#fff"
+      <ns-carousel [carouselHeight]="250" [Images]="currentHotel.images"></ns-carousel>
+      <!-- <GridLayout height="250">
+        <Carousel [items]="currentHotel.images" android:indicatorAnimation="swap" indicatorColor="#fff"
           indicatorColorUnselected="rgba(206, 193, 193, 0.61)" indicatorOffset="0, 10" showIndicator="true">
           <CarouselItem *ngFor="let item of currentHotel.images">
             <GridLayout>
@@ -20,7 +21,7 @@
             </GridLayout>
           </CarouselItem>
         </Carousel>
-      </GridLayout>
+      </GridLayout> -->
       <StackLayout style="width: 100%; padding: 15;">
         <label class="descriptionLabel secondFontSize regularBoldFont" [text]="currentHotel.description"></label>
         <GridLayout rows="*, *" columns="*, *">

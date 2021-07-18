@@ -4,7 +4,10 @@
     border-radius: 100%;
     background-color: $themeColor;
     vertical-alignment: center;
-    shadow-radius:100;
+    android-elevation: 10;
+    margin-left: 15;
+    margin-right: 15;
+    margin-bottom: 15;
 }
 
 .gif{
@@ -15,14 +18,9 @@
     // opacity: 0.8;
 }
 
-.waitingLabel{
-    text-align: center;
-    font-size: 15%;
-    font-weight: bold;
-}
-
 .iconsFlex{
     justify-content: space-between;
+    //align-items: flex-end;
 }
 
 .imagesMargin{
@@ -33,7 +31,7 @@
 
 .searchField{
     border-color: transparent;
-    margin: 0 15;
+    margin: 0 10;
     font-size: $subtitleFontSize;
     border-bottom-width: 1 ; // in order to override default color
     placeholder-color: rgb(207, 140, 140);
@@ -42,4 +40,5 @@
 .searchBar{
     background-color: white;
     border-radius: 100;
+    margin: 0 15;
 }

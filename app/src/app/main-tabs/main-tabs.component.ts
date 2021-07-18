@@ -10,6 +10,8 @@ import { HotelsService } from '../common/services/hotels-service';
 import { UserService } from '../common/services/userService';
 import { NotificationsModalComponent } from './notificationsModal/notificationsModal.component';
 import { ErrorsService } from '../common/services/errors-service';
+import { HotelsListComponent } from '../hotels/hotels-list/hotels-list.component';
+import { ProfileComponent } from '../profile/profile.component';
 
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
@@ -20,11 +22,12 @@ declare let java: any;
     styleUrls: ['./main-tabs.component.scss']
 })
 export class MainTabsComponent implements OnInit {
+    @ViewChild(HotelsListComponent, {static: false}) hotelsList;
+    @ViewChild(ProfileComponent, {static: false}) profile;
     @ViewChild('tabs', { static: true }) tabs;
     selectedPageIndex = 0;
     currentIndex;
     tabsVisibility = true;
-    showList = false;
     constructor(private route: ActivatedRoute,
         private page: Page,
         private viewContainerRef: ViewContainerRef,
@@ -53,22 +56,31 @@ export class MainTabsComponent implements OnInit {
         this.tabs.nativeElement.selectedIndex = 4;
     }
 
+    navigateToHotelList(){
+        this.hotelsList.getHotels();
+        this.tabs.nativeElement.selectedIndex = 5;
+    }
+
+    navigateToHotelFilters(){
+        this.tabs.nativeElement.selectedIndex = 2;
+    }
+
     pageChange(index) {
         this.currentIndex = index;
 
         if (index != 2) {
-            this.hotelService.showList = false;
+            //this.hotelService.showList = false;
             if (index == 0 && !this.userService.userLoggedIn) {
                 this.tabsVisibility = false;
             } else {
                 this.tabsVisibility = true;
             }
         } else {
-            if (this.hotelService.showList) {
-                this.tabsVisibility = true;
-            } else {
+            // if (this.hotelService.showList) {
+            //     this.tabsVisibility = true;
+            // } else {
                 this.tabsVisibility = false;
-            }
+            // }
         }
     }
 

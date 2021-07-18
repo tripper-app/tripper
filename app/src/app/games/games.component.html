@@ -1,5 +1,5 @@
 <StackLayout height="auto" width="auto">
-    <label class="header" style="text-align: center;" text="{{ 'games.title' | odedI18N:languageService.dummyUpdate }}" (onloaded)="alignVertical(title)" #title></label>
+    <label class="upper" style="text-align: center;" text="{{ 'games.title' | odedI18N:languageService.dummyUpdate }}" (onloaded)="alignVertical(title)" #title></label>
     <StackLayout class="line"></StackLayout>
     <GridLayout rows="*, *" columns="*, *" height="100%" margin="30">
         <FlexboxLayout flexDirection="column" row="0" col="0" (tap)="navigateToGame('trivia')">

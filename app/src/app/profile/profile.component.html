@@ -9,7 +9,7 @@
                     (onloaded)="alignVertical(title)" #title></Label>
             </GridLayout>
             <StackLayout class="line" marginBottom="20"></StackLayout>
-            <StackLayout margin="10">
+            <StackLayout margin="15">
                 <GridLayout [height]="widthHalf-10" columns="*,2*,*">
                     <FlexboxLayout flexDirection="column" [col]="languageService.rightToLeft? 0 : 2"
                         [ngStyle]="{'align-items': languageService.rightToLeft? 'flex-start' : 'flex-end'}"
@@ -59,20 +59,19 @@
                     <label (onloaded)="alignVertical(password)" class="thirdFontSize regularBoldFont" text="******"
                         #password></label>
                 </FlexboxLayout>
-
                 <label width="100%" marginTop="30" class="smallFontSize greyText"
                     text="{{ 'labels.language' | odedI18N:languageService.dummyUpdate }}"></label>
-                <FlexboxLayout margin="0 -6 20" justifyContent="space-between">
+                <FlexboxLayout margin="0 -9 20" justifyContent="space-between">
                     <FlexboxLayout style="align-items: center;">
                         <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale" height="40"
                             [isUserInteractionEnabled]="!waitingForResponse"
                             (checkedChange)="$event.value? cbIw.checked = false : changeLanguage('iw')"
                             [checked]="!languageService.rightToLeft" [fillColor]="mainColor" boxType="circle" #cbEn />
-                        <label class="thirdFontSize" [isUserInteractionEnabled]="!waitingForResponse"
+                        <label class="thirdFontSize regularBoldFont" [isUserInteractionEnabled]="!waitingForResponse"
                             (tap)="cbEn.checked = true" text="English"></label>
                     </FlexboxLayout>
                     <FlexboxLayout style="align-items: center;">
-                        <label class="thirdFontSize" [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
+                        <label class="thirdFontSize regularBoldFont" [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
                             (tap)="cbIw.checked = true"></label>
                         <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale"
                             [isUserInteractionEnabled]="!waitingForResponse"
@@ -80,16 +79,16 @@
                             [checked]="languageService.rightToLeft" [fillColor]="mainColor" boxType="circle" #cbIw />
                     </FlexboxLayout>
                 </FlexboxLayout>
-                <StackLayout class="line" marginBottom="10"></StackLayout>
-                <GridLayout columns="*,5*,*" height="50" (tap)="showFavorites()">
-                    <SVGImage height="40%" [col]="languageService.rightToLeft? 0 : 2" #showFavoritesImage
+                <StackLayout class="thinLine"></StackLayout>
+                <GridLayout columns="*,5*,*" height="40" margin="10,0" (tap)="showFavorites()">
+                    <SVGImage height="50%" [col]="languageService.rightToLeft? 0 : 2" #showFavoritesImage
                         src="~/assets/icons/arrowDown.svg">
                     </SVGImage>
                     <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
                         <label class="secondFontSize semiBoldFont"
                             text="{{ 'profile.favorites' | odedI18N:languageService.dummyUpdate }}"></label>
                     </FlexboxLayout>
-                    <SVGImage height="40%" [col]="languageService.rightToLeft? 2 : 0" src="~/assets/icons/starFull.svg">
+                    <SVGImage height="50%" [col]="languageService.rightToLeft? 2 : 0" src="~/assets/icons/starFull.svg">
                     </SVGImage>
                 </GridLayout>
                 <StackLayout width="100%" height="0" #favoritesStack>
@@ -116,19 +115,19 @@
                         </StackLayout>
                     </FlexboxLayout>
                 </StackLayout>
-                <StackLayout class="line"></StackLayout>
-                <GridLayout columns="*,5*,*" height="50" (tap)="showHistory()">
-                    <SVGImage height="40%" [col]="languageService.rightToLeft? 0 : 2" #showHistoryImage
+                <StackLayout class="thinLine"></StackLayout>
+                <GridLayout columns="*,5*,*" height="40" margin="10,0" (tap)="showHistory()" >
+                    <SVGImage height="50%" [col]="languageService.rightToLeft? 0 : 2" #showHistoryImage
                         src="~/assets/icons/arrowDown.svg">
                     </SVGImage>
                     <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
                         <label class="secondFontSize semiBoldFont"
                             text="{{ 'profile.history' | odedI18N:languageService.dummyUpdate }}"></label>
                     </FlexboxLayout>
-                    <SVGImage height="40%" [col]="languageService.rightToLeft? 2 : 0" src="~/assets/icons/history.svg">
+                    <SVGImage height="50%" [col]="languageService.rightToLeft? 2 : 0" src="~/assets/icons/history.svg">
                     </SVGImage>
                 </GridLayout>
-                <StackLayout class="line"> </StackLayout>
+                <StackLayout class="thinLine"> </StackLayout>
                 <StackLayout width="100%" height="0" #historyStack>
                     <ns-waiting-gif *ngIf="waitingForHistory"></ns-waiting-gif>
                     <FlexboxLayout flexWrap="wrap"

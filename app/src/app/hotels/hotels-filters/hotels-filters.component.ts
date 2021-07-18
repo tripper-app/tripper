@@ -3,6 +3,7 @@ import { Page } from 'tns-core-modules/ui/page';
 import { LanguageService } from '../../common/services/language-service';
 import { HotelFilters } from '~/app/common/models/hotelFilters';
 import { HotelsService } from '~/app/common/services/hotels-service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'ns-hotels-filters',
@@ -12,13 +13,12 @@ import { HotelsService } from '~/app/common/services/hotels-service';
 export class HotelsFiltersComponent implements OnInit {
     @ViewChild('aresStack', { static: false }) aresStack: ElementRef;
     @ViewChild('expandImage', { static: false }) expandImage: ElementRef;
-    @Output() hideFilters: EventEmitter<any> = new EventEmitter();
+    @Output() goToList: EventEmitter<any> = new EventEmitter();
     poolCheck = false;
     breakfastCheck = false;
     mainColor = "rgb(35, 204, 153)";
     greyColor = "rgb(225, 225, 225)";
     scale = "1.3";
-    //rightToLeft = true;
     areas = this.languageService.getText('hotelsFilters.areasList').split(', ');
     areasBoolean: boolean[] = [];
     selectedAreas = [];
@@ -32,7 +32,8 @@ export class HotelsFiltersComponent implements OnInit {
 
     constructor(private page: Page,
         private hotelsService: HotelsService,
-        private languageService: LanguageService) {
+        private languageService: LanguageService,
+        private router: Router) {
     }
 
     ngOnInit(): void {
@@ -83,8 +84,8 @@ export class HotelsFiltersComponent implements OnInit {
     }
 
     navigateToFiltersView() {
-        this.hotelsService.filteredHotels = undefined;
-        this.hideFilters.emit();
+        this.hotelsService.filteredHotels = undefined;  
+        this.goToList.emit();
     }
 
     alignVertical(label) {

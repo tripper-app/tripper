@@ -1,17 +1,19 @@
 <BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
-    <TabStrip [visibility]="tabsVisibility ? 'visible' : 'collapsed'" backgroundColor="white">
+    <TabStrip isIconSizeFixed="true" height="60" [visibility]="tabsVisibility ? 'visible' : 'collapsed'"
+        backgroundColor="white">
         <TabStripItem class="thirdFontSize">
             <Label text="{{ 'labels.account' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image [src]="currentIndex == 0? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'">
-            </Image>
+            <Image stretch="none" height="5" width="5"
+                [src]="currentIndex == 0? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'"></Image>
         </TabStripItem>
         <TabStripItem class="special">
             <Label text="{{ 'labels.games' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image [src]="currentIndex == 1? '~/assets/images/dice-bold.png' : '~/assets/images/dice-light.png'"></Image>
+            <Image [src]="currentIndex == 1? '~/assets/images/dice-bold.png' : '~/assets/images/dice-light.png'">
+            </Image>
         </TabStripItem>
         <TabStripItem class="special" >
             <Label text="{{ 'labels.bnb' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image [src]="currentIndex == 2? '~/assets/images/bed-bold.png' : '~/assets/images/bed-light.png'"></Image>
+            <Image [src]="currentIndex == 5? '~/assets/images/bed-bold.png' : '~/assets/images/bed-light.png'"></Image>
         </TabStripItem>
         <TabStripItem class="special">
             <Label text="{{ 'labels.map' | odedI18N:languageService.dummyUpdate }}"></Label>
@@ -30,7 +32,7 @@
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
-            <ns-hotels-list (hideTabs)="tabsVisibility = false" (showTabs)="tabsVisibility = true"></ns-hotels-list>
+            <ns-hotels-filters (goToList)="navigateToHotelList()"></ns-hotels-filters>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
@@ -43,4 +45,14 @@
             <ns-about></ns-about>
         </GridLayout>
     </TabContentItem>
+    <TabContentItem>
+        <GridLayout>
+            <ns-hotels-list (goToFilters)="navigateToHotelFilters()"></ns-hotels-list>
+        </GridLayout>
+    </TabContentItem>
+    <!-- <TabContentItem>
+        <GridLayout>
+            <ns-profile ></ns-profile>
+        </GridLayout>
+    </TabContentItem> -->
 </BottomNavigation>

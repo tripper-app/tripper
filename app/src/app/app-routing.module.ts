@@ -24,9 +24,9 @@ import { LandKingComponent } from "./games/landKing/landKing.component";
 import { SpringsService } from "./common/services/springs-service";
 
 const loggedUser = getString('user_token');
-const firstPage = 'mainTabs/' +  (loggedUser? '2' : '2');
+const firstPage = 'mainTabs/' +  (loggedUser? '3' : '0');
 const routes: Routes = [
-    { path: "", redirectTo: 'hotelView', data: {}, pathMatch: "full" },
+    { path: "", redirectTo: firstPage, data: {}, pathMatch: "full" },
     { path: "map", component: MapComponent },
     { path: "springView", component: SpringsViewComponent },
     { path: "springView/:springId", component: SpringsViewComponent },

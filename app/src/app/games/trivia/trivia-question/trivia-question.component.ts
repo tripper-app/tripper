@@ -20,6 +20,7 @@ export class TriviaQuestionComponent {
     question = new TriviaQuestion();
     pendingQuestion: TriviaQuestion;
     highScore = 0;
+    timer = 0;
     quizName = "trivia";
     constructor(private page: Page,
         private languageService: LanguageService,
@@ -31,6 +32,9 @@ export class TriviaQuestionComponent {
     }
 
     ngOnInit() {
+        setInterval(() => {
+            this.timer += 1000;
+        }, 1000)
         this.getHighScore();
         this.nextQuestion();
     }

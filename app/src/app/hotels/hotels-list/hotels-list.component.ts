@@ -14,8 +14,7 @@ import { screen } from "tns-core-modules/platform";
     styleUrls: ['./hotels-list.component.scss']
 })
 export class HotelsListComponent implements OnInit {
-    @Output() showTabs: EventEmitter<any> = new EventEmitter();
-    @Output() hideTabs: EventEmitter<any> = new EventEmitter();
+    @Output() goToFilters: EventEmitter<any> = new EventEmitter();
     hotelsList: FlatHotel[];
     waitingForResponse = false;
     imageHeight = ((screen.mainScreen.widthDIPs-27)/2)*(2/3);
@@ -28,17 +27,11 @@ export class HotelsListComponent implements OnInit {
         private errorService: ErrorsService) {
     }
 
-    ngOnInit(): void {        
+    ngOnInit(): void {
         this.page.actionBarHidden = true;
         if (this.hotelsService.filteredHotels) {
             this.hotelsList = this.hotelsService.filteredHotels;
         }
-    }
-
-    hideTheFilters() {
-        this.hotelsService.showList = true;
-        this.getHotels();
-        this.showTabs.emit();
     }
 
     getHotels() {
@@ -56,13 +49,12 @@ export class HotelsListComponent implements OnInit {
         })
     }
 
-    navigateToHotel(hotel) {
+    navigateToHotel(hotel) {        
         this.router.navigate(["hotelView", hotel]);
     }
 
     navigateToFilters() {
-        this.hideTabs.emit();
-        this.hotelsService.showList = false;
+        this.goToFilters.emit();
     }
 
     alignVertical(label) {
