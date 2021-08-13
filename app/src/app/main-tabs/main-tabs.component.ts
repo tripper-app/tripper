@@ -22,8 +22,8 @@ declare let java: any;
     styleUrls: ['./main-tabs.component.scss']
 })
 export class MainTabsComponent implements OnInit {
-    @ViewChild(HotelsListComponent, {static: false}) hotelsList;
-    @ViewChild(ProfileComponent, {static: false}) profile;
+    @ViewChild(HotelsListComponent, { static: false }) hotelsList;
+    @ViewChild(ProfileComponent, { static: false }) profile;
     @ViewChild('tabs', { static: true }) tabs;
     selectedPageIndex = 0;
     currentIndex;
@@ -50,18 +50,34 @@ export class MainTabsComponent implements OnInit {
 
     navigateToMap() {
         this.tabs.nativeElement.selectedIndex = 3
+        this.isFirstTime();
+    }
+
+
+    isFirstTime() {
+        setTimeout(() => {
+            if (!getString('firstTime')) {
+                const options: ModalDialogOptions = {
+                    viewContainerRef: this.viewContainerRef,
+                    fullscreen: false,
+                    context: { text: this.languageService.getText("map.firstTime") }
+                };
+                this.modalService.showModal(NotificationsModalComponent, options)
+                setString('firstTime', 'true');
+            }
+        }, 0);
     }
 
     navigateToAbout() {
         this.tabs.nativeElement.selectedIndex = 4;
     }
 
-    navigateToHotelList(){
+    navigateToHotelList() {
         this.hotelsList.getHotels();
         this.tabs.nativeElement.selectedIndex = 5;
     }
 
-    navigateToHotelFilters(){
+    navigateToHotelFilters() {
         this.tabs.nativeElement.selectedIndex = 2;
     }
 
@@ -73,20 +89,23 @@ export class MainTabsComponent implements OnInit {
             if (index == 0 && !this.userService.userLoggedIn) {
                 this.tabsVisibility = false;
             } else {
+                if (index == 3) {
+                    this.isFirstTime();
+                }
                 this.tabsVisibility = true;
             }
         } else {
             // if (this.hotelService.showList) {
             //     this.tabsVisibility = true;
             // } else {
-                this.tabsVisibility = false;
+            this.tabsVisibility = false;
             // }
         }
     }
 
     checkNotifications() {
         const messageTime = getString('notificationTimeStamp');
-        this.httpService.getNotification(messageTime ? messageTime : 0).subscribe((res: any) => {            
+        this.httpService.getNotification(messageTime ? messageTime : 0).subscribe((res: any) => {
             if (res.text) {
                 const options: ModalDialogOptions = {
                     viewContainerRef: this.viewContainerRef,

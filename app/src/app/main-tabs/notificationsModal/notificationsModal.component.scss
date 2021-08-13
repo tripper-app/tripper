@@ -2,12 +2,11 @@
 
 .text{
     font-size: $subtitleFontSize;
-    text-align: center;
+    // text-align: center;
 }
 
 .confirm{
     background-color: $themeColor;
-    color: white;
     width: 100%;
     height: $bottomHeight;
     justify-content: center;

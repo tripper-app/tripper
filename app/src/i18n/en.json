@@ -15,7 +15,8 @@
         }
     },
     "map": {
-        "springSearch": "Here you search for a spring"
+        "springSearch": "Here you search for a spring",
+        "firstTime": "In order to increase searching radius and add other filters click on the button in the upper right"
     },
     "springsFilters": {
         "title": "What spring to look for?",

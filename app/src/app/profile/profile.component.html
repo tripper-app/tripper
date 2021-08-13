@@ -98,7 +98,8 @@
                         <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring)" width="50%"
                             [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
                             *ngFor="let spring of currentUser.favorites; let i = index">
-                            <GridLayout [height]="springHeight-40">
+                            <ns-carousel [carouselHeight]="springHeight-40" [Images]="spring.images"></ns-carousel>
+                            <!-- <GridLayout [height]="springHeight-40">
                                 <Carousel [items]="spring.images" android:indicatorAnimation="scale"
                                     indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
                                     indicatorOffset="0, 20" showIndicator="true">
@@ -110,7 +111,7 @@
                                         </GridLayout>
                                     </CarouselItem>
                                 </Carousel>
-                            </GridLayout>
+                            </GridLayout> -->
                             <label class="semiBoldFont thirdFontSize" text="{{spring.name}}"></label>
                         </StackLayout>
                     </FlexboxLayout>
@@ -135,7 +136,8 @@
                         <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring.id)" width="50%"
                             [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
                             *ngFor="let spring of currentUser.history; let i = index">
-                            <GridLayout [height]="springHeight-40">
+                            <ns-carousel [carouselHeight]="springHeight-40" [Images]="spring.images"></ns-carousel>
+                            <!-- <GridLayout [height]="springHeight-40">
                                 <Carousel [items]="spring.images" android:indicatorAnimation="scale"
                                     indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
                                     indicatorOffset="0, 20" showIndicator="true">
@@ -147,7 +149,7 @@
                                         </GridLayout>
                                     </CarouselItem>
                                 </Carousel>
-                            </GridLayout>
+                            </GridLayout> -->
                             <label text="{{spring.name}}"></label>
                         </StackLayout>
                     </FlexboxLayout>

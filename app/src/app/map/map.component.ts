@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import { Page } from 'tns-core-modules/ui/page';
 import { SpringsService } from '../common/services/springs-service';
@@ -11,6 +11,7 @@ import { ErrorsService } from '../common/services/errors-service';
 import { Image, ImageSource } from '@nativescript/core';
 import { screen } from "tns-core-modules/platform";
 
+
 @Component({
   selector: 'ns-map',
   // providers: [ModalDialogService], // delete
@@ -18,7 +19,7 @@ import { screen } from "tns-core-modules/platform";
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-  @ViewChild('searchField', {static: false}) searchField;
+  @ViewChild('searchField', { static: false }) searchField;
   mainMap: MapView;
   loading = false;
   defaultZoom = 10;
@@ -40,8 +41,13 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (application.android) { // delete
+    if (application.android) {
       application.android.on(application.AndroidApplication.activityResumedEvent, this.onAndroidActivityResume, this);
+
+      application.android.on(application.AndroidApplication.activityBackPressedEvent, () => {
+        this.clearMarkers();
+        this.getSprings();
+      });
     }
 
     this.springsService.singleSpringSubject.subscribe(spring => {
@@ -52,7 +58,7 @@ export class MapComponent implements OnInit {
 
   async onMapReady(map: MapView) {
     setTimeout(() => {
-      this.singleRowHeight = (1 / 8.5) * (screen.mainScreen.heightDIPs-60) - 15
+      this.singleRowHeight = (1 / 8.5) * (screen.mainScreen.heightDIPs - 60) - 15
       // this.singleRowHeight = (1 / 8.5) * (map.getActualSize().height) - 15
     }, 0);
     this.mainMap = map;
@@ -213,13 +219,13 @@ export class MapComponent implements OnInit {
     })
   }
 
-  openSearchBar(){
+  openSearchBar() {
     this.searchMode = true
-    this.searchField.nativeElement.animate({width: screen.mainScreen.widthDIPs-20, duration: 150});
+    this.searchField.nativeElement.animate({ width: screen.mainScreen.widthDIPs - 20, duration: 150 });
   }
 
-  closeSearchBar(){
-    this.searchField.nativeElement.animate({width: 0, duration: 150}).then(() => {
+  closeSearchBar() {
+    this.searchField.nativeElement.animate({ width: 0, duration: 150 }).then(() => {
 
       this.searchMode = false;
     });
