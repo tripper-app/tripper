@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersCount = exports.setHighScore = exports.getHighScore = exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
+exports.removeUser = exports.getUsersCount = exports.setHighScore = exports.getHighScore = exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -863,6 +863,9 @@ exports.getUsersCount = functionBuilder(async (req, res) => {
     catch (error) {
         handleError(req, res, error);
     }
+});
+exports.removeUser = functionBuilder(async (req, res) => {
+    res.send("User removed successfully");
 });
 const handleError = (req, res, err) => {
     functions.logger.error({ request: req.query }, err);

@@ -125,6 +125,7 @@
     },
     "profile": {
         "title": "Profile",
+        "logOut": "Log out",
         "favorites": "Favorites",
         "history": "History",
         "changePassword": "Change password",

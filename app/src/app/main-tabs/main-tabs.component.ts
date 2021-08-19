@@ -53,7 +53,6 @@ export class MainTabsComponent implements OnInit {
         this.isFirstTime();
     }
 
-
     isFirstTime() {
         setTimeout(() => {
             if (!getString('firstTime')) {

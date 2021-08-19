@@ -124,6 +124,7 @@
     },
     "profile": {
         "title": "פרופיל אישי",
+        "logOut": "התנתקות",
         "favorites": "מועדפים",
         "history": "היסטוריה",
         "changePassword": "החלפת סיסמה",

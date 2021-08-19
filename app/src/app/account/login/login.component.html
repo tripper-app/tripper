@@ -1,5 +1,5 @@
 <StackLayout>
-	<ns-profile (goToMap)="navigateToMap()" (goToAbout)="navigateToAbout()" *ngIf="userService.userLoggedIn">
+	<ns-profile (goToMap)="navigateToMap()" (goToAbout)="navigateToAbout()" (logOutEmitter)="logOut()" *ngIf="userService.userLoggedIn">
 	</ns-profile>
 	<GridLayout *ngIf="!userService.userLoggedIn" rows="4*,*">
 		<ns-waiting-gif *ngIf="waitingForResponse" rowSpan="2"></ns-waiting-gif>

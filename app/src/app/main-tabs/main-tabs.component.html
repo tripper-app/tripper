@@ -22,7 +22,7 @@
     </TabStrip>
     <TabContentItem>
         <GridLayout>
-            <ns-login (goToMap)="navigateToMap()" (goToAbout)="navigateToAbout()"></ns-login>
+            <ns-login (goToMap)="navigateToMap()" (goToAbout)="navigateToAbout()" (logOutEmitter)="pageChange(0)"></ns-login>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>

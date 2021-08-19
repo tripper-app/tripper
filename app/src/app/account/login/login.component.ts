@@ -23,6 +23,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 export class LoginComponent implements OnInit {
     @Output() goToMap: EventEmitter<any> = new EventEmitter();
     @Output() goToAbout: EventEmitter<any> = new EventEmitter();
+    @Output() logOutEmitter: EventEmitter<any> = new EventEmitter();
     waitingForResponse = false;
     mainColor = "rgb(35, 204, 153)";
     user: User;
@@ -83,6 +84,11 @@ export class LoginComponent implements OnInit {
             this.userService.userLoggedIn = true;
             this.navigateToMap();
         }, err => this.handleError(err))
+    }
+
+    logOut(){
+        this.userService.logOut();
+        this.logOutEmitter.emit();
     }
 
     forgotPassword() {
@@ -182,17 +188,17 @@ export class LoginComponent implements OnInit {
         }
     }
 
-    logout() {
-        // this.httpService.logoutFacebook(getString("facebook_token")).subscribe(data => {
-        //     console.log("good");
-        // }, err => {
-        //     console.log("BAD");
-        //     console.log(err);
+    // logout() {
+    //     // this.httpService.logoutFacebook(getString("facebook_token")).subscribe(data => {
+    //     //     console.log("good");
+    //     // }, err => {
+    //     //     console.log("BAD");
+    //     //     console.log(err);
 
 
-        // })
-        //this.oathService.disConnect();
-    }
+    //     // })
+    //     //this.oathService.disConnect();
+    // }
 
     alignVertical(label) {
         label.android.setGravity(17)

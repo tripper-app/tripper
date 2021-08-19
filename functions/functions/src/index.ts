@@ -851,6 +851,10 @@ export const getUsersCount = functionBuilder(async (req, res) => {
     }
 })
 
+export const removeUser = functionBuilder(async (req, res) => {
+    res.send("User removed successfully");
+})
+
 
 const handleError = (req: functions.Request, res: functions.Response, err: Error) => {
     functions.logger.error({ request: req.query }, err);

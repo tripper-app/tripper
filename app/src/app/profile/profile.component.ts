@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
     @ViewChild('historyStack', { static: false }) historyStack: ElementRef;
     @Output() goToMap: EventEmitter<any> = new EventEmitter();
     @Output() goToAbout: EventEmitter<any> = new EventEmitter();
+    @Output() logOutEmitter: EventEmitter<any> = new EventEmitter();
 
     animationTime = 200;
     favoritesGifHeight = 320;
@@ -42,6 +43,7 @@ export class ProfileComponent implements OnInit {
     checkBoxScale = 0.7;
     showingFavorites = false;
     showingHistory = false;
+
     constructor(private userService: UserService,
         private languageService: LanguageService,
         private modalService: ModalDialogService,
@@ -252,6 +254,12 @@ export class ProfileComponent implements OnInit {
 
     alignVertical(label) {
         label.android.setGravity(17)
+    }
+
+    logOut(){
+        this.logOutEmitter.emit();
+        // this.userService.logOut();
+        // this.userService.userLoggedIn = false;
     }
 
     handleError(err) {

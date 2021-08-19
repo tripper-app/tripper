@@ -1,12 +1,13 @@
 <StackLayout>
     <ScrollView height="100%">
         <StackLayout (tap)="tappedAnywhere()">
-            <GridLayout columns="*,4*,*" class="header">
+            <GridLayout columns="*,3*,*" class="header">
                 <SVGImage class="titleIcon" [col]="languageService.rightToLeft? 2 : 0"
                     src="~/assets/icons/logo line.svg" (tap)="navigatetoAbout()">
                 </SVGImage>
                 <Label text="{{ 'profile.title' | odedI18N:languageService.dummyUpdate }}" col="1"
                     (onloaded)="alignVertical(title)" #title></Label>
+                <label class="smallFontSize" (onloaded)="alignVertical(logOutLabel)" #logOutLabel text="{{ 'profile.logOut' | odedI18N:languageService.dummyUpdate }}" (tap)="logOut()" [col]="languageService.rightToLeft? 0 : 2"></label>
             </GridLayout>
             <StackLayout class="line" marginBottom="20"></StackLayout>
             <StackLayout margin="15">
@@ -71,8 +72,8 @@
                             (tap)="cbEn.checked = true" text="English"></label>
                     </FlexboxLayout>
                     <FlexboxLayout style="align-items: center;">
-                        <label class="thirdFontSize regularBoldFont" [isUserInteractionEnabled]="!waitingForResponse" text="עברית"
-                            (tap)="cbIw.checked = true"></label>
+                        <label class="thirdFontSize regularBoldFont" [isUserInteractionEnabled]="!waitingForResponse"
+                            text="עברית" (tap)="cbIw.checked = true"></label>
                         <CheckBox:CheckBox [scaleX]="checkBoxScale" [scaleY]="checkBoxScale"
                             [isUserInteractionEnabled]="!waitingForResponse"
                             (checkedChange)="$event.value? cbEn.checked = false : changeLanguage('en')"
@@ -117,7 +118,7 @@
                     </FlexboxLayout>
                 </StackLayout>
                 <StackLayout class="thinLine"></StackLayout>
-                <GridLayout columns="*,5*,*" height="40" margin="10,0" (tap)="showHistory()" >
+                <GridLayout columns="*,5*,*" height="40" margin="10,0" (tap)="showHistory()">
                     <SVGImage height="50%" [col]="languageService.rightToLeft? 0 : 2" #showHistoryImage
                         src="~/assets/icons/arrowDown.svg">
                     </SVGImage>

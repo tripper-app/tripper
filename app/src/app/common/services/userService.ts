@@ -7,9 +7,10 @@ import { getString, setString } from '@nativescript/core/application-settings';
 })
 export class UserService {
     userLoggedIn = false;
+    userToken = 'user_token';
 
     constructor(private httpService: HttpService) {
-        if (getString('user_token')) {
+        if (getString(this.userToken)) {
             this.userLoggedIn = true;
         }
     }
@@ -32,6 +33,11 @@ export class UserService {
 
     login(user) {
         return this.httpService.login(user);
+    }
+
+    logOut(){
+        setString(this.userToken, '');
+        this.userLoggedIn = false;
     }
 
     signUp(user) {
