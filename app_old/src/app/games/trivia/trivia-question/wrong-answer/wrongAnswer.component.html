@@ -1,7 +1,0 @@
-<GridLayout [height]="screenHeight" [width]="screenWidth" backgroundColor="red" rows="*,2*,2*">
-    <SVGImage row="1" height="25%" src="~/assets/icons/wrongAnswer.svg"></SVGImage>
-    <StackLayout row="2" style="text-align: center;" color="white" horizontalAlignment="center">
-        <label class="titleFontSize semiBoldFont" text="{{ 'games.triviaWrong' | odedI18N:languageService.dummyUpdate }}"></label>
-        <label class="secondFontSize regularBoldFont" text="{{ 'games.triviaRightAnswerIs' | odedI18N: {value: [rightAnswer]} }}"></label>
-    </StackLayout>
-</GridLayout>

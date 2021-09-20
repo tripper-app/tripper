@@ -91,7 +91,7 @@ export class SpringsService {
     return this.httpService.updateSpring(text, springId);
   }
 
-  showSingleSpring(spring){
+  showSingleSpring(spring){    
     this.singleSpringSubject.next(spring);
   }
 

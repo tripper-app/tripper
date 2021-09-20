@@ -1,7 +1,0 @@
-<GridLayout [height]="screenHeight" [width]="screenWidth" backgroundColor="green" rows="*,2*,2*">
-    <SVGImage row="1" height="25%" src="~/assets/icons/rightAnswer.svg"></SVGImage>
-    <StackLayout row="2" style="text-align: center;" color="white" horizontalAlignment="center">
-        <label class="titleFontSize semiBoldFont" text="{{ 'games.triviaRight' | odedI18N:languageService.dummyUpdate }}"></label>
-        <label class="secondFontSize regularBoldFont" text="{{ rightAnswer }}"></label>
-    </StackLayout>
-</GridLayout>

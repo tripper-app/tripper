@@ -176,6 +176,7 @@ export class HttpService {
     if (getConnectionType() == connectionType.none) {
       return this.throwNoConnection();
     }
+    
     return this.httpClient.get(`${this.ApiURL}loginWithThirdParty?thirdrdParty=${thirdParty}&token=${token}`);
   }
 

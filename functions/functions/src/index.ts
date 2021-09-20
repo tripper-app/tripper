@@ -36,6 +36,7 @@ const usersCollection = "users";
 const springsCollection = 'springs';
 const hotelsCollection = 'hotels';
 const notificationsCollection = 'notifications';
+const viewCollection = "views";
 const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://firebasestorage.googleapis.com/v0/b/tripper-d0e21.appspot.com/o/assets%2FuserProfile.png?alt=media&token=a6c2eff3-af9e-4207-be7a-a1b4abef75a1";
@@ -557,6 +558,10 @@ export const getAllHotels = functionBuilder(async (req, res) => {
                 city: updateField(fields.city, currentLanguage),
                 images: fields.images
             };
+
+            updateHotelViews(doc.ref).catch(error => {
+                handleError(req, res, error);
+            })
             hotels.push(newHotel);
         })
         res.send(hotels)
@@ -856,7 +861,7 @@ export const removeUser = functionBuilder(async (req, res) => {
 })
 
 
-const handleError = (req: functions.Request, res: functions.Response, err: Error) => {
+const handleError = (req: functions.Request, res: functions.Response, err: unknown) => {
     functions.logger.error({ request: req.query }, err);
     res.status(500).send(err);
 }
@@ -943,6 +948,19 @@ const setHotelsQuery = async (filters: any, language: string) => {
 //     const upper = geohash.encode(upperLat, upperLon);
 //     return { lower, upper };
 // };
+
+const updateHotelViews = async (hotelsRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>) => {
+    const today = new Date();
+    const currentDate = today.getDate() + '.' + (today.getMonth() + 1) + '.' + today.getFullYear();
+    const viewsRef = await hotelsRef.collection(viewCollection).doc(currentDate);
+    const viewsDoc = await viewsRef.get();
+    if (!viewsDoc.exists) {
+        await viewsRef.create({ times: [] });
+    }
+    await viewsRef.update({
+        times: admin.firestore.FieldValue.arrayUnion(today)
+    })
+}
 
 const calculateRadius = async (query: any, radius: number, center: number[]) => {
     const bounds = geofire.geohashQueryBounds(center, radius);

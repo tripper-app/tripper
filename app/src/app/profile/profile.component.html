@@ -134,7 +134,7 @@
                     <ns-waiting-gif *ngIf="waitingForHistory"></ns-waiting-gif>
                     <FlexboxLayout flexWrap="wrap"
                         [ngStyle]="{'flex-direction': languageService.rightToLeft? 'row-reverse' : 'row'}">
-                        <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring.id)" width="50%"
+                        <StackLayout [height]="springHeight" (tap)="navigateToSpring(spring)" width="50%"
                             [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
                             *ngFor="let spring of currentUser.history; let i = index">
                             <ns-carousel [carouselHeight]="springHeight-40" [Images]="spring.images"></ns-carousel>
