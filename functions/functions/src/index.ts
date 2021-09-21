@@ -36,11 +36,12 @@ const usersCollection = "users";
 const springsCollection = 'springs';
 const hotelsCollection = 'hotels';
 const notificationsCollection = 'notifications';
-const viewCollection = "views";
+const searchResultsCollection = "searchResults";
+const viewsCollection = "views";
 const notificationsUpdates = 'עדכונים';
 const defaultLanguage = 'iw';
 const defaultUserPicture = "https://firebasestorage.googleapis.com/v0/b/tripper-d0e21.appspot.com/o/assets%2FuserProfile.png?alt=media&token=a6c2eff3-af9e-4207-be7a-a1b4abef75a1";
-const historyLimit = 10;
+const historyLimit = 14;
 const runtimeOpts: functions.RuntimeOptions = {
     timeoutSeconds: 60,
     memory: '128MB'
@@ -544,6 +545,7 @@ export const getHistorySprings = functionBuilder(async (req, res) => {
 
 export const getAllHotels = functionBuilder(async (req, res) => {
     const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
+    const today = new Date();
     try {
         const hotelsDocs = await setHotelsQuery(req.body.filters, currentLanguage);
         const hotels: any = [];
@@ -559,7 +561,7 @@ export const getAllHotels = functionBuilder(async (req, res) => {
                 images: fields.images
             };
 
-            updateHotelViews(doc.ref).catch(error => {
+            addHotelSearchResult(doc.ref, today).catch(error => {
                 handleError(req, res, error);
             })
             hotels.push(newHotel);
@@ -609,6 +611,9 @@ export const getHotel = functionBuilder(async (req, res) => {
             //     websiteLink: data.websiteLink
             // }
         }
+        addHotelView(hotel.ref).catch(error => {
+            handleError(req, res, error);
+        });
         res.send(data);
     } catch (error) {
         handleError(req, res, error);;
@@ -949,10 +954,22 @@ const setHotelsQuery = async (filters: any, language: string) => {
 //     return { lower, upper };
 // };
 
-const updateHotelViews = async (hotelsRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>) => {
+const addHotelSearchResult = async (hotelsRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>, today: Date) => {
+    const currentDate = today.getDate() + '.' + (today.getMonth() + 1) + '.' + today.getFullYear();
+    const viewsRef = await hotelsRef.collection(searchResultsCollection).doc(currentDate);
+    const viewsDoc = await viewsRef.get();
+    if (!viewsDoc.exists) {
+        await viewsRef.create({ times: [] });
+    }
+    await viewsRef.update({
+        times: admin.firestore.FieldValue.arrayUnion(today)
+    })
+}
+
+const addHotelView = async (hotelsRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>) => {
     const today = new Date();
     const currentDate = today.getDate() + '.' + (today.getMonth() + 1) + '.' + today.getFullYear();
-    const viewsRef = await hotelsRef.collection(viewCollection).doc(currentDate);
+    const viewsRef = await hotelsRef.collection(viewsCollection).doc(currentDate);
     const viewsDoc = await viewsRef.get();
     if (!viewsDoc.exists) {
         await viewsRef.create({ times: [] });
