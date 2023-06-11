@@ -2,23 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeUser = exports.getUsersCount = exports.setHighScore = exports.getHighScore = exports.getNotification = exports.getLocations = exports.getBingoItems = exports.getTriviaQuestions = exports.getTriviaQuestion = exports.getTriviaSubjects = exports.getKahoot = exports.updateUserName = exports.getUserProfile = exports.getFavoriteHotels = exports.removeFavoriteHotel = exports.addFavoriteHotel = exports.getHotel = exports.getAllHotels = exports.getHistorySprings = exports.getFavoriteSprings = exports.removeFavoriteSpring = exports.addFavoriteSpring = exports.addComment = exports.updateProfile = exports.changePassword = exports.resetPasswordRecieveCode = exports.resetPasswordCreateCode = exports.verifyEmail = exports.updateSpring = exports.signUp = exports.loginWithThirdParty = exports.login = exports.getSpring = exports.getSpringByName = exports.getAllSprings = void 0;
 global.XMLHttpRequest = require("xhr2");
+const { Buffer } = require('buffer');
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-// import * as geohash from "ngeohash";
+const app_1 = require("firebase/compat/app");
+require("firebase/compat/firestore");
+require("firebase/compat/storage");
+require("firebase/compat/auth");
+require('firebase-admin');
+require('firebase-admin/auth');
+//import { firestore } from 'firebase/app';
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const https = require("https");
-const firebase = require("firebase/app");
-require("firebase/storage");
 const geofire = require("geofire-common");
 const tripperEmail = {
     user: "tripper.app.il@gmail.com",
-    password: "tripperapp"
+    password: "hltvogywtttougrn"
 };
 const jwtSecret = "tripperSecret";
 // const firebaseConfigFile = require("./credentials/firebaseConfig");
-admin.initializeApp();
 const firebaseConfig = {
     apiKey: "AIzaSyAnnNBKwmXrXQ6lmexwt-oQs5aRTxkwV8A",
     authDomain: "tripper-d0e21.firebaseapp.com",
@@ -29,7 +33,8 @@ const firebaseConfig = {
     appId: "1:658415875612:web:b1535639c70c6fdc2591d9",
     measurementId: "G-HFCHK193HY"
 };
-firebase.default.initializeApp(firebaseConfig);
+admin.initializeApp(firebaseConfig);
+app_1.default.initializeApp(firebaseConfig);
 const db = admin.firestore();
 const region = "europe-west1";
 const usersCollection = "users";
@@ -50,7 +55,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: "tripper.app.il@gmail.com",
-        pass: "tripperapp"
+        pass: "hltvogywtttougrn"
     }
 });
 const mailOptions = {
@@ -402,9 +407,23 @@ exports.changePassword = functionBuilder(async (req, res) => {
 exports.updateProfile = functionBuilder(async (req, res) => {
     try {
         const email = validateJwtToken(req.headers.access_token);
-        const storageRef = firebase.default.storage().ref();
-        const imageRef = storageRef.child(`users/${email}/profile`);
+        const storage = app_1.default.storage();
+        const imageRef = storage.ref(`users/${email}/profile`);
+        //const buffer = Buffer.from(req.body.imageString, 'base64');
+        //const blob = buffer.toString('base64');
+        //const storageRef = firebase.default.storage().ref();
+        //const imageRef = storageRef.child(`users/${email}/profile`);
         const blob = Buffer.from(req.body.imageString, "base64");
+        // uploadString(imageRef, blob, 'base64', {
+        //     contentType: 'image/jpeg'
+        //   }).then(async (snap: any) => {
+        //     const user = await db.collection("users").doc(email).get();
+        //     const imageUrl = await snap.ref.getDownloadURL();
+        //     await user.ref.update({ "profile": imageUrl });
+        //     res.send({ imageUrl: imageUrl });
+        // }).catch((err: any) => {
+        //     throw err;
+        // });
         imageRef.put(blob, {
             contentType: "image/jpeg"
         }).then(async (snap) => {
@@ -412,7 +431,7 @@ exports.updateProfile = functionBuilder(async (req, res) => {
             const imageUrl = await snap.ref.getDownloadURL();
             await user.ref.update({ "profile": imageUrl });
             res.send({ imageUrl: imageUrl });
-        }).catch(err => {
+        }).catch((err) => {
             throw err;
         });
     }
@@ -586,36 +605,14 @@ exports.getHotel = functionBuilder(async (req, res) => {
             .doc(req.query.hotelId)
             .get();
         const data = hotel.data();
-        // let newHotel;
         if (data) {
             data.name = updateField(data.name, currentLanguage);
             if (data.attractions) {
                 data.attractions = data.attractions.map((h) => updateField(h, currentLanguage));
             }
-            // data.breakfast = data.breakfast;
             data.city = updateField(data.city, currentLanguage);
             data.description = updateField(data.description, currentLanguage);
-            // data.images = data.images;
-            // data.location = data.location;
-            // data.phone = data.phone;
-            // data.pool = data.pool;
-            // data.price = data.price;
             data.region = updateField(data.region, currentLanguage);
-            //data.websiteLink = data.websiteLink;
-            // newHotel = {
-            //     name: updateField(data.name, currentLanguage),
-            //     attractions: data.attractions.map((h: string) => updateField(h, currentLanguage)),
-            //     breakfast: data.breakfast,
-            //     city: updateField(data.city, currentLanguage),
-            //     description: updateField(data.description, currentLanguage),
-            //     images: data.images,
-            //     location: data.location,
-            //     phone: data.phone,
-            //     pool: data.pool,
-            //     price: data.price,
-            //     region: updateField(data.region, currentLanguage),
-            //     websiteLink: data.websiteLink
-            // }
         }
         addHotelView(hotel.ref).catch(error => {
             handleError(req, res, error);
@@ -951,7 +948,7 @@ const addHotelSearchResult = async (hotelsRef, today) => {
     const viewsRef = await hotelsRef.collection(searchResultsCollection).doc(currentDate);
     const viewsDoc = await viewsRef.get();
     if (!viewsDoc.exists) {
-        await viewsRef.create({ times: [] });
+        await viewsRef.set({ times: [] });
     }
     await viewsRef.update({
         times: admin.firestore.FieldValue.arrayUnion(today)
@@ -963,14 +960,14 @@ const addHotelView = async (hotelsRef) => {
     const viewsRef = await hotelsRef.collection(viewsCollection).doc(currentDate);
     const viewsDoc = await viewsRef.get();
     if (!viewsDoc.exists) {
-        await viewsRef.create({ times: [] });
+        await viewsRef.set({ times: [] });
     }
     await viewsRef.update({
         times: admin.firestore.FieldValue.arrayUnion(today)
     });
 };
 const calculateRadius = async (query, radius, center) => {
-    const bounds = geofire.geohashQueryBounds(center, radius);
+    const bounds = geofire.geohashQueryBounds([center[0], center[1]], radius);
     const promises = [];
     for (const b of bounds) {
         const q = query
@@ -988,7 +985,7 @@ const calculateRadius = async (query, radius, center) => {
                 const lng = loc.longitude;
                 // We have to filter out a few false positives due to GeoHash
                 // accuracy, but most will match
-                const distanceInKm = geofire.distanceBetween([lat, lng], center);
+                const distanceInKm = geofire.distanceBetween([lat, lng], [center[0], center[1]]);
                 const distanceInM = distanceInKm * 1000;
                 if (distanceInM <= radius) {
                     matchingDocs.push(doc);

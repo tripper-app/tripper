@@ -1,6 +1,6 @@
 "use strict";
 module.exports = {
     user: "tripper.app.il@gmail.com",
-    password: "tripperapp"
+    password: "hltvogywtttougrn"
 };
 //# sourceMappingURL=email.js.map

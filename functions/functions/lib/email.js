@@ -1,7 +1,7 @@
 "use strict";
 const email = {
     user: "tripper.app.il@gmail.com",
-    pass: "tripperapp"
+    pass: "hltvogywtttougrn"
 };
 exports.email = email;
 //# sourceMappingURL=email.js.map
