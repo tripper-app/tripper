@@ -8,12 +8,12 @@ import * as crypto from "crypto";
 import * as jwt from 'jsonwebtoken'
 import * as https from 'https';
 import * as firebase from "firebase/app";
-import 'firebase/storage';
+import { getStorage, ref, uploadString } from 'firebase/storage';
 import * as geofire from 'geofire-common';
 
 const tripperEmail = {
     user: "tripper.app.il@gmail.com",
-    password: "tripperapp"
+    password: "dpoophtpwgerwgtn"
 };
 const jwtSecret = "tripperSecret";
 // const firebaseConfigFile = require("./credentials/firebaseConfig");
@@ -29,7 +29,8 @@ const firebaseConfig = {
     appId: "1:658415875612:web:b1535639c70c6fdc2591d9",
     measurementId: "G-HFCHK193HY"
 };
-firebase.default.initializeApp(firebaseConfig)
+
+var firebaseApp = firebase.initializeApp(firebaseConfig)
 const db = admin.firestore();
 const region = "europe-west1";
 const usersCollection = "users";
@@ -266,7 +267,7 @@ export const signUp = functionBuilder(async (req, res) => {
         } else {
             res.status(400).send({ err: "email and password required" });
         }
-    } catch (error) {
+    } catch (error: any) {
         if (error.code === "EENVELOPE") {
             res.status(422).send({ err: "Wrong email address" });
         } else {
@@ -334,7 +335,7 @@ export const resetPasswordCreateCode = functionBuilder(async (req, res) => {
             const mailRes = await transporter.sendMail(mailOptions);
             res.send(mailRes);
         }
-    } catch (error) {
+    } catch (error: any) {
         if (error.code === "EENVELOPE") {
             res.status(422).send("Wrong email address");
         } else {
@@ -399,19 +400,39 @@ export const changePassword = functionBuilder(async (req, res) => { // should us
 export const updateProfile = functionBuilder(async (req, res) => {
     try {
         const email = validateJwtToken(req.headers.access_token as string);
-        const storageRef = firebase.default.storage().ref();
-        const imageRef = storageRef.child(`users/${email}/profile`);
-        const blob = Buffer.from(req.body.imageString, "base64");
-        imageRef.put(blob, {
-            contentType: "image/jpeg"
-        }).then(async snap => {
+
+        const storage = getStorage(firebaseApp);
+        //const storageRef = ref(storage);
+        const imageRef = ref(storage, `users/${email}/profile`);
+        const buffer = Buffer.from(req.body.imageString, 'base64');
+        const blob = buffer.toString('base64');
+
+        //const storageRef = firebase.default.storage().ref();
+        //const imageRef = storageRef.child(`users/${email}/profile`);
+        //const blob = Buffer.from(req.body.imageString, "base64");
+        
+        uploadString(imageRef, blob, 'base64', {
+            contentType: 'image/jpeg'
+          }).then(async (snap: any) => {
             const user = await db.collection("users").doc(email).get();
             const imageUrl = await snap.ref.getDownloadURL();
             await user.ref.update({ "profile": imageUrl });
             res.send({ imageUrl: imageUrl });
-        }).catch(err => {
+        }).catch((err: any) => {
             throw err;
         });
+
+        // imageRef.put(blob, {
+        //     contentType: "image/jpeg"
+        // }).then(async (snap: any) => {
+        //     const user = await db.collection("users").doc(email).get();
+        //     const imageUrl = await snap.ref.getDownloadURL();
+        //     await user.ref.update({ "profile": imageUrl });
+        //     res.send({ imageUrl: imageUrl });
+        // }).catch((err: any) => {
+        //     throw err;
+        // });
+
     } catch (error) {
         handleError(req, res, error);;
     }
@@ -801,7 +822,7 @@ export const getLocations = functionBuilder(async (req, res) => {
 export const getNotification = functionBuilder(async (req, res) => {
     try {
         const currentLanguage = (req.query.lang ? req.query.lang : defaultLanguage).toString();
-        const oldTime = req.query.messageTime as unknown as Number;
+        const oldTime = req.query.messageTime as unknown as number;
         const ref = await db.collection(notificationsCollection).doc(notificationsUpdates).get();
         let result = undefined;
         if (ref?.updateTime && ref.updateTime.seconds > oldTime) {
@@ -980,7 +1001,11 @@ const addHotelView = async (hotelsRef: FirebaseFirestore.DocumentReference<Fireb
 }
 
 const calculateRadius = async (query: any, radius: number, center: number[]) => {
-    const bounds = geofire.geohashQueryBounds(center, radius);
+    const centerAsGeo: geofire.Geopoint = [0, 0];
+    centerAsGeo[0] = center[0];
+    centerAsGeo[1] = center[1];
+
+    const bounds = geofire.geohashQueryBounds(centerAsGeo, radius);
     const promises = [];
     for (const b of bounds) {
         const q = query
@@ -1001,7 +1026,7 @@ const calculateRadius = async (query: any, radius: number, center: number[]) => 
 
                 // We have to filter out a few false positives due to GeoHash
                 // accuracy, but most will match
-                const distanceInKm = geofire.distanceBetween([lat, lng], center);
+                const distanceInKm = geofire.distanceBetween([lat, lng], centerAsGeo);
                 const distanceInM = distanceInKm * 1000;
                 if (distanceInM <= radius) {
                     matchingDocs.push(doc);
