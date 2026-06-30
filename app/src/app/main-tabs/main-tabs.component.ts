@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import { Page } from 'tns-core-modules/ui/page';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { ModalDialogService, ModalDialogOptions } from '@nativescript/angular';
+import { Page, Application, AndroidApplication } from '@nativescript/core';
 import { LanguageService } from '../common/services/language-service';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { getString, setString } from '@nativescript/core/application-settings';
 
 import { HttpService } from '../common/services/http-service';
@@ -16,27 +16,32 @@ import { ProfileComponent } from '../profile/profile.component';
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-mainTabs',
     templateUrl: './main-tabs.component.html',
     styleUrls: ['./main-tabs.component.scss']
 })
-export class MainTabsComponent implements OnInit {
+export class MainTabsComponent implements OnInit, OnDestroy {
     @ViewChild(HotelsListComponent, { static: false }) hotelsList;
     @ViewChild(ProfileComponent, { static: false }) profile;
     @ViewChild('tabs', { static: true }) tabs;
     selectedPageIndex = 0;
     currentIndex;
     tabsVisibility = true;
-    constructor(private route: ActivatedRoute,
-        private page: Page,
-        private viewContainerRef: ViewContainerRef,
-        private modalService: ModalDialogService,
-        private languageService: LanguageService,
-        private httpService: HttpService,
-        private errorService: ErrorsService,
-        private hotelService: HotelsService,
-        private userService: UserService) {
+    // The "bnb" tab hosts both the hotels filters and the results list; this flag
+    // toggles between them (replaces the old standalone hotels-list tab index).
+    showList = false;
+    constructor(public route: ActivatedRoute,
+        public router: Router,
+        public page: Page,
+        public viewContainerRef: ViewContainerRef,
+        public modalService: ModalDialogService,
+        public languageService: LanguageService,
+        public httpService: HttpService,
+        public errorService: ErrorsService,
+        public hotelService: HotelsService,
+        public userService: UserService,
+        public cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -44,13 +49,35 @@ export class MainTabsComponent implements OnInit {
         this.languageService.getCurrentLanguage();
         this.page.actionBarHidden = true;
         if (this.route.snapshot.params.page) {
-            this.selectedPageIndex = this.route.snapshot.params.page;
+            this.selectedPageIndex = +this.route.snapshot.params.page;
+        }
+        // The component instance survives when the app is backgrounded, so without
+        // this the app would resume on whatever tab was last open (e.g. hotels).
+        // Always bring it back to the proper entry tab: map when logged in, account
+        // (login) otherwise.
+        if (Application.android) {
+            Application.android.on(AndroidApplication.activityResumedEvent, this.resetToEntryTab, this);
         }
     }
 
+    ngOnDestroy() {
+        if (Application.android) {
+            Application.android.off(AndroidApplication.activityResumedEvent, this.resetToEntryTab, this);
+        }
+    }
+
+    // Bound so it can be removed in ngOnDestroy.
+    resetToEntryTab = () => {
+        const loggedIn = !!getString('user_token');
+        this.showList = false;
+        this.selectedPageIndex = loggedIn ? 3 : 0;
+        this.currentIndex = this.selectedPageIndex;
+    }
+
     navigateToMap() {
-        this.tabs.nativeElement.selectedIndex = 3
-        this.isFirstTime();
+        // pageChange sets the selected index, manages the tab bar visibility
+        // and runs the first-time map intro.
+        this.pageChange(3);
     }
 
     isFirstTime() {
@@ -68,20 +95,27 @@ export class MainTabsComponent implements OnInit {
     }
 
     navigateToAbout() {
-        this.tabs.nativeElement.selectedIndex = 4;
+        this.router.navigate(["about"]);
     }
 
     navigateToHotelList() {
         this.hotelsList.getHotels();
-        this.tabs.nativeElement.selectedIndex = 5;
+        this.showList = true;
     }
 
     navigateToHotelFilters() {
-        this.tabs.nativeElement.selectedIndex = 2;
+        this.showList = false;
     }
 
     pageChange(index) {
+        // Keep selectedPageIndex in sync with the user's tab taps so the
+        // [selectedIndex] binding and the bold/light icon swap stay correct.
+        this.selectedPageIndex = index;
         this.currentIndex = index;
+        // Always start the "bnb" tab on the filters screen, not stale results.
+        if (index == 2) {
+            this.showList = false;
+        }
 
         if (index != 2) {
             //this.hotelService.showList = false;
@@ -100,6 +134,10 @@ export class MainTabsComponent implements OnInit {
             this.tabsVisibility = false;
             // }
         }
+        // pageChange may be invoked from an off-zone context (e.g. login/skip
+        // emitting goToMap from an HTTP callback). Force CD so the tab actually
+        // switches and the bar visibility updates.
+        this.cd.detectChanges();
     }
 
     checkNotifications() {

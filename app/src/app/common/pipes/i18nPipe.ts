@@ -5,9 +5,9 @@ import { LanguageService } from '../services/language-service';
 @Injectable({
   providedIn: 'root'
 })
-@Pipe({ name: 'odedI18N' })
+@Pipe({ standalone: false, name: 'odedI18N' })
 export class OdedI18NPipe implements PipeTransform {
-  constructor(private languageService: LanguageService) {
+  constructor(public languageService: LanguageService) {
   }
   transform(word: string, dummy: any = undefined) {
     const path = word.split('.');

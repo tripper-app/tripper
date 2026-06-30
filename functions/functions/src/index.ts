@@ -1,7 +1,7 @@
 declare let global: any;
 global.XMLHttpRequest = require("xhr2");
 const { Buffer } = require('buffer');
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import * as admin from "firebase-admin";
 import firebase from "firebase/compat/app";
 import 'firebase/compat/firestore';

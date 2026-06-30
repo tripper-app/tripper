@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	package="com.bartovCoder.tripper"
 	android:versionCode="28"
 	android:versionName="1.0">
 
@@ -40,6 +39,7 @@
 		<activity
 			android:windowSoftInputMode="adjustPan"
 			android:name="com.tns.NativeScriptActivity"
+			android:exported="true"
 			android:launchMode="singleTask"
 			android:label="@string/title_activity_kimera"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|locale|uiMode"

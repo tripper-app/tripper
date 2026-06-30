@@ -1,10 +1,10 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { LanguageService } from '../common/services/language-service';
 import { UserService } from '../common/services/userService';
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen, ImageSource } from "@nativescript/core";
 import { User } from '../common/models/user';
-import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
-import * as imagepicker from "nativescript-imagepicker";
+import { ModalDialogService, ModalDialogOptions } from '@nativescript/angular';
+import * as imagepicker from '@nativescript/imagepicker';
 import * as btoa from 'btoa';
 import { AlertService } from '../common/services/alert-service';
 import { ChangePasswordModalComponent } from '../common/alerts/changePassword/change-password.component';
@@ -14,7 +14,7 @@ import { ErrorsService } from '../common/services/errors-service';
 declare let android: any; // or use tns-platform-declarations
 declare let java: any;
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-profile',
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
@@ -44,13 +44,14 @@ export class ProfileComponent implements OnInit {
     showingFavorites = false;
     showingHistory = false;
 
-    constructor(private userService: UserService,
-        private languageService: LanguageService,
-        private modalService: ModalDialogService,
-        private viewContainerRef: ViewContainerRef,
-        private alertService: AlertService,
-        private springService: SpringsService,
-        private errorService: ErrorsService) {
+    constructor(public userService: UserService,
+        public languageService: LanguageService,
+        public modalService: ModalDialogService,
+        public viewContainerRef: ViewContainerRef,
+        public alertService: AlertService,
+        public springService: SpringsService,
+        public errorService: ErrorsService,
+        public cd: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
@@ -64,6 +65,12 @@ export class ProfileComponent implements OnInit {
             this.currentUser.userName = res.userName;
             this.currentUser.email = res.email;
             this.currentUser.profile = res.profileImage;
+            // HTTP response fires off Angular's zone -> force CD to render the profile.
+            this.cd.detectChanges();
+        }, err => {
+            this.waitingForResponse = false;
+            this.handleError(err);
+            this.cd.detectChanges();
         })
     }
 
@@ -76,28 +83,29 @@ export class ProfileComponent implements OnInit {
             return context.present();
         }).then((selection) => {
             const image = selection[0];
-            image.getImageAsync((img, err) => {
-                if (err) {
-                    console.log(err);
-                    this.alertService.showError(this.languageService.getText('profile.cantPickImage'));
-                } else {
-                    this.waitingForUserPic = true;
-                    let byteArrayOutputStream = new java.io.ByteArrayOutputStream();
-                    img.compress(android.graphics.Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-                    let byteArray = byteArrayOutputStream.toByteArray();
-                    var base64 = btoa(new Uint8Array(byteArray).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+            // @nativescript/imagepicker v5 returns selection items with a `path`;
+            // load it through ImageSource to obtain the native bitmap.
+            const imageSource = ImageSource.fromFileSync(image.path);
+            if (!imageSource || !imageSource.android) {
+                this.alertService.showError(this.languageService.getText('profile.cantPickImage'));
+                return;
+            }
+            this.waitingForUserPic = true;
+            const img = imageSource.android; // android.graphics.Bitmap
+            let byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+            img.compress(android.graphics.Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            let byteArray = byteArrayOutputStream.toByteArray();
+            var base64 = btoa(new Uint8Array(byteArray).reduce((data, byte) => data + String.fromCharCode(byte), ''));
 
-                    this.userService.updateProfilePicture(base64).subscribe(res => {
-                        console.log("MIRACLE");
-                        this.waitingForUserPic = false;
-                        this.currentUser.profile = res.imageUrl;
-                        this.userService.setUserPicture(res.imageUrl);
-                    }, err => {
-                        this.waitingForUserPic = false;
-                        console.log("ERROR");
-                        this.handleError(err);
-                    })
-                }
+            this.userService.updateProfilePicture(base64).subscribe(res => {
+                this.waitingForUserPic = false;
+                this.currentUser.profile = res.imageUrl;
+                this.userService.setUserPicture(res.imageUrl);
+                this.cd.detectChanges();
+            }, err => {
+                this.waitingForUserPic = false;
+                this.handleError(err);
+                this.cd.detectChanges();
             })
 
         }).catch(function (e) {
@@ -111,9 +119,16 @@ export class ProfileComponent implements OnInit {
         return this.userService.getFavoriteSprings().subscribe(springs => {
             this.waitingForFavorites = false;
             this.currentUser.favorites = springs;
+            // HTTP response fires off Angular's zone -> force CD before rendering /
+            // measuring the list so the favorites show and the gif clears.
+            this.cd.detectChanges();
             if (this.showingFavorites) {
                 this.expandToFavorites();
             }
+        }, err => {
+            this.waitingForFavorites = false;
+            this.handleError(err);
+            this.cd.detectChanges();
         })
     }
 
@@ -148,10 +163,14 @@ export class ProfileComponent implements OnInit {
         return this.userService.getHistorySprings().subscribe(springs => {
             this.waitingForHistory = false;
             this.currentUser.history = springs;
-
+            this.cd.detectChanges();
             if (this.showingHistory) {
                 this.expandToHistory();
             }
+        }, err => {
+            this.waitingForHistory = false;
+            this.handleError(err);
+            this.cd.detectChanges();
         })
     }
 
@@ -285,5 +304,7 @@ export class ProfileComponent implements OnInit {
                 this.errorService.handleErorr(err);
                 break;
         }
+        // Error callbacks also arrive off Angular's zone; clear the spinner state.
+        this.cd.detectChanges();
     }
 }

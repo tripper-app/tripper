@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalDialogParams } from "nativescript-angular/modal-dialog";
+import { ModalDialogParams } from '@nativescript/angular';
 import { LanguageService } from '~/app/common/services/language-service';
 
 
-@Component({
+@Component({ standalone: false,
   selector: 'ns-notifications-modal',
   templateUrl: './notificationsModal.component.html',
   styleUrls: ['./notificationsModal.component.scss']
@@ -11,8 +11,9 @@ import { LanguageService } from '~/app/common/services/language-service';
 export class NotificationsModalComponent implements OnInit {
   text = '';
   rightToLeft = true;
-  constructor(private params: ModalDialogParams,
-    private languageService: LanguageService) {
+  waitingForResponse = false;
+  constructor(public params: ModalDialogParams,
+    public languageService: LanguageService) {
   }
   ngOnInit() {
     this.rightToLeft = this.languageService.getRightToLeft();

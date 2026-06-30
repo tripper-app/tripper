@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Page } from "@nativescript/core";
 import { KahootQuiz } from "~/app/common/models/kahootQuiz";
 import { GamesService } from "~/app/common/services/games-service";
-import { openUrl } from "tns-core-modules/utils/utils";
+import { openUrl } from "@nativescript/core/utils";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { LanguageService } from "~/app/common/services/language-service";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-kahoot',
     templateUrl: './kahoot.component.html',
     styleUrls: ['./kahoot.component.scss']
@@ -17,11 +17,12 @@ export class KahootComponent implements OnInit {
     waitingForResponse = false;
     quizes: KahootQuiz[] = [];
 
-    constructor(private page: Page,
-                private gameService: GamesService,
-                private router: Router,
-                private errorService: ErrorsService,
-                private languageService: LanguageService){
+    constructor(public page: Page,
+                public gameService: GamesService,
+                public router: Router,
+                public errorService: ErrorsService,
+                public languageService: LanguageService,
+                public cd: ChangeDetectorRef){
         this.page.actionBarHidden = true;
     }
     ngOnInit() {
@@ -29,9 +30,12 @@ export class KahootComponent implements OnInit {
         this.gameService.getKahootQuizes().subscribe((res: KahootQuiz[]) => {
             this.waitingForResponse = false;
             this.quizes = res;
+            // HTTP response fires off Angular's zone -> force CD to render quizzes.
+            this.cd.detectChanges();
         }, err => {
             this.waitingForResponse = false;
             this.errorService.handleErorr(err);
+            this.cd.detectChanges();
         })
     }
 

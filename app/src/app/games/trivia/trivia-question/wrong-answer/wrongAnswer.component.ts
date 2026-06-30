@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { screen, } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 import { LanguageService } from '~/app/common/services/language-service';
 
 
-@Component({
+@Component({ standalone: false,
   selector: 'ns-wrong-answer',
   templateUrl: './wrongAnswer.component.html',
   styleUrls: ['./wrongAnswer.component.scss']
@@ -12,7 +12,7 @@ export class WrongAnswerComponent implements OnInit {
   screenHeight = 1;
   screenWidth = 1;
   @Input() rightAnswer: string;
-  constructor(private languageService: LanguageService) {
+  constructor(public languageService: LanguageService) {
   }
 
   ngOnInit(): void {

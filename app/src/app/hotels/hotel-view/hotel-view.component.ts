@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Page } from '@nativescript/core';
 import { LanguageService } from '../../common/services/language-service';
 import { AlertService } from '../../common/services/alert-service';
 import { ActivatedRoute, Route, Router } from "@angular/router";
@@ -10,7 +10,7 @@ import { ErrorsService } from '~/app/common/services/errors-service';
 import { Utils } from '@nativescript/core';
 import { dial } from "nativescript-phone";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-hotel-view',
     templateUrl: './hotel-view.component.html',
     styleUrls: ['./hotel-view.component.scss']
@@ -20,14 +20,15 @@ export class HotelViewComponent implements OnInit {
     waitingForResponse = false;
     currentHotel: FullHotel;
 
-    constructor(private page: Page,
-        private router: Router,
-        private hotelsService: HotelsService,
-        private languageService: LanguageService,
-        private alertService: AlertService,
-        private springService: SpringsService,
-        private errorService: ErrorsService,
-         private route: ActivatedRoute) {
+    constructor(public page: Page,
+        public router: Router,
+        public hotelsService: HotelsService,
+        public languageService: LanguageService,
+        public alertService: AlertService,
+        public springService: SpringsService,
+        public errorService: ErrorsService,
+         public route: ActivatedRoute,
+         public cd: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
@@ -47,10 +48,13 @@ export class HotelViewComponent implements OnInit {
             this.hotelsService.getHotel(this.route.snapshot.params.hotelId).subscribe((hotel: FullHotel) => {
             this.waitingForResponse = false;
             this.currentHotel = hotel;
-
+            // HTTP response fires off Angular's zone -> force CD so the hotel
+            // details render and the spinner clears (otherwise: white screen).
+            this.cd.detectChanges();
         }, err => {
             this.waitingForResponse = false;
             this.handleErrors(err);
+            this.cd.detectChanges();
         })
     }
 
@@ -58,7 +62,6 @@ export class HotelViewComponent implements OnInit {
         this.springService.filterByHotel = true;
 
         this.springService.singleHotel = { id: this.currentHotel.ID, location: { latitude: this.currentHotel.location._latitude, longitude: this.currentHotel.location._longitude } };
-        this.springService.loadMap = true;
         this.router.navigate(['mainTabs', 3]);
     }
 

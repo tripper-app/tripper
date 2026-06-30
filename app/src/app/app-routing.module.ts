@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from '@nativescript/angular';
 import { Routes } from "@angular/router";
 import { getString } from '@nativescript/core/application-settings';
 
@@ -56,10 +56,4 @@ const routes: Routes = [
     imports: [NativeScriptRouterModule.forRoot(routes)],
     exports: [NativeScriptRouterModule]
 })
-export class AppRoutingModule { 
-    constructor(private springService: SpringsService){
-        if (loggedUser) {
-            this.springService.loadMap = true;
-        }
-    }
-}
+export class AppRoutingModule { }

@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Page } from "@nativescript/core";
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
 import { LanguageService } from "~/app/common/services/language-service";
 import { UserService } from "~/app/common/services/userService";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-bingo',
     templateUrl: './bingo.component.html',
     styleUrls: ['./bingo.component.scss']
@@ -24,12 +24,13 @@ export class BingoComponent implements OnInit {
     { name: "", found: false, color: "rgb(0, 134, 212)" },
     { name: "", found: false, color: "rgb(224, 50, 40)" }];
 
-    constructor(private page: Page,
-        private router: Router,
-        private gameService: GamesService,
-        private errorService: ErrorsService,
-        private languageService: LanguageService,
-        private userService: UserService) {
+    constructor(public page: Page,
+        public router: Router,
+        public gameService: GamesService,
+        public errorService: ErrorsService,
+        public languageService: LanguageService,
+        public userService: UserService,
+        public cd: ChangeDetectorRef) {
         this.page.actionBarHidden = true;
     }
 
@@ -44,12 +45,18 @@ export class BingoComponent implements OnInit {
             }
 
             this.waitingForResponse = false;
+            // HTTP response fires off Angular's zone; force CD so the board renders
+            // and the spinner clears. (setInterval below is created here, in the
+            // out-of-zone callback, so its ticks also need detectChanges.)
+            this.cd.detectChanges();
             setInterval(() => {
                 this.timer += 1000;
+                this.cd.detectChanges();
             }, 1000)
         }, err => {
             this.waitingForResponse = false;
             this.errorService.handleErorr(err);
+            this.cd.detectChanges();
         })
     }
 

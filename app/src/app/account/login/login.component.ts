@@ -1,5 +1,5 @@
-import { Component, ViewContainerRef, OnInit, Output, EventEmitter } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { ChangeDetectorRef, Component, ViewContainerRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Page } from '@nativescript/core';
 import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { Router } from '@angular/router';
@@ -9,13 +9,13 @@ import { LanguageService } from '~/app/common/services/language-service';
 import { setString, getString } from '@nativescript/core/application-settings';
 import { GoogleLogin } from 'nativescript-google-login';
 import { AlertService } from '../../common/services/alert-service';
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
+import { ModalDialogService, ModalDialogOptions } from '@nativescript/angular';
 import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
 import { ChangeLanguageModalComponent } from '~/app/common/alerts/changeLanguage/change-language.component';
 import { ErrorsService } from '~/app/common/services/errors-service';
 import { OdedI18NPipe } from "../../common/pipes/i18nPipe";
-import { RouterExtensions } from 'nativescript-angular/router';
-@Component({
+import { RouterExtensions } from '@nativescript/angular';
+@Component({ standalone: false,
     selector: 'ns-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
@@ -29,18 +29,19 @@ export class LoginComponent implements OnInit {
     user: User;
     first = false;
 
-    constructor(private page: Page,
-        private userService: UserService,
-        private router: Router,
-        private oathService: OauthService,
-        private httpService: HttpService,
-        private languageService: LanguageService,
-        private alertService: AlertService,
-        private modalService: ModalDialogService,
-        private viewContainerRef: ViewContainerRef,
-        private errorService: ErrorsService,
-        private odedi18n: OdedI18NPipe,
-        private routerExtensions: RouterExtensions) {
+    constructor(public page: Page,
+        public userService: UserService,
+        public router: Router,
+        public oathService: OauthService,
+        public httpService: HttpService,
+        public languageService: LanguageService,
+        public alertService: AlertService,
+        public modalService: ModalDialogService,
+        public viewContainerRef: ViewContainerRef,
+        public errorService: ErrorsService,
+        public odedi18n: OdedI18NPipe,
+        public routerExtensions: RouterExtensions,
+        public cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -186,6 +187,9 @@ export class LoginComponent implements OnInit {
                 this.errorService.handleErorr(err);
                 break;
         }
+        // Error callbacks arrive off Angular's zone; force CD so the spinner clears
+        // and the user can retry (otherwise the waiting overlay stays stuck).
+        this.cd.detectChanges();
     }
 
     // logout() {

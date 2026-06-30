@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalDialogParams } from "nativescript-angular/modal-dialog";
+import { ModalDialogParams } from '@nativescript/angular';
 import { LanguageService } from '~/app/common/services/language-service';
 
 
-@Component({
+@Component({ standalone: false,
   selector: 'ns-start-modal-modal',
   templateUrl: './startModal.component.html',
   styleUrls: ['./startModal.component.scss']
 })
 export class StartModalComponent implements OnInit {
   rightToLeft = true;
-  constructor(private params: ModalDialogParams,
-              private languageService: LanguageService) {
+  constructor(public params: ModalDialogParams,
+              public languageService: LanguageService) {
   }
   ngOnInit() {
     this.rightToLeft = this.languageService.getRightToLeft();

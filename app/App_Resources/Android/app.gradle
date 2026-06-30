@@ -9,10 +9,16 @@
 // e.g. project.ext.googlePlayServicesVersion = "15.0.1"
 // create a file named before-plugins.gradle in the current directory and place it there
 
+repositories {
+  // jitpack hosts plugin transitive deps that used to live on the shut-down JCenter
+  // (e.g. com.github.romandanylyk:PageIndicatorView used by nativescript-carousel)
+  maven { url 'https://jitpack.io' }
+}
+
 android {
   defaultConfig {
-    minSdkVersion 19
-    targetSdkVersion 30
+    minSdkVersion 21
+    targetSdkVersion 34
     generatedDensities = []
   }
   aaptOptions {
@@ -27,4 +33,17 @@ android {
 
 dependencies {
   implementation 'com.google.android.gms:play-services-auth:17.0.0'
+}
+
+// @nativescript/geolocation v9 uses com.google.android.gms.location.Priority and
+// LocationRequest.Builder, which only exist in play-services-location 21.0.0+.
+// before-plugins.gradle pins googlePlayServicesVersion = "17.0.0" (needed by the
+// Google Maps SDK plugin), which would otherwise drag play-services-location down
+// to 17.0.0 and make enableLocationRequest()/getCurrentLocation() throw at runtime
+// even when the permission is granted. Force just the location artifact to a modern
+// version; maps/auth stay at 17.0.0.
+configurations.all {
+  resolutionStrategy {
+    force 'com.google.android.gms:play-services-location:21.0.1'
+  }
 }

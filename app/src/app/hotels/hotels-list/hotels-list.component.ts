@@ -1,14 +1,14 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { ChangeDetectorRef, Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Page } from '@nativescript/core';
 import { LanguageService } from '../../common/services/language-service';
 import { AlertService } from '../../common/services/alert-service';
 import { Router } from "@angular/router";
 import { HotelsService } from '~/app/common/services/hotels-service';
 import { FlatHotel } from '~/app/common/models/flatHotel';
 import { ErrorsService } from '~/app/common/services/errors-service';
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-hotels-list',
     templateUrl: './hotels-list.component.html',
     styleUrls: ['./hotels-list.component.scss']
@@ -19,12 +19,13 @@ export class HotelsListComponent implements OnInit {
     waitingForResponse = false;
     imageHeight = ((screen.mainScreen.widthDIPs-27)/2)*(2/3);
 
-    constructor(private page: Page,
-        private router: Router,
-        private hotelsService: HotelsService,
-        private languageService: LanguageService,
-        private alertService: AlertService,
-        private errorService: ErrorsService) {
+    constructor(public page: Page,
+        public router: Router,
+        public hotelsService: HotelsService,
+        public languageService: LanguageService,
+        public alertService: AlertService,
+        public errorService: ErrorsService,
+        public cd: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
@@ -44,8 +45,13 @@ export class HotelsListComponent implements OnInit {
             if (!(res && res.length)) {
                 this.alertService.showError(this.languageService.getText("messages.error.hotelNotFound"));
             }
+            // HTTP response fires off Angular's zone -> force CD so the list renders
+            // and the spinner clears.
+            this.cd.detectChanges();
         }, err => {
+            this.waitingForResponse = false;
             this.errorService.handleErorr(err);
+            this.cd.detectChanges();
         })
     }
 

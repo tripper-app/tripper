@@ -1,21 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { Page } from '@nativescript/core';
+import { RouterExtensions } from '@nativescript/angular';
 import { LanguageService } from '../common/services/language-service';
 import { Utils } from '@nativescript/core';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-about',
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
-    constructor(private page: Page,
-        private languageService: LanguageService) {
+    constructor(public page: Page,
+        public routerExtensions: RouterExtensions,
+        public languageService: LanguageService) {
     }
 
     ngOnInit(): void {
         this.page.actionBarHidden = true;
 
+    }
+
+    goBack() {
+        this.routerExtensions.back();
     }
 
     alignVertical(label) {

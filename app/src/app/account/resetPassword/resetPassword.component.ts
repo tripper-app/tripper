@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
-import { alert } from "tns-core-modules/ui/dialogs";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Page } from '@nativescript/core';
+import { alert } from '@nativescript/core';
 import { UserService } from '~/app/common/services/userService';
 //import { localize } from "nativescript-localize";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { AlertService } from '~/app/common/services/alert-service';
 import { ErrorsService } from '~/app/common/services/errors-service';
 import { OdedI18NPipe } from '~/app/common/pipes/i18nPipe';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-resetPassword',
     templateUrl: './resetPassword.component.html',
     styleUrls: ['./resetPassword.component.scss']
@@ -21,14 +21,15 @@ export class ResetPasswordComponent implements OnInit {
     password = '';
     confirmPassword = '';
 
-    constructor(private page: Page, 
-                private userService: UserService, 
-                private router: Router,
-                private languageService: LanguageService,
-                private alertService: AlertService,
-                private errorService: ErrorsService,
-                private odedi18n: OdedI18NPipe,
-                private route: ActivatedRoute) {
+    constructor(public page: Page, 
+                public userService: UserService, 
+                public router: Router,
+                public languageService: LanguageService,
+                public alertService: AlertService,
+                public errorService: ErrorsService,
+                public odedi18n: OdedI18NPipe,
+                public route: ActivatedRoute,
+                public cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -80,5 +81,7 @@ export class ResetPasswordComponent implements OnInit {
                 this.errorService.handleErorr(err);
                 break;
         }
+        // Error callbacks arrive off Angular's zone; force CD so the spinner clears.
+        this.cd.detectChanges();
     }
 }

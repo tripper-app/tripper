@@ -1,21 +1,21 @@
 import { Component } from "@angular/core";
 import { GamesService } from "~/app/common/services/games-service";
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 import { Router } from "@angular/router";
 import { LanguageService } from "~/app/common/services/language-service";
 import { Page } from "@nativescript/core";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-score',
     templateUrl: './score.component.html',
     styleUrls: ['./score.component.scss']
 })
 export class ScoreComponent {
     rigthToLeft = true;
-    constructor(private page: Page,
-        private gameService: GamesService,
-        private router: Router,
-        private languageService: LanguageService) {
+    constructor(public page: Page,
+        public gameService: GamesService,
+        public router: Router,
+        public languageService: LanguageService) {
 
     }
 

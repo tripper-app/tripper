@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { Page } from '@nativescript/core';
 import { SpringsService } from '../../common/services/springs-service';
 import { LanguageService } from '../../common/services/language-service';
-import { AlertService } from '../../common/services/alert-service';
-import { Router } from "@angular/router";
+import { RouterExtensions } from '@nativescript/angular';
 import { SpringFilters } from '~/app/common/models/springFilters';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-spring-filters',
     templateUrl: './spring-filters.component.html',
     styleUrls: ['./spring-filters.component.scss']
 })
 export class SpringsFiltersComponent implements OnInit {
+    defaultDistance = 40;
     campingCheck = false;
     childrenCheck = false;
     waterCheck = false;
@@ -22,10 +22,10 @@ export class SpringsFiltersComponent implements OnInit {
     greyColor = "rgb(225, 225, 225)";
     scale = "1.3";
 
-    constructor(private page: Page,
-        private router: Router,
-        private springsService: SpringsService,
-        private languageService: LanguageService) {
+    constructor(public page: Page,
+        public routerExtensions: RouterExtensions,
+        public springsService: SpringsService,
+        public languageService: LanguageService) {
     }
 
     ngOnInit(): void {        
@@ -45,17 +45,23 @@ export class SpringsFiltersComponent implements OnInit {
         filters.children = this.childrenCheck;
         filters.water = this.waterCheck;
         filters.depth = this.depthCheck;
-        filters.distance = this.sliderValue > 0 ? this.sliderValue : undefined;
+        filters.distance = this.sliderValue > 0 ? this.sliderValue : this.defaultDistance;
 
         this.springsService.filters = filters;
         this.navigateToMap();
     }
 
-    alignVertical(label) {
+    alignVertical(label: any) {
         label.android.setGravity(17)
     }
 
     navigateToMap() {
-        this.router.navigate(["mainTabs/", 3]);
+        // Go back to the existing (still-mounted) map rather than navigating
+        // forward to a new tabs page, which would create a second MapView that
+        // renders white. The map re-fetches with the new filters when it becomes
+        // visible again (its page navigatedTo), so the loading gif shows on the
+        // already-visible map instead of while it is still behind this page.
+        this.springsService.filtersChanged = true;
+        this.routerExtensions.back();
     }
 }

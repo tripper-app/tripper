@@ -1,58 +1,71 @@
-<BottomNavigation [selectedIndex]="selectedPageIndex" (selectedIndexChanged)="pageChange(tabs.selectedIndex)" #tabs>
-    <TabStrip isIconSizeFixed="true" height="60" [visibility]="tabsVisibility ? 'visible' : 'collapsed'"
-        backgroundColor="white">
-        <TabStripItem class="thirdFontSize">
-            <Label text="{{ 'labels.account' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image stretch="none" height="5" width="5"
-                [src]="currentIndex == 0? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'"></Image>
-        </TabStripItem>
-        <TabStripItem class="special">
-            <Label text="{{ 'labels.games' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image [src]="currentIndex == 1? '~/assets/images/dice-bold.png' : '~/assets/images/dice-light.png'">
-            </Image>
-        </TabStripItem>
-        <TabStripItem class="special" >
-            <Label text="{{ 'labels.bnb' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image [src]="currentIndex == 5? '~/assets/images/bed-bold.png' : '~/assets/images/bed-light.png'"></Image>
-        </TabStripItem>
-        <TabStripItem class="special">
-            <Label text="{{ 'labels.map' | odedI18N:languageService.dummyUpdate }}"></Label>
-            <Image [src]="currentIndex == 3? '~/assets/images/map-bold.png' : '~/assets/images/map-light.png'"></Image>
-        </TabStripItem>
-    </TabStrip>
-    <TabContentItem>
-        <GridLayout>
+<!--
+  Custom bottom-tab navigation.
+
+  NOTE: core 9 removed BottomNavigation/TabStrip/TabContentItem, and the
+  remaining TabView component renders blank on this core+angular pairing, so the
+  navigation is implemented with a plain layout: a content area whose screens are
+  toggled via `visibility` (only the selected one is laid out) plus a custom tab
+  bar. All screens stay mounted (matching the old BottomNavigation behaviour), so
+  @ViewChild references and the Google map keep their state.
+-->
+<GridLayout rows="*, auto">
+
+    <!--
+      Content area: only the selected screen is visible/laid out. The visibility
+      binding must sit on a real layout wrapper, NOT on the component selectors
+      (<ns-login> etc.) - those resolve to a ProxyViewContainer whose visibility
+      is ignored, so the child views would stay on screen.
+    -->
+    <GridLayout row="0">
+        <GridLayout [visibility]="selectedPageIndex == 0 ? 'visible' : 'collapsed'">
             <ns-login (goToMap)="navigateToMap()" (goToAbout)="navigateToAbout()" (logOutEmitter)="pageChange(0)"></ns-login>
         </GridLayout>
-    </TabContentItem>
-    <TabContentItem>
-        <GridLayout>
+
+        <GridLayout [visibility]="selectedPageIndex == 1 ? 'visible' : 'collapsed'">
             <ns-games></ns-games>
         </GridLayout>
-    </TabContentItem>
-    <TabContentItem>
-        <GridLayout>
-            <ns-hotels-filters (goToList)="navigateToHotelList()"></ns-hotels-filters>
+
+        <GridLayout [visibility]="selectedPageIndex == 2 ? 'visible' : 'collapsed'">
+            <GridLayout [visibility]="showList ? 'collapsed' : 'visible'">
+                <ns-hotels-filters (goToList)="navigateToHotelList()"></ns-hotels-filters>
+            </GridLayout>
+            <GridLayout [visibility]="showList ? 'visible' : 'collapsed'">
+                <ns-hotels-list (goToFilters)="navigateToHotelFilters()"></ns-hotels-list>
+            </GridLayout>
         </GridLayout>
-    </TabContentItem>
-    <TabContentItem>
-        <GridLayout>
+
+        <GridLayout [visibility]="selectedPageIndex == 3 ? 'visible' : 'collapsed'">
             <ns-map></ns-map>
         </GridLayout>
-    </TabContentItem>
-    <TabContentItem>
-        <GridLayout>
-            <ns-about></ns-about>
-        </GridLayout>
-    </TabContentItem>
-    <TabContentItem>
-        <GridLayout>
-            <ns-hotels-list (goToFilters)="navigateToHotelFilters()"></ns-hotels-list>
-        </GridLayout>
-    </TabContentItem>
-    <!-- <TabContentItem>
-        <GridLayout>
-            <ns-profile ></ns-profile>
-        </GridLayout>
-    </TabContentItem> -->
-</BottomNavigation>
+    </GridLayout>
+
+    <!-- Custom bottom tab bar -->
+    <GridLayout row="1" columns="*,*,*,*" height="60" backgroundColor="white"
+        [visibility]="tabsVisibility ? 'visible' : 'collapsed'" class="tabBar">
+        <StackLayout col="0" class="tabItem" (tap)="pageChange(0)">
+            <Image stretch="aspectFit" height="26"
+                [src]="selectedPageIndex == 0 ? '~/assets/images/user-bold.png' : '~/assets/images/user-light.png'"></Image>
+            <Label class="tabLabel" [color]="selectedPageIndex == 0 ? '#23cc99' : '#a89797'"
+                text="{{ 'labels.account' | odedI18N:languageService.dummyUpdate }}"></Label>
+        </StackLayout>
+        <StackLayout col="1" class="tabItem" (tap)="pageChange(1)">
+            <Image stretch="aspectFit" height="26"
+                [src]="selectedPageIndex == 1 ? '~/assets/images/dice-bold.png' : '~/assets/images/dice-light.png'"></Image>
+            <Label class="tabLabel" [color]="selectedPageIndex == 1 ? '#23cc99' : '#a89797'"
+                text="{{ 'labels.games' | odedI18N:languageService.dummyUpdate }}"></Label>
+        </StackLayout>
+        <StackLayout col="2" class="tabItem" (tap)="pageChange(2)">
+            <Image stretch="aspectFit" height="26"
+                [src]="selectedPageIndex == 2 ? '~/assets/images/bed-bold.png' : '~/assets/images/bed-light.png'"></Image>
+            <Label class="tabLabel" [color]="selectedPageIndex == 2 ? '#23cc99' : '#a89797'"
+                text="{{ 'labels.bnb' | odedI18N:languageService.dummyUpdate }}"></Label>
+        </StackLayout>
+        <StackLayout col="3" class="tabItem" (tap)="pageChange(3)">
+            <Image stretch="aspectFit" height="26"
+                [src]="selectedPageIndex == 3 ? '~/assets/images/map-bold.png' : '~/assets/images/map-light.png'"></Image>
+            <Label class="tabLabel" [color]="selectedPageIndex == 3 ? '#23cc99' : '#a89797'"
+                text="{{ 'labels.map' | odedI18N:languageService.dummyUpdate }}"></Label>
+        </StackLayout>
+    </GridLayout>
+
+</GridLayout>

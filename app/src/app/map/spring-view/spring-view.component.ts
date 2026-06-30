@@ -1,53 +1,48 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Page } from '@nativescript/core';
 import { SpringsService } from '../../common/services/springs-service';
 import { LanguageService } from '../../common/services/language-service';
 import { AlertService } from '../../common/services/alert-service';
-import { Router } from "@angular/router";
+import { RouterExtensions } from '@nativescript/angular';
 import { FullSpring } from '~/app/common/models/fullSpring';
 import { ActivatedRoute } from "@angular/router";
-import { openUrl } from "tns-core-modules/utils/utils";
-import { ImageSource } from "tns-core-modules/image-source";
-import * as SocialShare from "nativescript-social-share";
+import { openUrl } from "@nativescript/core/utils";
+import { ImageSource } from '@nativescript/core';
+import * as SocialShare from '@nativescript/social-share';
 import { UserService } from '~/app/common/services/userService';
-import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { ModalDialogOptions, ModalDialogService } from '@nativescript/angular';
 import { UpdateSpringModalComponent } from './update-spring/updateSpringModal.component';
 import { ErrorsService } from '~/app/common/services/errors-service';
 import { registerSoftKeyboardCallback } from 'nativescript-soft-keyboard';
-import { Image } from 'tns-core-modules/ui/image';
-import * as obs from 'rxjs';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-spring-view',
     templateUrl: './spring-view.component.html',
     styleUrls: ['./spring-view.component.scss']
 })
 export class SpringsViewComponent implements OnInit, OnDestroy {
-    commentHeight = 60;
-    mainColor = "rgb(35, 204, 153)";
-    spring: FullSpring;
     waitingForResponse = false;
-    currentSpring: any = {};
+    currentSpring: FullSpring = new FullSpring();
     googleMapsURL = "https://maps.google.com/?daddr=";
     wazeURL = "waze://?ll=";
-    springLocation;
-    fullComments = false;
+    springLocation = "";
+    expandComments = false;
     thereIsComment = false;
     isKeyboardOpen = false;
     navigated = false;
 
-    constructor(private page: Page,
-        private router: Router,
-        private springsService: SpringsService,
-        private languageService: LanguageService,
-        private alertService: AlertService,
-        private userService: UserService,
-        private modalService: ModalDialogService,
-        private viewContainerRef: ViewContainerRef,
-        private errorService: ErrorsService,
-        private route: ActivatedRoute,
-        private cd: ChangeDetectorRef,
-        private zone: NgZone) {
+    constructor(public page: Page,
+        public springsService: SpringsService,
+        public languageService: LanguageService,
+        public alertService: AlertService,
+        public userService: UserService,
+        public modalService: ModalDialogService,
+        public viewContainerRef: ViewContainerRef,
+        public errorService: ErrorsService,
+        public route: ActivatedRoute,
+        public cd: ChangeDetectorRef,
+        public zone: NgZone,
+        public routerExtensions: RouterExtensions) {
     }
     ngOnDestroy(): void {
         this.navigated = true;
@@ -65,15 +60,18 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         })
 
         this.waitingForResponse = true;
-        // this.springsService.getSpring("מעיין מאיר").subscribe((spring: FullSpring) => {
-            this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
+        this.springsService.getSpring(this.route.snapshot.params.springId).subscribe((spring: FullSpring) => {
             this.waitingForResponse = false;
             this.currentSpring = spring;
             this.springLocation = `${this.currentSpring.location._latitude},${this.currentSpring.location._longitude}`;
-
+            // NativeScript's HTTP backend completes off Angular's zone, so without
+            // forcing change detection the loading flag/details never render and the
+            // spinner stays on a white screen forever.
+            this.cd.detectChanges();
         }, err => {
             this.waitingForResponse = false;
             this.handleErrors(err);
+            this.cd.detectChanges();
         })
     }
 
@@ -122,12 +120,21 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         });
     }
 
-    alignVertical(label) {
+    alignVertical(label: any) {
         label.android.setGravity(17)
     }
 
     navigateToMap() {
-        this.router.navigate(["mainTabs/", 3]);
+        // Go BACK to the existing (still-mounted) map rather than navigating
+        // forward to a new tabs page. A forward nav builds a fresh MapView that
+        // re-fetches and shows white until the server responds; going back keeps
+        // the map and its already-loaded markers from the last fetch. (Fall back to
+        // a forward nav only when there's no back stack, e.g. opened via deep link.)
+        if (this.routerExtensions.canGoBack()) {
+            this.routerExtensions.back();
+        } else {
+            this.routerExtensions.navigate(["mainTabs", 3], { clearHistory: true });
+        }
     }
 
     navigateWithMaps() {
@@ -141,8 +148,7 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
     async shareSpring() {
         try {
             const imgsrc = await ImageSource.fromUrl(this.currentSpring.images[0]);
-            // const imgsrc = await ImageSource.fromUrl("https://s3-us-west-2.amazonaws.com/melingoimages/Images/14337.jpg");
-            var springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}
+            const springText = `*${this.currentSpring.name}*\n${this.currentSpring.description}
         \n${this.getTextFromFields()}\n${this.languageService.getText("springView.navigateWithWaze")}:
         https://www.waze.com/ul?ll=${this.currentSpring.location._latitude}%2C${this.currentSpring.location._longitude}&navigate=yes\n\n${this.languageService.getText("springView.shareLink")}:\nhttps://play.google.com/store/apps/details?id=org.nativescript.tripper`;
             SocialShare.shareImage(imgsrc, springText)
@@ -151,20 +157,23 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    addComment(input) {
+    addComment(input: any) {
         input.android.clearFocus();
         if (input.text) {
             this.springsService.addComment(input.text, this.currentSpring.ID).subscribe(res => {
                 input.text = "";
                 res.date = { _seconds: new Date().getTime() / 1000 };
                 this.currentSpring.comments.push(res);
+                // HTTP response fires off Angular's zone -> force CD so the new
+                // comment renders.
+                this.cd.detectChanges();
             }, err => {
                 this.handleErrors(err);
             })
         }
     }
 
-    commentTextChanged(text) {
+    commentTextChanged(text: string) {
         this.thereIsComment = text !== '';
     }
 
@@ -189,7 +198,7 @@ export class SpringsViewComponent implements OnInit, OnDestroy {
         this.isKeyboardOpen = true;
     }
 
-    handleErrors(error) {
+    handleErrors(error: any) {
         this.errorService.handleErorr(error);
     }
 }

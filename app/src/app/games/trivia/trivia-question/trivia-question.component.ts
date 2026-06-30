@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Page } from "@nativescript/core";
 import { TriviaQuestion } from "~/app/common/models/triviaQuestion";
@@ -7,7 +7,7 @@ import { GamesService } from "~/app/common/services/games-service";
 import { LanguageService } from "~/app/common/services/language-service";
 import { UserService } from "~/app/common/services/userService";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-trivia-question',
     templateUrl: './trivia-question.component.html',
     styleUrls: ['./trivia-question.component.scss']
@@ -22,12 +22,13 @@ export class TriviaQuestionComponent {
     highScore = 0;
     timer = 0;
     quizName = "trivia";
-    constructor(private page: Page,
-        private languageService: LanguageService,
-        private gameService: GamesService,
-        private router: Router,
-        private errorService: ErrorsService,
-        private userService: UserService) {
+    constructor(public page: Page,
+        public languageService: LanguageService,
+        public gameService: GamesService,
+        public router: Router,
+        public errorService: ErrorsService,
+        public userService: UserService,
+        public cd: ChangeDetectorRef) {
         this.page.actionBarHidden = true;
     }
 
@@ -68,9 +69,12 @@ export class TriviaQuestionComponent {
                 this.pendingQuestion = res;
                 this.waitingForResponse = false;
                 this.afetrAnswer();
+                // HTTP response fires off Angular's zone -> force CD to render.
+                this.cd.detectChanges();
             }, err => {
                 this.waitingForResponse = false;
                 this.errorService.handleErorr(err);
+                this.cd.detectChanges();
             })
         } else {
             this.pendingQuestion = null;
@@ -93,8 +97,10 @@ export class TriviaQuestionComponent {
             if (res && res.score) {
                 this.highScore = res.score;
             }
+            this.cd.detectChanges();
         }, err => {
             this.errorService.handleErorr(err);
+            this.cd.detectChanges();
         })
     }
 

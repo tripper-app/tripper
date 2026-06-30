@@ -1,5 +1,6 @@
-android {  
-  project.ext {
-    googlePlayServicesVersion = "17.0.0"
-  }
+// Applied to the root project before plugins' include.gradle files.
+// Must NOT use the `android { }` block here (the android extension does not
+// exist on the root project in the NativeScript 8/9 gradle setup).
+project.ext {
+  googlePlayServicesVersion = "17.0.0"
 }

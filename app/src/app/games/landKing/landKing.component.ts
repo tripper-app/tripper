@@ -1,15 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
-import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular/modal-dialog";
+import { ModalDialogOptions, ModalDialogService } from '@nativescript/angular';
 import { Image, Page } from "@nativescript/core";
 import { LanguageService } from "~/app/common/services/language-service";
 import { StartModalComponent } from "./startModal/startModal.component";
 import { GamesService } from "~/app/common/services/games-service";
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 import { UserService } from "~/app/common/services/userService";
 import { ErrorsService } from "~/app/common/services/errors-service";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-landKing',
     templateUrl: './landKing.component.html',
     styleUrls: ['./landKing.component.scss']
@@ -28,14 +28,15 @@ export class LandKingComponent implements OnInit {
     map;
     // mapScale = (screen.mainScreen.scale * 0.60) - 0.1;
     // mapScale = screen.mainScreen.scale * 0.35
-    constructor(private page: Page,
-        private modalService: ModalDialogService,
-        private viewContainerRef: ViewContainerRef,
-        private router: Router,
-        private languageService: LanguageService,
-        private gameService: GamesService,
-        private userService: UserService,
-        private errorService: ErrorsService) {
+    constructor(public page: Page,
+        public modalService: ModalDialogService,
+        public viewContainerRef: ViewContainerRef,
+        public router: Router,
+        public languageService: LanguageService,
+        public gameService: GamesService,
+        public userService: UserService,
+        public errorService: ErrorsService,
+        public cd: ChangeDetectorRef) {
         this.page.actionBarHidden = true;
     }
     ngOnInit() {
@@ -70,15 +71,21 @@ export class LandKingComponent implements OnInit {
                     this.waitingForResponse = false;
                     this.addLocation();
                     // this.initPanStats();
+                    // This subscribe fires off Angular's zone, so the setInterval
+                    // created here also runs off-zone -> detectChanges each tick to
+                    // render the countdown, and once now to clear the spinner.
+                    this.cd.detectChanges();
                     let timer = setInterval(() => {
                         this.time -= 1000;
                         if (this.time <= 0) {
                             this.navigateToScroe();
                             clearInterval(timer);
                         }
+                        this.cd.detectChanges();
                     }, 1000)
                 }, err => {
                     this.errorService.handleErorr(err);
+                    this.cd.detectChanges();
                 })
             } else {
                 setTimeout(() => {
@@ -119,6 +126,9 @@ export class LandKingComponent implements OnInit {
                 const location = this.allLocations.splice(Math.random() * this.allLocations.length - 1, 1)[0];
                 this.guessedLocation = location;
                 this.opacity = 0.5;
+                // The first addLocation runs from the out-of-zone getLocations
+                // callback, so this setTimeout is also off-zone -> render explicitly.
+                this.cd.detectChanges();
             }, 0);
         } else {
             this.navigateToScroe();
@@ -141,10 +151,12 @@ export class LandKingComponent implements OnInit {
     }
 
     getHighScore() {
-        this.gameService.getHighScore(this.quizName).subscribe(res => {            
+        this.gameService.getHighScore(this.quizName).subscribe(res => {
             this.highScore = res.score;
+            this.cd.detectChanges();
         }, err => {
             this.errorService.handleErorr(err);
+            this.cd.detectChanges();
         });
     }
 

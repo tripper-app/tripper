@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Page } from "@nativescript/core";
 import { TriviaSubject } from "~/app/common/models/triviaSubject";
@@ -6,7 +6,7 @@ import { ErrorsService } from "~/app/common/services/errors-service";
 import { GamesService } from "~/app/common/services/games-service";
 import { LanguageService } from "~/app/common/services/language-service";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-trivia',
     templateUrl: './trivia.component.html',
     styleUrls: ['./trivia.component.scss']
@@ -17,11 +17,12 @@ export class TriviaComponent {
     waitingForResponse = false;
     subjects: TriviaSubject[] = [];
 
-    constructor(private page: Page,
-        private gameService: GamesService,
-        private languageService: LanguageService,
-        private router: Router,
-        private errorService: ErrorsService) {
+    constructor(public page: Page,
+        public gameService: GamesService,
+        public languageService: LanguageService,
+        public router: Router,
+        public errorService: ErrorsService,
+        public cd: ChangeDetectorRef) {
         this.page.actionBarHidden = true;
     }
 
@@ -30,9 +31,12 @@ export class TriviaComponent {
         this.gameService.getTriviasubjects().subscribe((res: TriviaSubject[]) => {
             this.waitingForResponse = false;
             this.subjects = res;
+            // HTTP response fires off Angular's zone -> force CD to render subjects.
+            this.cd.detectChanges();
         }, err => {
             this.waitingForResponse = false;
             this.errorService.handleErorr(err);
+            this.cd.detectChanges();
         })
     }
 

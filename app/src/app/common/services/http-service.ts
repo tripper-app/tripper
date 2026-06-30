@@ -2,314 +2,184 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { LanguageService } from './language-service';
 import { User } from '../models/user';
-import { connectionType, getConnectionType } from "tns-core-modules/connectivity";
-import { observable, Observable, Subscriber } from 'rxjs';
-import { noConnectionError } from "../models/errors/noConnectionError"
-import { unRegisteredUserError } from '../models/errors/unRegisteredUserError';
+import { connectionType, getConnectionType } from "@nativescript/core/connectivity";
+import { Observable, Subscriber } from 'rxjs';
+import { noConnectionError } from "../models/errors/noConnectionError";
 import { getString } from '@nativescript/core/application-settings';
 import { HotelFilters } from '../models/hotelFilters';
+import { SpringFilters } from '../models/springFilters';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
   ApiURL = "https://europe-west1-tripper-d0e21.cloudfunctions.net/";
-  language;
 
   constructor(private httpClient: HttpClient, private languageService: LanguageService) {
   }
 
-  getAllsprings(filters) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.post(this.ApiURL + "getAllSprings", { filters: filters });
+  // --- Springs ---
+
+  getAllsprings(filters: SpringFilters) {
+    return this.post("getAllSprings", { filters });
   }
 
   getSpringByName(springName: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get(`${this.ApiURL}getSpringByName?springName=${springName}&lang=${this.getLanguage()}`);
-  }
-
-  getFavoritesprings() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    //const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }    
-    return this.httpClient.get(this.ApiURL + `getFavoriteSprings?lang=${this.getLanguage()}`, this.getTokenHeaders());
-  }
-
-  addFavoriteSpring(springId: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-
-    return this.httpClient.post(this.ApiURL + `addFavoriteSpring`, { springId: springId }, this.getTokenHeaders());
-  }
-
-  removeFavoriteSpring(springId) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-
-    return this.httpClient.post(this.ApiURL + `removeFavoriteSpring`, { springId: springId }, this.getTokenHeaders());
-  }
-
-  getHistorySprings() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-    return this.httpClient.get(this.ApiURL + `getHistorySprings?lang=${this.getLanguage()}`, this.getTokenHeaders());
+    return this.get(`getSpringByName?springName=${springName}&lang=${this.getLanguage()}`);
   }
 
   getspring(id: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-
-    return this.httpClient.get(this.ApiURL + `getSpring?springId=${id}&lang=${this.getLanguage()}`, this.getTokenHeaders());
-  }
-
-  getAllHotels(filters: HotelFilters) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.post(this.ApiURL + `getAllHotels?lang=${this.getLanguage()}`, { filters: filters });
-  }
-
-  getHotel(id: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get(this.ApiURL + `getHotel?hotelId=${id}&lang=${this.getLanguage()}`);
-  }
-
-  login(user: User) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get(this.ApiURL + `login?email=${user.email}&password=${user.password}`);
-  }
-
-  signUp(user: User) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.post(this.ApiURL + `signUp`, user);
-  }
-
-  getUserProfile() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-
-    return this.httpClient.get(`${this.ApiURL}getUserProfile`, this.getTokenHeaders());
-  }
-
-  updateUserName(newUserName) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-
-    return this.httpClient.post(`${this.ApiURL}updateUserName`, { newUserName: newUserName }, this.getTokenHeaders());
-  }
-
-  changePassword(oldPassword, newPassword) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-
-    return this.httpClient.post(`${this.ApiURL}changePassword`, { newPassword: newPassword, oldPassword: oldPassword }, this.getTokenHeaders());
-  }
-
-  resetPasswordCreateCode(email) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get(`${this.ApiURL}resetPasswordCreateCode?email=${email}&lang=${this.getLanguage()}`)
-  }
-
-  resetPasswordRecieveCode(code, email, password) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.post(this.ApiURL + `resetPasswordRecieveCode`, { code: code, email: email, password: password })
-  }
-
-  getEmailByFacebookToken(token) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get("https://graph.facebook.com/me?fields=email&access_token=" + token);
-  }
-
-  loginWithThirdPartyToken(token, thirdParty) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    
-    return this.httpClient.get(`${this.ApiURL}loginWithThirdParty?thirdrdParty=${thirdParty}&token=${token}`);
-  }
-
-  logoutFacebook(token) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get("https://www.facebook.com/logout.php?access_token=" + token)
-  }
-
-  updateProfile(base64: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-    return this.httpClient.post(`${this.ApiURL}updateProfile`, { imageString: base64 }, this.getTokenHeaders());
+    return this.get(`getSpring?springId=${id}&lang=${this.getLanguage()}`, true);
   }
 
   addComment(text: string, springId: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-    return this.httpClient.post(`${this.ApiURL}addComment`,
-      { text: text, springId: springId },
-      this.getTokenHeaders());
+    return this.post("addComment", { text, springId }, true);
   }
 
-  updateSpring(text, springId) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    // const token = this.getToken();
-    // if (!token) {
-    //   return this.throwUnRegisteredUser();
-    // }
-
-    return this.httpClient.get(`${this.ApiURL}updateSpring?text=${text}&spring=${springId}`, this.getTokenHeaders());
+  updateSpring(text: string, springId: string) {
+    return this.get(`updateSpring?text=${text}&spring=${springId}`, true);
   }
+
+  getFavoritesprings() {
+    return this.get(`getFavoriteSprings?lang=${this.getLanguage()}`, true);
+  }
+
+  getHistorySprings() {
+    return this.get(`getHistorySprings?lang=${this.getLanguage()}`, true);
+  }
+
+  addFavoriteSpring(springId: string) {
+    return this.post("addFavoriteSpring", { springId }, true);
+  }
+
+  removeFavoriteSpring(springId: string) {
+    return this.post("removeFavoriteSpring", { springId }, true);
+  }
+
+  // --- Hotels ---
+
+  getAllHotels(filters: HotelFilters) {
+    return this.post(`getAllHotels?lang=${this.getLanguage()}`, { filters });
+  }
+
+  getHotel(id: string) {
+    return this.get(`getHotel?hotelId=${id}&lang=${this.getLanguage()}`);
+  }
+
+  // --- Account ---
+
+  login(user: User) {
+    return this.get(`login?email=${user.email}&password=${user.password}`);
+  }
+
+  signUp(user: User) {
+    return this.post("signUp", user);
+  }
+
+  loginWithThirdPartyToken(token: string, thirdParty: string) {
+    // NOTE: `thirdrdParty` is a typo in the backend contract -- kept on purpose.
+    return this.get(`loginWithThirdParty?thirdrdParty=${thirdParty}&token=${token}`);
+  }
+
+  resetPasswordCreateCode(email: string) {
+    return this.get(`resetPasswordCreateCode?email=${email}&lang=${this.getLanguage()}`);
+  }
+
+  resetPasswordRecieveCode(code: string, email: string, password: string) {
+    return this.post("resetPasswordRecieveCode", { code, email, password });
+  }
+
+  // --- Profile ---
+
+  getUserProfile() {
+    return this.get("getUserProfile", true);
+  }
+
+  updateUserName(newUserName: string) {
+    return this.post("updateUserName", { newUserName }, true);
+  }
+
+  changePassword(oldPassword: string, newPassword: string) {
+    return this.post("changePassword", { newPassword, oldPassword }, true);
+  }
+
+  updateProfile(base64: string) {
+    return this.post("updateProfile", { imageString: base64 }, true);
+  }
+
+  // --- Games ---
 
   getKahoot() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-
-    return this.httpClient.get(this.ApiURL + `getKahoot?lang=${this.getLanguage()}`);
+    return this.get(`getKahoot?lang=${this.getLanguage()}`);
   }
 
   getTriviaSubjects() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-
-    return this.httpClient.get(this.ApiURL + `getTriviaSubjects?lang=${this.getLanguage()}`);
+    return this.get(`getTriviaSubjects?lang=${this.getLanguage()}`);
   }
 
-  getTriviaQuestions(triviaIds) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-
-    return this.httpClient.post(this.ApiURL + `getTriviaQuestions?lang=${this.getLanguage()}`, { triviaIds: triviaIds });
+  getTriviaQuestions(triviaIds: string[]) {
+    return this.post(`getTriviaQuestions?lang=${this.getLanguage()}`, { triviaIds });
   }
 
   getBingoItems() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-
-    return this.httpClient.get(this.ApiURL + `getBingoItems?lang=${this.getLanguage()}`);
+    return this.get(`getBingoItems?lang=${this.getLanguage()}`);
   }
 
   getLocations() {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-    return this.httpClient.get(this.ApiURL + `getLocations?lang=${this.getLanguage()}`);
-  }
-
-  getNotification(messageTime) {
-    return this.httpClient.get(this.ApiURL + `getNotification?lang=${this.getLanguage()}&messageTime=${messageTime}`);
+    return this.get(`getLocations?lang=${this.getLanguage()}`);
   }
 
   setHighScore(quiz: string, score: number) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }
-
-    return this.httpClient.get(`${this.ApiURL}setHighScore?quiz=${quiz}&score=${score}`, this.getTokenHeaders());
+    return this.get(`setHighScore?quiz=${quiz}&score=${score}`, true);
   }
 
   getHighScore(quiz: string) {
-    if (getConnectionType() == connectionType.none) {
-      return this.throwNoConnection();
-    }    
-    return this.httpClient.get(`${this.ApiURL}getHighScore?quiz=${quiz}`, this.getTokenHeaders());
+    return this.get(`getHighScore?quiz=${quiz}`, true);
   }
 
+  // --- Misc ---
 
+  // Intentionally not guarded by a connection check (matches existing behaviour).
+  getNotification(messageTime: string | number) {
+    return this.httpClient.get<any>(this.ApiURL + `getNotification?lang=${this.getLanguage()}&messageTime=${messageTime}`);
+  }
+
+  // --- Internals ---
+
+  private get<T = any>(path: string, auth = false): Observable<T> {
+    if (getConnectionType() === connectionType.none) {
+      return this.throwNoConnection();
+    }
+    return auth
+      ? this.httpClient.get<T>(this.ApiURL + path, this.getTokenHeaders())
+      : this.httpClient.get<T>(this.ApiURL + path);
+  }
+
+  private post<T = any>(path: string, body: any, auth = false): Observable<T> {
+    if (getConnectionType() === connectionType.none) {
+      return this.throwNoConnection();
+    }
+    return auth
+      ? this.httpClient.post<T>(this.ApiURL + path, body, this.getTokenHeaders())
+      : this.httpClient.post<T>(this.ApiURL + path, body);
+  }
 
   getLanguage() {
-    //if (!this.language) {
     return this.languageService.currentLanguage;
-    //}
-
-    // return this.language;
   }
 
   getToken() {
     return getString("user_token");
-    // return "eyJhbGciOiJIUzI1NiJ9.b2RlZG9kZWQ3NzdAZ21haWwuY29t.-dTvSdoQ8p7yMaRMB9EMEgdKrpJnkPIhTzHAuchsrbU";
   }
 
-  getTokenHeaders(): any {
+  getTokenHeaders(): { headers?: { access_token: string } } {
     const token = this.getToken();
-    return token ? { headers: { access_token: token } } : "";
+    return token ? { headers: { access_token: token } } : {};
   }
 
-  throwNoConnection() {
+  throwNoConnection(): Observable<any> {
     return new Observable<any>((subscriber: Subscriber<any>) => {
       subscriber.error(new noConnectionError(this.languageService.getText('messages.error.connectionError')));
     });
-  }
-
-  throwUnRegisteredUser() {
-    return new Observable<any>((subscriber: Subscriber<any>) => {
-      subscriber.error(new unRegisteredUserError(this.languageService.getText('messages.error.unRegisteredUser')));
-    })
   }
 }

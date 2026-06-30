@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { ModalDialogParams } from "nativescript-angular/modal-dialog";
+import { ModalDialogParams } from '@nativescript/angular';
 import { AlertService } from '../../services/alert-service';
 import { ErrorsService } from '../../services/errors-service';
 import { LanguageService } from '../../services/language-service';
 import { UserService } from '../../services/userService';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-change-password',
     templateUrl: './change-password.component.html',
     styleUrls: ['./change-password.component.scss']
@@ -16,11 +16,11 @@ export class ChangePasswordModalComponent {
     newPassword = "";
     confirmPassword = "";
     rightToLeft = true;
-    constructor(private params: ModalDialogParams,
-        private alertService: AlertService,
-        private userService: UserService,
-        private errorService: ErrorsService,
-        private languageService: LanguageService) { 
+    constructor(public params: ModalDialogParams,
+        public alertService: AlertService,
+        public userService: UserService,
+        public errorService: ErrorsService,
+        public languageService: LanguageService) { 
             this.rightToLeft = this.languageService.getRightToLeft();
         }
 

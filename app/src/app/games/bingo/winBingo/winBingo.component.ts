@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Page } from "@nativescript/core";
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 import { LanguageService } from "~/app/common/services/language-service";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-winBingo',
     templateUrl: './winBingo.component.html',
     styleUrls: ['./winBingo.component.scss']
@@ -14,10 +14,10 @@ export class WinBingoComponent implements OnInit {
     screenWidth = 1;
     timeToWin = '0';
     rigthToLeft = true;
-    constructor(private page: Page,
-        private router: Router,
-        private route: ActivatedRoute,
-        private languageService: LanguageService) {
+    constructor(public page: Page,
+        public router: Router,
+        public route: ActivatedRoute,
+        public languageService: LanguageService) {
         this.page.actionBarHidden = true;
     }
 

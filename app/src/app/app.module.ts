@@ -1,15 +1,18 @@
-import { registerElement } from "nativescript-angular/element-registry";
+import { registerElement } from '@nativescript/angular';
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NativeScriptFormsModule } from "nativescript-angular/forms"
-import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
+import { NativeScriptModule } from '@nativescript/angular';
+import { NativeScriptFormsModule } from '@nativescript/angular'
+import { NativeScriptHttpClientModule } from '@nativescript/angular';
 import { AppRoutingModule } from "./app-routing.module";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from '@nativescript/angular';
 import { TNSCheckBoxModule } from '@nstudio/nativescript-checkbox/angular';
 import { Carousel, CarouselItem } from 'nativescript-carousel';
-import { LottieView } from 'nativescript-lottie';
-import { NativeScriptUIRangeSeekBarModule } from "nativescript-range-seek-bar/angular";
-import { NativeScriptSvgModule } from '@teammaestro/nativescript-svg/angular';
+import { LottieView } from '@nativescript-community/ui-lottie';
+// NOTE: nativescript-range-seek-bar is abandoned and its Angular module is not a
+// valid Ivy NgModule on Angular 21, so it is no longer imported here. The
+// <RangeSeekBar> usages in the filter screens need a maintained replacement
+// (e.g. @nativescript-community/ui-range-seekbar or a core Slider) + retesting.
+import { SVGView } from '@nativescript-community/ui-svg';
 import { OdedI18NPipe } from './common/pipes/i18nPipe';
 
 import { AppComponent } from "./app.component";
@@ -48,6 +51,7 @@ import { CarouselComponent } from "./common/carousel/carousel.component";
 registerElement('LottieView', () => LottieView);
 registerElement('Carousel', () => Carousel);
 registerElement('CarouselItem', () => CarouselItem);
+registerElement('SVGImage', () => SVGView);
 registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView);
 
 @NgModule({
@@ -60,16 +64,7 @@ registerElement("MapView", () => require("nativescript-google-maps-sdk").MapView
         NativeScriptFormsModule,
         NativeScriptHttpClientModule,
         NativeScriptRouterModule,
-        TNSCheckBoxModule,
-        NativeScriptUIRangeSeekBarModule,
-        NativeScriptSvgModule
-    ],
-    entryComponents: [
-        ResetPasswordModalComponent,
-        NotificationsModalComponent,
-        StartModalComponent,
-        UpdateSpringModalComponent,
-        ChangePasswordModalComponent
+        TNSCheckBoxModule
     ],
     declarations: [
         NotificationsModalComponent,

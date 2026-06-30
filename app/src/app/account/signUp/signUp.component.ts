@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Page } from '@nativescript/core';
 import { User } from '~/app/common/models/user';
 import { UserService } from '~/app/common/services/userService';
 import { Router } from '@angular/router';
@@ -10,9 +10,9 @@ import { setString } from '@nativescript/core/application-settings';
 import { GoogleLogin } from 'nativescript-google-login';
 import { AlertService } from '../../common/services/alert-service';
 import { ErrorsService } from '~/app/common/services/errors-service';
-import { RouterExtensions } from 'nativescript-angular/router';
+import { RouterExtensions } from '@nativescript/angular';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-signUp',
     templateUrl: './signUp.component.html',
     styleUrls: ['./signUp.component.scss']
@@ -24,15 +24,16 @@ export class SignUpComponent implements OnInit {
     user: User;
     confirmPassword = '';
 
-    constructor(private page: Page,
-        private userService: UserService,
-        private router: Router,
-        private oathService: OauthService,
-        private httpService: HttpService,
-        private languageService: LanguageService,
-        private alertService: AlertService,
-        private errorService: ErrorsService,
-        private routerExtensions: RouterExtensions) {
+    constructor(public page: Page,
+        public userService: UserService,
+        public router: Router,
+        public oathService: OauthService,
+        public httpService: HttpService,
+        public languageService: LanguageService,
+        public alertService: AlertService,
+        public errorService: ErrorsService,
+        public routerExtensions: RouterExtensions,
+        public cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -142,6 +143,8 @@ export class SignUpComponent implements OnInit {
                 this.errorService.handleErorr(err);
                 break;
         }
+        // Error callbacks arrive off Angular's zone; force CD so the spinner clears.
+        this.cd.detectChanges();
     }
 
     alignVertical(label) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-waiting-gif',
     templateUrl: './waiting-gif.component.html',
     styleUrls: ['./waiting-gif.component.css']

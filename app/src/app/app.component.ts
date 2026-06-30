@@ -2,22 +2,22 @@ import { Component, NgZone, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { registerUniversalLinkCallback } from "@nativescript-community/universal-links";
 
-import { on as applicationOn, resumeEvent, ApplicationEventData, android } from "tns-core-modules/application";
+import { Application, ApplicationEventData } from "@nativescript/core";
 
-@Component({
+@Component({ standalone: false,
     selector: "ns-app",
     templateUrl: "./app.component.html"
 })
 export class AppComponent implements OnInit {
-    constructor(private router: Router,
-        private zone: NgZone) { }
+    constructor(public router: Router,
+        public zone: NgZone) { }
 
     ngOnInit() {
         this.listenToLink();
     }
 
     listenToLink() {
-        applicationOn(resumeEvent, (args: ApplicationEventData) => {
+        Application.on(Application.resumeEvent, (args: ApplicationEventData) => {
             if (args.android) {
                 const activity = args.android.getIntent().getData();
                 if (activity) {

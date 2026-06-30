@@ -1,11 +1,18 @@
 <GridLayout [height]="carouselHeight">
-    <Carousel [items]="Images" android:indicatorAnimation="swap" indicatorColor="#FFFFFF"
+    <!--
+      [items] gives the ViewPager adapter its item count up front; the slide views
+      themselves come from the *ngFor CarouselItem children. Both are required:
+      without [items] the adapter starts at count 0 while 4 children get added and
+      the ViewPager crashes ("changed contents without notifyDataSetChanged"). The
+      image binds directly to the *ngFor value so its src is present when each page
+      is built (a deferred/empty src renders blank, since the adapter reads src once).
+    -->
+    <Carousel #carouselEl [items]="Images" android:indicatorAnimation="swap" indicatorColor="#FFFFFF"
         indicatorColorUnselected="rgb(153, 157, 160)" indicatorOffset="0, 10" showIndicator="true">
-        <CarouselItem *ngFor="let item of Images; let i = index">
+        <CarouselItem *ngFor="let item of Images">
             <GridLayout>
-                <label  style="font-size: 30; z-index: 4;"></label>
                 <ns-waiting-gif></ns-waiting-gif>
-                <Image style="z-index: 3;" [src]="showingImage[i]" width="100%" height="100%" stretch="fill" (tap)="click()" #imagesQuery></Image>
+                <Image style="z-index: 3;" [src]="item" width="100%" height="100%" stretch="fill" (tap)="click()"></Image>
             </GridLayout>
         </CarouselItem>
     </Carousel>

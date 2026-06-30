@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalDialogParams } from "nativescript-angular/modal-dialog";
+import { ModalDialogParams } from '@nativescript/angular';
 import { AlertService } from '~/app/common/services/alert-service';
 import { LanguageService } from '~/app/common/services/language-service';
 import { UserService } from '~/app/common/services/userService';
 
 
-@Component({
+@Component({ standalone: false,
   selector: 'ns-update-spring-modal',
   templateUrl: './updatespringModal.component.html',
   styleUrls: ['./updatespringModal.component.scss']
 })
 export class UpdateSpringModalComponent {
   content = '';
-  constructor(private params: ModalDialogParams,
-    private languageService: LanguageService) {
+  constructor(public params: ModalDialogParams,
+    public languageService: LanguageService) {
   }
 
   confirm() {
       this.exit(this.content);
   }
 
-  exit(text: string) {
+  exit(text?: string) {
     this.params.closeCallback(text);
   }
 }

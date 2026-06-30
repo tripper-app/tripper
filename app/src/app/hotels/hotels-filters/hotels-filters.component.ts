@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { Page } from 'tns-core-modules/ui/page';
+import { Page } from '@nativescript/core';
 import { LanguageService } from '../../common/services/language-service';
 import { HotelFilters } from '~/app/common/models/hotelFilters';
 import { HotelsService } from '~/app/common/services/hotels-service';
 import { Router } from '@angular/router';
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-hotels-filters',
     templateUrl: './hotels-filters.component.html',
     styleUrls: ['./hotels-filters.component.scss']
@@ -30,10 +30,10 @@ export class HotelsFiltersComponent implements OnInit {
     finalMinPrice = 10;
     finalMaxPrice = 2000;
 
-    constructor(private page: Page,
-        private hotelsService: HotelsService,
-        private languageService: LanguageService,
-        private router: Router) {
+    constructor(public page: Page,
+        public hotelsService: HotelsService,
+        public languageService: LanguageService,
+        public router: Router) {
     }
 
     ngOnInit(): void {

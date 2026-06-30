@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { GridLayout, Page, PanGestureEventData } from "@nativescript/core";
 import { LanguageService } from "~/app/common/services/language-service";
-import { screen } from "tns-core-modules/platform";
+import { Screen as screen } from "@nativescript/core";
 import { Location } from "~/app/common/models/location";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-location-component',
     templateUrl: './locationComponent.component.html',
     styleUrls: ['./locationComponent.component.scss']
@@ -25,8 +25,8 @@ export class LocationComponentComponent implements OnInit {
     showFeedback = true;
     first = true;
     placed = false;
-    constructor(private page: Page,
-        private languageService: LanguageService) {
+    constructor(public page: Page,
+        public languageService: LanguageService) {
     }
 
     ngOnInit() {

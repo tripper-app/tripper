@@ -2,15 +2,15 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { LanguageService } from "../common/services/language-service";
 
-@Component({
+@Component({ standalone: false,
     selector: 'ns-games',
     templateUrl: './games.component.html',
     styleUrls: ['./games.component.scss']
 })
 export class GamesComponent {
     itemSize = "38%";
-    constructor(private router: Router,
-        private languageService: LanguageService){}
+    constructor(public router: Router,
+        public languageService: LanguageService){}
 
     navigateToGame(game){
         this.router.navigate([game]);

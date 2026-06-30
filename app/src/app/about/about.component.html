@@ -6,6 +6,9 @@
         </SVGImage>
         <label text="{{ 'labels.about' | odedI18N:languageService.dummyUpdate }}" col="1" class="title"
           (onloaded)="alignVertical(title)" #title></label>
+        <SVGImage class="exit titleIcon" height="40%" [col]="languageService.rightToLeft? 2 : 0"
+          src="~/assets/icons/times-light.svg" (tap)="goBack()">
+        </SVGImage>
       </GridLayout>
       <StackLayout class="line"></StackLayout>
       <SVGImage margin="40 0 20" height="30%" src="~/assets/icons/logo line with text.svg">
