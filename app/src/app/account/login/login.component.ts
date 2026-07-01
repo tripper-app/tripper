@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     @Output() logOutEmitter: EventEmitter<any> = new EventEmitter();
     waitingForResponse = false;
     mainColor = "rgb(35, 204, 153)";
-    user: User;
+    user: User = new User();
     first = false;
 
     constructor(public page: Page,
@@ -78,13 +78,13 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.waitingForResponse = true;
-        this.userService.login(this.user).subscribe(data => {
+        this.userService.login(this.user).subscribe((data: any) => {
             this.waitingForResponse = false;
             this.saveTokenToCache(data.token);
             this.userService.setUserPicture(data.profile_picture);
             this.userService.userLoggedIn = true;
             this.navigateToMap();
-        }, err => this.handleError(err))
+        }, (err: any) => this.handleError(err))
     }
 
     logOut(){
@@ -97,21 +97,20 @@ export class LoginComponent implements OnInit {
             viewContainerRef: this.viewContainerRef,
             fullscreen: false
         };
-        this.modalService.showModal(ResetPasswordModalComponent, options).then(email => {            
+        this.modalService.showModal(ResetPasswordModalComponent, options).then((email: string) => {
             if (email) {
                 this.waitingForResponse = true;
                 this.userService.resetPasswordCreateCode(email).subscribe(() => {
                     this.router.navigate(['resetPassword', email]);
-                }, err => this.handleError(err));
+                }, (err: any) => this.handleError(err));
             }
         });
     }
 
     loginWithFacebook() {
-        this.oathService.tnsOauthLogin("facebook", data => {
+        this.oathService.tnsOauthLogin("facebook", (data: any) => {
             this.loginWithThirdParty(data.accessToken, 'facebook')
-        }, err => {
-            //this.handleError(err);
+        }, (err: any) => {
             console.log("error while logging to facebook");
             console.log(err);
             this.handleError(err);
@@ -119,7 +118,7 @@ export class LoginComponent implements OnInit {
     }
 
     loginWithGoogle() {
-        GoogleLogin.login(res => {
+        GoogleLogin.login((res: any) => {
             console.log(res);
         })
         // this.oathService.tnsOauthLogin("google", data => {
@@ -138,10 +137,10 @@ export class LoginComponent implements OnInit {
         // })
     }
 
-    loginWithThirdParty(token, thirdParty) {
+    loginWithThirdParty(token: string, thirdParty: string) {
         this.waitingForResponse = true;
         console.log("logged in with: " + thirdParty);
-        
+
         this.httpService.loginWithThirdPartyToken(token, thirdParty).subscribe((res: any) => {
             this.waitingForResponse = false;
             console.log("token is: " + res.token);
@@ -149,10 +148,10 @@ export class LoginComponent implements OnInit {
             this.userService.setUserPicture(res.profile_picture);
             this.userService.userLoggedIn = true;
             this.navigateToMap();
-        }, err => this.handleError(err))
+        }, (err: any) => this.handleError(err))
     }
 
-    saveTokenToCache(token) {
+    saveTokenToCache(token: string) {
         setString("user_token", token);
     }
 
@@ -160,7 +159,7 @@ export class LoginComponent implements OnInit {
     //     this.languageService.switchLanguage(lan);
     // }
 
-    handleError(err) {
+    handleError(err: any) {
         this.waitingForResponse = false;
         console.log(err);
 
@@ -204,7 +203,7 @@ export class LoginComponent implements OnInit {
     //     //this.oathService.disConnect();
     // }
 
-    alignVertical(label) {
+    alignVertical(label: any) {
         label.android.setGravity(17)
     }
 

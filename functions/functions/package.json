@@ -10,7 +10,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -28,6 +28,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ngeohash": "^0.6.8",
+    "@types/node": "^22.0.0",
     "@types/nodemailer": "^8.0.1",
     "@typescript-eslint/parser": "^8.62.0",
     "eslint": "^9.39.4",

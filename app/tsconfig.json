@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "es2020",
     "lib": ["es2020", "dom"],
     "experimentalDecorators": true,
@@ -10,10 +10,9 @@
     "noEmitHelpers": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["src/*"],
+      "~/*": ["./src/*"],
+      "@/*": ["./src/*"],
       "rxjs": ["./node_modules/rxjs"],
       "rxjs/*": ["./node_modules/rxjs/*"]
     }
