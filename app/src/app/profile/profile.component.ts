@@ -281,6 +281,21 @@ export class ProfileComponent implements OnInit {
         // this.userService.userLoggedIn = false;
     }
 
+    async deleteAccount() {
+        const confirmed = await this.alertService.confirm(this.languageService.getText('profile.deleteAccountConfirm'));
+        if (!confirmed) {
+            return;
+        }
+        this.userService.removeUser().subscribe(() => {
+            // Reuse the logout flow: clears the token and returns to the login form.
+            this.logOut();
+        }, err => {
+            this.alertService.showError(this.languageService.getText('profile.deleteAccountError'));
+            console.log(err);
+            this.cd.detectChanges();
+        });
+    }
+
     handleError(err) {
         this.waitingForResponse = false;
 

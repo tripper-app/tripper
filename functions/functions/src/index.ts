@@ -866,8 +866,39 @@ export const getUsersCount = functionBuilder(async (req, res) => {
     }
 })
 
+// Deletes the authenticated user and all of their saved data: their comments on
+// springs, their profile image in storage, and their user document (which holds
+// favorites, history, high scores, profile and credentials).
 export const removeUser = functionBuilder(async (req, res) => {
-    res.send("User removed successfully");
+    try {
+        const email = validateJwtToken(req.headers.access_token as string);
+
+        // 1. Remove the user's comments from every spring that contains them.
+        const springsSnap = await db.collection(springsCollection).get();
+        const commentUpdates: Promise<unknown>[] = [];
+        springsSnap.forEach(doc => {
+            const comments = doc.get('comments');
+            if (Array.isArray(comments) && comments.some((c: any) => c.email === email)) {
+                const remaining = comments.filter((c: any) => c.email !== email);
+                commentUpdates.push(doc.ref.update({ comments: remaining }));
+            }
+        });
+        await Promise.all(commentUpdates);
+
+        // 2. Delete the profile image (best-effort; users on the default picture have none).
+        try {
+            await firebase.storage().ref(`users/${email}/profile`).delete();
+        } catch (storageErr) {
+            functions.logger.warn(`No profile image to delete for ${email}`, storageErr);
+        }
+
+        // 3. Delete the user document itself.
+        await db.collection(usersCollection).doc(email).delete();
+
+        res.send({ data: "User removed successfully" });
+    } catch (error) {
+        handleError(req, res, error);
+    }
 })
 
 

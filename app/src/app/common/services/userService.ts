@@ -68,6 +68,10 @@ export class UserService {
         return this.httpService.updateProfile(base64);
     }
 
+    removeUser() {
+        return this.httpService.removeUser();
+    }
+
     getUserPicture() {
         return getString('user_picture') ? getString('user_picture') : "https://lh3.googleusercontent.com/proxy/K7ojimeHTUDQtaSsOFMKXoCUxAjO65G42nQgibMQA26qCeizSn3MJS4Gy3sAmxJhC7MSy0dHwKDSSQYfOkzyH54VoNp3BE5ycdFlivZzN5A_M9tDPB6usAk9V6l1Oj6oDjSNJSwPdi4BZw";
     }

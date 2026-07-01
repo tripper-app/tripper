@@ -107,6 +107,10 @@ export class HttpService {
     return this.post("updateProfile", { imageString: base64 }, true);
   }
 
+  removeUser() {
+    return this.get("removeUser", true);
+  }
+
   // --- Games ---
 
   getKahoot() {

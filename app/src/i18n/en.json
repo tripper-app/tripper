@@ -132,7 +132,10 @@
         "currentPassword": "Current password",
         "newPassword": "New password",
         "confirmNewPassword": "Confirm new password",
-        "cantPickImage": "Can't use this image. Please select another one"
+        "cantPickImage": "Can't use this image. Please select another one",
+        "deleteAccount": "Delete account",
+        "deleteAccountConfirm": "Are you sure you want to delete your account? This will permanently remove all your data.",
+        "deleteAccountError": "Could not delete your account. Please try again."
     },
     "games": {
         "title": "Pick a game for the road",
@@ -164,6 +167,8 @@
         "language": "Preferred language",
         "OK": "OK",
         "cancel": "Cancel",
+        "yes": "Yes",
+        "no": "No",
         "email": "Email address",
         "all": "all",
         "about": "About",

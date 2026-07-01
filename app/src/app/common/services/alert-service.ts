@@ -38,6 +38,16 @@ export class AlertService {
         });
     }
 
+    // Yes/No confirmation dialog. Resolves true if the user confirms.
+    confirm(txt: string): Promise<boolean> {
+        return confirm({
+            title: '',
+            message: txt,
+            okButtonText: this.languageService.getText("labels.yes"),
+            cancelButtonText: this.languageService.getText("labels.no")
+        });
+    }
+
     // Used when a permission (e.g. location) is missing. The OS only shows the
     // system permission popup while the permission is still askable; once the user
     // has denied it (Android marks it "don't ask again"), the popup no longer

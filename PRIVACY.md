@@ -55,6 +55,7 @@ We keep your information for as long as your account is active or as needed to p
 - **Location** — you can enable or disable location access at any time in your device settings.
 - **Account data** — you can view and update your profile in the App, and you can delete your account to remove your data.
 - **Access and deletion** — you may contact us to request access to or deletion of your personal information.
+- **Delete your account** — you can delete your account and all associated data directly in the app: open the **Account** tab, scroll to the bottom of your **Profile**, tap **Delete account**, and confirm. This permanently removes your account, favorites, history, comments, and profile picture.
 
 ## 7. Children's Privacy
 

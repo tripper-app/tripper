@@ -155,6 +155,16 @@
                         </StackLayout>
                     </FlexboxLayout>
                 </StackLayout>
+                <StackLayout class="thinLine"></StackLayout>
+                <GridLayout columns="*,5*,*" height="40" margin="10,0" (tap)="deleteAccount()">
+                    <SVGImage height="50%" [col]="languageService.rightToLeft? 0 : 2"
+                        src="~/assets/icons/trash-red.svg">
+                    </SVGImage>
+                    <FlexboxLayout col="1" style="flex-direction: column; justify-content: center;">
+                        <label class="secondFontSize semiBoldFont" style="color: #e03228;"
+                            text="{{ 'profile.deleteAccount' | odedI18N:languageService.dummyUpdate }}"></label>
+                    </FlexboxLayout>
+                </GridLayout>
             </StackLayout>
         </StackLayout>
     </ScrollView>
