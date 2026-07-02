@@ -71,17 +71,6 @@ const mailOptions = {
 };
 
 const functionBuilder = functions.region(region).runWith(runtimeOpts).https.onRequest;
-// const execCall = (fu: (req: functions.https.Request, resp: functions.Response<any>) => void | Promise<void>) => {
-//     try {
-//         functions.region(region).runWith(runtimeOpts).https.onRequest(fu)
-//     } catch (error) {
-
-//     }
-//}
-
-// const check = execCall(async (req, res) => {
-
-// })
 
 export const getAllSprings = functionBuilder(async (req, res) => {
     try {
