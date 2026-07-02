@@ -51,6 +51,10 @@ export class MainTabsComponent implements OnInit, OnDestroy {
         if (this.route.snapshot.params.page) {
             this.selectedPageIndex = +this.route.snapshot.params.page;
         }
+        // Hide the bottom tab bar on the initial login screen. pageChange() applies
+        // this rule on taps, but it never runs on first load, so set it up front:
+        // the bar stays hidden while the (not-logged-in) user is on the login tab.
+        this.tabsVisibility = !(this.selectedPageIndex == 0 && !this.userService.userLoggedIn);
         // The component instance survives when the app is backgrounded, so without
         // this the app would resume on whatever tab was last open (e.g. hotels).
         // Always bring it back to the proper entry tab: map when logged in, account
