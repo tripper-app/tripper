@@ -66,8 +66,8 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:path="/auth" 
-				android:scheme="com.googleusercontent.apps.761150329649-2g7q7hv1avpucbksngp4dcp7ih9cnajv"/>
+				<data android:path="/auth"
+				android:scheme="com.googleusercontent.apps.658415875612-igt7tu9o8lhologkc39ers3jukr1pl01"/>
 			</intent-filter>
 		</activity>
 		<activity android:name="com.tns.ErrorReportActivity"/>

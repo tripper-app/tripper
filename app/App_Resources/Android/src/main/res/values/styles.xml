@@ -29,6 +29,20 @@
         <item name="colorPrimaryDark">@color/ns_primaryDark</item>
         <item name="colorAccent">@color/ns_accent</item>
 
+        <!-- NativeScript builds native android.app.AlertDialog with theme -1, so it
+             falls back to this. Force a light dialog with visible (green) buttons so
+             alert/confirm dialogs are readable even on dark-mode devices. -->
+        <item name="android:alertDialogTheme">@style/AppAlertDialogTheme</item>
+    </style>
+
+    <!-- Light AlertDialog theme. The parent already provides a floating white card
+         with dark text and a normal dim; we only disable force-dark (so it can't
+         invert on dark-mode devices) and set the accent. Note: do not override
+         android:windowBackground here; that replaces the floating card drawable
+         and leaves an opaque black band around the dialog. -->
+    <style name="AppAlertDialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:colorAccent">@color/ns_primary</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeBase">

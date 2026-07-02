@@ -3,7 +3,11 @@
 
     <!-- Application theme -->
     <style name="AppThemeBase29" parent="AppThemeBase21">
-        <item name="android:forceDarkAllowed">true</item>
+        <!-- The app is a light-only design. Allowing Android's force-dark to
+             auto-invert the Light theme breaks native AlertDialog buttons (their
+             text becomes the same colour as the background -> invisible Yes/No
+             buttons on dark-mode devices). Keep force-dark off. -->
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeBase29">

@@ -11,7 +11,7 @@ import { SpringFilters } from '~/app/common/models/springFilters';
     styleUrls: ['./spring-filters.component.scss']
 })
 export class SpringsFiltersComponent implements OnInit {
-    defaultDistance = 40;
+    defaultDistance = 30;
     campingCheck = false;
     childrenCheck = false;
     waterCheck = false;

@@ -36,11 +36,16 @@
 			</FlexboxLayout>
 		</StackLayout>
 		<FlexboxLayout row="1" height="100%" flexDirection="column" style="justify-content: flex-end;">
-			<FlexboxLayout (tap)="loginWithFacebook()" class="facebook"
+			<FlexboxLayout (tap)="loginWithGoogle()" class="google"
+				[isUserInteractionEnabled]="!waitingForResponse">
+				<label color="#5f6368" text="{{ 'login.loginGoogle' | odedI18N:languageService.dummyUpdate }}"></label>
+				<SVGImage width="15%" height="50%" src="~/assets/icons/google.svg"></SVGImage>
+			</FlexboxLayout>
+			<!-- <FlexboxLayout (tap)="loginWithFacebook()" class="facebook"
 				[isUserInteractionEnabled]="!waitingForResponse">
 				<label color="white" text="{{ 'login.loginFacebook' | odedI18N:languageService.dummyUpdate }}"></label>
 				<SVGImage width="15%" height="50%" src="~/assets/icons/facebook-white.svg"></SVGImage>
-			</FlexboxLayout>
+			</FlexboxLayout> -->
 		</FlexboxLayout>
 	</GridLayout>
 </StackLayout>

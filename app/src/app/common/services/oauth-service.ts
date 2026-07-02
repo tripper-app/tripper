@@ -33,12 +33,12 @@ export class OauthService {
         const googleProviderOptions: TnsOaProviderOptionsGoogle = {
             openIdSupport: "oid-full",
             clientId:
-                '597122793226-n41f7gf929ha59764mupi98vtgnrh13v.apps.googleusercontent.com',
+                '658415875612-igt7tu9o8lhologkc39ers3jukr1pl01.apps.googleusercontent.com',
             redirectUri:
-                'com.googleusercontent.apps.597122793226-n41f7gf929ha59764mupi98vtgnrh13v:/auth',
+                'com.googleusercontent.apps.658415875612-igt7tu9o8lhologkc39ers3jukr1pl01:/auth',
             urlScheme:
-                'com.googleusercontent.apps.597122793226-n41f7gf929ha59764mupi98vtgnrh13v',
-            scopes: ["email"]
+                'com.googleusercontent.apps.658415875612-igt7tu9o8lhologkc39ers3jukr1pl01',
+            scopes: ["email", "profile"]
         };
         const googleProvider = new TnsOaProviderGoogle(googleProviderOptions);
         return googleProvider;

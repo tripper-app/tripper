@@ -38,6 +38,7 @@ export class ProfileComponent implements OnInit {
     waitingForFavorites = false;
     waitingForHistory = false;
     waitingForUserPic = false;
+    deleting = false;
     springHeight = 160;
     mainColor = "rgb(35, 204, 153)";
     checkBoxScale = 0.7;
@@ -286,10 +287,15 @@ export class ProfileComponent implements OnInit {
         if (!confirmed) {
             return;
         }
+        // Show the loading overlay while the request is in flight (we can't navigate
+        // to login first -- removeUser needs the still-valid auth token).
+        this.deleting = true;
+        this.cd.detectChanges();
         this.userService.removeUser().subscribe(() => {
             // Reuse the logout flow: clears the token and returns to the login form.
             this.logOut();
         }, err => {
+            this.deleting = false;
             this.alertService.showError(this.languageService.getText('profile.deleteAccountError'));
             console.log(err);
             this.cd.detectChanges();

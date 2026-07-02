@@ -9,6 +9,17 @@
   justify-content: center;
 }
 
+.google{
+  height: $bottomHeight;
+  font-size: $subtitleFontSize;
+  background-color: white;
+  border-top-width: $lineWidth;
+  border-color: rgba(221, 207, 207, 0.37);
+  align-items: center;
+  color: #5f6368;
+  justify-content: center;
+}
+
 .upper{
   border-bottom-width: $lineWidth;
   border-color: rgba(221, 207, 207, 0.37);

@@ -1,4 +1,4 @@
-<StackLayout>
+<GridLayout>
     <ScrollView height="100%">
         <StackLayout (tap)="tappedAnywhere()">
             <GridLayout columns="*,3*,*" class="header">
@@ -100,19 +100,6 @@
                             [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
                             *ngFor="let spring of currentUser.favorites; let i = index">
                             <ns-carousel [carouselHeight]="springHeight-40" [Images]="spring.images"></ns-carousel>
-                            <!-- <GridLayout [height]="springHeight-40">
-                                <Carousel [items]="spring.images" android:indicatorAnimation="scale"
-                                    indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
-                                    indicatorOffset="0, 20" showIndicator="true">
-                                    <CarouselItem *ngFor="let item of spring.images">
-                                        <GridLayout>
-                                            <ns-waiting-gif></ns-waiting-gif>
-                                            <Image (tap)="navigateToSpring(spring)" style="z-index: 3;" [src]="item"
-                                                width="100%" height="100%" stretch="fill"></Image>
-                                        </GridLayout>
-                                    </CarouselItem>
-                                </Carousel>
-                            </GridLayout> -->
                             <label class="semiBoldFont thirdFontSize" text="{{spring.name}}"></label>
                         </StackLayout>
                     </FlexboxLayout>
@@ -138,19 +125,6 @@
                             [padding]="((i%2==0 || languageService.rightToLeft) && !(i%2==0 && languageService.rightToLeft))? '0, 9, 0, 0' : '0, 0, 0, 9'"
                             *ngFor="let spring of currentUser.history; let i = index">
                             <ns-carousel [carouselHeight]="springHeight-40" [Images]="spring.images"></ns-carousel>
-                            <!-- <GridLayout [height]="springHeight-40">
-                                <Carousel [items]="spring.images" android:indicatorAnimation="scale"
-                                    indicatorColor="#fff" indicatorColorUnselected="rgba(206, 193, 193, 0.61)"
-                                    indicatorOffset="0, 20" showIndicator="true">
-                                    <CarouselItem *ngFor="let item of spring.images">
-                                        <GridLayout>
-                                            <ns-waiting-gif></ns-waiting-gif>
-                                            <Image (tap)="navigateToSpring(spring)" style="z-index: 3;" [src]="item"
-                                                width="100%" height="100%" stretch="fill"></Image>
-                                        </GridLayout>
-                                    </CarouselItem>
-                                </Carousel>
-                            </GridLayout> -->
                             <label text="{{spring.name}}"></label>
                         </StackLayout>
                     </FlexboxLayout>
@@ -168,4 +142,5 @@
             </StackLayout>
         </StackLayout>
     </ScrollView>
-</StackLayout>
+    <ns-waiting-gif *ngIf="deleting"></ns-waiting-gif>
+</GridLayout>

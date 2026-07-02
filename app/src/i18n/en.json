@@ -120,6 +120,7 @@
         "dontHaveAccount": "I don't have an account yet",
         "haveAccount": "I already have an account",
         "loginFacebook": "Login with facebook",
+        "loginGoogle": "Login with Google",
         "noMailForThisAccount": "There is no email connected to this account. Login failed",
         "skip": "Skip"
     },

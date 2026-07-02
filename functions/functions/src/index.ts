@@ -219,16 +219,20 @@ export const loginWithThirdParty = functionBuilder(async (req, res) => {
                     } else {
                         functions.logger.debug(data);
                         const doc = await db.collection('users').doc(data.email).get();
+                        // Facebook returns picture as { data: { url } }; Google's tokeninfo
+                        // returns it as a plain string. Handle both, with fallbacks.
+                        const picture = data.picture ? (data.picture.data ? data.picture.data.url : data.picture) : defaultUserPicture;
+                        const userName = data.name ? data.name : data.email.slice(0, data.email.indexOf('@'));
                         if (!doc.exists) {
                             await doc.ref.set({
                                 email: data.email,
                                 password: 'logged with third party',
-                                userName: data.name,
+                                userName: userName,
                                 pendingVerification: false,
-                                profile: data.picture.data.url
+                                profile: picture
                             })
                         }
-                        res.send({ token: creatJwtToken(data.email), profile_picture: data.picture.data.url });
+                        res.send({ token: creatJwtToken(data.email), profile_picture: picture });
                     }
                 });
             }).end();

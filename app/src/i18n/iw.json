@@ -120,6 +120,7 @@
         "dontHaveAccount": "עדיין אין לי חשבון",
         "haveAccount": "כבר יש לי חשבון",
         "loginFacebook": "התחברות באמצעות פייסבוק",
+        "loginGoogle": "התחברות באמצעות גוגל",
         "skip": "דלג"
     },
     "profile": {

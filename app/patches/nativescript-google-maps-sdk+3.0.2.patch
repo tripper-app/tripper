@@ -1,0 +1,12 @@
+diff --git a/node_modules/nativescript-google-maps-sdk/platforms/android/include.gradle b/node_modules/nativescript-google-maps-sdk/platforms/android/include.gradle
+index 5bced4d..0d8a3f7 100644
+--- a/node_modules/nativescript-google-maps-sdk/platforms/android/include.gradle
++++ b/node_modules/nativescript-google-maps-sdk/platforms/android/include.gradle
+@@ -4,5 +4,5 @@ android {
+ 
+ dependencies {
+ 	def googlePlayServicesVersion = project.hasProperty('googlePlayServicesVersion') ? project.googlePlayServicesVersion : '+'
+-	compile "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
++	implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
+ }
+\ No newline at end of file

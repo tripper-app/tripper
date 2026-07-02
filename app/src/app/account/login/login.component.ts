@@ -7,7 +7,6 @@ import { OauthService } from '../../common/services/oauth-service';
 import { HttpService } from '~/app/common/services/http-service';
 import { LanguageService } from '~/app/common/services/language-service';
 import { setString, getString } from '@nativescript/core/application-settings';
-import { GoogleLogin } from 'nativescript-google-login';
 import { AlertService } from '../../common/services/alert-service';
 import { ModalDialogService, ModalDialogOptions } from '@nativescript/angular';
 import { ResetPasswordModalComponent } from '../resetPassword/resetPasswordModal/resetPasswordModal.component';
@@ -118,27 +117,22 @@ export class LoginComponent implements OnInit {
     }
 
     loginWithGoogle() {
-        GoogleLogin.login((res: any) => {
-            console.log(res);
-        })
-        // this.oathService.tnsOauthLogin("google", data => {
-        //     alert(data)
-        //     console.log(data);
-        //     this.httpService.getEmailByFacebookToken(data.accessToken).subscribe(res => {
-        //         console.log("SUCCESS!!");
-
-        //         console.log(res);
-
-        //     }, err => this.handleError(err))
-        // }, err => {
-        //     console.log("in error callback");
-        //     console.log(err);
-
-        // })
+        // Google's backend endpoint validates an OpenID id_token (tokeninfo?id_token=),
+        // so we pass data.idToken here, not the access token.
+        this.oathService.tnsOauthLogin("google", (data: any) => {
+            this.loginWithThirdParty(data.idToken, 'google');
+        }, (err: any) => {
+            console.log("error while logging in with google");
+            console.log(err);
+            this.handleError(err);
+        });
     }
 
     loginWithThirdParty(token: string, thirdParty: string) {
         this.waitingForResponse = true;
+        // This runs from the OAuth callback, which is outside Angular's zone, so
+        // force CD to actually render the loading gif while the backend responds.
+        this.cd.detectChanges();
         console.log("logged in with: " + thirdParty);
 
         this.httpService.loginWithThirdPartyToken(token, thirdParty).subscribe((res: any) => {

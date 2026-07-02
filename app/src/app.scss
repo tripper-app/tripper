@@ -25,6 +25,14 @@ Button{
     color: white;
 }
 
+// The global "Button { color: white }" above also gets applied to NativeScript's
+// native alert/confirm dialog buttons (they carry the built-in "ns-dialog-item"
+// class), making them white-on-white and invisible. Override just those buttons
+// with a visible colour (app buttons keep white text on their coloured bg).
+Button.ns-dialog-item {
+    color: $themeColor;
+}
+
 .header{
     height: $headerHeight;
     font-size: $titleFontSize;

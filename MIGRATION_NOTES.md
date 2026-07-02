@@ -77,13 +77,19 @@ that were required.
   (NS didn't recognize the `android-36.1` platform Android Studio had), plus the
   `system-images;android-36;google_apis;x86_64` emulator image.
 
-### node_modules patches (⚠️ reverted by `npm install` — reapply or use patch-package)
-- `nativescript-google-maps-sdk/platforms/android/include.gradle`: `compile` → `implementation`
-- `nativescript-carousel/platforms/android/include.gradle`: `compile` → `implementation`,
-  and the dep `com.romandanylyk:pageindicatorview:1.0.3` (dead JCenter artifact) →
-  `com.github.romandanylyk:PageIndicatorView:1.0.1` (jitpack). A `maven { url 'https://jitpack.io' }`
-  repository was added in `App_Resources/Android/app.gradle` for it.
-  → Recommend adopting `patch-package` so these survive reinstalls.
+### node_modules patches (✅ now handled by patch-package — survive reinstalls)
+These `node_modules` edits used to be reverted by every `npm install`. They are now
+committed as patch files under `app/patches/` and re-applied automatically via the
+`postinstall": "patch-package"` script (deps: `patch-package`, `postinstall-postinstall`).
+Do NOT hand-edit `node_modules` for these; edit the plugin file then run
+`npx patch-package <plugin-name>` to refresh the patch.
+- `patches/nativescript-google-maps-sdk+3.0.2.patch`:
+  `platforms/android/include.gradle` `compile` → `implementation`
+- `patches/nativescript-carousel+7.0.1.patch`:
+  `platforms/android/include.gradle` `compile` → `implementation`, and the dep
+  `com.romandanylyk:pageindicatorview:1.0.3` (dead JCenter artifact) →
+  `com.github.romandanylyk:PageIndicatorView:1.0.1` (jitpack). The
+  `maven { url 'https://jitpack.io' }` repository for it is in `App_Resources/Android/app.gradle`.
 
 ### App_Resources / source fixes made to build & run on AGP 8 + Angular 21
 - `App_Resources/Android/before-plugins.gradle`: removed the invalid `android { }`
@@ -93,11 +99,16 @@ that were required.
 - `App_Resources/Android/src/main/AndroidManifest.xml`: removed `package=` attribute
   (AGP 8 sets namespace from gradle; app id `com.bartovCoder.tripper` is now in
   `nativescript.config.ts`), and added `android:exported="true"` to the launcher activity.
-- `src/main.ts`: bootstrap via `runNativeScriptAngularApp({ appModuleBootstrap: () =>
-  platformNativeScript().bootstrapModule(AppModule) })`. `platformNativeScriptDynamic` is
-  deprecated and auto-launches the app, so it must not be wrapped in
-  `runNativeScriptAngularApp` (double-start). The plain `platformNativeScript()` PlatformRef
-  does not auto-launch, so `runNativeScriptAngularApp` can own the lifecycle. Also added a
+- `src/main.ts`: bootstrap via **standalone** `platformNativeScriptDynamic().bootstrapModule(AppModule)`
+  (it logs a deprecation warning — accept it; it's the only form that works on this version).
+  ⚠️ Both "modern" alternatives are broken here:
+    - `runNativeScriptAngularApp({ appModuleBootstrap: () => platformNativeScript()... })` →
+      Angular boots but NativeScript's root view is never attached → **black screen** (0 views,
+      "Angular is running in development mode" logged, no errors).
+    - `runNativeScriptAngularApp({ appModuleBootstrap: () => platformNativeScriptDynamic()... })` →
+      **"Application is already started"** — `bootstrapModule` calls `Application.run` internally and
+      so does `runNativeScriptAngularApp` → double start.
+  So `bootstrapModule` must NOT be wrapped in `runNativeScriptAngularApp`. Also added a
   global `AbortController`/`AbortSignal` polyfill from `@nativescript/core/abortcontroller`
   (Angular 21 router/HttpClient need it; NS V8 doesn't provide it).
 - `alert-service.ts`: replaced abandoned `nativescript-sweet-alert` (imports removed

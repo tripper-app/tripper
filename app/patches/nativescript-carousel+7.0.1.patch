@@ -1,0 +1,12 @@
+diff --git a/node_modules/nativescript-carousel/platforms/android/include.gradle b/node_modules/nativescript-carousel/platforms/android/include.gradle
+index 22861cf..159600f 100644
+--- a/node_modules/nativescript-carousel/platforms/android/include.gradle
++++ b/node_modules/nativescript-carousel/platforms/android/include.gradle
+@@ -2,5 +2,5 @@ android {
+     
+ }
+ dependencies {
+-  compile 'com.romandanylyk:pageindicatorview:1.0.3'
++  implementation 'com.github.romandanylyk:PageIndicatorView:1.0.1'
+ }
+\ No newline at end of file
