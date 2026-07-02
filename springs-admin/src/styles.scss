@@ -1,0 +1,355 @@
+:root {
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --primary: #23cc99;
+  --primary-dark: #1aa87d;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  font-size: 15px;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+h2 {
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 13px;
+}
+.error {
+  color: var(--danger-dark);
+  font-weight: 500;
+}
+
+/* ---- Top bar ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.spacer {
+  flex: 1;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ---- Cards ---- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: #f9fafb;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.btn.small {
+  padding: 5px 10px;
+  font-size: 13px;
+}
+.btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.btn.primary:hover {
+  background: var(--primary-dark);
+}
+.btn.danger {
+  color: var(--danger-dark);
+  border-color: #fecaca;
+}
+.btn.danger:hover {
+  background: #fef2f2;
+}
+.btn.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+.btn.ghost:hover {
+  background: #f3f4f6;
+}
+
+/* ---- Inputs ---- */
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+}
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.field-group {
+  margin-bottom: 18px;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+  margin: 0;
+}
+.check input {
+  width: auto;
+}
+
+/* ---- Login ---- */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.login-card {
+  width: 100%;
+  max-width: 360px;
+}
+.login-card h1 {
+  margin-bottom: 4px;
+}
+.login-card .btn {
+  width: 100%;
+  margin-top: 16px;
+}
+.login-card input {
+  margin-bottom: 12px;
+}
+
+/* ---- List / toolbar ---- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.search {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 260px;
+}
+.search input {
+  flex: 1;
+}
+.search select {
+  width: auto;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #e5e7eb;
+  flex-shrink: 0;
+}
+.row-main {
+  flex: 1;
+  min-width: 0;
+}
+.row-title {
+  font-weight: 500;
+}
+.row-sub {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---- Gallery ---- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+.tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #f9fafb;
+}
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tile .badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.tile-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tile.add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+}
+.tile.add:hover {
+  background: #f3f4f6;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ---- Map picker (Leaflet) ---- */
+.map-picker {
+  height: 320px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+/* Custom marker pin (avoids Leaflet's bundled image assets). */
+.map-pin {
+  background: transparent;
+  border: none;
+}
+.map-pin-dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--primary);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  margin: 2px;
+}

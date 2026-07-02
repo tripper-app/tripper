@@ -1,0 +1,29 @@
+rules_version = '2';
+
+// Storage rules for the Tripper project.
+//
+// IMPORTANT: the mobile backend's Cloud Functions (updateProfile / removeUser)
+// write and delete users/<email>/profile using the *client* SDK while
+// UNAUTHENTICATED, so those writes are subject to these rules. The users/** rule
+// below preserves that access — do not remove it or profile images will break.
+//
+// The springs/** rule is what this admin app needs (signed-in admins upload/delete
+// spring images; everyone can read them).
+//
+// NOTE: image reads in the mobile app go through public download URLs (with a
+// token), which bypass these rules, so tightening `read` here does not affect them.
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Spring images: public read, admin-only write.
+    match /springs/{springId}/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Profile images: written/deleted by the Cloud Functions' (unauthenticated)
+    // client SDK. Kept open to preserve existing app behaviour.
+    match /users/{userId}/{fileName} {
+      allow read, write: if true;
+    }
+  }
+}
